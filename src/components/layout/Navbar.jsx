@@ -197,7 +197,7 @@ export default function Navbar() {
               onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
               className="hidden md:block gradient-cta text-white text-sm font-bold px-5 py-2.5 rounded-full hover:opacity-95 transition-opacity shadow-md shadow-[hsl(265,75%,58%)]/20"
             >
-              Empieza tu match
+              Match inteligente
             </button>
 
             <button className="lg:hidden p-2 rounded-full hover:bg-secondary" onClick={() => setMobileOpen(!mobileOpen)}>
@@ -287,7 +287,7 @@ export default function Navbar() {
                 onClick={() => { setMobileOpen(false); window.dispatchEvent(new CustomEvent("open-match-quiz")); }}
                 className="w-full mt-2 gradient-cta text-white font-bold py-3 rounded-full"
               >
-                Empieza tu match
+                Match inteligente
               </button>
             </div>
           </motion.div>

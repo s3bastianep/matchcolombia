@@ -5,19 +5,19 @@ import { BOGOTA, INTERIORS } from "@/lib/bogotaImages";
 const cards = [
   {
     title: "Cero scroll infinito",
-    desc: "Filtramos por ti. Solo ves inmuebles que encajan con lo que buscas.",
+    desc: "Solo inmuebles verificados. Match inteligente, sin anuncios falsos.",
     img: INTERIORS.balcon,
     accent: "hsl(340,82%,52%)",
   },
   {
     title: "Menos estrés, más ¡sí!",
-    desc: "Sin anuncios engañosos. Nosotros gestionamos todo el proceso por ti.",
+    desc: "100% verificados. Nosotros gestionamos todo — sin estafas, sin sustos.",
     img: BOGOTA.chapinero,
     accent: "hsl(265,75%,58%)",
   },
   {
     title: "Ayuda real, no solo búsqueda",
-    desc: "Quiz personalizado, favoritos y acompañamiento por WhatsApp.",
+    desc: "Match inteligente, favoritos y acompañamiento real por WhatsApp.",
     img: INTERIORS.sala,
     accent: "hsl(168,72%,40%)",
   },
@@ -57,7 +57,7 @@ export default function BuiltForRenters({ onStartQuiz }) {
           onClick={onStartQuiz}
           className="gradient-cta text-white font-bold px-7 py-3.5 rounded-xl shadow-md hover:opacity-95 transition-opacity"
         >
-          Empieza tu match
+          Match inteligente
         </button>
       </div>
     </section>

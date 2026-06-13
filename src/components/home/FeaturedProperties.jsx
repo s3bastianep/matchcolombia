@@ -29,7 +29,7 @@ export default function FeaturedProperties({ properties, isLoading }) {
           <SectionHeader
             eyebrow="Nuevas publicaciones"
             title="Inmuebles verificados"
-            subtitle="Precio, administración y match score en un solo lugar"
+            subtitle="100% verificados por MatchColombia. Sin estafas, sin sustos."
           />
 
           <div className="flex items-center gap-3">

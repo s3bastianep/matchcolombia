@@ -56,7 +56,8 @@ export default function HeroSection({ onStartQuiz }) {
           </h1>
 
           <p className="text-muted-foreground text-sm sm:text-base mb-7 max-w-md leading-relaxed">
-            Match inteligente en Bogotá y Barranquilla. Nosotros gestionamos todo el proceso.
+            Match inteligente con inmuebles <span className="font-semibold text-foreground">100% verificados</span>.
+            Sin estafas, sin sustos.
           </p>
 
           <InlineMatchBar variant="hero" />
@@ -67,7 +68,7 @@ export default function HeroSection({ onStartQuiz }) {
               onClick={onStartQuiz}
               className="inline-flex items-center justify-center gap-2 gradient-cta btn-glow text-white font-bold px-6 py-3 rounded-full hover:opacity-95 transition-opacity text-sm"
             >
-              Empieza tu match
+              Match inteligente
               <ArrowRight className="w-4 h-4" />
             </button>
             <button

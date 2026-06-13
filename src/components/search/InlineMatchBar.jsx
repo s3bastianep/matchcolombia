@@ -75,7 +75,7 @@ function MatchButton({ onClick, compact = false, className }) {
       )}
     >
       <Search className="w-4 h-4 shrink-0" strokeWidth={2.5} />
-      <span>Empieza tu match</span>
+      <span>Match inteligente</span>
     </button>
   );
 }

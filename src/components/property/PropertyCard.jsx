@@ -190,7 +190,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                 {showMatch && matchScore > 0 && (
                   <span className="px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-extrabold text-[hsl(265,75%,50%)] shadow-sm flex items-center gap-1">
                     <Sparkles className="w-3 h-3" />
-                    {matchScore}% match
+                    {matchScore}% · verificado
                   </span>
                 )}
               </div>

@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Check, Sparkles, Car, PawPrint, Sofa } from "lucide-react";
+import { ArrowRight, ArrowLeft, Check, Car, PawPrint, Sofa, ShieldCheck } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { savePreferences, buildExploreUrl } from "@/lib/matchPreferences";
 import { CITIES, getZonesForCity } from "@/lib/colombia";
 import { cn } from "@/lib/utils";
 
 const STEPS = [
-  { id: "city", title: "¿En qué ciudad?", subtitle: "Bogotá, Barranquilla o ambas" },
-  { id: "zone", title: "¿En qué zona?", subtitle: "Opcional — refina tu búsqueda" },
-  { id: "type", title: "¿Qué tipo de inmueble?", subtitle: "Apartamento, casa, estudio..." },
-  { id: "beds", title: "¿Cuántas habitaciones?", subtitle: "Lo mínimo que necesitas" },
-  { id: "budget", title: "¿Cuál es tu presupuesto?", subtitle: "Precio máximo mensual en COP" },
-  { id: "extras", title: "¿Qué es importante para ti?", subtitle: "Opcional — mejora tu match" },
+  { id: "city", title: "¿En qué ciudad?", subtitle: "Solo inmuebles verificados en Bogotá y Barranquilla" },
+  { id: "zone", title: "¿En qué zona?", subtitle: "Opcional — entre opciones revisadas por nuestro equipo" },
+  { id: "type", title: "¿Qué tipo de inmueble?", subtitle: "Apartamento, casa, estudio… todos verificados" },
+  { id: "beds", title: "¿Cuántas habitaciones?", subtitle: "Para afinar tu match inteligente" },
+  { id: "budget", title: "¿Cuál es tu presupuesto?", subtitle: "Precio real, sin sorpresas ni cargos ocultos" },
+  { id: "extras", title: "¿Qué más necesitas?", subtitle: "Último paso — te mostramos solo lo que encaja" },
 ];
 
 const TYPES = [
@@ -85,15 +85,16 @@ export default function MatchQuiz({ open, onOpenChange }) {
         </div>
 
         <div className="gradient-hero px-6 sm:px-8 pt-6 pb-4 border-b border-border/30">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl gradient-cta flex items-center justify-center shadow-md">
-              <Sparkles className="w-5 h-5 text-white" />
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-2xl gradient-cta flex items-center justify-center shadow-md shrink-0">
+              <ShieldCheck className="w-5 h-5 text-white" />
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                Match quiz · Paso {step + 1}/{STEPS.length}
+                Match inteligente · Paso {step + 1}/{STEPS.length}
               </p>
-              <p className="font-extrabold text-sm">Tu match perfecto</p>
+              <p className="font-extrabold text-sm leading-snug">Inmuebles 100% verificados</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Sin estafas, sin sustos.</p>
             </div>
           </div>
         </div>
@@ -217,7 +218,7 @@ export default function MatchQuiz({ open, onOpenChange }) {
               onClick={next}
               className="flex items-center gap-2 gradient-cta btn-glow text-white font-bold px-6 py-3 rounded-xl hover:opacity-95 transition-opacity"
             >
-              {step === STEPS.length - 1 ? "Ver mis matches" : "Siguiente"}
+              {step === STEPS.length - 1 ? "Ver inmuebles verificados" : "Siguiente"}
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

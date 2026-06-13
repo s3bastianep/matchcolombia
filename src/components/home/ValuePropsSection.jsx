@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const props = [
   { title: "Cero scroll infinito", desc: "Hacemos la parte difícil; tú ahorras más de 50 horas de búsqueda.", images: [INTERIORS.sala, INTERIORS.conjunto, CITIES_IMG.bogota] },
-  { title: "Menos estrés, más \"¡Sí!\"", desc: "Sin anuncios engañosos. Solo inmuebles que encajan contigo.", images: [INTERIORS.dormitorio, INTERIORS.balcon, INTERIORS.cocina] },
+  { title: "Menos estrés, más \"¡Sí!\"", desc: "Inmuebles 100% verificados. Sin estafas, sin sustos.", images: [INTERIORS.dormitorio, INTERIORS.balcon, INTERIORS.cocina] },
   { title: "Nos encargamos de todo", desc: "Visitas, documentos y seguimiento. Tú eliges, nosotros gestionamos.", images: [INTERIORS.comedor, CITIES_IMG.barranquilla, INTERIORS.estudio] },
 ];
 
@@ -34,7 +34,7 @@ export default function ValuePropsSection({ onStartQuiz }) {
             onClick={onStartQuiz}
             className="gradient-cta btn-glow text-white font-bold px-8 py-3.5 rounded-full hover:opacity-95 transition-opacity"
           >
-            Empieza tu match ahora
+            Match inteligente ahora
           </button>
         </div>
 

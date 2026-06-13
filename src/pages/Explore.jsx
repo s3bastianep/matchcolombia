@@ -220,8 +220,9 @@ export default function Explore() {
           >
             <Sparkles className="w-4 h-4 text-[hsl(265,75%,50%)] shrink-0" />
             <p className="text-xs font-bold text-foreground min-w-0 truncate">
-              Matches en {cityLabel}
+              Inmuebles verificados en {cityLabel}
             </p>
+            <p className="text-[10px] text-muted-foreground truncate">Sin estafas, sin sustos</p>
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
               className="ml-auto text-[11px] font-bold text-[hsl(265,75%,50%)] hover:underline shrink-0"
@@ -510,7 +511,7 @@ export default function Explore() {
                 onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
                 className="gradient-cta text-white font-bold px-6 py-3 rounded-xl shadow-md hover:opacity-95 transition-opacity"
               >
-                Actualizar preferencias
+                Refinar match
               </button>
               <button
                 onClick={clearAllFilters}

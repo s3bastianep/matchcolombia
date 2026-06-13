@@ -9,18 +9,18 @@ const steps = [
   {
     num: "01",
     icon: Sparkles,
-    title: "Haz el quiz",
-    desc: "Ciudad, habitaciones, presupuesto y lo que de verdad te importa.",
-    tag: "2 minutos",
+    title: "Cuéntanos qué buscas",
+    desc: "Ciudad, habitaciones y presupuesto — solo para filtrar entre inmuebles verificados.",
+    tag: "Match inteligente",
     accent: "from-[hsl(340,82%,52%)] to-[hsl(265,75%,58%)]",
-    pills: ["Bogotá", "2 hab", "$2.5M", "Mascotas"],
+    pills: ["Verificados", "Sin estafas", "Sin sustos"],
   },
   {
     num: "02",
     icon: Target,
-    title: "Recibe tus matches",
-    desc: "Solo inmuebles que encajan contigo. Sin anuncios que no van contigo.",
-    tag: "Match real",
+    title: "Recibe tu selección",
+    desc: "Solo inmuebles 100% verificados por MatchColombia. Precio real, fotos reales.",
+    tag: "100% verificados",
     accent: "from-[hsl(265,75%,58%)] to-[hsl(200,90%,50%)]",
     scores: [92, 88, 95],
   },
@@ -52,7 +52,7 @@ export default function MatchSteps({ onStartQuiz }) {
                 Tu match en <span className="text-gradient">3 pasos</span>
               </>
             }
-            subtitle="Menos scroll. Más claridad. Inmuebles que sí van contigo."
+            subtitle="Match inteligente con inmuebles 100% verificados. Sin estafas, sin sustos."
             className="max-w-xl"
           />
           <div className="hidden lg:flex items-center gap-2 text-sm font-semibold text-muted-foreground shrink-0 pb-1">
@@ -142,7 +142,7 @@ export default function MatchSteps({ onStartQuiz }) {
             onClick={onStartQuiz}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 gradient-cta btn-glow text-white font-bold px-8 py-3.5 rounded-full hover:opacity-95 transition-opacity"
           >
-            Empieza tu match
+            Match inteligente
             <ArrowRight className="w-4 h-4" />
           </button>
           <Link

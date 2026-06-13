@@ -54,12 +54,12 @@ export default function Favorites() {
             <Heart className="w-14 h-14 text-[hsl(265,75%,58%)]/30 mb-4" />
             <h2 className="font-extrabold text-xl mb-2">Tu Short List está vacía</h2>
             <p className="text-muted-foreground text-sm max-w-sm mb-6">
-              Haz el quiz para ver matches o toca el corazón en cualquier inmueble.
+              Usa el match inteligente para ver inmuebles 100% verificados, o guarda cualquier opción con el corazón.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))} className="rounded-xl gap-2 font-bold gradient-cta border-0">
                 <Sparkles className="w-4 h-4" />
-                Empieza tu match
+                Match inteligente
               </Button>
               <Link to="/explorar">
                 <Button variant="outline" className="rounded-xl gap-2 font-semibold border-2">
