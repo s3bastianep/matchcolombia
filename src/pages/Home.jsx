@@ -6,7 +6,7 @@ import StatsBar from "../components/home/StatsBar";
 import MatchSteps from "../components/home/MatchSteps";
 import WhyMatchSection from "../components/home/WhyMatchSection";
 import FeaturedProperties from "../components/home/FeaturedProperties";
-import DualPathSection from "../components/home/DualPathSection";
+import RentEasySection from "../components/home/RentEasySection";
 import TestimonialsSection from "../components/home/TestimonialsSection";
 import ValuePropsSection from "../components/home/ValuePropsSection";
 import MapExploreSection from "../components/home/MapExploreSection";
@@ -26,7 +26,7 @@ export default function Home() {
       <MatchSteps onStartQuiz={startQuiz} />
       <WhyMatchSection />
       <FeaturedProperties properties={properties} isLoading={isLoading} />
-      <DualPathSection onStartQuiz={startQuiz} />
+      <RentEasySection />
       <ValuePropsSection onStartQuiz={startQuiz} />
       <TestimonialsSection />
       <MapExploreSection />
