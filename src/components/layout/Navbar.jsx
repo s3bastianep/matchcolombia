@@ -6,12 +6,34 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
 import BrandLogo from "../brand/BrandLogo";
 
-const navLinks = [
+const seekerLinks = [
   { to: "/explorar?intent=compra", label: "Comprar", intent: "compra" },
   { to: "/explorar", label: "Rentar", intent: "arriendo" },
+];
+
+const ownerLinks = [
   { to: "/publicar", label: "Vender", publish: true },
   { to: "/anunciar", label: "Anunciar", advertise: true },
 ];
+
+function NavLink({ link, pathname, search, className }) {
+  const active = isNavLinkActive(link, pathname, search);
+  return (
+    <Link to={link.to}>
+      <span
+        className={cn(
+          "px-4 py-2 text-sm font-semibold rounded-full transition-colors",
+          active
+            ? "text-[hsl(265,75%,50%)] bg-[hsl(265,75%,58%)]/8"
+            : "text-foreground/70 hover:text-foreground hover:bg-secondary",
+          className
+        )}
+      >
+        {link.label}
+      </span>
+    </Link>
+  );
+}
 
 function isNavLinkActive(link, pathname, search) {
   if (link.advertise) return pathname === "/anunciar";
@@ -41,21 +63,29 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-[60px]">
           <BrandLogo size="sm" />
 
-          <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link key={link.label} to={link.to}>
-                <span
+          <div className="hidden lg:flex items-center gap-5">
+            <div className="flex items-center gap-1">
+              {seekerLinks.map((link) => (
+                <NavLink key={link.label} link={link} pathname={location.pathname} search={location.search} />
+              ))}
+            </div>
+
+            <div className="w-px h-6 bg-border/70" aria-hidden />
+
+            <div className="flex items-center gap-1 pl-0.5">
+              {ownerLinks.map((link) => (
+                <NavLink
+                  key={link.label}
+                  link={link}
+                  pathname={location.pathname}
+                  search={location.search}
                   className={cn(
-                    "px-4 py-2 text-sm font-semibold rounded-full transition-colors",
-                    isNavLinkActive(link, location.pathname, location.search)
-                      ? "text-[hsl(265,75%,50%)] bg-[hsl(265,75%,58%)]/8"
-                      : "text-foreground/70 hover:text-foreground hover:bg-secondary"
+                    !isNavLinkActive(link, location.pathname, location.search) &&
+                      "text-foreground/55 hover:text-foreground/80"
                   )}
-                >
-                  {link.label}
-                </span>
-              </Link>
-            ))}
+                />
+              ))}
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -155,17 +185,52 @@ export default function Navbar() {
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden border-t border-border/50 bg-white overflow-hidden"
           >
-            <div className="px-4 py-3 space-y-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.to}
-                  onClick={() => setMobileOpen(false)}
-                  className="block px-3 py-3 text-sm font-semibold text-foreground/80 hover:bg-secondary rounded-xl"
-                >
-                  {link.label}
-                </Link>
-              ))}
+            <div className="px-4 py-3 space-y-4">
+              <div>
+                <p className="px-3 mb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Buscar inmueble
+                </p>
+                <div className="space-y-1">
+                  {seekerLinks.map((link) => (
+                    <Link
+                      key={link.label}
+                      to={link.to}
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(
+                        "block px-3 py-3 text-sm font-semibold rounded-xl transition-colors",
+                        isNavLinkActive(link, location.pathname, location.search)
+                          ? "text-[hsl(265,75%,50%)] bg-[hsl(265,75%,58%)]/8"
+                          : "text-foreground/80 hover:bg-secondary"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div className="border-t border-border/40 pt-3">
+                <p className="px-3 mb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Publicar inmueble
+                </p>
+                <div className="space-y-1">
+                  {ownerLinks.map((link) => (
+                    <Link
+                      key={link.label}
+                      to={link.to}
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(
+                        "block px-3 py-3 text-sm font-semibold rounded-xl transition-colors",
+                        isNavLinkActive(link, location.pathname, location.search)
+                          ? "text-[hsl(265,75%,50%)] bg-[hsl(265,75%,58%)]/8"
+                          : "text-foreground/70 hover:bg-secondary"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
               {isAuthenticated && user ? (
                 <>
