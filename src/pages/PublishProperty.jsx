@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
@@ -75,18 +75,22 @@ function FieldLabel({ children }) {
 
 export default function PublishProperty() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
-    title: "", description: "", property_type: "apartamento", city: "Bogotá",
-    neighborhood: "", locality: "", address: "",
+    title: "", description: "", property_type: "apartamento",
+    city: searchParams.get("city") || "Bogotá",
+    neighborhood: searchParams.get("neighborhood") || "",
+    locality: "", address: "",
     bedrooms: "", bathrooms: "", area_sqm: "", floor: "",
     parking: false, parking_spots: 0, furnished: "sin_amoblar", pets_allowed: false,
     amenities: [], images: [], available_from: "",
     monthly_rent: "", deposit: "", admin_fee: "",
     min_contract_months: "", estrato: "",
-    contact_name: user?.name || "",
-    contact_phone: "", contact_email: user?.email || "",
+    contact_name: searchParams.get("name") || user?.name || "",
+    contact_phone: searchParams.get("phone") || "",
+    contact_email: searchParams.get("email") || user?.email || "",
     status: "disponible",
   });
   const [uploading, setUploading] = useState(false);
@@ -172,6 +176,10 @@ export default function PublishProperty() {
     <div className="min-h-screen bg-[hsl(240,40%,98%)]">
       <div className="bg-white border-b border-border/50">
         <div className="max-w-3xl mx-auto px-5 sm:px-8 py-8 sm:py-10">
+          <Link to="/publicar" className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground mb-4 transition-colors">
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Volver a vender
+          </Link>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[hsl(340,82%,52%)]/10 text-[hsl(340,82%,45%)] text-xs font-bold uppercase tracking-wider mb-4">
             <Sparkles className="w-3.5 h-3.5" />
             Publicar gratis
@@ -447,7 +455,7 @@ export default function PublishProperty() {
         <div className="flex items-center justify-between mt-8">
           <button
             type="button"
-            onClick={() => (step > 0 ? setStep(step - 1) : navigate(-1))}
+            onClick={() => (step > 0 ? setStep(step - 1) : navigate("/publicar"))}
             className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />

@@ -15,7 +15,7 @@ const navLinks = [
 
 function isNavLinkActive(link, pathname, search) {
   if (link.advertise) return pathname === "/anunciar";
-  if (link.publish) return pathname === "/publicar";
+  if (link.publish) return pathname.startsWith("/publicar");
   if (pathname !== "/explorar") return false;
   const intent = new URLSearchParams(search).get("intent");
   if (link.intent === "compra") return intent === "compra";

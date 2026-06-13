@@ -211,7 +211,7 @@ function LeadForm({ dark = false }) {
     if (form.name) params.set("name", form.name);
     if (form.email) params.set("email", form.email);
     if (form.phone) params.set("phone", form.phone);
-    navigate(`/publicar${params.toString() ? `?${params}` : ""}`);
+    navigate(`/publicar/nuevo${params.toString() ? `?${params}` : ""}`);
   };
 
   const inputClass = cn(
@@ -287,7 +287,7 @@ export default function Advertise() {
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <Link
-                to="/publicar"
+                to="/publicar/nuevo"
                 className="inline-flex items-center justify-center gap-2 bg-white text-[hsl(265,35%,22%)] font-bold px-6 py-3.5 rounded-xl hover:bg-white/90 transition-colors text-sm"
               >
                 Publicar mi inmueble
