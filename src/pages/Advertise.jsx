@@ -18,7 +18,6 @@ import {
   Camera,
   ClipboardCheck,
   Handshake,
-  Star,
   Phone,
   Mail,
   User,
@@ -73,24 +72,6 @@ const PROCESS = [
   { title: "Publicamos por ti", desc: "Revisamos, activamos y promocionamos en tu zona.", icon: Camera },
   { title: "Gestionamos interesados", desc: "Consultas, visitas y evaluación — sin que tú hables con nadie.", icon: Users },
   { title: "Eliges con confianza", desc: "Te presentamos al mejor candidato. Seguimos el proceso.", icon: BadgeCheck },
-];
-
-const OWNER_TESTIMONIALS = [
-  {
-    text: "Lo mejor es que no me escribieron 50 personas por WhatsApp. MatchColombia filtró todo y solo me avisaron cuando había alguien serio.",
-    author: "Carlos M.",
-    role: "Propietario · Chapinero",
-  },
-  {
-    text: "Publicé mi apartamento un martes y ellos se encargaron de las visitas el fin de semana. Yo solo recibí el resumen.",
-    author: "María Elena R.",
-    role: "Propietaria · Usaquén",
-  },
-  {
-    text: "El equipo gestionó consultas y me presentó dos candidatos buenos. Cero estrés.",
-    author: "Andrés V.",
-    role: "Propietario · Barranquilla",
-  },
 ];
 
 const FAQ = [
@@ -386,38 +367,6 @@ export default function Advertise() {
                     <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{desc}</p>
                   </div>
                 </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonios — tarjeta destacada + lista */}
-      <section className="py-16 sm:py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
-          <OwnerSectionTitle title="Propietarios que ya confían" subtitle="Dejaron la gestión en nuestras manos." />
-          <div className="mt-10 grid lg:grid-cols-[1.2fr_1fr] gap-5">
-            <blockquote className="bg-[hsl(265,35%,22%)] text-white rounded-2xl p-8 sm:p-10 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-[hsl(340,82%,52%)]/20 blur-3xl" />
-              <div className="relative">
-                <div className="flex gap-0.5 mb-4">
-                  {Array(5).fill(0).map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-[hsl(32,95%,54%)] text-[hsl(32,95%,54%)]" />
-                  ))}
-                </div>
-                <p className="text-lg sm:text-xl font-medium leading-relaxed text-white/95">&ldquo;{OWNER_TESTIMONIALS[0].text}&rdquo;</p>
-                <footer className="mt-6 pt-6 border-t border-white/15">
-                  <p className="font-bold">{OWNER_TESTIMONIALS[0].author}</p>
-                  <p className="text-sm text-white/60">{OWNER_TESTIMONIALS[0].role}</p>
-                </footer>
-              </div>
-            </blockquote>
-            <div className="space-y-4">
-              {OWNER_TESTIMONIALS.slice(1).map((t) => (
-                <blockquote key={t.author} className="bg-white border border-border/40 rounded-2xl p-5">
-                  <p className="text-sm text-foreground/85 leading-relaxed">&ldquo;{t.text}&rdquo;</p>
-                  <footer className="mt-3 text-xs font-bold text-muted-foreground">{t.author} · {t.role}</footer>
-                </blockquote>
               ))}
             </div>
           </div>
