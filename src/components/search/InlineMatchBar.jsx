@@ -28,12 +28,12 @@ const CITY_OPTIONS = [
 ];
 
 const triggerClass =
-  "border-0 shadow-none focus:ring-0 p-0 h-8 gap-2 font-semibold text-sm text-foreground w-full [&>span]:line-clamp-none";
+  "border-0 shadow-none focus:ring-0 p-0 h-7 gap-1.5 font-semibold text-sm text-foreground w-full [&>span]:line-clamp-none [&>svg]:opacity-40";
 
 function MatchField({ label, value, onChange, options, className }) {
   return (
-    <div className={cn("px-4 sm:px-5 py-3.5 min-w-0 w-full", className)}>
-      <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-1">{label}</p>
+    <div className={cn("px-4 sm:px-5 py-3 min-w-0 w-full", className)}>
+      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80 mb-0.5">{label}</p>
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className={triggerClass}>
           <SelectValue />
@@ -48,17 +48,33 @@ function MatchField({ label, value, onChange, options, className }) {
   );
 }
 
-function MatchButton({ onClick, className }) {
+function MatchButton({ onClick, compact = false, className }) {
+  if (compact) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className={cn(
+          "inline-flex items-center justify-center gap-2 h-10 px-5 rounded-full gradient-cta text-white text-sm font-bold shadow-md shadow-primary/20 hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all shrink-0 whitespace-nowrap",
+          className
+        )}
+      >
+        <Search className="w-4 h-4 shrink-0" strokeWidth={2.5} />
+        Match
+      </button>
+    );
+  }
+
   return (
     <button
       type="button"
       onClick={onClick}
       className={cn(
-        "flex items-center justify-center gap-2 w-full gradient-cta text-white font-bold text-sm px-6 py-4 rounded-xl hover:opacity-95 transition-opacity",
+        "inline-flex items-center justify-center gap-2 w-full h-11 gradient-cta text-white font-bold text-sm px-5 rounded-full shadow-md shadow-primary/15 hover:opacity-95 active:scale-[0.99] transition-all",
         className
       )}
     >
-      <Search className="w-4 h-4 shrink-0" />
+      <Search className="w-4 h-4 shrink-0" strokeWidth={2.5} />
       <span>Empieza tu match</span>
     </button>
   );
@@ -110,30 +126,24 @@ export default function InlineMatchBar({ variant = "hero" }) {
     },
   ];
 
+  const barShell = "w-full max-w-full rounded-[1.25rem] bg-white/95 backdrop-blur-sm border border-border/60 shadow-[0_8px_30px_-8px_rgba(0,0,0,0.12)] overflow-hidden";
+
   if (variant === "hero") {
     return (
-      <div className="w-full max-w-full rounded-2xl bg-white border border-border/80 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.15)] overflow-hidden">
-        <div className="color-bar h-[3px] w-full" />
+      <div className={barShell}>
+        <div className="color-bar h-[2px] w-full opacity-90" />
 
-        {/* Móvil + tablet: campos apilados */}
-        <div className="flex flex-col lg:hidden divide-y divide-border/60">
+        <div className="flex flex-col lg:hidden divide-y divide-border/50">
           {fields.map((field) => (
-            <MatchField
-              key={field.key}
-              label={field.label}
-              value={field.value}
-              onChange={field.onChange}
-              options={field.options}
-            />
+            <MatchField key={field.key} label={field.label} value={field.value} onChange={field.onChange} options={field.options} />
           ))}
-          <div className="p-3">
+          <div className="p-3 pt-2">
             <MatchButton onClick={handleMatch} />
           </div>
         </div>
 
-        {/* Desktop: fila horizontal */}
-        <div className="hidden lg:flex lg:items-stretch">
-          <div className="flex flex-1 min-w-0 divide-x divide-border/60">
+        <div className="hidden lg:flex lg:items-center lg:gap-1 lg:pr-2.5 lg:py-2">
+          <div className="flex flex-1 min-w-0 divide-x divide-border/50">
             {fields.map((field) => (
               <MatchField
                 key={field.key}
@@ -141,15 +151,12 @@ export default function InlineMatchBar({ variant = "hero" }) {
                 value={field.value}
                 onChange={field.onChange}
                 options={field.options}
-                className="flex-1 min-w-[160px] hover:bg-secondary/40 transition-colors"
+                className="flex-1 min-w-0 hover:bg-secondary/30 transition-colors rounded-sm"
               />
             ))}
           </div>
-          <div className="p-2 shrink-0 flex items-center">
-            <MatchButton
-              onClick={handleMatch}
-              className="w-auto h-full min-h-[72px] px-7 py-0 rounded-xl whitespace-nowrap"
-            />
+          <div className="shrink-0 pl-1 pr-0.5">
+            <MatchButton onClick={handleMatch} compact />
           </div>
         </div>
       </div>
@@ -157,34 +164,23 @@ export default function InlineMatchBar({ variant = "hero" }) {
   }
 
   return (
-    <div className="w-full max-w-full rounded-2xl bg-white border border-border/70 shadow-lg overflow-hidden">
-      <div className="flex flex-col sm:hidden divide-y divide-border/60">
+    <div className={cn(barShell, "shadow-lg")}>
+      <div className="flex flex-col sm:hidden divide-y divide-border/50">
         {fields.map((field) => (
           <MatchField key={field.key} {...field} />
         ))}
-        <div className="p-3">
-          <button
-            type="button"
-            onClick={handleMatch}
-            className="flex items-center justify-center gap-2 w-full bg-[hsl(265,75%,50%)] hover:bg-[hsl(265,75%,45%)] text-white font-bold text-sm px-6 py-4 rounded-xl transition-colors"
-          >
-            <Search className="w-4 h-4 shrink-0" />
-            Empieza tu match
-          </button>
+        <div className="p-3 pt-2">
+          <MatchButton onClick={handleMatch} />
         </div>
       </div>
 
-      <div className="hidden sm:flex sm:items-stretch divide-x divide-border/60">
+      <div className="hidden sm:flex sm:items-center sm:gap-2 sm:pr-2 sm:py-2 divide-x divide-border/50">
         {fields.map((field) => (
           <MatchField key={field.key} {...field} className="flex-1 min-w-0" />
         ))}
-        <button
-          type="button"
-          onClick={handleMatch}
-          className="m-2 bg-[hsl(265,75%,50%)] hover:bg-[hsl(265,75%,45%)] text-white font-bold text-sm px-5 py-3.5 rounded-xl transition-colors shrink-0 self-center"
-        >
-          Empieza tu match
-        </button>
+        <div className="pl-2 pr-1 shrink-0">
+          <MatchButton onClick={handleMatch} compact />
+        </div>
       </div>
     </div>
   );

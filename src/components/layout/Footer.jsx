@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Mail, Phone } from "lucide-react";
 import { BRAND } from "@/lib/brand";
+import CitySkyline from "./CitySkyline";
 
 const SocialX = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -142,6 +143,8 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      <CitySkyline />
     </footer>
   );
 }

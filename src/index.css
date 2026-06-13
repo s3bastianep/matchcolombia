@@ -89,6 +89,39 @@
 }
 .animate-marquee { animation: marquee 30s linear infinite; }
 
+@keyframes skyline-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.skyline-track {
+  animation: skyline-scroll 90s linear infinite;
+}
+.skyline-track-paused {
+  animation-play-state: paused;
+}
+
+@keyframes blimp-float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-4px) translateX(6px); }
+}
+.animate-blimp {
+  animation: blimp-float 6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes birds-drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(12px); }
+}
+.animate-birds {
+  animation: birds-drift 8s ease-in-out infinite;
+}
+
+.skyline-building:hover .skyline-window {
+  opacity: 1;
+  filter: brightness(1.15);
+}
+
 @layer utilities {
   .gradient-hero {
     background:
