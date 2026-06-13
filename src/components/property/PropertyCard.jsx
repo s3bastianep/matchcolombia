@@ -73,21 +73,25 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03, duration: 0.3 }}
-      className={cn("card-hover", highlighted && "ring-2 ring-[hsl(265,75%,58%)]/40", isGrid ? "rounded-xl" : "rounded-[1.35rem]")}
+      className={cn(
+        "card-hover",
+        highlighted && "ring-2 ring-[hsl(265,75%,58%)] ring-offset-2",
+        isGrid ? "rounded-xl" : "rounded-[1.35rem]"
+      )}
     >
       <Link to={`/propiedad/${property.id}`} className="group block">
         <article
           className={cn(
             "bg-white overflow-hidden transition-all duration-300",
             isGrid
-              ? "rounded-lg border-0 group-hover:shadow-[0_4px_20px_rgba(15,23,42,0.08)]"
+              ? "rounded-xl border border-[hsl(0,0%,92%)] group-hover:border-[hsl(265,75%,58%)]/25 group-hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]"
               : "rounded-[1.35rem]",
             !isGrid && isExplore
               ? "border border-[hsl(0,0%,92%)] shadow-[0_4px_24px_rgba(15,23,42,0.05)] group-hover:shadow-[0_12px_36px_rgba(15,23,42,0.09)] group-hover:-translate-y-0.5"
               : !isGrid && "border border-border/40 shadow-sm group-hover:shadow-xl group-hover:border-[hsl(265,75%,58%)]/25"
           )}
         >
-          <div className={cn("relative overflow-hidden bg-muted", isGrid ? "aspect-[5/4] rounded-lg" : isExplore ? "aspect-[16/10]" : "aspect-[4/3]")}>
+          <div className={cn("relative overflow-hidden bg-muted", isGrid ? "aspect-[5/4] rounded-t-xl" : isExplore ? "aspect-[16/10]" : "aspect-[4/3]")}>
             <SmartImage
               src={image}
               alt={property.title}
@@ -129,9 +133,10 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                   setLiked(toggleShortlist(property.id));
                 }}
                 className={cn(
-                  "absolute top-2.5 right-2.5 w-8 h-8 rounded-full flex items-center justify-center z-10 transition-all opacity-0 group-hover:opacity-100",
-                  liked ? "bg-primary text-white shadow-md opacity-100" : "bg-white/95 text-gray-400 hover:text-primary shadow-sm"
+                  "absolute top-2.5 right-2.5 w-8 h-8 rounded-full flex items-center justify-center z-10 transition-all shadow-sm",
+                  liked ? "bg-primary text-white" : "bg-white/95 text-gray-400 hover:text-primary"
                 )}
+                aria-label="Guardar en favoritos"
               >
                 <Heart className={cn("w-3.5 h-3.5", liked && "fill-current")} />
               </button>
@@ -146,7 +151,8 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                     e.stopPropagation();
                     setPhotoIdx((i) => (i - 1 + images.length) % images.length);
                   }}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/90 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/95 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                  aria-label="Foto anterior"
                 >
                   <ChevronLeft className="w-4 h-4 text-foreground/70" />
                 </button>
@@ -157,10 +163,22 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                     e.stopPropagation();
                     setPhotoIdx((i) => (i + 1) % images.length);
                   }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/90 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                  className="absolute right-10 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/95 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                  aria-label="Foto siguiente"
                 >
                   <ChevronRight className="w-4 h-4 text-foreground/70" />
                 </button>
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex gap-1">
+                  {images.slice(0, 5).map((_, i) => (
+                    <span
+                      key={i}
+                      className={cn(
+                        "w-1.5 h-1.5 rounded-full transition-all",
+                        i === photoIdx ? "bg-white scale-110" : "bg-white/50"
+                      )}
+                    />
+                  ))}
+                </div>
               </>
             )}
 
@@ -201,10 +219,10 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
             )}
           </div>
 
-          <div className={cn(isGrid ? "p-3" : isExplore ? "p-4 sm:p-5" : "p-5")}>
+          <div className={cn(isGrid ? "px-3 pt-3 pb-3.5" : isExplore ? "p-4 sm:p-5" : "p-5")}>
             {isGrid && (
               <>
-                <p className="font-extrabold text-[15px] text-foreground leading-tight tracking-tight">
+                <p className="font-extrabold text-base text-foreground leading-tight tracking-tight">
                   {formatCOP(property.monthly_rent)}
                   <span className="text-xs font-semibold text-muted-foreground"> / mes</span>
                 </p>
@@ -213,15 +231,29 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                     {formatCOP(property.admin_fee)} administración aprox.
                   </p>
                 )}
-                <div className="flex items-center gap-2.5 text-[11px] text-muted-foreground mt-2 font-medium">
-                  {property.area_sqm && <span>{property.area_sqm} m²</span>}
-                  <span className="flex items-center gap-0.5"><Bed className="w-3 h-3" />{property.bedrooms}</span>
-                  <span className="flex items-center gap-0.5"><Bath className="w-3 h-3" />{property.bathrooms}</span>
+                <div className="flex items-center gap-3 text-[11px] text-foreground/70 mt-2.5 font-semibold">
+                  {property.area_sqm && (
+                    <span className="flex items-center gap-1">
+                      <Maximize className="w-3 h-3 text-[hsl(168,72%,40%)]" />
+                      {property.area_sqm} m²
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1">
+                    <Bed className="w-3 h-3 text-[hsl(265,75%,58%)]" />
+                    {property.bedrooms}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Bath className="w-3 h-3 text-[hsl(200,90%,50%)]" />
+                    {property.bathrooms}
+                  </span>
                 </div>
-                <p className="text-[11px] text-muted-foreground mt-1.5 line-clamp-1">
-                  {typeLabel[property.property_type] || "Inmueble"}
-                  {property.neighborhood ? ` ${property.neighborhood}` : ""}
-                  {property.city ? `, ${property.city}` : ""}
+                <p className="text-xs text-muted-foreground mt-2 line-clamp-1 flex items-center gap-1">
+                  <MapPin className="w-3 h-3 shrink-0 text-[hsl(340,82%,52%)]" />
+                  <span>
+                    {typeLabel[property.property_type] || "Inmueble"}
+                    {property.neighborhood ? ` ${property.neighborhood}` : ""}
+                    {property.city ? `, ${property.city}` : ""}
+                  </span>
                 </p>
               </>
             )}

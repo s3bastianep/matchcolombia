@@ -89,6 +89,15 @@ export default function ExploreMap({
       </div>
       )}
 
+      {pane && (
+        <div className="absolute top-3 left-3 z-[1000] pointer-events-none">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-bold text-foreground border border-[hsl(0,0%,88%)] shadow-sm">
+            <MapPin className="w-3 h-3 text-[hsl(340,82%,52%)]" />
+            {properties.length} en el mapa
+          </span>
+        </div>
+      )}
+
       <InteractiveMap
         markers={mapMarkers}
         center={mapCenter}
@@ -123,7 +132,10 @@ export default function ExploreMap({
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 8 }}
-              className="bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3 border border-white/80 shadow-lg pointer-events-auto"
+              className={cn(
+                "bg-white/95 backdrop-blur-md rounded-xl px-3.5 py-3 border border-white/80 shadow-lg pointer-events-auto",
+                pane && "text-left"
+              )}
             >
               <p className="font-bold text-sm truncate">{hovered.title}</p>
               <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
