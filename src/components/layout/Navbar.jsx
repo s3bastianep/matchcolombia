@@ -7,26 +7,48 @@ import { useAuth } from "@/lib/AuthContext";
 import BrandLogo from "../brand/BrandLogo";
 
 const seekerLinks = [
-  { to: "/explorar?intent=compra", label: "Comprar", intent: "compra" },
-  { to: "/explorar", label: "Rentar", intent: "arriendo" },
+  { to: "/explorar?intent=compra", label: "Comprar", intent: "compra", theme: "compra" },
+  { to: "/explorar", label: "Rentar", intent: "arriendo", theme: "rentar" },
 ];
 
 const ownerLinks = [
-  { to: "/publicar", label: "Vender", publish: true },
-  { to: "/anunciar", label: "Anunciar", advertise: true },
+  { to: "/publicar", label: "Vender", publish: true, theme: "vender" },
+  { to: "/anunciar", label: "Anunciar", advertise: true, theme: "anunciar" },
 ];
+
+const NAV_THEMES = {
+  compra: {
+    idle: "text-[hsl(200,70%,42%)] hover:text-[hsl(200,80%,36%)]",
+    active: "bg-[hsl(200,90%,94%)] text-[hsl(200,85%,32%)] font-semibold",
+  },
+  rentar: {
+    idle: "text-[hsl(265,60%,50%)] hover:text-[hsl(265,70%,44%)]",
+    active: "bg-[hsl(265,75%,94%)] text-[hsl(265,75%,42%)] font-semibold",
+  },
+  vender: {
+    idle: "text-[hsl(32,80%,42%)] hover:text-[hsl(28,90%,36%)]",
+    active: "bg-[hsl(32,95%,92%)] text-[hsl(24,90%,34%)] font-semibold",
+  },
+  anunciar: {
+    idle: "text-[hsl(265,35%,40%)] hover:text-[hsl(265,35%,32%)]",
+    active: "bg-[hsl(265,30%,90%)] text-[hsl(265,35%,24%)] font-semibold",
+  },
+};
+
+function navLinkClass(theme, active) {
+  const t = NAV_THEMES[theme];
+  return cn(
+    "block px-2.5 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap",
+    active ? t.active : t.idle
+  );
+}
 
 function NavLink({ link, pathname, search }) {
   const active = isNavLinkActive(link, pathname, search);
 
   return (
     <Link to={link.to}>
-      <span
-        className={cn(
-          "block px-2.5 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap",
-          active ? "bg-white text-foreground shadow-sm" : "text-foreground/55 hover:text-foreground/80"
-        )}
-      >
+      <span className={navLinkClass(link.theme, active)}>
         {link.label}
       </span>
     </Link>
@@ -201,10 +223,8 @@ export default function Navbar() {
                       to={link.to}
                       onClick={() => setMobileOpen(false)}
                       className={cn(
-                        "flex-1 text-center px-2 py-2 text-xs font-medium rounded-md transition-colors",
-                        isNavLinkActive(link, location.pathname, location.search)
-                          ? "bg-white text-foreground shadow-sm"
-                          : "text-foreground/55"
+                        "flex-1 text-center px-2 py-2 text-xs rounded-md transition-colors",
+                        navLinkClass(link.theme, isNavLinkActive(link, location.pathname, location.search))
                       )}
                     >
                       {link.label}
@@ -222,10 +242,8 @@ export default function Navbar() {
                       to={link.to}
                       onClick={() => setMobileOpen(false)}
                       className={cn(
-                        "flex-1 text-center px-2 py-2 text-xs font-medium rounded-md transition-colors",
-                        isNavLinkActive(link, location.pathname, location.search)
-                          ? "bg-white text-foreground shadow-sm"
-                          : "text-foreground/55"
+                        "flex-1 text-center px-2 py-2 text-xs rounded-md transition-colors",
+                        navLinkClass(link.theme, isNavLinkActive(link, location.pathname, location.search))
                       )}
                     >
                       {link.label}
