@@ -12,6 +12,7 @@ import Home from './pages/Home';
 import Explore from './pages/Explore';
 import PropertyDetail from './pages/PropertyDetail';
 import PublishProperty from './pages/PublishProperty';
+import Advertise from './pages/Advertise';
 import Favorites from './pages/Favorites';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -31,6 +32,7 @@ function App() {
             <Route element={<AppLayout />}>
               <Route path="/" element={<Home />} />
               <Route path="/explorar" element={<Explore />} />
+              <Route path="/anunciar" element={<Advertise />} />
               <Route path="/propiedad/:id" element={<PropertyDetail />} />
               <Route element={<RequireAuth />}>
                 <Route path="/publicar" element={<PublishProperty />} />

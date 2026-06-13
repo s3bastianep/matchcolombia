@@ -22,6 +22,7 @@ const SocialTikTok = () => (
 const footerLinks = {
   Plataforma: [
     { to: "/explorar", label: "Buscar arriendos" },
+    { to: "/anunciar", label: "Anunciar inmueble" },
     { to: "/publicar", label: "Publicar gratis" },
     { to: "/favoritos", label: "Mis guardados" },
   ],

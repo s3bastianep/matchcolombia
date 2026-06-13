@@ -10,10 +10,11 @@ const navLinks = [
   { to: "/explorar?intent=compra", label: "Comprar", intent: "compra" },
   { to: "/explorar", label: "Rentar", intent: "arriendo" },
   { to: "/publicar", label: "Vender", publish: true },
-  { to: "/publicar", label: "Anunciar", publish: true },
+  { to: "/anunciar", label: "Anunciar", advertise: true },
 ];
 
 function isNavLinkActive(link, pathname, search) {
+  if (link.advertise) return pathname === "/anunciar";
   if (link.publish) return pathname === "/publicar";
   if (pathname !== "/explorar") return false;
   const intent = new URLSearchParams(search).get("intent");
