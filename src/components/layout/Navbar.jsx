@@ -1,36 +1,40 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Heart, User, LogOut, LogIn, UserPlus } from "lucide-react";
+import { Menu, X, Heart, User, LogOut, LogIn, UserPlus, Search, KeyRound, TrendingUp, Megaphone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
 import BrandLogo from "../brand/BrandLogo";
 
 const seekerLinks = [
-  { to: "/explorar?intent=compra", label: "Comprar", intent: "compra" },
-  { to: "/explorar", label: "Rentar", intent: "arriendo" },
+  { to: "/explorar?intent=compra", label: "Comprar", intent: "compra", icon: Search },
+  { to: "/explorar", label: "Rentar", intent: "arriendo", icon: KeyRound },
 ];
 
 const ownerLinks = [
-  { to: "/publicar", label: "Vender", publish: true },
-  { to: "/anunciar", label: "Anunciar", advertise: true },
+  { to: "/publicar", label: "Vender", publish: true, icon: TrendingUp, tone: "sell" },
+  { to: "/anunciar", label: "Anunciar", advertise: true, icon: Megaphone, tone: "advertise" },
 ];
 
 function NavLink({ link, pathname, search, variant = "seeker" }) {
   const active = isNavLinkActive(link, pathname, search);
   const isOwner = variant === "owner";
+  const Icon = link.icon;
 
   return (
-    <Link to={link.to}>
+    <Link to={link.to} className="flex-1 min-w-0">
       <span
         className={cn(
-          "px-4 py-2 text-sm font-semibold rounded-lg transition-all",
-          active && isOwner && "bg-[hsl(265,35%,22%)] text-white shadow-sm",
-          active && !isOwner && "bg-white text-[hsl(265,75%,50%)] shadow-sm",
-          !active && isOwner && "text-[hsl(265,35%,28%)]/80 hover:text-[hsl(265,35%,22%)] hover:bg-white/70",
-          !active && !isOwner && "text-foreground/65 hover:text-foreground hover:bg-white/60"
+          "flex items-center justify-center gap-1.5 px-3.5 py-2 text-sm font-semibold rounded-full transition-all whitespace-nowrap",
+          active && !isOwner && "bg-white text-[hsl(265,75%,48%)] shadow-sm ring-1 ring-white/80",
+          !active && !isOwner && "text-foreground/60 hover:text-foreground hover:bg-white/50",
+          active && isOwner && link.tone === "sell" && "bg-gradient-to-r from-[hsl(32,95%,54%)] to-[hsl(340,82%,52%)] text-white shadow-md shadow-[hsl(340,82%,52%)]/25",
+          active && isOwner && link.tone === "advertise" && "bg-[hsl(265,35%,22%)] text-white shadow-md",
+          !active && isOwner && link.tone === "sell" && "text-[hsl(32,70%,38%)] hover:bg-white/80 hover:text-[hsl(32,80%,32%)]",
+          !active && isOwner && link.tone === "advertise" && "text-[hsl(265,50%,42%)] hover:bg-white/80 hover:text-[hsl(265,35%,28%)]"
         )}
       >
+        {Icon && <Icon className="w-3.5 h-3.5 shrink-0" strokeWidth={2.25} />}
         {link.label}
       </span>
     </Link>
@@ -41,21 +45,21 @@ function NavGroup({ label, links, variant, pathname, search }) {
   const isOwner = variant === "owner";
 
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className="flex flex-col gap-1.5">
       <span
         className={cn(
-          "text-[9px] font-extrabold uppercase tracking-[0.14em] leading-none",
-          isOwner ? "text-[hsl(265,75%,45%)]" : "text-muted-foreground/75"
+          "text-[9px] font-extrabold uppercase tracking-[0.16em] leading-none pl-1",
+          isOwner ? "text-[hsl(265,75%,48%)]" : "text-[hsl(200,50%,42%)]"
         )}
       >
         {label}
       </span>
       <div
         className={cn(
-          "flex items-center gap-0.5 p-1 rounded-xl",
+          "flex items-center gap-0.5 p-1 rounded-full",
           isOwner
-            ? "bg-[hsl(265,35%,22%)]/[0.07] ring-1 ring-[hsl(265,75%,58%)]/20"
-            : "bg-secondary ring-1 ring-border/60"
+            ? "bg-[hsl(265,30%,93%)] ring-1 ring-[hsl(265,75%,58%)]/25 shadow-sm"
+            : "bg-[hsl(210,35%,94%)] ring-1 ring-[hsl(200,60%,88%)]/80 shadow-sm"
         )}
       >
         {links.map((link) => (
@@ -91,10 +95,10 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border/50">
       <div className="color-bar h-[2px] w-full" />
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
-        <div className="flex items-center justify-between h-[64px] lg:h-[72px]">
+        <div className="flex items-center justify-between h-[60px] lg:h-[64px]">
           <BrandLogo size="sm" />
 
-          <div className="hidden lg:flex items-end gap-6">
+          <div className="hidden lg:flex items-center gap-5">
             <NavGroup
               label="Buscar"
               links={seekerLinks}
@@ -103,7 +107,9 @@ export default function Navbar() {
               search={location.search}
             />
 
-            <div className="w-px h-12 bg-border mb-1" aria-hidden />
+            <div className="flex flex-col items-center gap-1 self-stretch py-1" aria-hidden>
+              <div className="w-px flex-1 bg-gradient-to-b from-transparent via-border to-transparent" />
+            </div>
 
             <NavGroup
               label="Publicar"
@@ -213,48 +219,57 @@ export default function Navbar() {
           >
             <div className="px-4 py-3 space-y-4">
               <div>
-                <p className="px-3 mb-2 text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">
+                <p className="px-3 mb-2 text-[10px] font-extrabold uppercase tracking-widest text-[hsl(200,50%,42%)]">
                   Buscar inmueble
                 </p>
-                <div className="flex gap-1 p-1 rounded-xl bg-secondary ring-1 ring-border/60">
-                  {seekerLinks.map((link) => (
-                    <Link
-                      key={link.label}
-                      to={link.to}
-                      onClick={() => setMobileOpen(false)}
-                      className={cn(
-                        "flex-1 text-center px-3 py-3 text-sm font-semibold rounded-lg transition-colors",
-                        isNavLinkActive(link, location.pathname, location.search)
-                          ? "bg-white text-[hsl(265,75%,50%)] shadow-sm"
-                          : "text-foreground/70 hover:bg-white/60"
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+                <div className="flex gap-1 p-1 rounded-full bg-[hsl(210,35%,94%)] ring-1 ring-[hsl(200,60%,88%)]/80">
+                  {seekerLinks.map((link) => {
+                    const Icon = link.icon;
+                    const active = isNavLinkActive(link, location.pathname, location.search);
+                    return (
+                      <Link
+                        key={link.label}
+                        to={link.to}
+                        onClick={() => setMobileOpen(false)}
+                        className={cn(
+                          "flex-1 flex items-center justify-center gap-1.5 px-3 py-3 text-sm font-semibold rounded-full transition-colors",
+                          active ? "bg-white text-[hsl(265,75%,48%)] shadow-sm" : "text-foreground/65 hover:bg-white/50"
+                        )}
+                      >
+                        <Icon className="w-3.5 h-3.5" />
+                        {link.label}
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
 
               <div>
-                <p className="px-3 mb-2 text-[10px] font-extrabold uppercase tracking-widest text-[hsl(265,75%,45%)]">
+                <p className="px-3 mb-2 text-[10px] font-extrabold uppercase tracking-widest text-[hsl(265,75%,48%)]">
                   Publicar inmueble
                 </p>
-                <div className="flex gap-1 p-1 rounded-xl bg-[hsl(265,35%,22%)]/[0.07] ring-1 ring-[hsl(265,75%,58%)]/20">
-                  {ownerLinks.map((link) => (
-                    <Link
-                      key={link.label}
-                      to={link.to}
-                      onClick={() => setMobileOpen(false)}
-                      className={cn(
-                        "flex-1 text-center px-3 py-3 text-sm font-semibold rounded-lg transition-colors",
-                        isNavLinkActive(link, location.pathname, location.search)
-                          ? "bg-[hsl(265,35%,22%)] text-white shadow-sm"
-                          : "text-[hsl(265,35%,28%)]/80 hover:bg-white/70"
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+                <div className="flex gap-1 p-1 rounded-full bg-[hsl(265,30%,93%)] ring-1 ring-[hsl(265,75%,58%)]/25">
+                  {ownerLinks.map((link) => {
+                    const Icon = link.icon;
+                    const active = isNavLinkActive(link, location.pathname, location.search);
+                    return (
+                      <Link
+                        key={link.label}
+                        to={link.to}
+                        onClick={() => setMobileOpen(false)}
+                        className={cn(
+                          "flex-1 flex items-center justify-center gap-1.5 px-3 py-3 text-sm font-semibold rounded-full transition-colors",
+                          active && link.tone === "sell" && "bg-gradient-to-r from-[hsl(32,95%,54%)] to-[hsl(340,82%,52%)] text-white shadow-sm",
+                          active && link.tone === "advertise" && "bg-[hsl(265,35%,22%)] text-white shadow-sm",
+                          !active && link.tone === "sell" && "text-[hsl(32,70%,38%)] hover:bg-white/70",
+                          !active && link.tone === "advertise" && "text-[hsl(265,50%,42%)] hover:bg-white/70"
+                        )}
+                      >
+                        <Icon className="w-3.5 h-3.5" />
+                        {link.label}
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
 
