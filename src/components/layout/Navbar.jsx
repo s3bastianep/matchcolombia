@@ -1,69 +1,47 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Heart, User, LogOut, LogIn, UserPlus, Search, KeyRound, TrendingUp, Megaphone } from "lucide-react";
+import { Menu, X, Heart, User, LogOut, LogIn, UserPlus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
 import BrandLogo from "../brand/BrandLogo";
 
 const seekerLinks = [
-  { to: "/explorar?intent=compra", label: "Comprar", intent: "compra", icon: Search },
-  { to: "/explorar", label: "Rentar", intent: "arriendo", icon: KeyRound },
+  { to: "/explorar?intent=compra", label: "Comprar", intent: "compra" },
+  { to: "/explorar", label: "Rentar", intent: "arriendo" },
 ];
 
 const ownerLinks = [
-  { to: "/publicar", label: "Vender", publish: true, icon: TrendingUp, tone: "sell" },
-  { to: "/anunciar", label: "Anunciar", advertise: true, icon: Megaphone, tone: "advertise" },
+  { to: "/publicar", label: "Vender", publish: true },
+  { to: "/anunciar", label: "Anunciar", advertise: true },
 ];
 
-function NavLink({ link, pathname, search, variant = "seeker" }) {
+function NavLink({ link, pathname, search }) {
   const active = isNavLinkActive(link, pathname, search);
-  const isOwner = variant === "owner";
-  const Icon = link.icon;
 
   return (
-    <Link to={link.to} className="flex-1 min-w-0">
+    <Link to={link.to}>
       <span
         className={cn(
-          "flex items-center justify-center gap-1.5 px-3.5 py-2 text-sm font-semibold rounded-full transition-all whitespace-nowrap",
-          active && !isOwner && "bg-white text-[hsl(265,75%,48%)] shadow-sm ring-1 ring-white/80",
-          !active && !isOwner && "text-foreground/60 hover:text-foreground hover:bg-white/50",
-          active && isOwner && link.tone === "sell" && "bg-gradient-to-r from-[hsl(32,95%,54%)] to-[hsl(340,82%,52%)] text-white shadow-md shadow-[hsl(340,82%,52%)]/25",
-          active && isOwner && link.tone === "advertise" && "bg-[hsl(265,35%,22%)] text-white shadow-md",
-          !active && isOwner && link.tone === "sell" && "text-[hsl(32,70%,38%)] hover:bg-white/80 hover:text-[hsl(32,80%,32%)]",
-          !active && isOwner && link.tone === "advertise" && "text-[hsl(265,50%,42%)] hover:bg-white/80 hover:text-[hsl(265,35%,28%)]"
+          "block px-2.5 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap",
+          active ? "bg-white text-foreground shadow-sm" : "text-foreground/55 hover:text-foreground/80"
         )}
       >
-        {Icon && <Icon className="w-3.5 h-3.5 shrink-0" strokeWidth={2.25} />}
         {link.label}
       </span>
     </Link>
   );
 }
 
-function NavGroup({ label, links, variant, pathname, search }) {
-  const isOwner = variant === "owner";
-
+function NavGroup({ label, links, pathname, search }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <span
-        className={cn(
-          "text-[9px] font-extrabold uppercase tracking-[0.16em] leading-none pl-1",
-          isOwner ? "text-[hsl(265,75%,48%)]" : "text-[hsl(200,50%,42%)]"
-        )}
-      >
+    <div className="flex items-center gap-2">
+      <span className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wide shrink-0">
         {label}
       </span>
-      <div
-        className={cn(
-          "flex items-center gap-0.5 p-1 rounded-full",
-          isOwner
-            ? "bg-[hsl(265,30%,93%)] ring-1 ring-[hsl(265,75%,58%)]/25 shadow-sm"
-            : "bg-[hsl(210,35%,94%)] ring-1 ring-[hsl(200,60%,88%)]/80 shadow-sm"
-        )}
-      >
+      <div className="flex items-center gap-0.5 p-0.5 rounded-lg bg-secondary/70">
         {links.map((link) => (
-          <NavLink key={link.label} link={link} pathname={pathname} search={search} variant={variant} />
+          <NavLink key={link.label} link={link} pathname={pathname} search={search} />
         ))}
       </div>
     </div>
@@ -95,26 +73,22 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border/50">
       <div className="color-bar h-[2px] w-full" />
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
-        <div className="flex items-center justify-between h-[60px] lg:h-[64px]">
+        <div className="flex items-center justify-between h-[56px]">
           <BrandLogo size="sm" />
 
-          <div className="hidden lg:flex items-center gap-5">
+          <div className="hidden lg:flex items-center gap-4">
             <NavGroup
               label="Buscar"
               links={seekerLinks}
-              variant="seeker"
               pathname={location.pathname}
               search={location.search}
             />
 
-            <div className="flex flex-col items-center gap-1 self-stretch py-1" aria-hidden>
-              <div className="w-px flex-1 bg-gradient-to-b from-transparent via-border to-transparent" />
-            </div>
+            <div className="w-px h-4 bg-border/80" aria-hidden />
 
             <NavGroup
               label="Publicar"
               links={ownerLinks}
-              variant="owner"
               pathname={location.pathname}
               search={location.search}
             />
@@ -217,59 +191,46 @@ export default function Navbar() {
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden border-t border-border/50 bg-white overflow-hidden"
           >
-            <div className="px-4 py-3 space-y-4">
-              <div>
-                <p className="px-3 mb-2 text-[10px] font-extrabold uppercase tracking-widest text-[hsl(200,50%,42%)]">
-                  Buscar inmueble
-                </p>
-                <div className="flex gap-1 p-1 rounded-full bg-[hsl(210,35%,94%)] ring-1 ring-[hsl(200,60%,88%)]/80">
-                  {seekerLinks.map((link) => {
-                    const Icon = link.icon;
-                    const active = isNavLinkActive(link, location.pathname, location.search);
-                    return (
-                      <Link
-                        key={link.label}
-                        to={link.to}
-                        onClick={() => setMobileOpen(false)}
-                        className={cn(
-                          "flex-1 flex items-center justify-center gap-1.5 px-3 py-3 text-sm font-semibold rounded-full transition-colors",
-                          active ? "bg-white text-[hsl(265,75%,48%)] shadow-sm" : "text-foreground/65 hover:bg-white/50"
-                        )}
-                      >
-                        <Icon className="w-3.5 h-3.5" />
-                        {link.label}
-                      </Link>
-                    );
-                  })}
+            <div className="px-4 py-3 space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wide w-14 shrink-0">Buscar</span>
+                <div className="flex flex-1 gap-0.5 p-0.5 rounded-lg bg-secondary/70">
+                  {seekerLinks.map((link) => (
+                    <Link
+                      key={link.label}
+                      to={link.to}
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(
+                        "flex-1 text-center px-2 py-2 text-xs font-medium rounded-md transition-colors",
+                        isNavLinkActive(link, location.pathname, location.search)
+                          ? "bg-white text-foreground shadow-sm"
+                          : "text-foreground/55"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
                 </div>
               </div>
 
-              <div>
-                <p className="px-3 mb-2 text-[10px] font-extrabold uppercase tracking-widest text-[hsl(265,75%,48%)]">
-                  Publicar inmueble
-                </p>
-                <div className="flex gap-1 p-1 rounded-full bg-[hsl(265,30%,93%)] ring-1 ring-[hsl(265,75%,58%)]/25">
-                  {ownerLinks.map((link) => {
-                    const Icon = link.icon;
-                    const active = isNavLinkActive(link, location.pathname, location.search);
-                    return (
-                      <Link
-                        key={link.label}
-                        to={link.to}
-                        onClick={() => setMobileOpen(false)}
-                        className={cn(
-                          "flex-1 flex items-center justify-center gap-1.5 px-3 py-3 text-sm font-semibold rounded-full transition-colors",
-                          active && link.tone === "sell" && "bg-gradient-to-r from-[hsl(32,95%,54%)] to-[hsl(340,82%,52%)] text-white shadow-sm",
-                          active && link.tone === "advertise" && "bg-[hsl(265,35%,22%)] text-white shadow-sm",
-                          !active && link.tone === "sell" && "text-[hsl(32,70%,38%)] hover:bg-white/70",
-                          !active && link.tone === "advertise" && "text-[hsl(265,50%,42%)] hover:bg-white/70"
-                        )}
-                      >
-                        <Icon className="w-3.5 h-3.5" />
-                        {link.label}
-                      </Link>
-                    );
-                  })}
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wide w-14 shrink-0">Publicar</span>
+                <div className="flex flex-1 gap-0.5 p-0.5 rounded-lg bg-secondary/70">
+                  {ownerLinks.map((link) => (
+                    <Link
+                      key={link.label}
+                      to={link.to}
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(
+                        "flex-1 text-center px-2 py-2 text-xs font-medium rounded-md transition-colors",
+                        isNavLinkActive(link, location.pathname, location.search)
+                          ? "bg-white text-foreground shadow-sm"
+                          : "text-foreground/55"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
                 </div>
               </div>
 
