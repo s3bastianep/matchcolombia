@@ -1,22 +1,31 @@
 import React, { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { MapPin, Navigation } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MapPin, Navigation, Layers, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import InteractiveMap from "@/components/map/InteractiveMap";
+import { clusterMarkers } from "@/lib/mapClusters";
 import { getPropertyLatLng, getPropertyPin, getCityLabel, getMapCenter } from "@/lib/zoneMap";
 
 const formatCOP = (v) =>
   new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v || 0);
 
-export default function ExploreMap({ properties, activeCity }) {
+export default function ExploreMap({
+  properties,
+  activeCity,
+  className,
+  sticky = false,
+  highlightedId,
+  onHighlight,
+}) {
   const navigate = useNavigate();
   const [hoveredId, setHoveredId] = useState(null);
-  const hovered = properties.find((p) => p.id === hoveredId);
+  const [selectedCluster, setSelectedCluster] = useState(null);
 
   const cityLabel = activeCity || (properties[0] ? getCityLabel(properties[0].city) : "Bogotá y Barranquilla");
   const mapCenter = getMapCenter(activeCity || properties[0]?.city);
 
-  const markers = useMemo(
+  const rawMarkers = useMemo(
     () =>
       properties.map((property, i) => {
         const coords = getPropertyLatLng(property, i);
@@ -29,54 +38,132 @@ export default function ExploreMap({ properties, activeCity }) {
           sublabel: property.neighborhood,
           color: pin.hex,
           href: `/propiedad/${property.id}`,
+          property,
         };
       }),
     [properties]
   );
 
+  const mapMarkers = useMemo(() => clusterMarkers(rawMarkers), [rawMarkers]);
+  const activeId = hoveredId || highlightedId;
+  const hovered = properties.find((p) => p.id === activeId);
+
+  const handleMarkerClick = (marker) => {
+    if (marker.type === "cluster") {
+      setSelectedCluster(marker);
+      return;
+    }
+    if (marker.href) navigate(marker.href);
+  };
+
+  const handleMarkerEnter = (marker) => {
+    if (marker.type === "cluster") return;
+    setHoveredId(marker.id);
+    onHighlight?.(marker.id);
+  };
+
+  const handleMarkerLeave = () => {
+    setHoveredId(null);
+    onHighlight?.(null);
+  };
+
   return (
-    <div className="relative rounded-3xl overflow-hidden border border-border/40 shadow-lg min-h-[420px] sm:min-h-[520px]">
+    <div
+      className={cn(
+        "relative rounded-[1.35rem] overflow-hidden border border-border/30 shadow-[0_8px_30px_rgba(15,23,42,0.08)] bg-white",
+        sticky && "xl:sticky xl:top-[210px]",
+        className
+      )}
+    >
+      <div className="absolute top-4 left-4 z-[1000] flex items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-bold text-foreground border border-border/40 shadow-sm">
+          <Layers className="w-3 h-3 text-[hsl(265,75%,50%)]" />
+          {mapMarkers.filter((m) => m.type === "cluster").length > 0
+            ? `${mapMarkers.length} zonas · ${properties.length} inmuebles`
+            : `${properties.length} en el mapa`}
+        </span>
+      </div>
+
       <InteractiveMap
-        markers={markers}
+        markers={mapMarkers}
         center={mapCenter}
         zoom={mapCenter.zoom}
-        className="absolute inset-0 w-full h-full"
-        onMarkerClick={(marker) => marker.href && navigate(marker.href)}
-        onMarkerEnter={(marker) => setHoveredId(marker.id)}
-        onMarkerLeave={() => setHoveredId(null)}
-        activeMarkerId={hoveredId}
+        className="w-full min-h-[360px] sm:min-h-[440px] xl:min-h-[calc(100vh-240px)]"
+        onMarkerClick={handleMarkerClick}
+        onMarkerEnter={handleMarkerEnter}
+        onMarkerLeave={handleMarkerLeave}
+        activeMarkerId={activeId}
       />
 
-      <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 z-[1000] flex flex-col sm:flex-row gap-3 pointer-events-none">
-        <div className="flex-1 bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3.5 border border-white shadow-lg flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl gradient-cta flex items-center justify-center shrink-0">
-            <Navigation className="w-5 h-5 text-white" />
+      <div className="absolute bottom-4 left-4 right-4 z-[1000] flex flex-col gap-3 pointer-events-none">
+        <div className="bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3 border border-white/80 shadow-lg flex items-center gap-3 pointer-events-auto">
+          <div className="w-9 h-9 rounded-xl gradient-cta flex items-center justify-center shrink-0">
+            <Navigation className="w-4 h-4 text-white" />
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-sm font-extrabold text-foreground truncate">{cityLabel}</p>
-            <p className="text-xs text-muted-foreground">
-              {properties.length} inmueble{properties.length !== 1 ? "s" : ""} en el mapa
-            </p>
+            <p className="text-xs text-muted-foreground">Toca un pin o grupo para ver detalle</p>
           </div>
         </div>
 
-        {hovered && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="sm:w-72 bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3 border border-white shadow-lg pointer-events-auto"
-          >
-            <p className="font-bold text-sm truncate">{hovered.title}</p>
-            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-              <MapPin className="w-3 h-3" />
-              {hovered.neighborhood}, {hovered.city}
-            </p>
-            <p className="text-sm font-extrabold text-[hsl(340,82%,52%)] mt-1">{formatCOP(hovered.monthly_rent)}/mes</p>
-            <Link to={`/propiedad/${hovered.id}`} className="text-xs font-bold text-[hsl(265,75%,50%)] mt-2 inline-block hover:underline">
-              Ver detalle →
-            </Link>
-          </motion.div>
-        )}
+        <AnimatePresence>
+          {hovered && !selectedCluster && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              className="bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3 border border-white/80 shadow-lg pointer-events-auto"
+            >
+              <p className="font-bold text-sm truncate">{hovered.title}</p>
+              <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                <MapPin className="w-3 h-3" />
+                {hovered.neighborhood}, {hovered.city}
+              </p>
+              <p className="text-sm font-extrabold text-[hsl(340,82%,52%)] mt-1">{formatCOP(hovered.monthly_rent)}/mes</p>
+              <Link to={`/propiedad/${hovered.id}`} className="text-xs font-bold text-[hsl(265,75%,50%)] mt-2 inline-block hover:underline">
+                Ver detalle →
+              </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {selectedCluster && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              className="bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-white/80 shadow-lg pointer-events-auto max-h-52 overflow-y-auto"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-sm font-extrabold">{selectedCluster.count} inmuebles en esta zona</p>
+                <button
+                  type="button"
+                  onClick={() => setSelectedCluster(null)}
+                  className="p-1 rounded-lg hover:bg-secondary"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="space-y-2">
+                {selectedCluster.markers.map((marker) => (
+                  <Link
+                    key={marker.id}
+                    to={marker.href}
+                    onClick={() => setSelectedCluster(null)}
+                    className="flex items-center justify-between gap-3 p-2.5 rounded-xl hover:bg-secondary/80 transition-colors"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold truncate">{marker.property?.title || marker.sublabel}</p>
+                      <p className="text-[10px] text-muted-foreground">{marker.sublabel}</p>
+                    </div>
+                    <span className="text-xs font-extrabold text-[hsl(340,82%,52%)] shrink-0">{marker.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

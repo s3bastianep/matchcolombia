@@ -5,9 +5,17 @@ import { getVisibleBounds, latLngToPercent } from "@/lib/zoneMap";
 
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
 
-function markerSvg(color = "#e11d6f") {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
-    <circle cx="14" cy="14" r="9" fill="${color}" stroke="white" stroke-width="3"/>
+function markerSvg(color = "#e11d6f", size = 28) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${size / 2}" cy="${size / 2}" r="${size * 0.32}" fill="${color}" stroke="white" stroke-width="3"/>
+  </svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function clusterSvg(color = "#7c3aed", count = 2) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+    <circle cx="18" cy="18" r="14" fill="${color}" stroke="white" stroke-width="3"/>
+    <text x="18" y="22" text-anchor="middle" fill="white" font-size="12" font-weight="700" font-family="Arial,sans-serif">${count}</text>
   </svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
@@ -25,7 +33,10 @@ function MapBadge() {
 }
 
 function MapMarker({ marker, position, onMarkerClick, onMarkerEnter, onMarkerLeave, activeMarkerId }) {
+  const isCluster = marker.type === "cluster";
   const isActive = activeMarkerId === marker.id;
+  const size = isCluster ? "w-9 h-9" : "w-5 h-5";
+
   return (
     <button
       type="button"
@@ -36,22 +47,50 @@ function MapMarker({ marker, position, onMarkerClick, onMarkerEnter, onMarkerLea
       onMouseLeave={() => onMarkerLeave?.(marker)}
       aria-label={marker.label || marker.sublabel || "Ver en mapa"}
     >
-      <div
-        className={cn(
-          "w-5 h-5 rounded-full shadow-lg ring-4 ring-white transition-transform",
-          isActive ? "scale-150" : "group-hover:scale-125"
-        )}
-        style={{ backgroundColor: marker.color || "#e11d6f" }}
-      />
-      {(marker.label || marker.sublabel) && (
+      {isCluster ? (
         <div
           className={cn(
-            "absolute top-6 left-1/2 -translate-x-1/2 whitespace-nowrap transition-opacity pointer-events-none",
+            "rounded-full shadow-lg ring-4 ring-white flex items-center justify-center text-white text-[11px] font-extrabold transition-transform",
+            size,
+            isActive ? "scale-110" : "group-hover:scale-105"
+          )}
+          style={{ backgroundColor: marker.color || "#7c3aed" }}
+        >
+          {marker.count}
+        </div>
+      ) : (
+        <>
+          <div
+            className={cn(
+              "rounded-full shadow-lg ring-4 ring-white transition-transform",
+              size,
+              isActive ? "scale-150" : "group-hover:scale-125"
+            )}
+            style={{ backgroundColor: marker.color || "#e11d6f" }}
+          />
+          {marker.label && (
+            <div
+              className={cn(
+                "absolute top-6 left-1/2 -translate-x-1/2 whitespace-nowrap transition-opacity pointer-events-none",
+                isActive ? "opacity-100" : "opacity-80 group-hover:opacity-100"
+              )}
+            >
+              <div className="bg-foreground text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-lg">
+                {marker.label}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+      {isCluster && (
+        <div
+          className={cn(
+            "absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap transition-opacity pointer-events-none",
             isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
           )}
         >
           <div className="bg-foreground text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-lg">
-            {marker.label || marker.sublabel}
+            {marker.label}
           </div>
         </div>
       )}
@@ -147,22 +186,27 @@ function GoogleMapView({ markers, center, zoom, className, onMarkerClick, onMark
           styles: [{ featureType: "poi", stylers: [{ visibility: "off" }] }],
         }}
       >
-        {markers.map((marker) => (
-          <Marker
-            key={marker.id}
-            position={{ lat: marker.lat, lng: marker.lng }}
-            title={marker.label}
-            icon={{
-              url: markerSvg(marker.color || "#e11d6f"),
-              scaledSize: new window.google.maps.Size(28, 28),
-              anchor: new window.google.maps.Point(14, 14),
-            }}
-            onClick={() => onMarkerClick?.(marker)}
-            onMouseOver={() => onMarkerEnter?.(marker)}
-            onMouseOut={() => onMarkerLeave?.(marker)}
-            zIndex={activeMarkerId === marker.id ? 1000 : 1}
-          />
-        ))}
+        {markers.map((marker) => {
+          const isCluster = marker.type === "cluster";
+          return (
+            <Marker
+              key={marker.id}
+              position={{ lat: marker.lat, lng: marker.lng }}
+              title={marker.label}
+              icon={{
+                url: isCluster
+                  ? clusterSvg(marker.color || "#7c3aed", marker.count)
+                  : markerSvg(marker.color || "#e11d6f"),
+                scaledSize: new window.google.maps.Size(isCluster ? 36 : 28, isCluster ? 36 : 28),
+                anchor: new window.google.maps.Point(isCluster ? 18 : 14, isCluster ? 18 : 14),
+              }}
+              onClick={() => onMarkerClick?.(marker)}
+              onMouseOver={() => onMarkerEnter?.(marker)}
+              onMouseOut={() => onMarkerLeave?.(marker)}
+              zIndex={activeMarkerId === marker.id ? 1000 : isCluster ? 2 : 1}
+            />
+          );
+        })}
       </GoogleMap>
     </div>
   );

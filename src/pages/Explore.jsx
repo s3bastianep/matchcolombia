@@ -8,8 +8,9 @@ import AdvancedFilters from "../components/explore/AdvancedFilters";
 import ExploreMap from "../components/explore/ExploreMap";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
-import { SlidersHorizontal, X, MapPin, Sparkles, Search, LayoutGrid, Map } from "lucide-react";
+import { SlidersHorizontal, X, MapPin, Sparkles, Search, LayoutGrid, Map, Columns2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatEstratoFilterLabel } from "@/lib/propertyLabels";
 import { loadPreferences, scoreProperty } from "@/lib/matchPreferences";
 import {
   DEFAULT_ADVANCED_FILTERS,
@@ -28,15 +29,14 @@ const QUICK_FILTERS = [
 
 function ExploreSkeleton() {
   return (
-    <div className="rounded-3xl bg-white border border-border/40 overflow-hidden shadow-sm">
-      <div className="aspect-[4/3] shimmer" />
-      <div className="p-4 space-y-3">
+    <div className="rounded-[1.35rem] bg-white border border-border/30 overflow-hidden shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
+      <div className="aspect-[16/10] shimmer" />
+      <div className="p-5 space-y-3">
         <div className="h-4 w-3/4 rounded-lg shimmer" />
         <div className="h-3 w-1/2 rounded-lg shimmer" />
         <div className="flex gap-2 pt-1">
-          <div className="h-6 w-14 rounded-full shimmer" />
-          <div className="h-6 w-14 rounded-full shimmer" />
-          <div className="h-6 w-14 rounded-full shimmer" />
+          <div className="h-6 w-16 rounded-md shimmer" />
+          <div className="h-6 w-14 rounded-md shimmer" />
         </div>
       </div>
     </div>
@@ -72,7 +72,8 @@ export default function Explore() {
   const [activeQuick, setActiveQuick] = useState([]);
   const [priceMax, setPriceMax] = useState(initialMax ? parseInt(initialMax) : (prefs?.maxPrice || 10000000));
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [viewMode, setViewMode] = useState("list");
+  const [viewMode, setViewMode] = useState("split");
+  const [highlightedId, setHighlightedId] = useState(null);
 
   const advancedFilters = useMemo(
     () => parseAdvancedFiltersFromUrl(searchParams),
@@ -148,8 +149,8 @@ export default function Explore() {
 
   return (
     <div className="min-h-screen bg-[hsl(240,40%,98%)]">
-      <div className="bg-white border-b border-border/50 sticky top-[62px] z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-6 sm:py-7">
+      <div className="bg-white border-b border-border/40 sticky top-[62px] z-30">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-5">
           {isMatched && prefs && (
             <motion.div
               initial={{ opacity: 0, y: -8 }}
@@ -179,16 +180,13 @@ export default function Explore() {
             </motion.div>
           )}
 
-          <div className="mb-5 flex items-end justify-between gap-4">
+          <div className="mb-4 flex items-end justify-between gap-4">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
-                {isMatched ? "Resultados personalizados" : "Explorar"}
-              </p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              <h1 className="text-2xl sm:text-[1.75rem] font-extrabold tracking-tight">
                 {isMatched ? "Tus matches" : exploreHeading}{" "}
                 <span className="text-gradient">{cityLabel}</span>
               </h1>
-              <p className="text-sm text-muted-foreground mt-1.5 flex items-center gap-1.5">
+              <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-[hsl(340,82%,52%)]" />
                 {isLoading ? "Cargando..." : `${filtered.length} inmueble${filtered.length !== 1 ? "s" : ""}`}
                 {initialQ && <span className="font-semibold text-foreground"> en «{initialQ}»</span>}
@@ -205,12 +203,12 @@ export default function Explore() {
             )}
           </div>
 
-          <SearchBar variant="compact" className="shadow-lg shadow-black/[0.04] rounded-2xl" />
+          <SearchBar variant="compact" className="shadow-[0_8px_30px_rgba(15,23,42,0.06)] rounded-[1.25rem] border-border/30" />
         </div>
       </div>
 
-      <div className="border-b border-border/40 bg-white/90 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-3 flex items-center gap-2.5 overflow-x-auto fade-edges">
+      <div className="border-b border-border/30 bg-white">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-2.5 flex items-center gap-2 overflow-x-auto">
           <button
             type="button"
             onClick={() => setMobileFiltersOpen(true)}
@@ -240,10 +238,10 @@ export default function Explore() {
                 )
               }
               className={cn(
-                "shrink-0 px-4 py-2 rounded-full text-xs font-bold border-2 transition-all",
+                "shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold border transition-all",
                 activeQuick.includes(f.key)
-                  ? `${f.color} shadow-sm scale-[1.02]`
-                  : "bg-white border-border/50 text-muted-foreground hover:border-border"
+                  ? `${f.color} shadow-sm`
+                  : "bg-white border-border/40 text-muted-foreground hover:border-border hover:text-foreground"
               )}
             >
               {f.label}
@@ -258,7 +256,18 @@ export default function Explore() {
             </button>
           )}
           <div className="ml-auto shrink-0 flex items-center gap-2">
-            <div className="flex p-1 rounded-xl bg-secondary/80">
+            <div className="flex p-1 rounded-xl bg-secondary/60 border border-border/30">
+              <button
+                type="button"
+                onClick={() => setViewMode("split")}
+                className={cn(
+                  "hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
+                  viewMode === "split" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground"
+                )}
+              >
+                <Columns2 className="w-3.5 h-3.5" />
+                Split
+              </button>
               <button
                 type="button"
                 onClick={() => setViewMode("list")}
@@ -298,9 +307,9 @@ export default function Explore() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8 sm:py-10">
-        <div className="flex gap-8 items-start">
-          <aside className="hidden lg:block w-72 xl:w-80 shrink-0 sticky top-[220px]">
+      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-6 sm:py-8">
+        <div className="flex gap-6 xl:gap-8 items-start">
+          <aside className="hidden lg:block w-64 xl:w-72 shrink-0 sticky top-[200px]">
             <AdvancedFilters
               filters={advancedFilters}
               onChange={updateAdvancedFilters}
@@ -309,41 +318,85 @@ export default function Explore() {
           </aside>
 
           <div className="flex-1 min-w-0">
-            {advancedCount > 0 && (
+            {totalFilterCount > 0 && (
               <div className="mb-5 flex flex-wrap gap-2">
                 {advancedFilters.bedrooms && (
-                  <span className="px-3 py-1 rounded-full bg-white border border-border/60 text-xs font-semibold">
+                  <span className="px-3 py-1 rounded-lg bg-white border border-border/40 text-xs font-semibold">
                     {advancedFilters.bedrooms === "5" ? "5+ hab." : `${advancedFilters.bedrooms} hab.`}
                   </span>
                 )}
                 {advancedFilters.bathrooms && (
-                  <span className="px-3 py-1 rounded-full bg-white border border-border/60 text-xs font-semibold">
+                  <span className="px-3 py-1 rounded-lg bg-white border border-border/40 text-xs font-semibold">
                     {advancedFilters.bathrooms === "5" ? "5+ baños" : `${advancedFilters.bathrooms} baño${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
                   </span>
                 )}
                 {advancedFilters.parkingSpots && (
-                  <span className="px-3 py-1 rounded-full bg-white border border-border/60 text-xs font-semibold">
+                  <span className="px-3 py-1 rounded-lg bg-white border border-border/40 text-xs font-semibold">
                     {advancedFilters.parkingSpots === "5" ? "5+ parqueaderos" : `${advancedFilters.parkingSpots} parqueadero${advancedFilters.parkingSpots !== "1" ? "s" : ""}`}
                   </span>
                 )}
                 {advancedFilters.estrato && (
-                  <span className="px-3 py-1 rounded-full bg-white border border-border/60 text-xs font-semibold capitalize">
-                    Estrato {advancedFilters.estrato}
+                  <span className="px-3 py-1 rounded-lg bg-[hsl(32,95%,54%)]/10 border border-[hsl(32,95%,54%)]/20 text-xs font-semibold text-[hsl(32,95%,38%)]">
+                    {formatEstratoFilterLabel(advancedFilters.estrato)}
                   </span>
                 )}
+                {activeQuick.map((key) => {
+                  const label = QUICK_FILTERS.find((f) => f.key === key)?.label;
+                  return label ? (
+                    <span key={key} className="px-3 py-1 rounded-lg bg-white border border-border/40 text-xs font-semibold">
+                      {label}
+                    </span>
+                  ) : null;
+                })}
               </div>
             )}
 
             {isLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-6 sm:gap-7">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-7">
                 {Array(6).fill(0).map((_, i) => (
                   <ExploreSkeleton key={i} />
                 ))}
               </div>
             ) : filtered.length > 0 && viewMode === "map" ? (
               <ExploreMap properties={filtered} activeCity={initialCity || undefined} />
+            ) : filtered.length > 0 && viewMode === "split" ? (
+              <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(340px,42%)] gap-6 xl:gap-7 items-start">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-5 sm:gap-6">
+                  {filtered.map((property, i) => (
+                    <div
+                      key={property.id}
+                      onMouseEnter={() => setHighlightedId(property.id)}
+                      onMouseLeave={() => setHighlightedId(null)}
+                    >
+                      <PropertyCard
+                        property={property}
+                        index={i}
+                        matchScore={property.matchScore}
+                        showMatch={isMatched}
+                        variant="explore"
+                        highlighted={highlightedId === property.id}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <ExploreMap
+                  properties={filtered}
+                  activeCity={initialCity || undefined}
+                  sticky
+                  highlightedId={highlightedId}
+                  onHighlight={setHighlightedId}
+                  className="hidden xl:block"
+                />
+                <ExploreMap
+                  properties={filtered}
+                  activeCity={initialCity || undefined}
+                  highlightedId={highlightedId}
+                  onHighlight={setHighlightedId}
+                  className="xl:hidden"
+                />
+              </div>
             ) : filtered.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-6 sm:gap-7">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-7">
                 {filtered.map((property, i) => (
                   <PropertyCard
                     key={property.id}
@@ -351,6 +404,7 @@ export default function Explore() {
                     index={i}
                     matchScore={property.matchScore}
                     showMatch={isMatched}
+                    variant="explore"
                   />
                 ))}
               </div>
