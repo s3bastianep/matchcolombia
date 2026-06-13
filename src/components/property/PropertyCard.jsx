@@ -41,7 +41,7 @@ const typeLabel = {
 
 function FeatureChip({ icon: Icon, children, className }) {
   return (
-    <span className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold border", className)}>
+    <span className={cn("inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold border", className)}>
       {Icon && <Icon className="w-3 h-3 shrink-0" />}
       {children}
     </span>
@@ -77,7 +77,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
           className={cn(
             "rounded-[1.35rem] bg-white overflow-hidden transition-all duration-300",
             isExplore
-              ? "border border-border/30 shadow-[0_8px_30px_rgba(15,23,42,0.06)] group-hover:shadow-[0_16px_40px_rgba(15,23,42,0.1)] group-hover:-translate-y-0.5"
+              ? "border border-[hsl(0,0%,92%)] shadow-[0_4px_24px_rgba(15,23,42,0.05)] group-hover:shadow-[0_12px_36px_rgba(15,23,42,0.09)] group-hover:-translate-y-0.5"
               : "border border-border/40 shadow-sm group-hover:shadow-xl group-hover:border-[hsl(265,75%,58%)]/25"
           )}
         >

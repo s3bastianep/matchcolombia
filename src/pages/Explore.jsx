@@ -207,28 +207,28 @@ export default function Explore() {
         </div>
       </div>
 
-      <div className="border-b border-border/30 bg-white">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-2.5 flex items-center gap-2 overflow-x-auto">
+      <div className="border-b border-[hsl(0,0%,92%)] bg-[hsl(0,0%,98%)]">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-3 flex items-center gap-2.5 overflow-x-auto">
           <button
             type="button"
             onClick={() => setMobileFiltersOpen(true)}
             className={cn(
-              "lg:hidden shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold border-2 transition-all",
+              "lg:hidden shrink-0 flex items-center gap-1.5 h-10 px-4 rounded-full text-xs font-bold border transition-all",
               advancedCount > 0
-                ? "border-[hsl(265,75%,58%)]/35 text-[hsl(265,75%,50%)] bg-[hsl(265,75%,58%)]/10"
-                : "bg-white border-border/50 text-muted-foreground"
+                ? "border-foreground/20 bg-foreground text-white"
+                : "bg-white border-[hsl(0,0%,88%)] text-foreground hover:border-foreground/20"
             )}
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
             Más filtros
             {advancedCount > 0 && (
-              <span className="w-5 h-5 rounded-full bg-[hsl(265,75%,58%)] text-white text-[10px] font-bold flex items-center justify-center">
+              <span className="w-5 h-5 rounded-full bg-white/20 text-white text-[10px] font-bold flex items-center justify-center">
                 {advancedCount}
               </span>
             )}
           </button>
 
-          <SlidersHorizontal className="w-4 h-4 text-muted-foreground shrink-0 hidden lg:block" />
+          <span className="hidden lg:inline text-xs font-bold text-muted-foreground shrink-0">Filtros:</span>
           {QUICK_FILTERS.map((f) => (
             <button
               key={f.key}
@@ -238,10 +238,10 @@ export default function Explore() {
                 )
               }
               className={cn(
-                "shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold border transition-all",
+                "shrink-0 h-10 px-4 rounded-full text-xs font-semibold border transition-all",
                 activeQuick.includes(f.key)
-                  ? `${f.color} shadow-sm`
-                  : "bg-white border-border/40 text-muted-foreground hover:border-border hover:text-foreground"
+                  ? "bg-foreground border-foreground text-white shadow-sm"
+                  : "bg-white border-[hsl(0,0%,88%)] text-foreground/80 hover:border-foreground/20"
               )}
             >
               {f.label}
@@ -309,7 +309,7 @@ export default function Explore() {
 
       <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-6 sm:py-8">
         <div className="flex gap-6 xl:gap-8 items-start">
-          <aside className="hidden lg:block w-64 xl:w-72 shrink-0 sticky top-[200px]">
+          <aside className="hidden lg:block w-[272px] xl:w-[288px] shrink-0 sticky top-[188px]">
             <AdvancedFilters
               filters={advancedFilters}
               onChange={updateAdvancedFilters}
@@ -452,7 +452,7 @@ export default function Explore() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 320 }}
-              className="relative w-full bg-[hsl(240,40%,98%)] rounded-t-3xl p-5 max-h-[88vh] overflow-y-auto"
+              className="relative w-full bg-[hsl(0,0%,96%)] rounded-t-3xl p-5 max-h-[88vh] overflow-y-auto"
             >
               <div className="w-10 h-1 bg-border rounded-full mx-auto mb-4" />
               <div className="flex items-center justify-between mb-4">
