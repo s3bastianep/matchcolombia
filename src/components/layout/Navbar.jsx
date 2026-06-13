@@ -55,17 +55,12 @@ function NavLink({ link, pathname, search }) {
   );
 }
 
-function NavGroup({ label, links, pathname, search }) {
+function NavGroup({ links, pathname, search }) {
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wide shrink-0">
-        {label}
-      </span>
-      <div className="flex items-center gap-0.5 p-0.5 rounded-lg bg-secondary/70">
-        {links.map((link) => (
-          <NavLink key={link.label} link={link} pathname={pathname} search={search} />
-        ))}
-      </div>
+    <div className="flex items-center gap-0.5 p-0.5 rounded-lg bg-secondary/70">
+      {links.map((link) => (
+        <NavLink key={link.label} link={link} pathname={pathname} search={search} />
+      ))}
     </div>
   );
 }
@@ -98,9 +93,8 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-[56px]">
           <BrandLogo size="sm" />
 
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-3">
             <NavGroup
-              label="Buscar"
               links={seekerLinks}
               pathname={location.pathname}
               search={location.search}
@@ -109,7 +103,6 @@ export default function Navbar() {
             <div className="w-px h-4 bg-border/80" aria-hidden />
 
             <NavGroup
-              label="Publicar"
               links={ownerLinks}
               pathname={location.pathname}
               search={location.search}
@@ -215,7 +208,6 @@ export default function Navbar() {
           >
             <div className="px-4 py-3 space-y-3">
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wide w-14 shrink-0">Buscar</span>
                 <div className="flex flex-1 gap-0.5 p-0.5 rounded-lg bg-secondary/70">
                   {seekerLinks.map((link) => (
                     <Link
@@ -231,10 +223,9 @@ export default function Navbar() {
                     </Link>
                   ))}
                 </div>
-              </div>
 
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wide w-14 shrink-0">Publicar</span>
+                <div className="w-px h-4 bg-border/80 shrink-0" aria-hidden />
+
                 <div className="flex flex-1 gap-0.5 p-0.5 rounded-lg bg-secondary/70">
                   {ownerLinks.map((link) => (
                     <Link
