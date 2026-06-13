@@ -28,7 +28,7 @@ export default function ValuePropsSection({ onStartQuiz }) {
         <div className="text-center mb-12">
           <p className="text-xs font-bold uppercase tracking-widest text-[hsl(265,75%,50%)] mb-2">Nuestra filosofía</p>
           <h2 className="text-2xl sm:text-[2rem] font-extrabold leading-tight mb-6">
-            Hecho por quienes entienden de arriendos
+            Hecho para quienes odian el scroll infinito
           </h2>
           <button
             onClick={onStartQuiz}

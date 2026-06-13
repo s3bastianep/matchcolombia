@@ -1,7 +1,8 @@
 export const BRAND = {
   name: "MatchColombia",
   short: "Match",
-  tagline: "Bogotá y Barranquilla",
+  tagline: "Arrienda fácil en Colombia",
+  promise: "Gestión completa · Match inteligente",
   email: "hola@matchcolombia.co",
   phone: "+573012345678",
   phoneDisplay: "+57 301 234 5678",

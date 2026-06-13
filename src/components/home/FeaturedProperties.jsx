@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import PropertyCard from "../property/PropertyCard";
 import SectionHeader from "../ui/SectionHeader";
 import { cn } from "@/lib/utils";
@@ -17,36 +17,51 @@ export default function FeaturedProperties({ properties, isLoading }) {
   const [tab, setTab] = useState("all");
   const filtered = tab === "all" ? properties : properties.filter((p) => p.property_type === tab);
 
+  const scroll = (dir) => {
+    const el = document.getElementById("featured-carousel");
+    if (el) el.scrollBy({ left: dir * 340, behavior: "smooth" });
+  };
+
   return (
-    <section id="featured" className="section-pad bg-white">
+    <section id="featured" className="section-pad bg-[hsl(240,40%,98%)] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
           <SectionHeader
-            eyebrow="Destacados"
-            title="Arriendos en Bogotá y Barranquilla"
-            subtitle="Inmuebles seleccionados según tu perfil de match"
+            eyebrow="Nuevas publicaciones"
+            title="Inmuebles verificados"
+            subtitle="Precio, administración y match score en un solo lugar"
           />
 
-          <div className="flex flex-wrap gap-1.5 p-1 rounded-full bg-[hsl(240,40%,96%)] w-full sm:w-auto">
-            {TABS.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setTab(t.id)}
-                className={cn(
-                  "flex-1 sm:flex-none px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap",
-                  tab === t.id ? "bg-white text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {t.label}
+          <div className="flex items-center gap-3">
+            <div className="flex flex-wrap gap-1.5 p-1 rounded-full bg-white border border-border/50 w-full sm:w-auto">
+              {TABS.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setTab(t.id)}
+                  className={cn(
+                    "flex-1 sm:flex-none px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap",
+                    tab === t.id ? "bg-foreground text-white shadow-sm" : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+            <div className="hidden sm:flex gap-1 shrink-0">
+              <button type="button" onClick={() => scroll(-1)} className="w-9 h-9 rounded-full border border-border/60 bg-white flex items-center justify-center hover:bg-secondary transition-colors" aria-label="Anterior">
+                <ChevronLeft className="w-4 h-4" />
               </button>
-            ))}
+              <button type="button" onClick={() => scroll(1)} className="w-9 h-9 rounded-full border border-border/60 bg-white flex items-center justify-center hover:bg-secondary transition-colors" aria-label="Siguiente">
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array(6).fill(0).map((_, i) => (
-              <div key={i} className="rounded-3xl overflow-hidden border border-border/40">
+          <div className="flex gap-5 overflow-hidden">
+            {Array(4).fill(0).map((_, i) => (
+              <div key={i} className="shrink-0 w-[min(320px,85vw)] rounded-3xl overflow-hidden border border-border/40">
                 <div className="aspect-[4/3] shimmer" />
                 <div className="p-5 space-y-2"><div className="h-5 shimmer rounded w-1/3" /><div className="h-4 shimmer rounded w-2/3" /></div>
               </div>
@@ -56,13 +71,16 @@ export default function FeaturedProperties({ properties, isLoading }) {
           <AnimatePresence mode="wait">
             <motion.div
               key={tab}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
+              id="featured-carousel"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-thin scroll-smooth"
             >
-              {filtered.slice(0, 6).map((p, i) => (
-                <PropertyCard key={p.id} property={p} index={i} />
+              {filtered.map((p, i) => (
+                <div key={p.id} className="snap-start shrink-0 w-[min(320px,85vw)] sm:w-[340px]">
+                  <PropertyCard property={p} index={i} />
+                </div>
               ))}
             </motion.div>
           </AnimatePresence>
@@ -72,7 +90,7 @@ export default function FeaturedProperties({ properties, isLoading }) {
           <p className="text-center text-muted-foreground py-12">No hay inmuebles de este tipo por ahora.</p>
         )}
 
-        <div className="mt-12 flex justify-center">
+        <div className="mt-10 flex justify-center">
           <Link to="/explorar">
             <button className="group flex items-center gap-2.5 gradient-cta btn-glow text-white font-bold px-8 py-4 rounded-full hover:opacity-95 transition-opacity">
               Ver todos los arriendos
