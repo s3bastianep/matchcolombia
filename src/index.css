@@ -93,33 +93,69 @@
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
-.skyline-track {
-  animation: skyline-scroll 90s linear infinite;
+
+/* HotPads-style footer marquee */
+.hotpads-skyline-track {
+  animation: hotpads-marquee 160s linear infinite;
+  will-change: transform;
 }
-.skyline-track-paused {
+.hotpads-skyline-paused {
   animation-play-state: paused;
+}
+@keyframes hotpads-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotpads-skyline-track {
+    animation: none;
+  }
 }
 
 @keyframes blimp-float {
-  0%, 100% { transform: translateY(0) translateX(0); }
-  50% { transform: translateY(-4px) translateX(6px); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
 }
-.animate-blimp {
-  animation: blimp-float 6s ease-in-out infinite;
+.skyline-blimp {
+  animation: blimp-float 7s ease-in-out infinite;
+  transform-box: fill-box;
   transform-origin: center;
 }
 
 @keyframes birds-drift {
   0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(12px); }
+  50% { transform: translateX(16px); }
 }
-.animate-birds {
-  animation: birds-drift 8s ease-in-out infinite;
+.skyline-birds {
+  animation: birds-drift 9s ease-in-out infinite;
 }
 
-.skyline-building:hover .skyline-window {
-  opacity: 1;
-  filter: brightness(1.15);
+@keyframes smoke-puff {
+  0%, 100% { opacity: 0.4; transform: translateY(0); }
+  50% { opacity: 0.7; transform: translateY(-3px); }
+}
+.skyline-smoke {
+  animation: smoke-puff 3s ease-in-out infinite;
+}
+
+@keyframes lamp-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+.skyline-lamp {
+  animation: lamp-glow 4s ease-in-out infinite;
+}
+
+.skyline-building {
+  transition: transform 0.25s ease;
+}
+.skyline-building:hover {
+  transform: translateY(-2px);
+}
+.skyline-building:hover rect[fill="#eef2f6"],
+.skyline-building:hover rect[fill="#fff"] {
+  filter: brightness(0.97);
 }
 
 @layer utilities {
