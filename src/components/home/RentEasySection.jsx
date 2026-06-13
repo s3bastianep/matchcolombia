@@ -106,52 +106,43 @@ export default function RentEasySection() {
                 transition={{ delay: i * 0.1 }}
                 className="group relative flex flex-col rounded-3xl bg-white border border-border/50 shadow-sm overflow-hidden card-hover"
               >
-                <div className={cn("h-1.5 w-full bg-gradient-to-r", feature.accent)} />
+                <div className="relative h-40 sm:h-44 overflow-hidden">
+                  <img
+                    src={feature.image}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className={cn("absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent")} />
+                  <div className={cn("absolute top-0 left-0 right-0 h-1 bg-gradient-to-r", feature.accent)} />
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1 text-white text-[10px] font-bold drop-shadow">
+                      <MapPin className="w-3 h-3" />
+                      Colombia
+                    </span>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-white/95 text-foreground shadow-sm">
+                      {feature.tag}
+                    </span>
+                  </div>
+                </div>
 
                 <div className="p-5 sm:p-6 flex flex-col flex-1">
-                  <div className="flex items-start justify-between mb-5">
+                  <div className="flex items-start gap-4 mb-4">
                     <div
                       className={cn(
-                        "w-12 h-12 rounded-2xl bg-gradient-to-br flex items-center justify-center text-white shadow-md ring-4",
-                        feature.accent,
-                        feature.ring
+                        "w-11 h-11 rounded-xl bg-gradient-to-br flex items-center justify-center text-white shadow-md shrink-0",
+                        feature.accent
                       )}
                     >
                       <Icon className="w-5 h-5" strokeWidth={2.25} />
                     </div>
-                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-secondary text-muted-foreground">
-                      {feature.tag}
-                    </span>
-                  </div>
-
-                  <h3 className="font-extrabold text-xl sm:text-[1.35rem] mb-2.5 tracking-tight">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">{feature.desc}</p>
-
-                  <div className="mb-4 min-h-[2rem]">{feature.preview}</div>
-
-                  <div className="relative h-32 sm:h-36 rounded-2xl overflow-hidden">
-                    <img
-                      src={feature.image}
-                      alt=""
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent" />
-                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                      <span className="inline-flex items-center gap-1 text-white text-[10px] font-bold drop-shadow">
-                        <MapPin className="w-3 h-3" />
-                        Colombia
-                      </span>
-                      <span
-                        className={cn(
-                          "text-[10px] font-extrabold text-white px-2 py-0.5 rounded-full bg-gradient-to-r shadow-sm",
-                          feature.accent
-                        )}
-                      >
-                        {i + 1}/3
-                      </span>
+                    <div>
+                      <h3 className="font-extrabold text-lg sm:text-xl tracking-tight">{feature.title}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed mt-1.5">{feature.desc}</p>
                     </div>
                   </div>
+
+                  <div className="mt-auto pt-2">{feature.preview}</div>
                 </div>
               </motion.article>
             );
