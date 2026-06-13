@@ -32,9 +32,45 @@ function MapBadge() {
   );
 }
 
-function MapMarker({ marker, position, onMarkerClick, onMarkerEnter, onMarkerLeave, activeMarkerId }) {
+function MapMarker({ marker, position, onMarkerClick, onMarkerEnter, onMarkerLeave, activeMarkerId, variant = "default" }) {
   const isCluster = marker.type === "cluster";
   const isActive = activeMarkerId === marker.id;
+  const isHoum = variant === "houm";
+
+  if (isHoum) {
+    return (
+      <button
+        type="button"
+        className="absolute z-20 -translate-x-1/2 -translate-y-1/2 group"
+        style={{ top: `${position.top}%`, left: `${position.left}%` }}
+        onClick={() => onMarkerClick?.(marker)}
+        onMouseEnter={() => onMarkerEnter?.(marker)}
+        onMouseLeave={() => onMarkerLeave?.(marker)}
+        aria-label={marker.label || marker.sublabel || "Ver en mapa"}
+      >
+        {isCluster ? (
+          <div
+            className={cn(
+              "min-w-[34px] h-[34px] px-1 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.18)] border border-[hsl(0,0%,88%)] flex items-center justify-center text-foreground text-xs font-extrabold transition-transform",
+              isActive ? "scale-110 ring-2 ring-[hsl(265,75%,58%)]/40" : "group-hover:scale-105"
+            )}
+          >
+            {marker.count}
+          </div>
+        ) : (
+          <div
+            className={cn(
+              "whitespace-nowrap bg-white text-foreground text-[11px] font-bold px-2.5 py-1.5 rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.15)] border border-[hsl(0,0%,88%)] transition-transform",
+              isActive ? "scale-105 ring-2 ring-[hsl(265,75%,58%)]/40" : "group-hover:scale-[1.02]"
+            )}
+          >
+            {marker.label}
+          </div>
+        )}
+      </button>
+    );
+  }
+
   const size = isCluster ? "w-9 h-9" : "w-5 h-5";
 
   return (
@@ -99,7 +135,7 @@ function MapMarker({ marker, position, onMarkerClick, onMarkerEnter, onMarkerLea
 }
 
 /** Google Maps embebido — funciona sin API key */
-function GoogleEmbedMap({ markers, center, zoom, className, onMarkerClick, onMarkerEnter, onMarkerLeave, activeMarkerId }) {
+function GoogleEmbedMap({ markers, center, zoom, className, onMarkerClick, onMarkerEnter, onMarkerLeave, activeMarkerId, markerVariant }) {
   const bounds = useMemo(() => getVisibleBounds(center, zoom), [center, zoom]);
   const embedSrc = useMemo(() => googleEmbedUrl(center, zoom), [center.lat, center.lng, zoom]);
 
@@ -114,7 +150,7 @@ function GoogleEmbedMap({ markers, center, zoom, className, onMarkerClick, onMar
 
   return (
     <div className={cn("relative overflow-hidden", className)}>
-      <MapBadge />
+      {markerVariant !== "houm" && <MapBadge />}
       <iframe
         title="Mapa de Bogotá y Barranquilla"
         src={embedSrc}
@@ -133,6 +169,7 @@ function GoogleEmbedMap({ markers, center, zoom, className, onMarkerClick, onMar
             onMarkerEnter={onMarkerEnter}
             onMarkerLeave={onMarkerLeave}
             activeMarkerId={activeMarkerId}
+            variant={markerVariant}
           />
         ))}
       </div>
@@ -141,7 +178,7 @@ function GoogleEmbedMap({ markers, center, zoom, className, onMarkerClick, onMar
 }
 
 /** Google Maps JS API — requiere VITE_GOOGLE_MAPS_API_KEY */
-function GoogleMapView({ markers, center, zoom, className, onMarkerClick, onMarkerEnter, onMarkerLeave, activeMarkerId }) {
+function GoogleMapView({ markers, center, zoom, className, onMarkerClick, onMarkerEnter, onMarkerLeave, activeMarkerId, markerVariant }) {
   const { isLoaded, loadError } = useJsApiLoader({
     id: "matchcolombia-google-map",
     googleMapsApiKey: GOOGLE_KEY,
@@ -160,6 +197,7 @@ function GoogleMapView({ markers, center, zoom, className, onMarkerClick, onMark
         onMarkerEnter={onMarkerEnter}
         onMarkerLeave={onMarkerLeave}
         activeMarkerId={activeMarkerId}
+        markerVariant={markerVariant}
       />
     );
   }
@@ -174,7 +212,7 @@ function GoogleMapView({ markers, center, zoom, className, onMarkerClick, onMark
 
   return (
     <div className={cn("relative", className)}>
-      <MapBadge />
+      {markerVariant !== "houm" && <MapBadge />}
       <GoogleMap
         mapContainerClassName="w-full h-full"
         center={mapCenter}
@@ -221,6 +259,7 @@ export default function InteractiveMap({
   onMarkerEnter,
   onMarkerLeave,
   activeMarkerId,
+  markerVariant = "default",
 }) {
   const shared = {
     markers,
@@ -231,6 +270,7 @@ export default function InteractiveMap({
     onMarkerEnter,
     onMarkerLeave,
     activeMarkerId,
+    markerVariant,
   };
 
   if (GOOGLE_KEY) {

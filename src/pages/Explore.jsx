@@ -1,16 +1,14 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import PropertyCard from "../components/property/PropertyCard";
-import SearchBar from "../components/search/SearchBar";
 import AdvancedFilters from "../components/explore/AdvancedFilters";
 import ExploreMap from "../components/explore/ExploreMap";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
-import { SlidersHorizontal, X, MapPin, Sparkles, Search, LayoutGrid, Map, Columns2 } from "lucide-react";
+import { SlidersHorizontal, X, MapPin, Sparkles, Search, Map, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { formatEstratoFilterLabel } from "@/lib/propertyLabels";
 import { loadPreferences, scoreProperty } from "@/lib/matchPreferences";
 import {
   DEFAULT_ADVANCED_FILTERS,
@@ -18,6 +16,13 @@ import {
   applyAdvancedFilters,
   countAdvancedFilters,
 } from "@/lib/propertyFilters";
+
+const TYPES_LABEL = {
+  apartamento: "Apartamento",
+  casa: "Casa",
+  estudio: "Estudio",
+  habitacion: "Habitación",
+};
 
 const QUICK_FILTERS = [
   { key: "apartamento", label: "Apartamento", color: "border-[hsl(340,82%,52%)]/35 text-[hsl(340,82%,45%)] bg-[hsl(340,82%,52%)]/10" },
@@ -29,17 +34,25 @@ const QUICK_FILTERS = [
 
 function ExploreSkeleton() {
   return (
-    <div className="rounded-[1.35rem] bg-white border border-border/30 overflow-hidden shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
-      <div className="aspect-[16/10] shimmer" />
-      <div className="p-5 space-y-3">
-        <div className="h-4 w-3/4 rounded-lg shimmer" />
-        <div className="h-3 w-1/2 rounded-lg shimmer" />
-        <div className="flex gap-2 pt-1">
-          <div className="h-6 w-16 rounded-md shimmer" />
-          <div className="h-6 w-14 rounded-md shimmer" />
-        </div>
+    <div className="overflow-hidden">
+      <div className="aspect-[5/4] rounded-lg shimmer" />
+      <div className="pt-3 space-y-2">
+        <div className="h-4 w-2/3 rounded shimmer" />
+        <div className="h-3 w-1/2 rounded shimmer" />
+        <div className="h-3 w-3/4 rounded shimmer" />
       </div>
     </div>
+  );
+}
+
+function ActiveFilterChip({ label, onRemove }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full bg-white border border-[hsl(340,82%,52%)]/25 text-[11px] font-semibold text-[hsl(340,82%,42%)]">
+      {label}
+      <button type="button" onClick={onRemove} className="p-0.5 rounded-full hover:bg-[hsl(340,82%,52%)]/10">
+        <X className="w-3 h-3" />
+      </button>
+    </span>
   );
 }
 
@@ -65,7 +78,6 @@ export default function Explore() {
   const initialMax = searchParams.get("max") || "";
   const isMatched = searchParams.get("matched") === "1";
   const intent = searchParams.get("intent");
-  const exploreHeading = intent === "compra" ? "Comprar en" : "Arriendos en";
   const prefs = loadPreferences();
 
   const [sortBy, setSortBy] = useState(isMatched ? "match" : "newest");
@@ -74,6 +86,18 @@ export default function Explore() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [viewMode, setViewMode] = useState("split");
   const [highlightedId, setHighlightedId] = useState(null);
+  const [locality, setLocality] = useState(initialQ);
+
+  const applyLocalitySearch = useCallback(() => {
+    const next = new URLSearchParams(searchParams);
+    if (locality.trim()) next.set("q", locality.trim());
+    else next.delete("q");
+    setSearchParams(next, { replace: true });
+  }, [locality, searchParams, setSearchParams]);
+
+  useEffect(() => {
+    setLocality(initialQ);
+  }, [initialQ]);
 
   const advancedFilters = useMemo(
     () => parseAdvancedFiltersFromUrl(searchParams),
@@ -143,92 +167,83 @@ export default function Explore() {
     return result;
   }, [properties, initialQ, initialCity, initialType, advancedFilters, activeQuick, priceMax, sortBy, isMatched, prefs]);
 
-  const cityLabel = initialCity || prefs?.city || "Bogotá y Barranquilla";
+  const cityLabel = initialCity || prefs?.city || "Bogotá";
   const advancedCount = countAdvancedFilters(advancedFilters);
   const totalFilterCount = advancedCount + activeQuick.length;
+  const resultsTitle =
+    intent === "compra"
+      ? `Inmuebles en venta en ${cityLabel}`
+      : `Apartamentos en arriendo en ${cityLabel}`;
+
+  const removeQuickFilter = (key) => setActiveQuick((prev) => prev.filter((k) => k !== key));
 
   return (
-    <div className="min-h-screen bg-[hsl(240,40%,98%)]">
-      <div className="bg-white border-b border-border/40 sticky top-[62px] z-30">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-5">
-          {isMatched && prefs && (
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-5 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[hsl(265,75%,58%)]/8 via-[hsl(340,82%,52%)]/6 to-[hsl(168,72%,40%)]/8 border border-[hsl(265,75%,58%)]/20 flex items-start gap-3"
+    <div className="min-h-screen bg-white">
+      <div className="bg-white border-b border-[hsl(0,0%,90%)] sticky top-[62px] z-30">
+        {isMatched && prefs && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mx-4 lg:mx-6 mt-3 p-3 rounded-xl bg-gradient-to-r from-[hsl(265,75%,58%)]/8 to-[hsl(340,82%,52%)]/6 border border-[hsl(265,75%,58%)]/15 flex items-center gap-3"
+          >
+            <Sparkles className="w-4 h-4 text-[hsl(265,75%,50%)] shrink-0" />
+            <p className="text-xs font-bold text-foreground min-w-0 truncate">
+              Matches en {cityLabel}
+            </p>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
+              className="ml-auto text-[11px] font-bold text-[hsl(265,75%,50%)] hover:underline shrink-0"
             >
-              <div className="w-10 h-10 rounded-xl gradient-cta flex items-center justify-center shrink-0 shadow-md">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
-              <div className="min-w-0">
-                <p className="font-extrabold text-sm text-foreground">
-                  Tus matches{cityLabel !== "Bogotá y Barranquilla" ? ` en ${cityLabel}` : ""}
-                </p>
-                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                  {prefs.zone && `${prefs.zone} · `}
-                  {prefs.type !== "all" && `${prefs.type} · `}
-                  {prefs.beds !== "all" && `${prefs.beds} hab. · `}
-                  ordenados por compatibilidad
-                </p>
-              </div>
-              <button
-                onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
-                className="ml-auto text-xs font-bold text-[hsl(265,75%,50%)] hover:underline shrink-0"
-              >
-                Editar
-              </button>
-            </motion.div>
-          )}
+              Editar
+            </button>
+          </motion.div>
+        )}
 
-          <div className="mb-4 flex items-end justify-between gap-4">
-            <div>
-              <h1 className="text-2xl sm:text-[1.75rem] font-extrabold tracking-tight">
-                {isMatched ? "Tus matches" : exploreHeading}{" "}
-                <span className="text-gradient">{cityLabel}</span>
-              </h1>
-              <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-[hsl(340,82%,52%)]" />
-                {isLoading ? "Cargando..." : `${filtered.length} inmueble${filtered.length !== 1 ? "s" : ""}`}
-                {initialQ && <span className="font-semibold text-foreground"> en «{initialQ}»</span>}
-              </p>
-            </div>
-            {!isMatched && (
-              <button
-                onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
-                className="hidden sm:flex items-center gap-1.5 gradient-cta text-white text-xs font-bold px-4 py-2.5 rounded-xl shrink-0 shadow-md hover:opacity-95 transition-opacity"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                Hacer quiz
-              </button>
-            )}
+        <div className="px-4 lg:px-6 py-3 flex items-center gap-3">
+          <div className="relative flex-1 min-w-0 max-w-xl">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+            <input
+              type="search"
+              value={locality}
+              onChange={(e) => setLocality(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && applyLocalitySearch()}
+              onBlur={applyLocalitySearch}
+              placeholder="Buscar por localidad"
+              className="w-full h-10 pl-10 pr-4 rounded-lg bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)] text-sm font-medium placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(265,75%,58%)]/25"
+            />
           </div>
 
-          <SearchBar variant="compact" className="shadow-[0_8px_30px_rgba(15,23,42,0.06)] rounded-[1.25rem] border-border/30" />
+          <div className="lg:hidden flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => setMobileFiltersOpen(true)}
+              className={cn(
+                "flex items-center gap-1.5 h-10 px-3.5 rounded-lg text-xs font-bold border transition-all",
+                advancedCount > 0
+                  ? "border-foreground/20 bg-foreground text-white"
+                  : "bg-white border-[hsl(0,0%,88%)] text-foreground"
+              )}
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              Filtrar
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode((m) => (m === "map" ? "split" : "map"))}
+              className={cn(
+                "flex items-center gap-1.5 h-10 px-3.5 rounded-lg text-xs font-bold border transition-all",
+                viewMode === "map"
+                  ? "border-[hsl(265,75%,58%)]/30 bg-[hsl(265,75%,58%)]/10 text-[hsl(265,75%,45%)]"
+                  : "bg-white border-[hsl(0,0%,88%)] text-foreground"
+              )}
+            >
+              <Map className="w-3.5 h-3.5" />
+              Mapa
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="border-b border-[hsl(0,0%,92%)] bg-[hsl(0,0%,98%)]">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-3 flex items-center gap-2.5 overflow-x-auto">
-          <button
-            type="button"
-            onClick={() => setMobileFiltersOpen(true)}
-            className={cn(
-              "lg:hidden shrink-0 flex items-center gap-1.5 h-10 px-4 rounded-full text-xs font-bold border transition-all",
-              advancedCount > 0
-                ? "border-foreground/20 bg-foreground text-white"
-                : "bg-white border-[hsl(0,0%,88%)] text-foreground hover:border-foreground/20"
-            )}
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5" />
-            Más filtros
-            {advancedCount > 0 && (
-              <span className="w-5 h-5 rounded-full bg-white/20 text-white text-[10px] font-bold flex items-center justify-center">
-                {advancedCount}
-              </span>
-            )}
-          </button>
-
-          <span className="hidden lg:inline text-xs font-bold text-muted-foreground shrink-0">Filtros:</span>
+        <div className="px-4 lg:px-6 pb-3 flex items-center gap-2 overflow-x-auto scrollbar-none">
           {QUICK_FILTERS.map((f) => (
             <button
               key={f.key}
@@ -238,10 +253,10 @@ export default function Explore() {
                 )
               }
               className={cn(
-                "shrink-0 h-10 px-4 rounded-full text-xs font-semibold border transition-all",
+                "shrink-0 h-8 px-3.5 rounded-full text-[11px] font-semibold border transition-all",
                 activeQuick.includes(f.key)
-                  ? "bg-foreground border-foreground text-white shadow-sm"
-                  : "bg-white border-[hsl(0,0%,88%)] text-foreground/80 hover:border-foreground/20"
+                  ? "bg-[hsl(340,82%,52%)]/10 border-[hsl(340,82%,52%)]/30 text-[hsl(340,82%,42%)]"
+                  : "bg-white border-[hsl(0,0%,88%)] text-foreground/75 hover:border-foreground/15"
               )}
             >
               {f.label}
@@ -250,196 +265,185 @@ export default function Explore() {
           {totalFilterCount > 0 && (
             <button
               onClick={clearAllFilters}
-              className="shrink-0 text-xs font-semibold text-muted-foreground flex items-center gap-1 hover:text-foreground"
+              className="shrink-0 text-[11px] font-semibold text-muted-foreground flex items-center gap-1 hover:text-foreground px-2"
             >
               <X className="w-3 h-3" /> Limpiar
             </button>
           )}
-          <div className="ml-auto shrink-0 flex items-center gap-2">
-            <div className="flex p-1 rounded-xl bg-secondary/60 border border-border/30">
+        </div>
+      </div>
+
+      {isLoading ? (
+        <>
+          <div className="hidden lg:grid lg:grid-cols-[7fr_3fr] lg:h-[calc(100vh-158px)]">
+            <div className="px-6 py-5 grid grid-cols-2 xl:grid-cols-3 gap-5">
+              {Array(9).fill(0).map((_, i) => (
+                <ExploreSkeleton key={i} />
+              ))}
+            </div>
+            <div className="border-l border-[hsl(0,0%,90%)] shimmer min-h-[400px]" />
+          </div>
+          <div className="lg:hidden px-4 py-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {Array(4).fill(0).map((_, i) => (
+              <ExploreSkeleton key={i} />
+            ))}
+          </div>
+        </>
+      ) : filtered.length > 0 && viewMode === "map" ? (
+        <div className="lg:hidden h-[calc(100vh-158px)]">
+          <ExploreMap properties={filtered} activeCity={initialCity || undefined} pane className="h-full" />
+        </div>
+      ) : filtered.length > 0 ? (
+        <>
+          <div className="hidden lg:grid lg:grid-cols-[7fr_3fr] lg:h-[calc(100vh-158px)] border-t border-[hsl(0,0%,90%)]">
+            <div className="overflow-y-auto bg-white px-6 py-5">
+              <h1 className="text-xl font-extrabold tracking-tight text-foreground">
+                {resultsTitle}
+              </h1>
+
+              {totalFilterCount > 0 && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {initialType && (
+                    <ActiveFilterChip
+                      label={TYPES_LABEL[initialType] || initialType}
+                      onRemove={() => {
+                        const next = new URLSearchParams(searchParams);
+                        next.delete("type");
+                        setSearchParams(next, { replace: true });
+                      }}
+                    />
+                  )}
+                  {activeQuick.map((key) => {
+                    const label = QUICK_FILTERS.find((f) => f.key === key)?.label;
+                    return label ? (
+                      <ActiveFilterChip key={key} label={label} onRemove={() => removeQuickFilter(key)} />
+                    ) : null;
+                  })}
+                  {advancedFilters.bedrooms && (
+                    <ActiveFilterChip
+                      label={advancedFilters.bedrooms === "5" ? "5+ hab." : `${advancedFilters.bedrooms} hab.`}
+                      onRemove={() => updateAdvancedFilters({ ...advancedFilters, bedrooms: "" })}
+                    />
+                  )}
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-6 mt-5">
+                {filtered.map((property, i) => (
+                  <div
+                    key={property.id}
+                    onMouseEnter={() => setHighlightedId(property.id)}
+                    onMouseLeave={() => setHighlightedId(null)}
+                  >
+                    <PropertyCard
+                      property={property}
+                      index={i}
+                      matchScore={property.matchScore}
+                      showMatch={isMatched}
+                      variant="grid"
+                      highlighted={highlightedId === property.id}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col border-l border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] min-h-0">
+              <div className="flex items-center justify-end gap-2 px-3 py-2.5 border-b border-[hsl(0,0%,90%)] shrink-0 bg-white">
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(true)}
+                  className="flex items-center gap-1.5 h-9 px-3.5 rounded-lg text-xs font-bold border border-[hsl(0,0%,88%)] bg-white hover:bg-[hsl(0,0%,96%)] transition-colors"
+                >
+                  <SlidersHorizontal className="w-3.5 h-3.5" />
+                  Filtrar
+                  {advancedCount > 0 && (
+                    <span className="w-4 h-4 rounded-full bg-foreground text-white text-[9px] font-bold flex items-center justify-center">
+                      {advancedCount}
+                    </span>
+                  )}
+                </button>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-[7.5rem] h-9 bg-white border border-[hsl(0,0%,88%)] text-xs font-bold rounded-lg gap-1">
+                    <SelectValue placeholder="Ordenar" />
+                    <ChevronDown className="w-3.5 h-3.5 opacity-50" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {isMatched && <SelectItem value="match">Mejor match</SelectItem>}
+                    <SelectItem value="newest">Más recientes</SelectItem>
+                    <SelectItem value="price_asc">Menor precio</SelectItem>
+                    <SelectItem value="price_desc">Mayor precio</SelectItem>
+                    <SelectItem value="area">Mayor área</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex-1 min-h-0">
+                <ExploreMap
+                  properties={filtered}
+                  activeCity={initialCity || undefined}
+                  pane
+                  highlightedId={highlightedId}
+                  onHighlight={setHighlightedId}
+                  className="h-full"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className={cn("lg:hidden px-4 py-5 space-y-6", viewMode === "map" && "hidden")}>
+            <div>
+              <h1 className="text-lg font-extrabold tracking-tight">{resultsTitle}</h1>
+              <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                <MapPin className="w-3 h-3" />
+                {filtered.length} resultado{filtered.length !== 1 ? "s" : ""}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {filtered.map((property, i) => (
+                <PropertyCard
+                  key={property.id}
+                  property={property}
+                  index={i}
+                  matchScore={property.matchScore}
+                  showMatch={isMatched}
+                  variant="grid"
+                />
+              ))}
+            </div>
+            <ExploreMap properties={filtered} activeCity={initialCity || undefined} />
+          </div>
+        </>
+      ) : (
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-6 sm:py-8">
+          <div className="text-center py-20 sm:py-24 rounded-3xl bg-white border border-border/50 shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-[hsl(265,75%,58%)]/10 flex items-center justify-center mx-auto mb-5">
+              <Search className="w-8 h-8 text-[hsl(265,75%,50%)]" />
+            </div>
+            <h3 className="font-extrabold text-xl mb-2">Sin resultados por ahora</h3>
+            <p className="text-muted-foreground text-sm mb-6 max-w-sm mx-auto leading-relaxed">
+              Prueba ampliando ciudad, zona o ajustando habitaciones, baños, parqueaderos o estrato.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
-                type="button"
-                onClick={() => setViewMode("split")}
-                className={cn(
-                  "hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
-                  viewMode === "split" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground"
-                )}
+                onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
+                className="gradient-cta text-white font-bold px-6 py-3 rounded-xl shadow-md hover:opacity-95 transition-opacity"
               >
-                <Columns2 className="w-3.5 h-3.5" />
-                Split
+                Actualizar preferencias
               </button>
               <button
-                type="button"
-                onClick={() => setViewMode("list")}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
-                  viewMode === "list" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground"
-                )}
+                onClick={clearAllFilters}
+                className="font-semibold px-6 py-3 rounded-xl border-2 border-border text-foreground hover:bg-secondary transition-colors"
               >
-                <LayoutGrid className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Lista</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode("map")}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
-                  viewMode === "map" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground"
-                )}
-              >
-                <Map className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Mapa</span>
+                Limpiar filtros
               </button>
             </div>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-44 bg-secondary/80 border-0 text-xs font-semibold rounded-xl">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {isMatched && <SelectItem value="match">Mejor match</SelectItem>}
-                <SelectItem value="newest">Más recientes</SelectItem>
-                <SelectItem value="price_asc">Menor precio</SelectItem>
-                <SelectItem value="price_desc">Mayor precio</SelectItem>
-                <SelectItem value="area">Mayor área</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
         </div>
-      </div>
-
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-6 sm:py-8">
-        <div className="flex gap-6 xl:gap-8 items-start">
-          <aside className="hidden lg:block w-[272px] xl:w-[288px] shrink-0 sticky top-[188px]">
-            <AdvancedFilters
-              filters={advancedFilters}
-              onChange={updateAdvancedFilters}
-              onClear={clearAdvancedFilters}
-            />
-          </aside>
-
-          <div className="flex-1 min-w-0">
-            {totalFilterCount > 0 && (
-              <div className="mb-5 flex flex-wrap gap-2">
-                {advancedFilters.bedrooms && (
-                  <span className="px-3 py-1 rounded-lg bg-white border border-border/40 text-xs font-semibold">
-                    {advancedFilters.bedrooms === "5" ? "5+ hab." : `${advancedFilters.bedrooms} hab.`}
-                  </span>
-                )}
-                {advancedFilters.bathrooms && (
-                  <span className="px-3 py-1 rounded-lg bg-white border border-border/40 text-xs font-semibold">
-                    {advancedFilters.bathrooms === "5" ? "5+ baños" : `${advancedFilters.bathrooms} baño${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
-                  </span>
-                )}
-                {advancedFilters.parkingSpots && (
-                  <span className="px-3 py-1 rounded-lg bg-white border border-border/40 text-xs font-semibold">
-                    {advancedFilters.parkingSpots === "5" ? "5+ parqueaderos" : `${advancedFilters.parkingSpots} parqueadero${advancedFilters.parkingSpots !== "1" ? "s" : ""}`}
-                  </span>
-                )}
-                {advancedFilters.estrato && (
-                  <span className="px-3 py-1 rounded-lg bg-[hsl(32,95%,54%)]/10 border border-[hsl(32,95%,54%)]/20 text-xs font-semibold text-[hsl(32,95%,38%)]">
-                    {formatEstratoFilterLabel(advancedFilters.estrato)}
-                  </span>
-                )}
-                {activeQuick.map((key) => {
-                  const label = QUICK_FILTERS.find((f) => f.key === key)?.label;
-                  return label ? (
-                    <span key={key} className="px-3 py-1 rounded-lg bg-white border border-border/40 text-xs font-semibold">
-                      {label}
-                    </span>
-                  ) : null;
-                })}
-              </div>
-            )}
-
-            {isLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-7">
-                {Array(6).fill(0).map((_, i) => (
-                  <ExploreSkeleton key={i} />
-                ))}
-              </div>
-            ) : filtered.length > 0 && viewMode === "map" ? (
-              <ExploreMap properties={filtered} activeCity={initialCity || undefined} />
-            ) : filtered.length > 0 && viewMode === "split" ? (
-              <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(340px,42%)] gap-6 xl:gap-7 items-start">
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-5 sm:gap-6">
-                  {filtered.map((property, i) => (
-                    <div
-                      key={property.id}
-                      onMouseEnter={() => setHighlightedId(property.id)}
-                      onMouseLeave={() => setHighlightedId(null)}
-                    >
-                      <PropertyCard
-                        property={property}
-                        index={i}
-                        matchScore={property.matchScore}
-                        showMatch={isMatched}
-                        variant="explore"
-                        highlighted={highlightedId === property.id}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <ExploreMap
-                  properties={filtered}
-                  activeCity={initialCity || undefined}
-                  sticky
-                  highlightedId={highlightedId}
-                  onHighlight={setHighlightedId}
-                  className="hidden xl:block"
-                />
-                <ExploreMap
-                  properties={filtered}
-                  activeCity={initialCity || undefined}
-                  highlightedId={highlightedId}
-                  onHighlight={setHighlightedId}
-                  className="xl:hidden"
-                />
-              </div>
-            ) : filtered.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-7">
-                {filtered.map((property, i) => (
-                  <PropertyCard
-                    key={property.id}
-                    property={property}
-                    index={i}
-                    matchScore={property.matchScore}
-                    showMatch={isMatched}
-                    variant="explore"
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-20 sm:py-24 rounded-3xl bg-white border border-border/50 shadow-sm">
-                <div className="w-16 h-16 rounded-2xl bg-[hsl(265,75%,58%)]/10 flex items-center justify-center mx-auto mb-5">
-                  <Search className="w-8 h-8 text-[hsl(265,75%,50%)]" />
-                </div>
-                <h3 className="font-extrabold text-xl mb-2">Sin resultados por ahora</h3>
-                <p className="text-muted-foreground text-sm mb-6 max-w-sm mx-auto leading-relaxed">
-                  Prueba ampliando ciudad, zona o ajustando habitaciones, baños, parqueaderos o estrato.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <button
-                    onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
-                    className="gradient-cta text-white font-bold px-6 py-3 rounded-xl shadow-md hover:opacity-95 transition-opacity"
-                  >
-                    Actualizar preferencias
-                  </button>
-                  <button
-                    onClick={clearAllFilters}
-                    className="font-semibold px-6 py-3 rounded-xl border-2 border-border text-foreground hover:bg-secondary transition-colors"
-                  >
-                    Limpiar filtros
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      )}
 
       <AnimatePresence>
         {mobileFiltersOpen && (
-          <div className="lg:hidden fixed inset-0 z-50 flex items-end">
+          <div className="fixed inset-0 z-50 flex items-end lg:items-center lg:justify-center">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -452,7 +456,7 @@ export default function Explore() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 320 }}
-              className="relative w-full bg-[hsl(0,0%,96%)] rounded-t-3xl p-5 max-h-[88vh] overflow-y-auto"
+              className="relative w-full lg:max-w-md bg-[hsl(0,0%,96%)] rounded-t-3xl lg:rounded-2xl p-5 max-h-[88vh] overflow-y-auto"
             >
               <div className="w-10 h-1 bg-border rounded-full mx-auto mb-4" />
               <div className="flex items-center justify-between mb-4">

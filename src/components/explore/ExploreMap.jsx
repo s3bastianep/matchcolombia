@@ -15,6 +15,7 @@ export default function ExploreMap({
   activeCity,
   className,
   sticky = false,
+  pane = false,
   highlightedId,
   onHighlight,
 }) {
@@ -70,11 +71,14 @@ export default function ExploreMap({
   return (
     <div
       className={cn(
-        "relative rounded-[1.35rem] overflow-hidden border border-border/30 shadow-[0_8px_30px_rgba(15,23,42,0.08)] bg-white",
-        sticky && "xl:sticky xl:top-[210px]",
+        "relative overflow-hidden bg-white",
+        pane ? "h-full rounded-none border-0 shadow-none" : "rounded-[1.35rem] border border-border/30 shadow-[0_8px_30px_rgba(15,23,42,0.08)]",
+        sticky && !pane && "xl:sticky xl:top-[210px]",
+        pane && "h-full",
         className
       )}
     >
+      {!pane && (
       <div className="absolute top-4 left-4 z-[1000] flex items-center gap-2">
         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-bold text-foreground border border-border/40 shadow-sm">
           <Layers className="w-3 h-3 text-[hsl(265,75%,50%)]" />
@@ -83,19 +87,25 @@ export default function ExploreMap({
             : `${properties.length} en el mapa`}
         </span>
       </div>
+      )}
 
       <InteractiveMap
         markers={mapMarkers}
         center={mapCenter}
         zoom={mapCenter.zoom}
-        className="w-full min-h-[360px] sm:min-h-[440px] xl:min-h-[calc(100vh-240px)]"
+        markerVariant={pane ? "houm" : "default"}
+        className={cn(
+          "w-full",
+          pane ? "h-full min-h-0" : "min-h-[360px] sm:min-h-[440px] xl:min-h-[calc(100vh-240px)]"
+        )}
         onMarkerClick={handleMarkerClick}
         onMarkerEnter={handleMarkerEnter}
         onMarkerLeave={handleMarkerLeave}
         activeMarkerId={activeId}
       />
 
-      <div className="absolute bottom-4 left-4 right-4 z-[1000] flex flex-col gap-3 pointer-events-none">
+      <div className={cn("absolute bottom-4 left-4 right-4 z-[1000] flex flex-col gap-3 pointer-events-none", pane && "bottom-3 left-3 right-3")}>
+        {!pane && (
         <div className="bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3 border border-white/80 shadow-lg flex items-center gap-3 pointer-events-auto">
           <div className="w-9 h-9 rounded-xl gradient-cta flex items-center justify-center shrink-0">
             <Navigation className="w-4 h-4 text-white" />
@@ -105,6 +115,7 @@ export default function ExploreMap({
             <p className="text-xs text-muted-foreground">Toca un pin o grupo para ver detalle</p>
           </div>
         </div>
+        )}
 
         <AnimatePresence>
           {hovered && !selectedCluster && (

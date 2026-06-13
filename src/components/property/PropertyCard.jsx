@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, Bed, Bath, Maximize, MapPin, Sparkles, Car, PawPrint, Building2 } from "lucide-react";
+import { Heart, Bed, Bath, Maximize, MapPin, Sparkles, Car, PawPrint, Building2, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -52,9 +52,12 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [liked, setLiked] = useState(isInShortlist(property.id));
-  const image = property.images?.[0] || INTERIORS.sala;
+  const images = property.images?.length ? property.images : [INTERIORS.sala];
+  const [photoIdx, setPhotoIdx] = useState(0);
+  const image = images[photoIdx] || INTERIORS.sala;
   const typeColor = typeColors[property.property_type] || "bg-primary";
-  const isExplore = variant === "explore";
+  const isGrid = variant === "grid";
+  const isExplore = variant === "explore" || isGrid;
   const estratoLabel = getEstratoLabel(property.estrato);
   const parkingSpots = getParkingSpots(property);
   const pricePerSqm = property.area_sqm ? Math.round((property.monthly_rent || 0) / property.area_sqm) : null;
@@ -70,18 +73,21 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03, duration: 0.3 }}
-      className={cn("card-hover", highlighted && "ring-2 ring-[hsl(265,75%,58%)]/40 rounded-[1.35rem]")}
+      className={cn("card-hover", highlighted && "ring-2 ring-[hsl(265,75%,58%)]/40", isGrid ? "rounded-xl" : "rounded-[1.35rem]")}
     >
       <Link to={`/propiedad/${property.id}`} className="group block">
         <article
           className={cn(
-            "rounded-[1.35rem] bg-white overflow-hidden transition-all duration-300",
-            isExplore
+            "bg-white overflow-hidden transition-all duration-300",
+            isGrid
+              ? "rounded-lg border-0 group-hover:shadow-[0_4px_20px_rgba(15,23,42,0.08)]"
+              : "rounded-[1.35rem]",
+            !isGrid && isExplore
               ? "border border-[hsl(0,0%,92%)] shadow-[0_4px_24px_rgba(15,23,42,0.05)] group-hover:shadow-[0_12px_36px_rgba(15,23,42,0.09)] group-hover:-translate-y-0.5"
-              : "border border-border/40 shadow-sm group-hover:shadow-xl group-hover:border-[hsl(265,75%,58%)]/25"
+              : !isGrid && "border border-border/40 shadow-sm group-hover:shadow-xl group-hover:border-[hsl(265,75%,58%)]/25"
           )}
         >
-          <div className={cn("relative overflow-hidden bg-muted", isExplore ? "aspect-[16/10]" : "aspect-[4/3]")}>
+          <div className={cn("relative overflow-hidden bg-muted", isGrid ? "aspect-[5/4] rounded-lg" : isExplore ? "aspect-[16/10]" : "aspect-[4/3]")}>
             <SmartImage
               src={image}
               alt={property.title}
@@ -89,67 +95,152 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
               className="absolute inset-0"
               imgClassName="group-hover:scale-[1.03] transition-transform duration-700 ease-out"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/5" />
+            {!isGrid && <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/5" />}
 
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (!isAuthenticated) {
-                  navigate("/login", { state: { from: window.location.pathname } });
-                  return;
-                }
-                setLiked(toggleShortlist(property.id));
-              }}
-              className={cn(
-                "absolute top-3.5 right-3.5 w-10 h-10 rounded-full flex items-center justify-center z-10 transition-all",
-                liked ? "bg-primary text-white shadow-lg" : "bg-white/95 text-gray-400 hover:text-primary shadow-sm"
-              )}
-            >
-              <Heart className={cn("w-4 h-4", liked && "fill-current")} />
-            </button>
+            {!isGrid && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (!isAuthenticated) {
+                    navigate("/login", { state: { from: window.location.pathname } });
+                    return;
+                  }
+                  setLiked(toggleShortlist(property.id));
+                }}
+                className={cn(
+                  "absolute top-3.5 right-3.5 w-10 h-10 rounded-full flex items-center justify-center z-10 transition-all",
+                  liked ? "bg-primary text-white shadow-lg" : "bg-white/95 text-gray-400 hover:text-primary shadow-sm"
+                )}
+              >
+                <Heart className={cn("w-4 h-4", liked && "fill-current")} />
+              </button>
+            )}
 
-            <div className="absolute top-3.5 left-3.5 flex flex-wrap gap-1.5 z-10">
-              <span className={cn("px-2.5 py-1 rounded-full text-white text-[10px] font-bold shadow-sm", typeColor)}>
-                {typeLabel[property.property_type] || property.property_type}
-              </span>
-              {showMatch && matchScore > 0 && (
-                <span className="px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-extrabold text-[hsl(265,75%,50%)] shadow-sm flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" />
-                  {matchScore}% match
+            {isGrid && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (!isAuthenticated) {
+                    navigate("/login", { state: { from: window.location.pathname } });
+                    return;
+                  }
+                  setLiked(toggleShortlist(property.id));
+                }}
+                className={cn(
+                  "absolute top-2.5 right-2.5 w-8 h-8 rounded-full flex items-center justify-center z-10 transition-all opacity-0 group-hover:opacity-100",
+                  liked ? "bg-primary text-white shadow-md opacity-100" : "bg-white/95 text-gray-400 hover:text-primary shadow-sm"
+                )}
+              >
+                <Heart className={cn("w-3.5 h-3.5", liked && "fill-current")} />
+              </button>
+            )}
+
+            {isGrid && images.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setPhotoIdx((i) => (i - 1 + images.length) % images.length);
+                  }}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/90 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                >
+                  <ChevronLeft className="w-4 h-4 text-foreground/70" />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setPhotoIdx((i) => (i + 1) % images.length);
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/90 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                >
+                  <ChevronRight className="w-4 h-4 text-foreground/70" />
+                </button>
+              </>
+            )}
+
+            {!isGrid && (
+              <div className="absolute top-3.5 left-3.5 flex flex-wrap gap-1.5 z-10">
+                <span className={cn("px-2.5 py-1 rounded-full text-white text-[10px] font-bold shadow-sm", typeColor)}>
+                  {typeLabel[property.property_type] || property.property_type}
                 </span>
-              )}
-            </div>
-
-            <div className="absolute bottom-3.5 left-3.5 right-3.5 z-10 flex items-end justify-between gap-3">
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold max-w-[58%] truncate">
-                <MapPin className="w-3 h-3 shrink-0" />
-                {property.neighborhood || property.city}
-              </span>
-              <div className="text-right shrink-0">
-                <p className="font-extrabold text-xl text-white drop-shadow-md leading-none">{formatCOP(property.monthly_rent)}</p>
-                {isExplore && property.admin_fee > 0 && (
-                  <p className="text-[10px] text-white/80 font-semibold mt-0.5">+ {formatCompactCOP(property.admin_fee)} adm.</p>
+                {showMatch && matchScore > 0 && (
+                  <span className="px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-extrabold text-[hsl(265,75%,50%)] shadow-sm flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" />
+                    {matchScore}% match
+                  </span>
                 )}
               </div>
-            </div>
+            )}
+
+            {isGrid && showMatch && matchScore > 0 && (
+              <span className="absolute top-2.5 left-2.5 z-10 px-2 py-0.5 rounded-md bg-white/95 text-[10px] font-extrabold text-[hsl(265,75%,50%)] shadow-sm flex items-center gap-1">
+                <Sparkles className="w-3 h-3" />
+                {matchScore}%
+              </span>
+            )}
+
+            {!isGrid && (
+              <div className="absolute bottom-3.5 left-3.5 right-3.5 z-10 flex items-end justify-between gap-3">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold max-w-[58%] truncate">
+                  <MapPin className="w-3 h-3 shrink-0" />
+                  {property.neighborhood || property.city}
+                </span>
+                <div className="text-right shrink-0">
+                  <p className="font-extrabold text-xl text-white drop-shadow-md leading-none">{formatCOP(property.monthly_rent)}</p>
+                  {isExplore && property.admin_fee > 0 && (
+                    <p className="text-[10px] text-white/80 font-semibold mt-0.5">+ {formatCompactCOP(property.admin_fee)} adm.</p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className={cn(isExplore ? "p-4 sm:p-5" : "p-5")}>
+          <div className={cn(isGrid ? "p-3" : isExplore ? "p-4 sm:p-5" : "p-5")}>
+            {isGrid && (
+              <>
+                <p className="font-extrabold text-[15px] text-foreground leading-tight tracking-tight">
+                  {formatCOP(property.monthly_rent)}
+                  <span className="text-xs font-semibold text-muted-foreground"> / mes</span>
+                </p>
+                {property.admin_fee > 0 && (
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                    {formatCOP(property.admin_fee)} administración aprox.
+                  </p>
+                )}
+                <div className="flex items-center gap-2.5 text-[11px] text-muted-foreground mt-2 font-medium">
+                  {property.area_sqm && <span>{property.area_sqm} m²</span>}
+                  <span className="flex items-center gap-0.5"><Bed className="w-3 h-3" />{property.bedrooms}</span>
+                  <span className="flex items-center gap-0.5"><Bath className="w-3 h-3" />{property.bathrooms}</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-1.5 line-clamp-1">
+                  {typeLabel[property.property_type] || "Inmueble"}
+                  {property.neighborhood ? ` ${property.neighborhood}` : ""}
+                  {property.city ? `, ${property.city}` : ""}
+                </p>
+              </>
+            )}
             <h3
               className={cn(
                 "font-bold text-foreground line-clamp-1 group-hover:text-[hsl(265,75%,50%)] transition-colors",
-                isExplore ? "text-base" : "text-sm"
+                isGrid ? "hidden" : isExplore ? "text-base" : "text-sm"
               )}
             >
               {property.title}
             </h3>
-            <p className="text-xs text-muted-foreground mt-1">
-              {property.city}
-              {property.locality ? ` · ${property.locality}` : ""}
-            </p>
+            {!isGrid && (
+              <p className="text-xs text-muted-foreground mt-1">
+                {property.city}
+                {property.locality ? ` · ${property.locality}` : ""}
+              </p>
+            )}
 
-            {isExplore && (
+            {isExplore && !isGrid && (
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {estratoLabel && (
                   <FeatureChip icon={Building2} className={getEstratoChipStyle(property.estrato)}>
@@ -177,6 +268,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
             <div
               className={cn(
                 "flex items-center gap-4 text-xs text-muted-foreground",
+                isGrid && "hidden",
                 isExplore ? "mt-3.5 pt-3.5 border-t border-border/20" : "mt-4 pt-4 border-t border-border/30"
               )}
             >
