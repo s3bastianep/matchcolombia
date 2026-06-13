@@ -19,9 +19,9 @@ export default function Home() {
     <div className="w-full overflow-x-hidden">
       <HeroSection onStartQuiz={startQuiz} />
       <RentEasySection />
-      <FeaturedProperties properties={properties} isLoading={isLoading} />
       <MatchSteps onStartQuiz={startQuiz} />
       <TestimonialsSection />
+      <FeaturedProperties properties={properties} isLoading={isLoading} />
     </div>
   );
 }
