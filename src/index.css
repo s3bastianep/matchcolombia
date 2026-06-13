@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 40% 98%;
+    --foreground: 240 30% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 30% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 30% 10%;
+    --primary: 340 82% 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 30% 94%;
+    --secondary-foreground: 240 20% 25%;
+    --muted: 240 20% 93%;
+    --muted-foreground: 240 10% 44%;
+    --accent: 168 72% 40%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 18% 88%;
+    --input: 240 18% 90%;
+    --ring: 340 82% 52%;
+    --chart-1: 340 82% 52%;
+    --chart-2: 168 72% 40%;
+    --chart-3: 265 75% 58%;
+    --chart-4: 32 95% 54%;
+    --chart-5: 200 90% 50%;
+    --radius: 1rem;
+    --font-heading: 'Plus Jakarta Sans', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-display: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --brand-coral: 340 82% 52%;
+    --brand-teal: 168 72% 40%;
+    --brand-violet: 265 75% 58%;
+    --brand-amber: 32 95% 54%;
+    --brand-sky: 200 90% 50%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 340 82% 52%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 340 82% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased overflow-x-hidden;
+  }
+  h1, h2, h3 {
+    @apply font-display;
+  }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: hsl(var(--muted-foreground)/0.2); border-radius: 9px; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--secondary)) 50%, hsl(var(--muted)) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(var(--rot, 0deg)); }
+  50% { transform: translateY(-10px) rotate(var(--rot, 0deg)); }
+}
+.animate-float { animation: float 5s ease-in-out infinite; }
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 30s linear infinite; }
+
+@layer utilities {
+  .gradient-hero {
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 20%, hsl(340 82% 52% / 0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 90% 10%, hsl(265 75% 58% / 0.15) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 50% at 70% 90%, hsl(168 72% 40% / 0.14) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 20% 80%, hsl(32 95% 54% / 0.12) 0%, transparent 50%),
+      linear-gradient(160deg, hsl(240 40% 98%) 0%, hsl(340 60% 97%) 50%, hsl(265 40% 97%) 100%);
+  }
+  .gradient-cta {
+    background: linear-gradient(135deg, hsl(340 82% 52%) 0%, hsl(265 75% 58%) 55%, hsl(200 90% 50%) 100%);
+  }
+  .hero-overlay {
+    background:
+      linear-gradient(135deg, hsl(340 82% 52% / 0.55) 0%, hsl(265 75% 58% / 0.45) 45%, hsl(168 72% 40% / 0.4) 100%),
+      linear-gradient(to bottom, hsl(0 0% 0% / 0.25) 0%, hsl(0 0% 0% / 0.55) 100%);
+  }
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(340 82% 52%), hsl(265 75% 58%), hsl(168 72% 40%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .color-bar {
+    background: linear-gradient(90deg,
+      hsl(340 82% 52%),
+      hsl(265 75% 58%),
+      hsl(168 72% 40%),
+      hsl(32 95% 54%),
+      hsl(200 90% 50%)
+    );
+  }
+  .glass-light {
+    background: hsl(0 0% 100% / 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 24px 48px -16px hsl(265 75% 58% / 0.18);
+  }
+  .surface-card {
+    @apply bg-white rounded-3xl border border-border/50 shadow-sm;
+  }
+  .section-pad {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+  .fade-edges {
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .btn-glow {
+    box-shadow: 0 8px 32px -4px hsl(340 82% 52% / 0.45);
+  }
+  .btn-glow:hover {
+    box-shadow: 0 12px 40px -4px hsl(265 75% 58% / 0.5);
+  }
+  .section-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider;
+  }
+  .philosophy-bg {
+    background: hsl(35 28% 95%);
+  }
+  .philosophy-card {
+    background: hsl(35 22% 91%);
+  }
+  .mask-house {
+    clip-path: polygon(50% 0%, 100% 30%, 100% 100%, 0% 100%, 0% 30%);
+  }
+  .gradient-tile-warm {
+    background: linear-gradient(160deg, hsl(340 82% 58%) 0%, hsl(32 95% 58%) 40%, hsl(265 75% 58%) 100%);
+  }
+  .gradient-tile-cool {
+    background: conic-gradient(from 200deg at 50% 50%, hsl(265 75% 58%), hsl(200 90% 50%), hsl(32 95% 54%), hsl(340 82% 52%), hsl(265 75% 58%));
+  }
+  .gradient-tile-teal {
+    background: linear-gradient(135deg, hsl(168 72% 42%) 0%, hsl(200 90% 50%) 55%, hsl(265 75% 58%) 100%);
+  }
+}
