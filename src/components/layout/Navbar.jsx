@@ -9,11 +9,12 @@ import BrandLogo from "../brand/BrandLogo";
 const navLinks = [
   { to: "/explorar?intent=compra", label: "Comprar", intent: "compra" },
   { to: "/explorar", label: "Rentar", intent: "arriendo" },
-  { to: "/publicar", label: "Vender" },
+  { to: "/publicar", label: "Vender", publish: true },
+  { to: "/publicar", label: "Anunciar", publish: true },
 ];
 
 function isNavLinkActive(link, pathname, search) {
-  if (link.to === "/publicar") return pathname === "/publicar";
+  if (link.publish) return pathname === "/publicar";
   if (pathname !== "/explorar") return false;
   const intent = new URLSearchParams(search).get("intent");
   if (link.intent === "compra") return intent === "compra";
@@ -41,7 +42,7 @@ export default function Navbar() {
 
           <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
-              <Link key={link.to} to={link.to}>
+              <Link key={link.label} to={link.to}>
                 <span
                   className={cn(
                     "px-4 py-2 text-sm font-semibold rounded-full transition-colors",
@@ -156,7 +157,7 @@ export default function Navbar() {
             <div className="px-4 py-3 space-y-1">
               {navLinks.map((link) => (
                 <Link
-                  key={link.to}
+                  key={link.label}
                   to={link.to}
                   onClick={() => setMobileOpen(false)}
                   className="block px-3 py-3 text-sm font-semibold text-foreground/80 hover:bg-secondary rounded-xl"
