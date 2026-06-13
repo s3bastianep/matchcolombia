@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Sparkles, Target, KeyRound, ArrowRight, Compass } from "lucide-react";
 import SectionHeader from "../ui/SectionHeader";
+import VerifiedBadge from "@/components/brand/VerifiedBadge";
 import { cn } from "@/lib/utils";
 
 const steps = [
@@ -21,7 +22,7 @@ const steps = [
     title: "Recibe tu selección",
     desc: "Solo inmuebles 100% verificados por MatchColombia. Precio real, fotos reales.",
     tag: "100% verificados",
-    accent: "from-[hsl(265,75%,58%)] to-[hsl(200,90%,50%)]",
+    accent: "from-brand-magenta to-brand-violet",
     scores: [92, 88, 95],
   },
   {
@@ -30,7 +31,7 @@ const steps = [
     title: "Haz tu mudanza",
     desc: "Guarda favoritos, agenda visitas y nosotros gestionamos todo por ti.",
     tag: "Gestión completa",
-    accent: "from-[hsl(168,72%,40%)] to-[hsl(32,95%,54%)]",
+    accent: "from-brand-violet to-brand-magenta",
     pills: ["Favoritos", "Visita", "Equipo Match"],
   },
 ];
@@ -64,7 +65,7 @@ export default function MatchSteps({ onStartQuiz }) {
         {/* Timeline horizontal — sin fotos, distinto a RentEasy */}
         <div className="relative">
           <div className="hidden lg:block absolute top-[2.75rem] left-[12%] right-[12%] h-[2px]">
-            <div className="h-full bg-gradient-to-r from-[hsl(340,82%,52%)]/20 via-[hsl(265,75%,58%)]/40 to-[hsl(168,72%,40%)]/20 rounded-full" />
+            <div className="h-full bg-gradient-to-r from-brand-magenta/20 via-brand-violet/35 to-brand-magenta/20 rounded-full" />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6">
@@ -110,12 +111,16 @@ export default function MatchSteps({ onStartQuiz }) {
                     <h3 className="font-extrabold text-xl sm:text-[1.35rem] mt-3 mb-2 tracking-tight">{step.title}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed max-w-xs lg:mx-auto">{step.desc}</p>
 
-                    <div className="mt-4 flex flex-wrap gap-1.5 lg:justify-center">
-                      {step.pills?.map((pill) => (
-                        <span key={pill} className="px-2.5 py-1 rounded-full bg-[hsl(240,40%,98%)] text-[10px] font-bold text-foreground border border-border/40">
-                          {pill}
-                        </span>
-                      ))}
+                <div className="mt-4 flex flex-wrap gap-1.5 lg:justify-center">
+                  {step.pills?.map((pill) =>
+                    pill === "Verificados" ? (
+                      <VerifiedBadge key={pill} size="xs" className="!rounded-full" />
+                    ) : (
+                      <span key={pill} className="px-2.5 py-1 rounded-full bg-[hsl(240,40%,98%)] text-[10px] font-bold text-foreground border border-border/40">
+                        {pill}
+                      </span>
+                    )
+                  )}
                       {step.scores?.map((score) => (
                         <span
                           key={score}

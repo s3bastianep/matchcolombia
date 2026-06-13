@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Check, Car, PawPrint, Sofa, ShieldCheck } from "lucide-react";
+import VerifiedBadge from "@/components/brand/VerifiedBadge";
+import { ArrowRight, ArrowLeft, Check, Car, PawPrint, Sofa, Sparkles } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { savePreferences, buildExploreUrl } from "@/lib/matchPreferences";
 import { CITIES, getZonesForCity } from "@/lib/colombia";
@@ -17,10 +18,10 @@ const STEPS = [
 ];
 
 const TYPES = [
-  { value: "apartamento", label: "Apartamento", color: "border-[hsl(340,82%,52%)]/40 bg-[hsl(340,82%,52%)]/8" },
-  { value: "casa", label: "Casa", color: "border-[hsl(168,72%,40%)]/40 bg-[hsl(168,72%,40%)]/8" },
-  { value: "estudio", label: "Estudio", color: "border-[hsl(265,75%,58%)]/40 bg-[hsl(265,75%,58%)]/8" },
-  { value: "habitacion", label: "Habitación", color: "border-[hsl(200,90%,50%)]/40 bg-[hsl(200,90%,50%)]/8" },
+  { value: "apartamento", label: "Apartamento", color: "border-brand-magenta/40 bg-brand-magenta/8" },
+  { value: "casa", label: "Casa", color: "border-brand-violet/40 bg-brand-violet/8" },
+  { value: "estudio", label: "Estudio", color: "border-brand-violet/35 bg-brand-violet/8" },
+  { value: "habitacion", label: "Habitación", color: "border-brand-magenta/35 bg-brand-magenta/8" },
 ];
 const BEDS = ["1", "2", "3", "4", "5"];
 const BUDGETS = [
@@ -87,14 +88,16 @@ export default function MatchQuiz({ open, onOpenChange }) {
         <div className="gradient-hero px-6 sm:px-8 pt-6 pb-4 border-b border-border/30">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-2xl gradient-cta flex items-center justify-center shadow-md shrink-0">
-              <ShieldCheck className="w-5 h-5 text-white" />
+              <Sparkles className="w-5 h-5 text-white" />
             </div>
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Match inteligente · Paso {step + 1}/{STEPS.length}
               </p>
-              <p className="font-extrabold text-sm leading-snug">Inmuebles 100% verificados</p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Sin estafas, sin sustos.</p>
+              <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                <VerifiedBadge size="sm" />
+                <span className="text-[11px] text-muted-foreground">Sin estafas, sin sustos.</span>
+              </div>
             </div>
           </div>
         </div>

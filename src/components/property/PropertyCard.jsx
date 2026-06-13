@@ -8,7 +8,7 @@ import SmartImage from "@/components/ui/SmartImage";
 import { INTERIORS, FALLBACK_IMAGE } from "@/lib/colombiaImages";
 import { isInShortlist, toggleShortlist } from "@/lib/shortlist";
 import { getEstratoLabel, getEstratoChipStyle } from "@/lib/propertyLabels";
-import { getParkingSpots } from "@/lib/propertyFilters";
+import VerifiedBadge from "@/components/brand/VerifiedBadge";
 
 const formatCOP = (value) =>
   new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(value || 0);
@@ -20,13 +20,13 @@ const formatCompactCOP = (value) => {
 };
 
 const typeColors = {
-  apartamento: "bg-[hsl(340,82%,52%)]",
-  casa: "bg-[hsl(168,72%,40%)]",
-  estudio: "bg-[hsl(265,75%,58%)]",
-  habitacion: "bg-[hsl(200,90%,50%)]",
-  penthouse: "bg-[hsl(32,95%,54%)]",
-  duplex: "bg-[hsl(340,82%,52%)]",
-  comercial: "bg-[hsl(32,95%,54%)]",
+  apartamento: "bg-brand-magenta",
+  casa: "bg-brand-violet",
+  estudio: "bg-brand-violet",
+  habitacion: "bg-brand-magenta",
+  penthouse: "bg-brand-violet",
+  duplex: "bg-brand-magenta",
+  comercial: "bg-brand-violet",
 };
 
 const typeLabel = {
@@ -187,20 +187,19 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                 <span className={cn("px-2.5 py-1 rounded-full text-white text-[10px] font-bold shadow-sm", typeColor)}>
                   {typeLabel[property.property_type] || property.property_type}
                 </span>
-                {showMatch && matchScore > 0 && (
-                  <span className="px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-extrabold text-[hsl(265,75%,50%)] shadow-sm flex items-center gap-1">
-                    <Sparkles className="w-3 h-3" />
-                    {matchScore}% · verificado
-                  </span>
-                )}
+              {showMatch && matchScore > 0 && (
+                <span className="px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-extrabold text-brand-violet shadow-sm flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" />
+                  {matchScore}%
+                </span>
+              )}
               </div>
             )}
 
-            {isGrid && showMatch && matchScore > 0 && (
-              <span className="absolute top-2.5 left-2.5 z-10 px-2 py-0.5 rounded-md bg-white/95 text-[10px] font-extrabold text-[hsl(265,75%,50%)] shadow-sm flex items-center gap-1">
-                <Sparkles className="w-3 h-3" />
-                {matchScore}%
-              </span>
+            {isGrid && (
+              <div className="absolute top-2.5 left-2.5 z-10">
+                <VerifiedBadge size="xs" score={showMatch && matchScore > 0 ? matchScore : undefined} />
+              </div>
             )}
 
             {!isGrid && (
@@ -234,21 +233,21 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                 <div className="flex items-center gap-3 text-[11px] text-foreground/70 mt-2.5 font-semibold">
                   {property.area_sqm && (
                     <span className="flex items-center gap-1">
-                      <Maximize className="w-3 h-3 text-[hsl(168,72%,40%)]" />
+                      <Maximize className="w-3 h-3 text-brand-violet" />
                       {property.area_sqm} m²
                     </span>
                   )}
                   <span className="flex items-center gap-1">
-                    <Bed className="w-3 h-3 text-[hsl(265,75%,58%)]" />
+                    <Bed className="w-3 h-3 text-brand-violet" />
                     {property.bedrooms}
                   </span>
                   <span className="flex items-center gap-1">
-                    <Bath className="w-3 h-3 text-[hsl(200,90%,50%)]" />
+                    <Bath className="w-3 h-3 text-brand-magenta" />
                     {property.bathrooms}
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-2 line-clamp-1 flex items-center gap-1">
-                  <MapPin className="w-3 h-3 shrink-0 text-[hsl(340,82%,52%)]" />
+                  <MapPin className="w-3 h-3 shrink-0 text-brand-magenta" />
                   <span>
                     {typeLabel[property.property_type] || "Inmueble"}
                     {property.neighborhood ? ` ${property.neighborhood}` : ""}
@@ -285,7 +284,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                   </FeatureChip>
                 )}
                 {property.pets_allowed && (
-                  <FeatureChip icon={PawPrint} className="bg-[hsl(168,72%,40%)]/10 text-[hsl(168,72%,32%)] border-[hsl(168,72%,40%)]/20">
+                  <FeatureChip icon={PawPrint} className="bg-brand-magenta/10 text-brand-magenta border-brand-magenta/20">
                     Mascotas
                   </FeatureChip>
                 )}
@@ -305,16 +304,16 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
               )}
             >
               <span className="flex items-center gap-1.5 font-semibold text-foreground/80">
-                <Bed className="w-3.5 h-3.5 text-[hsl(265,75%,58%)]" />
+                <Bed className="w-3.5 h-3.5 text-brand-violet" />
                 {property.bedrooms} hab.
               </span>
               <span className="flex items-center gap-1.5 font-semibold text-foreground/80">
-                <Bath className="w-3.5 h-3.5 text-[hsl(200,90%,50%)]" />
+                <Bath className="w-3.5 h-3.5 text-brand-magenta" />
                 {property.bathrooms} baño{property.bathrooms !== 1 ? "s" : ""}
               </span>
               {property.area_sqm && (
                 <span className="flex items-center gap-1.5 font-semibold text-foreground/80">
-                  <Maximize className="w-3.5 h-3.5 text-[hsl(168,72%,40%)]" />
+                  <Maximize className="w-3.5 h-3.5 text-brand-violet" />
                   {property.area_sqm} m²
                 </span>
               )}

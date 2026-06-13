@@ -19,20 +19,20 @@ const ownerLinks = [
 
 const NAV_THEMES = {
   compra: {
-    idle: "text-[hsl(200,70%,42%)] hover:text-[hsl(200,80%,36%)]",
-    active: "bg-[hsl(200,90%,94%)] text-[hsl(200,85%,32%)] font-semibold",
+    idle: "text-brand-violet hover:text-brand-violet/80",
+    active: "bg-brand-violet/10 text-brand-violet font-semibold",
   },
   rentar: {
-    idle: "text-[hsl(265,60%,50%)] hover:text-[hsl(265,70%,44%)]",
-    active: "bg-[hsl(265,75%,94%)] text-[hsl(265,75%,42%)] font-semibold",
+    idle: "text-brand-magenta hover:text-brand-magenta/80",
+    active: "bg-brand-magenta/10 text-brand-magenta font-semibold",
   },
   vender: {
-    idle: "text-[hsl(32,80%,42%)] hover:text-[hsl(28,90%,36%)]",
-    active: "bg-[hsl(32,95%,92%)] text-[hsl(24,90%,34%)] font-semibold",
+    idle: "text-brand-magenta hover:text-brand-magenta/80",
+    active: "bg-brand-magenta/10 text-brand-magenta font-semibold",
   },
   anunciar: {
-    idle: "text-[hsl(265,35%,40%)] hover:text-[hsl(265,35%,32%)]",
-    active: "bg-[hsl(265,30%,90%)] text-[hsl(265,35%,24%)] font-semibold",
+    idle: "text-brand-violet hover:text-brand-violet/80",
+    active: "bg-brand-violet/10 text-brand-violet font-semibold",
   },
 };
 

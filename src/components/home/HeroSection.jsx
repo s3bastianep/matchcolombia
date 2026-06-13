@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import InlineMatchBar from "../search/InlineMatchBar";
+import VerifiedBadge from "../brand/VerifiedBadge";
 import { PEOPLE } from "@/lib/colombiaImages";
 import { cn } from "@/lib/utils";
 
@@ -55,10 +56,10 @@ export default function HeroSection({ onStartQuiz }) {
             <span className="text-gradient">Sin scroll infinito.</span>
           </h1>
 
-          <p className="text-muted-foreground text-sm sm:text-base mb-7 max-w-md leading-relaxed">
-            Match inteligente con inmuebles <span className="font-semibold text-foreground">100% verificados</span>.
-            Sin estafas, sin sustos.
+          <p className="text-muted-foreground text-sm sm:text-base mb-3 max-w-md leading-relaxed">
+            Match inteligente con inmuebles revisados por nuestro equipo.
           </p>
+          <VerifiedBadge size="sm" className="mb-7" />
 
           <InlineMatchBar variant="hero" />
 

@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { motion, AnimatePresence } from "framer-motion";
 import { SlidersHorizontal, X, Sparkles, Search, Map, Check, ArrowUpDown, MousePointer2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { loadPreferences, scoreProperty } from "@/lib/matchPreferences";
+import VerifiedBadge from "../components/brand/VerifiedBadge";
 import { CITIES } from "@/lib/colombia";
 import {
   DEFAULT_ADVANCED_FILTERS,
@@ -34,11 +34,11 @@ const SORT_LABELS = {
 };
 
 const QUICK_FILTERS = [
-  { key: "apartamento", label: "Apartamento", color: "border-[hsl(340,82%,52%)]/35 text-[hsl(340,82%,45%)] bg-[hsl(340,82%,52%)]/10" },
-  { key: "casa", label: "Casa", color: "border-[hsl(168,72%,40%)]/35 text-[hsl(168,72%,35%)] bg-[hsl(168,72%,40%)]/10" },
-  { key: "estudio", label: "Estudio", color: "border-[hsl(265,75%,58%)]/35 text-[hsl(265,75%,50%)] bg-[hsl(265,75%,58%)]/10" },
-  { key: "pets", label: "Mascotas 🐾", color: "border-[hsl(32,95%,54%)]/35 text-[hsl(32,95%,40%)] bg-[hsl(32,95%,54%)]/10" },
-  { key: "parking", label: "Parqueadero", color: "border-[hsl(200,90%,50%)]/35 text-[hsl(200,90%,40%)] bg-[hsl(200,90%,50%)]/10" },
+  { key: "apartamento", label: "Apartamento", color: "border-brand-magenta/30 text-brand-magenta bg-brand-magenta/10" },
+  { key: "casa", label: "Casa", color: "border-brand-violet/30 text-brand-violet bg-brand-violet/10" },
+  { key: "estudio", label: "Estudio", color: "border-brand-violet/25 text-brand-violet bg-brand-violet/8" },
+  { key: "pets", label: "Mascotas 🐾", color: "border-brand-magenta/25 text-brand-magenta bg-brand-magenta/8" },
+  { key: "parking", label: "Parqueadero", color: "border-brand-violet/25 text-brand-violet bg-brand-violet/8" },
 ];
 
 function ExploreSkeleton() {
@@ -216,13 +216,13 @@ export default function Explore() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mx-4 lg:mx-6 mt-3 p-3 rounded-xl bg-gradient-to-r from-[hsl(265,75%,58%)]/8 to-[hsl(340,82%,52%)]/6 border border-[hsl(265,75%,58%)]/15 flex items-center gap-3"
+            className="mx-4 lg:mx-6 mt-3 p-3 rounded-xl bg-gradient-to-r from-brand-violet/8 to-brand-magenta/6 border border-brand-violet/15 flex items-center gap-3"
           >
-            <Sparkles className="w-4 h-4 text-[hsl(265,75%,50%)] shrink-0" />
-            <p className="text-xs font-bold text-foreground min-w-0 truncate">
-              Inmuebles verificados en {cityLabel}
-            </p>
-            <p className="text-[10px] text-muted-foreground truncate">Sin estafas, sin sustos</p>
+            <Sparkles className="w-4 h-4 text-brand-violet shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold text-foreground truncate">Inmuebles verificados en {cityLabel}</p>
+              <VerifiedBadge size="xs" className="mt-1.5" />
+            </div>
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
               className="ml-auto text-[11px] font-bold text-[hsl(265,75%,50%)] hover:underline shrink-0"

@@ -12,6 +12,14 @@ module.exports = {
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+  			brand: {
+  				violet: 'hsl(var(--brand-violet))',
+  				magenta: 'hsl(var(--brand-magenta))',
+  				verified: 'hsl(var(--brand-verified))',
+  				'verified-bg': 'hsl(var(--brand-verified-bg))',
+  				'verified-fg': 'hsl(var(--brand-verified-fg))',
+  				'verified-border': 'hsl(var(--brand-verified-border))',
+  			},
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'

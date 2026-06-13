@@ -31,10 +31,10 @@ const BUDGETS = [
 ];
 
 const FILTER_STYLES = [
-  { bg: "bg-[hsl(340,82%,52%)]/10", color: "text-[hsl(340,82%,52%)]" },
-  { bg: "bg-[hsl(265,75%,58%)]/10", color: "text-[hsl(265,75%,58%)]" },
-  { bg: "bg-[hsl(168,72%,40%)]/10", color: "text-[hsl(168,72%,40%)]" },
-  { bg: "bg-[hsl(32,95%,54%)]/10", color: "text-[hsl(32,95%,54%)]" },
+  { bg: "bg-brand-magenta/10", color: "text-brand-magenta" },
+  { bg: "bg-brand-violet/10", color: "text-brand-violet" },
+  { bg: "bg-brand-magenta/8", color: "text-brand-magenta" },
+  { bg: "bg-brand-violet/8", color: "text-brand-violet" },
 ];
 
 export default function SearchBar({ variant = "hero", className }) {

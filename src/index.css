@@ -6,47 +6,62 @@
 
 @layer base {
   :root {
-    --background: 240 40% 98%;
-    --foreground: 240 30% 10%;
+    /* Fondos claros y aireados */
+    --background: 240 33% 98%;
+    --foreground: 265 25% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 240 30% 10%;
+    --card-foreground: 265 25% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 30% 10%;
+    --popover-foreground: 265 25% 12%;
+
+    /* Magenta → CTAs y acción */
     --primary: 340 82% 52%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 30% 94%;
-    --secondary-foreground: 240 20% 25%;
-    --muted: 240 20% 93%;
+
+    --secondary: 240 28% 95%;
+    --secondary-foreground: 265 18% 28%;
+    --muted: 240 22% 94%;
     --muted-foreground: 240 10% 44%;
-    --accent: 168 72% 40%;
+
+    /* Violeta → acentos de marca (no CTAs) */
+    --accent: 265 75% 58%;
     --accent-foreground: 0 0% 100%;
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 18% 88%;
-    --input: 240 18% 90%;
+    --border: 240 18% 90%;
+    --input: 240 18% 92%;
     --ring: 340 82% 52%;
+
+    /* Charts: solo variaciones marca (sin arcoíris) */
     --chart-1: 340 82% 52%;
-    --chart-2: 168 72% 40%;
-    --chart-3: 265 75% 58%;
-    --chart-4: 32 95% 54%;
-    --chart-5: 200 90% 50%;
+    --chart-2: 265 75% 58%;
+    --chart-3: 340 70% 62%;
+    --chart-4: 265 60% 65%;
+    --chart-5: 240 15% 55%;
+
     --radius: 1rem;
     --font-heading: 'Plus Jakarta Sans', sans-serif;
     --font-body: 'Plus Jakarta Sans', sans-serif;
     --font-display: 'Plus Jakarta Sans', sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    --brand-coral: 340 82% 52%;
-    --brand-teal: 168 72% 40%;
+
+    /* Paleta de marca — 3 colores con propósito */
     --brand-violet: 265 75% 58%;
-    --brand-amber: 32 95% 54%;
-    --brand-sky: 200 90% 50%;
+    --brand-magenta: 340 82% 52%;
+    /* Mint/turquesa — EXCLUSIVO badge verificado */
+    --brand-verified: 168 52% 42%;
+    --brand-verified-bg: 168 48% 94%;
+    --brand-verified-fg: 168 55% 26%;
+    --brand-verified-border: 168 38% 78%;
+
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-foreground: 265 20% 26%;
     --sidebar-primary: 340 82% 52%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
+    --sidebar-accent: 240 28% 95%;
+    --sidebar-accent-foreground: 265 25% 12%;
+    --sidebar-border: 240 18% 90%;
     --sidebar-ring: 340 82% 52%;
   }
 }
@@ -90,37 +105,63 @@
 .animate-marquee { animation: marquee 30s linear infinite; }
 
 @layer utilities {
+  /* Fondos suaves — solo violeta + magenta */
   .gradient-hero {
     background:
-      radial-gradient(ellipse 80% 60% at 10% 20%, hsl(340 82% 52% / 0.18) 0%, transparent 60%),
-      radial-gradient(ellipse 70% 50% at 90% 10%, hsl(265 75% 58% / 0.15) 0%, transparent 55%),
-      radial-gradient(ellipse 60% 50% at 70% 90%, hsl(168 72% 40% / 0.14) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 40% at 20% 80%, hsl(32 95% 54% / 0.12) 0%, transparent 50%),
-      linear-gradient(160deg, hsl(240 40% 98%) 0%, hsl(340 60% 97%) 50%, hsl(265 40% 97%) 100%);
+      radial-gradient(ellipse 80% 60% at 10% 20%, hsl(var(--brand-magenta) / 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 90% 10%, hsl(var(--brand-violet) / 0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 55% 45% at 75% 85%, hsl(var(--brand-violet) / 0.08) 0%, transparent 50%),
+      linear-gradient(160deg, hsl(240 33% 98%) 0%, hsl(265 40% 97%) 55%, hsl(340 45% 97%) 100%);
   }
+
+  /* CTAs: magenta → violeta (logo) */
   .gradient-cta {
-    background: linear-gradient(135deg, hsl(340 82% 52%) 0%, hsl(265 75% 58%) 55%, hsl(200 90% 50%) 100%);
+    background: linear-gradient(135deg, hsl(var(--brand-magenta)) 0%, hsl(var(--brand-violet)) 100%);
   }
+
   .hero-overlay {
     background:
-      linear-gradient(135deg, hsl(340 82% 52% / 0.55) 0%, hsl(265 75% 58% / 0.45) 45%, hsl(168 72% 40% / 0.4) 100%),
+      linear-gradient(135deg, hsl(var(--brand-magenta) / 0.5) 0%, hsl(var(--brand-violet) / 0.45) 100%),
       linear-gradient(to bottom, hsl(0 0% 0% / 0.25) 0%, hsl(0 0% 0% / 0.55) 100%);
   }
+
+  /* Texto destacado — identidad violeta/magenta */
   .text-gradient {
-    background: linear-gradient(135deg, hsl(340 82% 52%), hsl(265 75% 58%), hsl(168 72% 40%));
+    background: linear-gradient(135deg, hsl(var(--brand-magenta)), hsl(var(--brand-violet)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  .color-bar {
-    background: linear-gradient(90deg,
-      hsl(340 82% 52%),
-      hsl(265 75% 58%),
-      hsl(168 72% 40%),
-      hsl(32 95% 54%),
-      hsl(200 90% 50%)
-    );
+
+  .text-brand-violet {
+    color: hsl(var(--brand-violet));
   }
+
+  .text-brand-magenta {
+    color: hsl(var(--brand-magenta));
+  }
+
+  /* Barra superior — solo 2 colores marca */
+  .color-bar {
+    background: linear-gradient(90deg, hsl(var(--brand-magenta)), hsl(var(--brand-violet)));
+  }
+
+  /* ✓ Verificado — único uso del mint/turquesa */
+  .badge-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.375rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    background: hsl(var(--brand-verified-bg));
+    color: hsl(var(--brand-verified-fg));
+    border: 1px solid hsl(var(--brand-verified-border));
+  }
+
   .glass-light {
     background: hsl(0 0% 100% / 0.88);
     backdrop-filter: blur(12px);
@@ -131,7 +172,7 @@
   }
   .card-hover:hover {
     transform: translateY(-5px);
-    box-shadow: 0 24px 48px -16px hsl(265 75% 58% / 0.18);
+    box-shadow: 0 24px 48px -16px hsl(var(--brand-violet) / 0.16);
   }
   .surface-card {
     @apply bg-white rounded-3xl border border-border/50 shadow-sm;
@@ -143,30 +184,30 @@
     mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
   }
   .btn-glow {
-    box-shadow: 0 8px 32px -4px hsl(340 82% 52% / 0.45);
+    box-shadow: 0 8px 32px -4px hsl(var(--brand-magenta) / 0.4);
   }
   .btn-glow:hover {
-    box-shadow: 0 12px 40px -4px hsl(265 75% 58% / 0.5);
+    box-shadow: 0 12px 40px -4px hsl(var(--brand-violet) / 0.45);
   }
   .section-badge {
     @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider;
   }
   .philosophy-bg {
-    background: hsl(35 28% 95%);
+    background: hsl(240 30% 97%);
   }
   .philosophy-card {
-    background: hsl(35 22% 91%);
+    background: hsl(0 0% 100%);
   }
   .mask-house {
     clip-path: polygon(50% 0%, 100% 30%, 100% 100%, 0% 100%, 0% 30%);
   }
   .gradient-tile-warm {
-    background: linear-gradient(160deg, hsl(340 82% 58%) 0%, hsl(32 95% 58%) 40%, hsl(265 75% 58%) 100%);
+    background: linear-gradient(160deg, hsl(var(--brand-magenta)) 0%, hsl(var(--brand-violet)) 100%);
   }
   .gradient-tile-cool {
-    background: conic-gradient(from 200deg at 50% 50%, hsl(265 75% 58%), hsl(200 90% 50%), hsl(32 95% 54%), hsl(340 82% 52%), hsl(265 75% 58%));
+    background: linear-gradient(135deg, hsl(var(--brand-violet)) 0%, hsl(var(--brand-magenta)) 100%);
   }
   .gradient-tile-teal {
-    background: linear-gradient(135deg, hsl(168 72% 42%) 0%, hsl(200 90% 50%) 55%, hsl(265 75% 58%) 100%);
+    background: linear-gradient(135deg, hsl(var(--brand-violet)) 0%, hsl(265 65% 48%) 100%);
   }
 }

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import PropertyCard from "../property/PropertyCard";
+import VerifiedBadge from "../brand/VerifiedBadge";
 import SectionHeader from "../ui/SectionHeader";
 import { cn } from "@/lib/utils";
 
@@ -23,14 +24,17 @@ export default function FeaturedProperties({ properties, isLoading }) {
   };
 
   return (
-    <section id="featured" className="section-pad bg-[hsl(240,40%,98%)] overflow-hidden">
+    <section id="featured" className="section-pad bg-background overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
-          <SectionHeader
-            eyebrow="Nuevas publicaciones"
-            title="Inmuebles verificados"
-            subtitle="100% verificados por MatchColombia. Sin estafas, sin sustos."
-          />
+          <div className="flex flex-col gap-2">
+            <SectionHeader
+              eyebrow="Nuevas publicaciones"
+              title="Inmuebles verificados"
+              subtitle="100% verificados por MatchColombia. Sin estafas, sin sustos."
+            />
+            <VerifiedBadge size="sm" className="w-fit" />
+          </div>
 
           <div className="flex items-center gap-3">
             <div className="flex flex-wrap gap-1.5 p-1 rounded-full bg-white border border-border/50 w-full sm:w-auto">
