@@ -96,7 +96,7 @@
 
 /* HotPads-style footer marquee */
 .hotpads-skyline-track {
-  animation: hotpads-marquee 160s linear infinite;
+  animation: hotpads-marquee 280s linear infinite;
   will-change: transform;
 }
 .hotpads-skyline-paused {

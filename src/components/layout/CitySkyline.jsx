@@ -45,7 +45,7 @@ function SkylineArt({ onNavigate }) {
   return (
     <svg
       viewBox={`0 0 ${SEGMENT_WIDTH} 160`}
-      className="block h-full w-[1400px] shrink-0"
+      className="block h-full w-[1600px] shrink-0"
       preserveAspectRatio="xMinYMax meet"
       aria-hidden="true"
     >
@@ -252,7 +252,7 @@ export default function CitySkyline() {
 
   return (
     <div className="hotpads-skyline relative overflow-hidden select-none" style={{ backgroundColor: CREAM }}>
-      <div className="hotpads-skyline-viewport h-[148px] sm:h-[168px] md:h-[188px] overflow-hidden">
+      <div className="hotpads-skyline-viewport h-[220px] sm:h-[260px] md:h-[300px] lg:h-[320px] overflow-hidden">
         <div
           className={cn("hotpads-skyline-track flex w-max items-end", isPaused && "hotpads-skyline-paused")}
           aria-hidden={isPaused}
