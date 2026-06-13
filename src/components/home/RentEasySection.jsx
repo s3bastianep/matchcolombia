@@ -1,121 +1,177 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-
-function BuildingsIllustration() {
-  return (
-    <svg viewBox="0 0 200 140" className="w-full max-w-[240px] mx-auto h-auto" aria-hidden="true">
-      <polygon points="8,18 10,22 14,22 11,25 12,30 8,27 4,30 5,25 2,22 6,22" fill="hsl(32,95%,54%)" />
-      <polygon points="168,14 170,18 174,18 171,21 172,26 168,23 164,26 165,21 162,18 166,18" fill="hsl(32,95%,54%)" />
-      <rect x="20" y="70" width="36" height="50" rx="2" fill="hsl(200,90%,50%)" stroke="#1e293b" strokeWidth="1.5" />
-      <rect x="28" y="82" width="8" height="10" fill="#fff" /><rect x="40" y="82" width="8" height="10" fill="#fff" />
-      <rect x="28" y="98" width="8" height="10" fill="#fff" /><rect x="40" y="98" width="8" height="10" fill="#fff" />
-      <rect x="62" y="50" width="40" height="70" rx="2" fill="hsl(340,82%,52%)" stroke="#1e293b" strokeWidth="1.5" />
-      <rect x="72" y="62" width="10" height="12" fill="#fff" /><rect x="88" y="62" width="10" height="12" fill="#fff" />
-      <rect x="72" y="80" width="10" height="12" fill="#fff" /><rect x="88" y="80" width="10" height="12" fill="#fff" />
-      <rect x="72" y="98" width="10" height="12" fill="#fff" /><rect x="88" y="98" width="10" height="12" fill="#fff" />
-      <rect x="110" y="58" width="32" height="62" rx="2" fill="hsl(32,95%,54%)" stroke="#1e293b" strokeWidth="1.5" />
-      <rect x="118" y="70" width="8" height="10" fill="#fff" /><rect x="130" y="70" width="8" height="10" fill="#fff" />
-      <rect x="118" y="88" width="8" height="10" fill="#fff" /><rect x="130" y="88" width="8" height="10" fill="#fff" />
-      <rect x="148" y="78" width="34" height="42" rx="2" fill="hsl(265,75%,58%)" stroke="#1e293b" strokeWidth="1.5" />
-      <rect x="156" y="90" width="8" height="10" fill="#fff" /><rect x="168" y="90" width="8" height="10" fill="#fff" />
-      <polygon points="148,78 165,58 182,78" fill="hsl(168,72%,40%)" stroke="#1e293b" strokeWidth="1.2" />
-      <circle cx="175" cy="28" r="3" fill="hsl(32,95%,54%)" opacity="0.9" />
-      <circle cx="30" cy="35" r="2.5" fill="hsl(32,95%,54%)" opacity="0.8" />
-      <circle cx="155" cy="22" r="2" fill="hsl(32,95%,54%)" opacity="0.7" />
-    </svg>
-  );
-}
-
-function ResourcesIllustration() {
-  return (
-    <svg viewBox="0 0 200 140" className="w-full max-w-[240px] mx-auto h-auto" aria-hidden="true">
-      <rect x="30" y="30" width="70" height="80" rx="6" fill="#fff" stroke="#1e293b" strokeWidth="1.5" />
-      <circle cx="65" cy="58" r="22" fill="none" stroke="hsl(340,82%,52%)" strokeWidth="8" strokeDasharray="40 100" />
-      <circle cx="65" cy="58" r="22" fill="none" stroke="hsl(200,90%,50%)" strokeWidth="8" strokeDasharray="30 100" strokeDashoffset="-40" />
-      <circle cx="65" cy="58" r="22" fill="none" stroke="hsl(32,95%,54%)" strokeWidth="8" strokeDasharray="20 100" strokeDashoffset="-70" />
-      <rect x="115" y="40" width="60" height="70" rx="6" fill="#fff" stroke="#1e293b" strokeWidth="1.5" />
-      <rect x="128" y="88" width="10" height="14" fill="hsl(200,90%,50%)" rx="1" />
-      <rect x="142" y="78" width="10" height="24" fill="hsl(340,82%,52%)" rx="1" />
-      <rect x="156" y="68" width="10" height="34" fill="hsl(168,72%,40%)" rx="1" />
-      <polyline points="125,55 135,48 148,52 162,38 175,42" fill="none" stroke="hsl(265,75%,58%)" strokeWidth="2.5" strokeLinecap="round" />
-      <circle cx="40" cy="25" r="2.5" fill="hsl(32,95%,54%)" />
-      <circle cx="170" cy="28" r="2" fill="hsl(32,95%,54%)" />
-      <circle cx="100" cy="18" r="2" fill="hsl(32,95%,54%)" />
-    </svg>
-  );
-}
-
-function PeaceIllustration() {
-  return (
-    <svg viewBox="0 0 200 140" className="w-full max-w-[240px] mx-auto h-auto" aria-hidden="true">
-      <ellipse cx="100" cy="118" rx="42" ry="8" fill="#e2e8f0" opacity="0.6" />
-      <circle cx="100" cy="52" r="16" fill="#1e293b" />
-      <path d="M72 78 Q100 62 128 78 L122 108 Q100 98 78 108 Z" fill="hsl(340,82%,52%)" stroke="#1e293b" strokeWidth="1.5" />
-      <path d="M78 108 L72 118 M122 108 L128 118" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" />
-      <path d="M88 118 L88 128 M112 118 L112 128" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" />
-      <path d="M82 95 L78 108 M118 95 L122 108" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="55" cy="30" r="2.5" fill="hsl(32,95%,54%)" />
-      <circle cx="145" cy="25" r="2" fill="hsl(32,95%,54%)" />
-      <circle cx="165" cy="45" r="2" fill="hsl(32,95%,54%)" />
-      <circle cx="35" cy="50" r="2" fill="hsl(32,95%,54%)" />
-    </svg>
-  );
-}
+import { Building2, Sparkles, ShieldCheck, ArrowRight, MapPin } from "lucide-react";
+import { INTERIORS } from "@/lib/colombiaImages";
+import { cn } from "@/lib/utils";
 
 const features = [
   {
-    Illustration: BuildingsIllustration,
+    icon: Building2,
     title: "Listados completos",
-    desc: "Explora inmuebles verificados en arriendo en Bogotá y Barranquilla. Filtra por zona, precio, habitaciones y tipo sin scroll infinito.",
+    desc: "Explora inmuebles verificados en Bogotá y Barranquilla. Filtra por zona, precio y habitaciones sin scroll infinito.",
+    tag: "Inventario real",
+    accent: "from-[hsl(340,82%,52%)] to-[hsl(265,75%,58%)]",
+    ring: "ring-[hsl(340,82%,52%)]/20",
+    image: INTERIORS.conjunto,
+    preview: (
+      <div className="flex flex-wrap gap-1.5">
+        {["Chapinero", "2 hab", "$2.8M", "Apto"].map((pill) => (
+          <span key={pill} className="px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-bold text-foreground shadow-sm border border-border/40">
+            {pill}
+          </span>
+        ))}
+      </div>
+    ),
   },
   {
-    Illustration: ResourcesIllustration,
+    icon: Sparkles,
     title: "Recursos útiles",
-    desc: "Toma mejores decisiones con match inteligente, filtros avanzados, mapa interactivo y guías para arrendar en Colombia.",
+    desc: "Match inteligente, filtros avanzados, mapa interactivo y herramientas para decidir mejor en Colombia.",
+    tag: "Match + mapa",
+    accent: "from-[hsl(265,75%,58%)] to-[hsl(200,90%,50%)]",
+    ring: "ring-[hsl(265,75%,58%)]/20",
+    image: INTERIORS.sala2,
+    preview: (
+      <div className="flex items-center gap-2">
+        <div className="flex -space-x-1.5">
+          {[94, 88, 91].map((score) => (
+            <div
+              key={score}
+              className="w-8 h-8 rounded-full gradient-cta flex items-center justify-center text-[9px] font-extrabold text-white ring-2 ring-white"
+            >
+              {score}%
+            </div>
+          ))}
+        </div>
+        <span className="text-[10px] font-semibold text-muted-foreground">compatibilidad</span>
+      </div>
+    ),
   },
   {
-    Illustration: PeaceIllustration,
+    icon: ShieldCheck,
     title: "Tranquilidad de espíritu",
-    desc: "Siéntete seguro en tu proceso de arriendo. Anuncios verificados y un equipo real que gestiona consultas y visitas por ti.",
+    desc: "Anuncios verificados y un equipo real que gestiona consultas y visitas. Arrienda con confianza.",
+    tag: "Gestión completa",
+    accent: "from-[hsl(168,72%,40%)] to-[hsl(32,95%,54%)]",
+    ring: "ring-[hsl(168,72%,40%)]/20",
+    image: INTERIORS.dormitorio,
+    preview: (
+      <div className="flex flex-wrap gap-1.5 text-[10px] font-bold text-foreground/80">
+        <span className="px-2.5 py-1 rounded-lg bg-white/95 border border-border/40 shadow-sm flex items-center gap-1">
+          <ShieldCheck className="w-3 h-3 text-[hsl(168,72%,40%)]" /> Verificado
+        </span>
+        <span className="px-2.5 py-1 rounded-lg bg-white/95 border border-border/40 shadow-sm">Equipo Match</span>
+      </div>
+    ),
   },
 ];
 
 export default function RentEasySection() {
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-white border-b border-border/30">
-      <div className="max-w-6xl mx-auto px-4 sm:px-8">
+    <section className="relative overflow-hidden bg-[hsl(240,40%,98%)] border-b border-border/40 py-16 sm:py-20 lg:py-24">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-20 left-1/3 w-[420px] h-[420px] rounded-full bg-[hsl(265,75%,58%)]/6 blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[360px] h-[360px] rounded-full bg-[hsl(340,82%,52%)]/6 blur-3xl" />
+      </div>
+
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-8">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center max-w-3xl mx-auto mb-14 sm:mb-20"
+          className="text-center max-w-3xl mx-auto mb-12 sm:mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-foreground leading-tight tracking-tight">
-            Arrendar nunca fue tan fácil.
+          <p className="text-xs font-bold uppercase tracking-widest text-[hsl(265,75%,50%)] mb-3">
+            Por qué MatchColombia
+          </p>
+          <h2 className="text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold text-foreground leading-[1.12] tracking-tight">
+            Arrendar nunca fue{" "}
+            <span className="text-gradient">tan fácil</span>
           </h2>
-          <p className="text-muted-foreground text-base sm:text-lg leading-relaxed mt-4">
+          <p className="text-muted-foreground text-base sm:text-lg leading-relaxed mt-4 max-w-2xl mx-auto">
             Ayudamos a quienes buscan arriendo en Bogotá y Barranquilla a encontrar su hogar con confianza.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-10 lg:gap-14">
-          {features.map(({ Illustration, title, desc }, i) => (
-            <motion.article
-              key={title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08 }}
-              className="text-center"
-            >
-              <div className="relative mb-8 sm:mb-10 flex justify-center items-center min-h-[150px] sm:min-h-[160px]">
-                <Illustration />
-              </div>
-              <h3 className="font-extrabold text-xl sm:text-2xl text-foreground mb-3 tracking-tight">{title}</h3>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-sm mx-auto">{desc}</p>
-            </motion.article>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+          {features.map((feature, i) => {
+            const Icon = feature.icon;
+            return (
+              <motion.article
+                key={feature.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="group relative flex flex-col rounded-3xl bg-white border border-border/50 shadow-sm overflow-hidden card-hover"
+              >
+                <div className={cn("h-1.5 w-full bg-gradient-to-r", feature.accent)} />
+
+                <div className="p-5 sm:p-6 flex flex-col flex-1">
+                  <div className="flex items-start justify-between mb-5">
+                    <div
+                      className={cn(
+                        "w-12 h-12 rounded-2xl bg-gradient-to-br flex items-center justify-center text-white shadow-md ring-4",
+                        feature.accent,
+                        feature.ring
+                      )}
+                    >
+                      <Icon className="w-5 h-5" strokeWidth={2.25} />
+                    </div>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-secondary text-muted-foreground">
+                      {feature.tag}
+                    </span>
+                  </div>
+
+                  <h3 className="font-extrabold text-xl sm:text-[1.35rem] mb-2.5 tracking-tight">{feature.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">{feature.desc}</p>
+
+                  <div className="mb-4 min-h-[2rem]">{feature.preview}</div>
+
+                  <div className="relative h-32 sm:h-36 rounded-2xl overflow-hidden">
+                    <img
+                      src={feature.image}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent" />
+                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                      <span className="inline-flex items-center gap-1 text-white text-[10px] font-bold drop-shadow">
+                        <MapPin className="w-3 h-3" />
+                        Colombia
+                      </span>
+                      <span
+                        className={cn(
+                          "text-[10px] font-extrabold text-white px-2 py-0.5 rounded-full bg-gradient-to-r shadow-sm",
+                          feature.accent
+                        )}
+                      >
+                        {i + 1}/3
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </motion.article>
+            );
+          })}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-10 sm:mt-12 flex justify-center"
+        >
+          <Link
+            to="/explorar"
+            className="inline-flex items-center gap-2 text-sm font-bold text-[hsl(265,75%,50%)] hover:underline group"
+          >
+            Ver todos los inmuebles
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
