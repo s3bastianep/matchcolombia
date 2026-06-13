@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Heart, User, LogOut, LogIn, UserPlus } from "lucide-react";
+import { getUserRole, PANEL_HOME, ROLE_LABELS, ROLES } from "@/lib/roles";
+import { LayoutDashboard, User, Menu, X, Heart, LogOut, LogIn, UserPlus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -139,7 +140,15 @@ export default function Navbar() {
                         <div className="px-4 py-3 border-b border-border/40">
                           <p className="font-bold text-sm truncate">{user.name}</p>
                           <p className="text-xs text-muted-foreground truncate">@{user.username}</p>
+                          <p className="text-[10px] font-semibold text-[hsl(265,75%,50%)] mt-1">{ROLE_LABELS[getUserRole(user)]}</p>
                         </div>
+                        <Link
+                          to={PANEL_HOME[getUserRole(user)] || "/portal"}
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold hover:bg-secondary transition-colors"
+                        >
+                          <LayoutDashboard className="w-4 h-4" /> Mi panel
+                        </Link>
                         <Link
                           to="/favoritos"
                           onClick={() => setUserMenuOpen(false)}

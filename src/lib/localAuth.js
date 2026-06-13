@@ -1,5 +1,8 @@
+import { ROLES } from "./roles";
+
 const USERS_KEY = "matchcolombia_users";
 const SESSION_KEY = "matchcolombia_session";
+const DEMO_USERS_SEEDED = "matchcolombia_demo_users_seeded";
 
 const delay = (ms = 200) => new Promise((r) => setTimeout(r, ms));
 
@@ -44,7 +47,7 @@ function saveSession(session) {
 
 function sanitizeUser(user) {
   const { passwordHash, ...safe } = user;
-  return safe;
+  return { ...safe, role: safe.role || "seeker" };
 }
 
 function generateToken() {
@@ -55,8 +58,35 @@ function normalizeUsername(username) {
   return username.trim().toLowerCase();
 }
 
-export async function register({ name, username, email, password }) {
+async function seedDemoUsers() {
+  if (localStorage.getItem(DEMO_USERS_SEEDED)) return;
+  const users = loadUsers();
+  const demos = [
+    { id: "user-admin-demo", name: "Admin MatchColombia", username: "admin", email: "admin@matchcolombia.co", password: "admin123", role: ROLES.ADMIN },
+    { id: "user-seeker-demo", name: "Laura Buscadora", username: "buscador", email: "buscador@demo.co", password: "demo123", role: ROLES.SEEKER },
+    { id: "user-tenant-demo", name: "Ana Inquilina", username: "inquilino", email: "inquilino@demo.co", password: "demo123", role: ROLES.TENANT },
+    { id: "user-owner-demo", name: "Pedro Propietario", username: "propietario", email: "propietario@demo.co", password: "demo123", role: ROLES.OWNER },
+  ];
+  for (const d of demos) {
+    if (!users.some((u) => normalizeUsername(u.username) === d.username)) {
+      users.push({
+        id: d.id,
+        name: d.name,
+        username: d.username,
+        email: d.email,
+        role: d.role,
+        passwordHash: await hashPassword(d.password),
+        created_at: new Date().toISOString(),
+      });
+    }
+  }
+  saveUsers(users);
+  localStorage.setItem(DEMO_USERS_SEEDED, "1");
+}
+
+export async function register({ name, username, email, password, role = ROLES.SEEKER }) {
   await delay(400);
+  await seedDemoUsers();
 
   if (!name?.trim()) throw new Error("Ingresa tu nombre");
   if (!username?.trim()) throw new Error("Ingresa un usuario");
@@ -78,6 +108,7 @@ export async function register({ name, username, email, password }) {
     name: name.trim(),
     username: username.trim(),
     email: email?.trim() || "",
+    role: role || ROLES.SEEKER,
     passwordHash: await hashPassword(password),
     created_at: new Date().toISOString(),
   };
@@ -98,6 +129,7 @@ export async function register({ name, username, email, password }) {
 
 export async function login(username, password) {
   await delay(350);
+  await seedDemoUsers();
 
   if (!username?.trim() || !password) {
     throw new Error("Usuario y contraseña son obligatorios");
@@ -129,6 +161,7 @@ export async function loginViaEmailPassword(identifier, password) {
 
 export async function me() {
   await delay(100);
+  await seedDemoUsers();
   const session = loadSession();
   if (!session) return null;
 
