@@ -4,7 +4,6 @@ import { base44 } from "@/api/base44Client";
 import HeroSection from "../components/home/HeroSection";
 import FeaturedProperties from "../components/home/FeaturedProperties";
 import RentEasySection from "../components/home/RentEasySection";
-import MapExploreSection from "../components/home/MapExploreSection";
 import MatchSteps from "../components/home/MatchSteps";
 import TestimonialsSection from "../components/home/TestimonialsSection";
 
@@ -21,7 +20,6 @@ export default function Home() {
       <HeroSection onStartQuiz={startQuiz} />
       <FeaturedProperties properties={properties} isLoading={isLoading} />
       <RentEasySection />
-      <MapExploreSection />
       <MatchSteps onStartQuiz={startQuiz} />
       <TestimonialsSection />
     </div>
