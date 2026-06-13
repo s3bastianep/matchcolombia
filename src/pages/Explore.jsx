@@ -64,6 +64,8 @@ export default function Explore() {
   const initialType = searchParams.get("type") || "";
   const initialMax = searchParams.get("max") || "";
   const isMatched = searchParams.get("matched") === "1";
+  const intent = searchParams.get("intent");
+  const exploreHeading = intent === "compra" ? "Comprar en" : "Arriendos en";
   const prefs = loadPreferences();
 
   const [sortBy, setSortBy] = useState(isMatched ? "match" : "newest");
@@ -183,7 +185,7 @@ export default function Explore() {
                 {isMatched ? "Resultados personalizados" : "Explorar"}
               </p>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                {isMatched ? "Tus matches" : "Arriendos en"}{" "}
+                {isMatched ? "Tus matches" : exploreHeading}{" "}
                 <span className="text-gradient">{cityLabel}</span>
               </h1>
               <p className="text-sm text-muted-foreground mt-1.5 flex items-center gap-1.5">

@@ -7,10 +7,18 @@ import { useAuth } from "@/lib/AuthContext";
 import BrandLogo from "../brand/BrandLogo";
 
 const navLinks = [
-  { to: "/explorar", label: "Arriendos" },
-  { to: "/favoritos", label: "Mis guardados", auth: true },
-  { to: "/publicar", label: "Publicar", auth: true },
+  { to: "/explorar?intent=compra", label: "Comprar", intent: "compra" },
+  { to: "/explorar", label: "Rentar", intent: "arriendo" },
+  { to: "/publicar", label: "Vender" },
 ];
+
+function isNavLinkActive(link, pathname, search) {
+  if (link.to === "/publicar") return pathname === "/publicar";
+  if (pathname !== "/explorar") return false;
+  const intent = new URLSearchParams(search).get("intent");
+  if (link.intent === "compra") return intent === "compra";
+  return intent !== "compra";
+}
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -37,7 +45,7 @@ export default function Navbar() {
                 <span
                   className={cn(
                     "px-4 py-2 text-sm font-semibold rounded-full transition-colors",
-                    location.pathname === link.to
+                    isNavLinkActive(link, location.pathname, location.search)
                       ? "text-[hsl(265,75%,50%)] bg-[hsl(265,75%,58%)]/8"
                       : "text-foreground/70 hover:text-foreground hover:bg-secondary"
                   )}
