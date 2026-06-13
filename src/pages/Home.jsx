@@ -18,8 +18,8 @@ export default function Home() {
   return (
     <div className="w-full overflow-x-hidden">
       <HeroSection onStartQuiz={startQuiz} />
-      <FeaturedProperties properties={properties} isLoading={isLoading} />
       <RentEasySection />
+      <FeaturedProperties properties={properties} isLoading={isLoading} />
       <MatchSteps onStartQuiz={startQuiz} />
       <TestimonialsSection />
     </div>
