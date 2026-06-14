@@ -3,79 +3,69 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
-  BadgeCheck,
   Check,
   ChevronDown,
   ChevronRight,
-  Home,
-  MessageCircleOff,
-  Shield,
-  Users,
-  Zap,
-  Handshake,
   Phone,
   Mail,
   User,
   TrendingUp,
   MapPin,
-  ShieldCheck,
-  FileCheck,
   X,
-  Sparkles,
+  Smartphone,
   Eye,
   Headphones,
+  Handshake,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
-import OwnerPanelBenefits from "@/components/advertise/OwnerPanelBenefits";
+import SellDashboardScreen from "@/components/advertise/SellDashboardScreen";
+import SellHeroForm from "@/components/advertise/SellHeroForm";
+import SaleProgressTracker from "@/components/advertise/SaleProgressTracker";
 import { CITIES } from "@/lib/colombia";
-import { INTERIORS } from "@/lib/colombiaImages";
 
-const STATS = [
-  { label: "Seguimiento digital", desc: "Ofertas, visitas y estado en un solo lugar." },
-  { label: "Contratos digitales", desc: "Firma y consulta sin correos ni papeles perdidos." },
-  { label: "Verificación documental", desc: "Inmueble revisado antes de publicar." },
-  { label: "Atención centralizada", desc: "Un equipo coordina todo el proceso por ti." },
+const SALE_VISIBILITY = [
+  { emoji: "📈", title: "Personas que vieron el inmueble" },
+  { emoji: "👥", title: "Compradores interesados" },
+  { emoji: "📅", title: "Visitas programadas" },
+  { emoji: "💰", title: "Ofertas recibidas" },
+  { emoji: "🤝", title: "Estado de negociación" },
+  { emoji: "📲", title: "Seguimiento en tiempo real" },
 ];
 
-const ADMIN_INCLUDES = [
-  "Publicación premium",
-  "Fotografías profesionales",
-  "Verificación documental",
-  "Gestión de visitas",
-  "Filtrado de compradores",
-  "Seguimiento de ofertas",
-  "Contratos digitales",
-  "Asesoría en cierre",
-  "Panel de seguimiento",
-];
-
-const VALUE_PILLARS = [
+const OWNER_VIEWS = [
   {
-    icon: ShieldCheck,
-    tag: "Confianza",
-    title: "Listado verificado",
-    desc: "Tu inmueble pasa revisión antes de publicarse. Los compradores ven un anuncio serio, no uno más del montón.",
-    accent: "from-brand-magenta to-brand-violet",
-    bg: "bg-brand-magenta/8",
+    icon: Smartphone,
+    title: "Seguimiento en tiempo real",
+    desc: "Consulta visitas, interesados y ofertas desde cualquier dispositivo.",
   },
   {
     icon: Headphones,
-    tag: "Gestión",
-    title: "Nosotros atendemos por ti",
-    desc: "Consultas, visitas y seguimiento los maneja nuestro equipo. Tú no recibes 50 WhatsApps ni expones tu número.",
-    accent: "from-brand-violet to-brand-magenta",
-    bg: "bg-brand-violet/8",
+    title: "Menos llamadas",
+    desc: "Nosotros filtramos compradores y coordinamos visitas.",
   },
   {
     icon: Eye,
-    tag: "Exposición",
-    title: "Compradores que buscan en tu zona",
-    desc: "Promocionamos tu propiedad a quienes ya exploran Bogotá y Barranquilla en MatchColombia.",
-    accent: "from-brand-magenta to-brand-violet",
-    bg: "bg-brand-magenta/8",
+    title: "Más visibilidad",
+    desc: "Publicación profesional con fotografías optimizadas.",
   },
+  {
+    icon: Handshake,
+    title: "Acompañamiento completo",
+    desc: "Desde la publicación hasta el cierre.",
+  },
+];
+
+const SERVICE_INCLUDES = [
+  "Fotografías profesionales",
+  "Publicación en MatchColombia",
+  "Gestión de interesados",
+  "Coordinación de visitas",
+  "Seguimiento de compradores",
+  "Negociación",
+  "Acompañamiento documental",
+  "Panel de seguimiento",
 ];
 
 const WITHOUT_US = [
@@ -90,13 +80,6 @@ const WITH_US = [
   "Solo te avisamos cuando hay alguien real",
   "Visitas agendadas y confirmadas",
   "Seguimiento claro hasta cerrar la venta",
-];
-
-const PROCESS = [
-  { title: "Registras tu inmueble", desc: "Barrio, precio, fotos y lo esencial.", icon: Home, accent: "from-brand-magenta to-brand-violet" },
-  { title: "Verificamos y publicamos", desc: "Revisamos datos y activamos tu listado.", icon: FileCheck, accent: "from-brand-violet to-brand-magenta" },
-  { title: "Gestionamos compradores", desc: "Consultas y visitas sin que tú hables con nadie.", icon: Users, accent: "from-brand-magenta to-brand-violet" },
-  { title: "Cierras con apoyo", desc: "Te acompañamos hasta concretar la operación.", icon: BadgeCheck, accent: "from-brand-violet to-brand-magenta" },
 ];
 
 const FAQ = [
@@ -133,6 +116,20 @@ function SectionEyebrow({ children, light = false }) {
   );
 }
 
+function SectionTitle({ title, subtitle, badge, className }) {
+  return (
+    <div className={cn("border-l-4 border-brand-magenta pl-4 sm:pl-5", className)}>
+      {badge && (
+        <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider text-brand-magenta mb-2">{badge}</span>
+      )}
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight">{title}</h2>
+      {subtitle && (
+        <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-2xl leading-relaxed">{subtitle}</p>
+      )}
+    </div>
+  );
+}
+
 function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
@@ -162,6 +159,7 @@ function LeadForm({ dark = false }) {
     if (form.phone) params.set("phone", form.phone);
     if (form.neighborhood) params.set("neighborhood", form.neighborhood);
     if (form.city) params.set("city", form.city);
+    params.set("operation", "venta");
     navigate(`/publicar/nuevo${params.toString() ? `?${params}` : ""}`);
   };
 
@@ -216,25 +214,66 @@ function LeadForm({ dark = false }) {
       <button type="submit" className="w-full gradient-cta text-white font-bold py-4 rounded-xl hover:opacity-95 transition-opacity shadow-lg">
         Vender con {BRAND.name}
       </button>
-      <a
-        href={`https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent("Hola, quiero vender mi inmueble con MatchColombia")}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={cn(
-          "w-full flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 font-bold text-sm transition-colors",
-          dark ? "border-white/25 text-white hover:bg-white/10" : "border-border/60 hover:bg-secondary"
-        )}
-      >
-        Conversemos por WhatsApp
-      </a>
     </form>
+  );
+}
+
+function SellComparison() {
+  return (
+    <section id="comparacion" className="py-10 sm:py-14 bg-white border-b border-border/40">
+      <div className="max-w-6xl mx-auto px-4 sm:px-8">
+        <SectionTitle
+          badge="La pregunta clave"
+          title={`Vender solo vs vender con ${BRAND.name}`}
+          subtitle="¿Por qué dejarles vender tu inmueble? Porque nosotros filtramos, coordinamos y te mantenemos informado sin exponer tu teléfono."
+          className="mb-8"
+        />
+        <div className="grid md:grid-cols-2 gap-5 sm:gap-6">
+          <div className="rounded-2xl border border-border/50 bg-background p-6 sm:p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
+                <X className="w-5 h-5 text-muted-foreground" />
+              </div>
+              <h3 className="font-extrabold text-lg text-muted-foreground">Por tu cuenta</h3>
+            </div>
+            <ul className="space-y-4">
+              {WITHOUT_US.map((text) => (
+                <li key={text} className="flex items-start gap-3 text-sm text-muted-foreground">
+                  <X className="w-4 h-4 shrink-0 mt-0.5 text-brand-magenta/60" />
+                  {text}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-2xl border-2 border-brand-violet/30 bg-gradient-to-br from-brand-violet/8 via-white to-brand-magenta/5 p-6 sm:p-8 shadow-lg">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl gradient-cta flex items-center justify-center">
+                <Check className="w-5 h-5 text-white" strokeWidth={3} />
+              </div>
+              <h3 className="font-extrabold text-lg">Con {BRAND.name}</h3>
+            </div>
+            <ul className="space-y-4">
+              {WITH_US.map((text) => (
+                <li key={text} className="flex items-start gap-3 text-sm font-semibold text-foreground/90">
+                  <Check className="w-4 h-4 shrink-0 mt-0.5 text-brand-violet" strokeWidth={3} />
+                  {text}
+                </li>
+              ))}
+            </ul>
+            <a href="#vender-form-top" className="inline-flex items-center gap-2 mt-8 gradient-cta text-white font-bold px-6 py-3 rounded-xl hover:opacity-95 transition-opacity text-sm">
+              Quiero vender así
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
 export default function Sell() {
   return (
     <div className="w-full overflow-x-hidden bg-background">
-      {/* Breadcrumb con color */}
       <div className="color-bar">
         <div className="max-w-6xl mx-auto px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
           <nav className="flex items-center gap-1.5 text-xs font-semibold text-white/80">
@@ -249,22 +288,20 @@ export default function Sell() {
         </div>
       </div>
 
-      {/* Hero compacto */}
       <section className="relative overflow-hidden bg-brand-dark text-white">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-brand-magenta/15 blur-3xl" />
           <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-brand-violet/10 blur-3xl" />
         </div>
         <div className="relative max-w-6xl mx-auto px-4 sm:px-8 py-8 sm:py-10 lg:py-12">
-          <div className="grid lg:grid-cols-[1fr_0.9fr] gap-8 lg:gap-10 items-center">
+          <div className="grid lg:grid-cols-[1fr_0.85fr] gap-8 lg:gap-10 items-start">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
               <SectionEyebrow light>Por qué vender con nosotros</SectionEyebrow>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-[1.12] tracking-tight">
-                Vende sin estrés.{" "}
-                <span className="text-brand-magenta">Nosotros gestionamos todo.</span>
+                Vende tu inmueble sin perseguir compradores
               </h1>
               <p className="mt-4 text-white/75 text-sm sm:text-base leading-relaxed max-w-lg">
-                Publicar es gratis. {BRAND.name} verifica tu inmueble, filtra compradores y coordina visitas. Todo visible en tu panel.
+                Nos encargamos de las publicaciones, visitas, negociaciones y seguimiento mientras monitoreas todo desde tu panel.
               </p>
               <div className="mt-3">
                 <VerifiedBadge size="sm" />
@@ -282,73 +319,88 @@ export default function Sell() {
                 ))}
               </ul>
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                <Link to="/publicar/nuevo" className="inline-flex items-center justify-center gap-2 gradient-cta text-white font-bold px-6 py-3 rounded-xl hover:opacity-95 transition-opacity text-sm shadow-lg">
+                <a href="#vender-form-top" className="inline-flex items-center justify-center gap-2 gradient-cta text-white font-bold px-6 py-3 rounded-xl hover:opacity-95 transition-opacity text-sm shadow-lg">
                   Empezar a vender
                   <ArrowRight className="w-4 h-4" />
-                </Link>
-                <a href="#beneficios-panel" className="inline-flex items-center justify-center gap-2 border border-white/30 font-bold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm">
-                  Ver beneficios
+                </a>
+                <a href="#venta-visible" className="inline-flex items-center justify-center gap-2 border border-white/30 font-bold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm">
+                  Ver cómo se ve
                 </a>
               </div>
             </motion.div>
 
             <motion.div
+              id="vender-form-top"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="hidden sm:block rounded-2xl overflow-hidden border border-white/10 shadow-2xl max-h-[220px] lg:max-h-[260px]"
             >
-              <img src={INTERIORS.casa} alt="Inmueble en venta" className="w-full h-full object-cover" />
+              <SellHeroForm />
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Panel propietario */}
-      <section id="beneficios-panel" className="py-10 sm:py-14 lg:py-16 bg-white border-b border-border/40">
+      <SellComparison />
+
+      <section id="venta-visible" className="py-10 sm:py-14 lg:py-16 bg-white border-b border-border/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-8">
-          <div className="border-l-4 border-brand-magenta pl-4 sm:pl-5 mb-8 sm:mb-10">
-            <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider text-brand-magenta mb-2">Tecnología MatchColombia</span>
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight">Tu panel propietario, siempre visible</h2>
-            <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-2xl leading-relaxed">
-              Interesados, visitas, ofertas y estado de cada inmueble, en tiempo real y desde cualquier dispositivo.
-            </p>
+          <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-start mb-8 sm:mb-10">
+            <SectionTitle
+              badge="Tu venta, no un panel genérico"
+              title="Tu venta siempre visible"
+              subtitle="Visualizaciones, interesados, visitas y ofertas en un solo lugar. Sin tickets ni contratos de arriendo: solo lo que importa para vender."
+            />
+            <SellDashboardScreen />
           </div>
-          <OwnerPanelBenefits mode="sell" />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {SALE_VISIBILITY.map((item) => (
+              <div key={item.title} className="p-3.5 sm:p-4 rounded-xl bg-[hsl(0,0%,98%)] border border-border/40 text-center">
+                <span className="text-xl sm:text-2xl block mb-1.5" role="img" aria-hidden>{item.emoji}</span>
+                <p className="text-[11px] sm:text-xs font-bold leading-snug">{item.title}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Resultados concretos */}
-      <section className="color-bar">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-5 sm:py-6 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-          {STATS.map(({ label, desc }, i) => (
-            <motion.div
-              key={label}
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.04 }}
-              className="text-white px-1"
-            >
-              <p className="text-sm sm:text-base font-extrabold leading-snug">{label}</p>
-              <p className="text-[10px] sm:text-xs font-medium text-white/80 mt-1.5 leading-snug">{desc}</p>
-            </motion.div>
-          ))}
+      <section className="py-10 sm:py-14 bg-[hsl(0,0%,98%)] border-b border-border/40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+          <SectionTitle
+            title="Lo que ves como propietario"
+            subtitle="Tranquilidad para vender: menos llamadas, más visibilidad y acompañamiento hasta el cierre."
+            className="mb-8"
+          />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {OWNER_VIEWS.map(({ icon: Icon, title, desc }, i) => (
+              <motion.div
+                key={title}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="p-5 rounded-2xl bg-white border border-border/40"
+              >
+                <div className="w-10 h-10 rounded-xl gradient-cta flex items-center justify-center mb-3">
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="font-extrabold text-sm sm:text-base">{title}</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 leading-relaxed">{desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Administración */}
-      <section className="py-10 sm:py-14 lg:py-16">
+      <section className="py-10 sm:py-14">
         <div className="max-w-6xl mx-auto px-4 sm:px-8">
           <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-start">
-            <div className="border-l-4 border-brand-magenta pl-4 sm:pl-5">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight">Administración MatchColombia</h2>
-              <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-xl leading-relaxed">
-                Todo lo que necesitas para vender sin estrés, en un solo servicio.
-              </p>
-            </div>
+            <SectionTitle
+              title="¿Qué incluye nuestro servicio?"
+              subtitle="Todo lo que necesitas para vender sin estrés, en un solo acompañamiento."
+            />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-              {ADMIN_INCLUDES.map((item, i) => (
+              {SERVICE_INCLUDES.map((item, i) => (
                 <motion.div
                   key={item}
                   initial={{ opacity: 0, y: 8 }}
@@ -368,151 +420,21 @@ export default function Sell() {
         </div>
       </section>
 
-      {/* 3 pilares de valor */}
-      <section id="por-que" className="py-10 sm:py-14 bg-[hsl(0,0%,98%)] border-y border-border/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <SectionEyebrow>El valor de MatchColombia</SectionEyebrow>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
-              Tres razones para <span className="text-gradient">vender con nosotros</span>
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              No es solo publicar un anuncio. Es tener un equipo que trabaja tu venta.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-5 sm:gap-6">
-            {VALUE_PILLARS.map(({ icon: Icon, tag, title, desc, accent, bg }, i) => (
-              <motion.article
-                key={tag}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="relative rounded-3xl bg-white border border-border/50 overflow-hidden shadow-sm card-hover"
-              >
-                <div className={cn("h-1.5 w-full bg-gradient-to-r", accent)} />
-                <div className="p-6 sm:p-7">
-                  <div className={cn("inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-5", bg, "text-foreground/80")}>
-                    <Sparkles className="w-3 h-3" />
-                    {tag}
-                  </div>
-                  <div className={cn("w-14 h-14 rounded-2xl bg-gradient-to-br flex items-center justify-center text-white shadow-md mb-5", accent)}>
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <h3 className="font-extrabold text-xl mb-2">{title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <SaleProgressTracker />
 
-      {/* Comparación: solo vs con nosotros — guía clara */}
-      <section className="py-16 sm:py-20 bg-white border-y border-border/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
-          <div className="text-center max-w-xl mx-auto mb-12">
-            <SectionEyebrow>Entiende la diferencia</SectionEyebrow>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Vender solo vs vender con {BRAND.name}
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-5 sm:gap-6">
-            <div className="rounded-3xl border border-border/50 bg-background p-6 sm:p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
-                  <X className="w-5 h-5 text-muted-foreground" />
-                </div>
-                <h3 className="font-extrabold text-lg text-muted-foreground">Por tu cuenta</h3>
-              </div>
-              <ul className="space-y-4">
-                {WITHOUT_US.map((text) => (
-                  <li key={text} className="flex items-start gap-3 text-sm text-muted-foreground">
-                    <X className="w-4 h-4 shrink-0 mt-0.5 text-brand-magenta/60" />
-                    {text}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="rounded-3xl border-2 border-brand-violet/30 bg-gradient-to-br from-brand-violet/8 via-white to-brand-magenta/5 p-6 sm:p-8 shadow-lg relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-brand-magenta/10 blur-2xl" />
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-xl gradient-cta flex items-center justify-center">
-                    <Check className="w-5 h-5 text-white" strokeWidth={3} />
-                  </div>
-                  <h3 className="font-extrabold text-lg">Con {BRAND.name}</h3>
-                </div>
-                <ul className="space-y-4">
-                  {WITH_US.map((text) => (
-                    <li key={text} className="flex items-start gap-3 text-sm font-semibold text-foreground/90">
-                      <Check className="w-4 h-4 shrink-0 mt-0.5 text-brand-violet" strokeWidth={3} />
-                      {text}
-                    </li>
-                  ))}
-                </ul>
-                <Link to="/publicar/nuevo" className="inline-flex items-center gap-2 mt-8 gradient-cta text-white font-bold px-6 py-3 rounded-xl hover:opacity-95 transition-opacity text-sm">
-                  Quiero vender así
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Proceso guiado con color */}
-      <section className="py-16 sm:py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
-          <div className="text-center max-w-xl mx-auto mb-12">
-            <SectionEyebrow>Tu camino</SectionEyebrow>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Así vendes con nosotros, <span className="text-gradient">paso a paso</span>
-            </h2>
-            <p className="mt-3 text-muted-foreground">Simple de entender. Fácil de empezar.</p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-            {PROCESS.map(({ title, desc, icon: Icon, accent }, i) => (
-              <motion.div
-                key={title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="relative bg-white rounded-2xl border border-border/50 overflow-hidden shadow-sm"
-              >
-                <div className={cn("h-1 w-full bg-gradient-to-r", accent)} />
-                <div className="p-5 sm:p-6">
-                  <span className={cn("inline-block text-[10px] font-extrabold text-white px-2 py-0.5 rounded-full bg-gradient-to-r mb-4", accent)}>
-                    Paso {i + 1}
-                  </span>
-                  <div className={cn("w-11 h-11 rounded-xl bg-gradient-to-br flex items-center justify-center text-white mb-4", accent)}>
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <h3 className="font-extrabold text-base">{title}</h3>
-                  <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Banda de valor con color */}
       <section className="color-bar py-10 sm:py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
           <div>
             <p className="text-white font-extrabold text-xl sm:text-2xl">¿Listo para vender con respaldo real?</p>
             <p className="text-white/80 text-sm mt-2">Publica gratis · Bogotá y Barranquilla</p>
           </div>
-          <Link to="/publicar/nuevo" className="inline-flex items-center gap-2 bg-white text-brand-dark font-bold px-8 py-3.5 rounded-xl hover:bg-white/90 transition-colors shrink-0">
+          <a href="#vender-form-top" className="inline-flex items-center gap-2 bg-white text-brand-dark font-bold px-8 py-3.5 rounded-xl hover:bg-white/90 transition-colors shrink-0">
             Vender mi inmueble
             <ArrowRight className="w-4 h-4" />
-          </Link>
+          </a>
         </div>
       </section>
 
-      {/* FAQ en panel oscuro */}
       <section className="py-16 sm:py-20 bg-brand-dark text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-8 grid lg:grid-cols-[1fr_1.2fr] gap-10 items-start">
           <div>
@@ -534,7 +456,6 @@ export default function Sell() {
         </div>
       </section>
 
-      {/* Formulario */}
       <section id="vender-form" className="py-16 sm:py-20 bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-8 grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
           <div>
@@ -545,19 +466,14 @@ export default function Sell() {
             <p className="mt-4 text-muted-foreground leading-relaxed">
               Completa el formulario y nuestro equipo te guía en el siguiente paso. Sin compromiso.
             </p>
-            <div className="mt-8 grid sm:grid-cols-2 gap-3">
-              {[
-                { icon: Shield, label: "Verificación", color: "text-brand-magenta" },
-                { icon: Zap, label: "Gestión total", color: "text-brand-violet" },
-                { icon: MessageCircleOff, label: "Sin contacto directo", color: "text-brand-magenta" },
-                { icon: Handshake, label: "Tú decides", color: "text-brand-violet" },
-              ].map(({ icon: Icon, label, color }) => (
-                <div key={label} className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-border/40">
-                  <Icon className={cn("w-4 h-4 shrink-0", color)} />
-                  <span className="text-xs font-bold">{label}</span>
-                </div>
+            <ul className="mt-8 space-y-3">
+              {SERVICE_INCLUDES.slice(0, 4).map((text) => (
+                <li key={text} className="flex items-center gap-3 text-sm font-semibold">
+                  <Check className="w-4 h-4 text-brand-violet shrink-0" strokeWidth={2.5} />
+                  {text}
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
           <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-border/50 ring-1 ring-brand-violet/10">
             <div className="h-1 w-16 rounded-full gradient-cta mb-6" />
