@@ -6,7 +6,6 @@ import HeroSection from "../components/home/HeroSection";
 import FeaturedProperties from "../components/home/FeaturedProperties";
 import RentEasySection from "../components/home/RentEasySection";
 import MatchSteps from "../components/home/MatchSteps";
-import ZonesSection from "../components/home/ZonesSection";
 
 const startQuiz = () => window.dispatchEvent(new CustomEvent("open-match-quiz"));
 
@@ -22,7 +21,6 @@ export default function Home() {
       <HeroSection onStartQuiz={startQuiz} />
       <RentEasySection />
       <MatchSteps onStartQuiz={startQuiz} />
-      <ZonesSection />
       <FeaturedProperties properties={properties} isLoading={isLoading} />
     </div>
   );
