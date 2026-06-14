@@ -1,15 +1,25 @@
-import { LayoutDashboard, Building2, Users, Calendar, UserCheck, BarChart3 } from "lucide-react";
+import {
+  LayoutDashboard, Building2, Users, Calendar, UserCheck, BarChart3,
+  Shield, FileText, Settings, Bell,
+} from "lucide-react";
 import PanelLayout from "@/components/panels/PanelLayout";
-
-const nav = [
-  { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/admin/propiedades", label: "Propiedades", icon: Building2 },
-  { to: "/admin/leads", label: "Leads", icon: Users },
-  { to: "/admin/visitas", label: "Visitas", icon: Calendar },
-  { to: "/admin/inquilinos", label: "Inquilinos", icon: UserCheck },
-  { to: "/admin/reportes", label: "Reportes", icon: BarChart3 },
-];
+import { useAdminBadges } from "@/lib/useAdminBadges";
 
 export default function AdminLayout() {
+  const badges = useAdminBadges();
+
+  const nav = [
+    { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
+    { to: "/admin/propiedades", label: "Propiedades", icon: Building2 },
+    { to: "/admin/propietarios", label: "Propietarios", icon: Shield, badge: badges.owners },
+    { to: "/admin/leads", label: "Leads", icon: Users, badge: badges.leads },
+    { to: "/admin/visitas", label: "Visitas", icon: Calendar, badge: badges.visits },
+    { to: "/admin/aplicaciones", label: "Aplicaciones", icon: FileText, badge: badges.applications },
+    { to: "/admin/inquilinos", label: "Inquilinos", icon: UserCheck, badge: badges.tickets },
+    { to: "/admin/reportes", label: "Reportes", icon: BarChart3 },
+    { to: "/admin/configuracion", label: "Configuración", icon: Settings },
+    { to: "/admin/notificaciones", label: "Notificaciones", icon: Bell, badge: badges.notifications },
+  ];
+
   return <PanelLayout title="Admin" subtitle="MatchColombia" navItems={nav} accent="purple" />;
 }

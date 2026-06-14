@@ -1,4 +1,6 @@
 /** Datos demo para paneles admin, inquilino y propietario */
+import { DEFAULT_WHATSAPP_TEMPLATES } from "../lib/adminConstants";
+
 export function getPortalSeedData(propertyIds = []) {
   const prop1 = propertyIds[0] || "prop-seed-1";
   const prop2 = propertyIds[1] || "prop-seed-2";
@@ -16,6 +18,10 @@ export function getPortalSeedData(propertyIds = []) {
       move_in_date: "2026-07-01",
       pipeline_stage: "nuevo",
       status: "nueva",
+      source: "web",
+      tags: ["presupuesto_ok"],
+      internal_notes: "",
+      needs_reply: true,
       created_date: new Date(now - 86400000 * 2).toISOString(),
     },
     {
@@ -29,6 +35,11 @@ export function getPortalSeedData(propertyIds = []) {
       move_in_date: "2026-06-15",
       pipeline_stage: "visita_agendada",
       status: "contactado",
+      source: "whatsapp",
+      tags: [],
+      internal_notes: "Quiere mudarse en junio",
+      needs_reply: false,
+      last_reply_at: new Date(now - 86400000).toISOString(),
       created_date: new Date(now - 86400000 * 5).toISOString(),
     },
   ];
@@ -41,6 +52,7 @@ export function getPortalSeedData(propertyIds = []) {
       user_name: "Laura Méndez",
       scheduled_at: new Date(now.getTime() + 86400000 * 2).toISOString(),
       status: "confirmada",
+      visit_type: "presencial",
       notes: "Visita presencial — acompañar al edificio",
       created_date: new Date(now - 86400000).toISOString(),
     },
@@ -51,6 +63,7 @@ export function getPortalSeedData(propertyIds = []) {
       user_name: "Carlos Ruiz",
       scheduled_at: new Date(now.getTime() + 86400000 * 4).toISOString(),
       status: "pendiente",
+      visit_type: "virtual",
       notes: "",
       created_date: new Date(now - 86400000 * 3).toISOString(),
     },
@@ -142,6 +155,7 @@ export function getPortalSeedData(propertyIds = []) {
       description: "Desde ayer la nevera no mantiene temperatura. Adjunto foto.",
       priority: "alta",
       status: "en_proceso",
+      assigned_to: "admin",
       images: [],
       created_date: new Date(now - 86400000 * 2).toISOString(),
     },
@@ -159,5 +173,47 @@ export function getPortalSeedData(propertyIds = []) {
     },
   ];
 
-  return { inquiries, visits, messages, applications, leases, payments, tickets };
+  const owners = [
+    {
+      id: "owner-seed-1",
+      user_id: "user-owner-demo",
+      name: "Pedro Propietario",
+      email: "propietario@demo.co",
+      phone: "3001112233",
+      verification_status: "verificado",
+      documents: [
+        { type: "cedula", name: "Cédula.pdf", url: "#", uploaded_at: new Date(now - 86400000 * 30).toISOString() },
+        { type: "propiedad", name: "Certificado tradición.pdf", url: "#", uploaded_at: new Date(now - 86400000 * 28).toISOString() },
+      ],
+      internal_notes: "Verificado en oficina. Propietario recurrente.",
+      created_date: new Date(now - 86400000 * 60).toISOString(),
+    },
+    {
+      id: "owner-seed-2",
+      user_id: "user-owner-pending",
+      name: "Ana Dueña",
+      email: "ana@email.com",
+      phone: "3105558899",
+      verification_status: "pendiente",
+      documents: [{ type: "cedula", name: "Cédula Ana.pdf", url: "#", uploaded_at: new Date(now - 86400000).toISOString() }],
+      internal_notes: "Falta certificado de tradición.",
+      created_date: new Date(now - 86400000 * 3).toISOString(),
+    },
+  ];
+
+  const pois = [
+    { id: "poi-1", city: "Bogotá", neighborhood: "Chapinero", name: "Parque 93", category: "Parque", created_date: now.toISOString() },
+    { id: "poi-2", city: "Bogotá", neighborhood: "Chapinero", name: "Centro Andino", category: "Comercio", created_date: now.toISOString() },
+    { id: "poi-3", city: "Barranquilla", neighborhood: "Riomar", name: "Buenavista", category: "Comercio", created_date: now.toISOString() },
+  ];
+
+  const settings = {
+    whatsapp_templates: DEFAULT_WHATSAPP_TEMPLATES,
+    blocked_visit_slots: [],
+    admin_users: [
+      { username: "admin", name: "Administrador", role: "super", permissions: ["all"] },
+    ],
+  };
+
+  return { inquiries, visits, messages, applications, leases, payments, tickets, owners, pois, settings };
 }

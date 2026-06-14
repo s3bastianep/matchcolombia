@@ -3,12 +3,24 @@ import { cn } from "@/lib/utils";
 import StatusBadge from "./StatusBadge";
 
 export default function PipelineBoard({ stages, items, onMove, renderCard }) {
+  const many = stages.length > 4;
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div
+      className={cn(
+        "gap-4 pb-2",
+        many ? "flex overflow-x-auto" : "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4"
+      )}
+    >
       {stages.map((stage) => {
         const stageItems = items.filter((item) => (item.pipeline_stage || item.status) === stage.key);
         return (
-          <div key={stage.key} className="bg-[hsl(0,0%,96%)] rounded-2xl border border-border/30 min-h-[280px] flex flex-col">
+          <div
+            key={stage.key}
+            className={cn(
+              "bg-[hsl(0,0%,96%)] rounded-2xl border border-border/30 min-h-[280px] flex flex-col shrink-0",
+              many ? "w-[220px]" : ""
+            )}
+          >
             <div className="px-4 py-3 border-b border-border/30 flex items-center justify-between">
               <p className="text-xs font-extrabold">{stage.label}</p>
               <span className="text-[10px] font-bold bg-white px-2 py-0.5 rounded-full border">{stageItems.length}</span>

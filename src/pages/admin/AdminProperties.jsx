@@ -3,21 +3,25 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import StatusBadge from "@/components/panels/StatusBadge";
+import { PROPERTY_WORKFLOW } from "@/lib/adminConstants";
 import { Pencil, Trash2, Plus, ExternalLink } from "lucide-react";
 
 const formatCOP = (v) => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v || 0);
 
-const STATUSES = ["disponible", "en_proceso", "reservado", "arrendado", "vendido"];
-
 export default function AdminProperties() {
   const qc = useQueryClient();
+  const [workflowFilter, setWorkflowFilter] = useState("all");
   const { data: properties = [], isLoading } = useQuery({
     queryKey: ["admin-properties"],
     queryFn: () => base44.entities.Property.filter({}, "-created_date", 200),
   });
+  const { data: owners = [] } = useQuery({
+    queryKey: ["admin-owners"],
+    queryFn: () => base44.entities.Owner.filter({}, "-created_date", 100),
+  });
 
-  const updateStatus = useMutation({
-    mutationFn: ({ id, status }) => base44.entities.Property.update(id, { status }),
+  const updateWorkflow = useMutation({
+    mutationFn: ({ id, publication_status }) => base44.entities.Property.update(id, { publication_status }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-properties"] }),
   });
 
@@ -26,16 +30,39 @@ export default function AdminProperties() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-properties"] }),
   });
 
+  const ownerName = (userId) => owners.find((o) => o.user_id === userId)?.name || "—";
+  const workflow = (p) => p.publication_status || (p.status === "disponible" ? "publicada" : p.status);
+
+  const filtered = workflowFilter === "all"
+    ? properties
+    : properties.filter((p) => workflow(p) === workflowFilter);
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-extrabold">Propiedades</h2>
-          <p className="text-sm text-muted-foreground">CRUD completo — fotos, precio, ubicación y estado.</p>
+          <p className="text-sm text-muted-foreground">Workflow de publicación, referencia y propietario.</p>
         </div>
         <Link to="/publicar/nuevo" className="inline-flex items-center gap-2 gradient-cta text-white text-sm font-bold px-4 py-2.5 rounded-xl">
           <Plus className="w-4 h-4" /> Nueva propiedad
         </Link>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        <button type="button" onClick={() => setWorkflowFilter("all")} className={`text-xs font-bold px-3 py-1.5 rounded-lg ${workflowFilter === "all" ? "bg-brand-violet/10 text-brand-violet" : "bg-secondary"}`}>
+          Todas ({properties.length})
+        </button>
+        {PROPERTY_WORKFLOW.map((w) => (
+          <button
+            key={w.key}
+            type="button"
+            onClick={() => setWorkflowFilter(w.key)}
+            className={`text-xs font-bold px-3 py-1.5 rounded-lg ${workflowFilter === w.key ? "bg-brand-violet/10 text-brand-violet" : "bg-secondary"}`}
+          >
+            {w.label} ({properties.filter((p) => workflow(p) === w.key).length})
+          </button>
+        ))}
       </div>
 
       {isLoading ? (
@@ -47,31 +74,34 @@ export default function AdminProperties() {
               <thead>
                 <tr className="border-b border-border/30 bg-[hsl(0,0%,98%)]">
                   <th className="text-left p-4 font-bold">Inmueble</th>
+                  <th className="text-left p-4 font-bold">REF</th>
                   <th className="text-left p-4 font-bold">Precio</th>
-                  <th className="text-left p-4 font-bold">Zona</th>
-                  <th className="text-left p-4 font-bold">Estado</th>
+                  <th className="text-left p-4 font-bold">Propietario</th>
+                  <th className="text-left p-4 font-bold">Workflow</th>
                   <th className="text-right p-4 font-bold">Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {properties.map((p) => (
+                {filtered.map((p) => (
                   <tr key={p.id} className="border-b border-border/20 hover:bg-secondary/30">
                     <td className="p-4">
                       <p className="font-bold line-clamp-1">{p.title}</p>
-                      <p className="text-xs text-muted-foreground">{p.property_type}</p>
+                      <p className="text-xs text-muted-foreground">{p.neighborhood}, {p.city}</p>
                     </td>
+                    <td className="p-4 font-mono text-xs text-muted-foreground">{p.reference_code || "—"}</td>
                     <td className="p-4 font-semibold">{formatCOP(p.monthly_rent)}</td>
-                    <td className="p-4 text-muted-foreground">{p.neighborhood}, {p.city}</td>
+                    <td className="p-4 text-xs">{ownerName(p.owner_user_id)}</td>
                     <td className="p-4">
                       <select
-                        value={p.status || "disponible"}
-                        onChange={(e) => updateStatus.mutate({ id: p.id, status: e.target.value })}
+                        value={workflow(p)}
+                        onChange={(e) => updateWorkflow.mutate({ id: p.id, publication_status: e.target.value })}
                         className="text-xs font-semibold border rounded-lg px-2 py-1.5 bg-white"
                       >
-                        {STATUSES.map((s) => (
-                          <option key={s} value={s}>{s.replace("_", " ")}</option>
+                        {PROPERTY_WORKFLOW.map((w) => (
+                          <option key={w.key} value={w.key}>{w.label}</option>
                         ))}
                       </select>
+                      <div className="mt-1"><StatusBadge status={workflow(p)} /></div>
                     </td>
                     <td className="p-4">
                       <div className="flex items-center justify-end gap-2">

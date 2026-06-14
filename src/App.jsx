@@ -36,6 +36,10 @@ const AdminLeads = lazy(() => import('./pages/admin/AdminLeads'));
 const AdminVisits = lazy(() => import('./pages/admin/AdminVisits'));
 const AdminTenants = lazy(() => import('./pages/admin/AdminTenants'));
 const AdminReports = lazy(() => import('./pages/admin/AdminReports'));
+const AdminApplications = lazy(() => import('./pages/admin/AdminApplications'));
+const AdminOwners = lazy(() => import('./pages/admin/AdminOwners'));
+const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'));
+const AdminNotifications = lazy(() => import('./pages/admin/AdminNotifications'));
 
 const SeekerPortal = lazy(() => import('./pages/portal/SeekerPortal'));
 const SeekerApplications = lazy(() => import('./pages/portal/SeekerApplications'));
@@ -89,6 +93,10 @@ function AppRoutes() {
             <Route path="/admin/leads" element={<AdminLeads />} />
             <Route path="/admin/visitas" element={<AdminVisits />} />
             <Route path="/admin/inquilinos" element={<AdminTenants />} />
+            <Route path="/admin/aplicaciones" element={<AdminApplications />} />
+            <Route path="/admin/propietarios" element={<AdminOwners />} />
+            <Route path="/admin/configuracion" element={<AdminSettings />} />
+            <Route path="/admin/notificaciones" element={<AdminNotifications />} />
             <Route path="/admin/reportes" element={<AdminReports />} />
           </Route>
         </Route>
