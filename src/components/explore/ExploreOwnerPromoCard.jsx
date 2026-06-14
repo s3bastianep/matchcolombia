@@ -43,7 +43,7 @@ export default function ExploreOwnerPromoCard() {
                 Publica tu inmueble hoy
               </p>
               <p className="relative text-white/90 text-[11px] mt-1 font-semibold">
-                Gratis · Sin exclusividad
+                Gratis · Gestión exclusiva
               </p>
             </div>
           </div>
@@ -71,7 +71,7 @@ export default function ExploreOwnerPromoCard() {
               </span>
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
                 <Check className="w-3.5 h-3.5 text-brand-violet shrink-0" strokeWidth={2.5} />
-                Sin exclusividad
+                Gestión exclusiva
               </span>
             </div>
 

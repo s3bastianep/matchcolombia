@@ -395,7 +395,7 @@ export default function Advertise() {
             <OwnerSectionTitle
               light
               title="¿Listo para arrendar sin estrés?"
-              subtitle={`Completa tus datos y deja que ${BRAND.name} gestione tu propiedad. Sin exclusividad, sin contacto directo.`}
+              subtitle={`Completa tus datos y deja que ${BRAND.name} gestione tu propiedad con exclusividad. Nosotros atendemos a los interesados.`}
             />
             <ul className="mt-8 space-y-4">
               {[
