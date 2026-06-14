@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { FALLBACK_IMAGE } from "@/lib/colombiaImages";
 
-export default function SmartImage({ src, alt, className, fallback = FALLBACK_IMAGE, ...props }) {
+export default function SmartImage({ src, alt, className, imgClassName, fallback = FALLBACK_IMAGE, ...props }) {
   const imgRef = useRef(null);
   const [current, setCurrent] = useState(src || fallback);
   const [loaded, setLoaded] = useState(false);
@@ -35,7 +35,7 @@ export default function SmartImage({ src, alt, className, fallback = FALLBACK_IM
         className={cn(
           "w-full h-full object-cover transition-opacity duration-300",
           loaded ? "opacity-100" : "opacity-0",
-          props.imgClassName
+          imgClassName
         )}
       />
     </div>

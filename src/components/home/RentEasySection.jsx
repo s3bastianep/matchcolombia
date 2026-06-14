@@ -14,7 +14,7 @@ const features = [
     tag: "Inventario real",
     accent: "from-brand-magenta to-brand-violet",
     ring: "ring-brand-magenta/20",
-    image: INTERIORS.conjunto,
+    image: INTERIORS.sala,
     preview: (
       <div className="flex flex-wrap gap-1.5">
         {["Chapinero", "2 hab", "$2.8M", "Apto"].map((pill) => (

@@ -3,13 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { CITIES, getCityImage } from "@/lib/colombia";
-import { CITIES_IMG } from "@/lib/colombiaImages";
+import { INTERIORS } from "@/lib/colombiaImages";
 import SectionHeader from "../ui/SectionHeader";
+
+const CITY_IMAGES = {
+  bogota: INTERIORS.sala,
+  barranquilla: INTERIORS.sala2,
+  skyline: INTERIORS.cocina,
+};
 
 function CityCard({ city, delay }) {
   const navigate = useNavigate();
   const imgKey = getCityImage(city.id);
-  const image = CITIES_IMG[imgKey] || CITIES_IMG.skyline;
+  const image = CITY_IMAGES[imgKey] || INTERIORS.dormitorio;
 
   return (
     <motion.button

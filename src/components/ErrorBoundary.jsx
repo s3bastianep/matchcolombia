@@ -20,18 +20,32 @@ export default class ErrorBoundary extends React.Component {
             <p className="text-sm text-muted-foreground mb-6">
               Recarga la página. Si persiste, borra el caché del navegador.
             </p>
-            {import.meta.env.DEV && this.state.error?.message && (
+            {this.state.error?.message && (
               <p className="text-xs text-left bg-secondary/60 rounded-xl p-3 mb-4 font-mono break-all text-destructive">
                 {this.state.error.message}
               </p>
             )}
-            <button
-              type="button"
-              onClick={() => window.location.reload()}
-              className="gradient-cta text-white font-bold px-6 py-3 rounded-xl"
-            >
-              Recargar
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2 justify-center">
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="gradient-cta text-white font-bold px-6 py-3 rounded-xl"
+              >
+                Recargar
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  Object.keys(localStorage)
+                    .filter((key) => key.startsWith("matchcolombia_"))
+                    .forEach((key) => localStorage.removeItem(key));
+                  window.location.reload();
+                }}
+                className="px-6 py-3 rounded-xl border border-border font-semibold text-sm hover:bg-secondary/60"
+              >
+                Limpiar datos locales
+              </button>
+            </div>
           </div>
         </div>
       );

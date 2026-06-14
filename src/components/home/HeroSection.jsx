@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import InlineMatchBar from "../search/InlineMatchBar";
 import VerifiedBadge from "../brand/VerifiedBadge";
-import { PEOPLE } from "@/lib/colombiaImages";
+import { HERO_COLLAGE } from "@/lib/colombiaImages";
 import { cn } from "@/lib/utils";
 
 function CollagePhoto({ src, alt, className }) {
@@ -28,13 +28,13 @@ function HeroCollage() {
 
       <div className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[420px] aspect-square mx-auto">
         <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.55 }} className="absolute inset-[6%] z-10">
-          <CollagePhoto src={PEOPLE.collageMain} alt="Sala moderna de apartamento" className="w-full h-full shadow-2xl" />
+          <CollagePhoto src={HERO_COLLAGE.collageMain} alt="Sala moderna de apartamento" className="w-full h-full shadow-2xl" />
         </motion.div>
         <motion.div initial={{ opacity: 0, x: -12, rotate: -6 }} animate={{ opacity: 1, x: 0, rotate: -6 }} transition={{ duration: 0.5, delay: 0.12 }} className="absolute bottom-0 left-[-2%] w-[44%] aspect-[4/5] z-20">
-          <CollagePhoto src={PEOPLE.collageBedroom} alt="Habitación de apartamento" className="w-full h-full" />
+          <CollagePhoto src={HERO_COLLAGE.collageBedroom} alt="Habitación de apartamento" className="w-full h-full" />
         </motion.div>
         <motion.div initial={{ opacity: 0, x: 12, rotate: 8 }} animate={{ opacity: 1, x: 0, rotate: 8 }} transition={{ duration: 0.5, delay: 0.2 }} className="absolute top-0 right-[-2%] w-[40%] aspect-square z-20">
-          <CollagePhoto src={PEOPLE.collageKitchen} alt="Cocina de apartamento" className="w-full h-full" />
+          <CollagePhoto src={HERO_COLLAGE.collageKitchen} alt="Cocina de apartamento" className="w-full h-full" />
         </motion.div>
       </div>
     </div>
