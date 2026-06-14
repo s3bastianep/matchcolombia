@@ -6,7 +6,6 @@ import {
   BadgeCheck,
   Building2,
   Check,
-  ChevronDown,
   ChevronRight,
   Home,
   MessageCircleOff,
@@ -25,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
 import OwnerPanelBenefits from "@/components/advertise/OwnerPanelBenefits";
+import OwnerFaqSection from "@/components/advertise/OwnerFaqSection";
 
 const STATS = [
   { value: "100%", label: "Propiedades verificadas" },
@@ -73,33 +73,6 @@ const PROCESS = [
   { title: "Eliges con confianza", desc: "Te presentamos al mejor candidato. Seguimos el proceso.", icon: BadgeCheck },
 ];
 
-const FAQ = [
-  {
-    q: "¿Tengo que hablar con los interesados?",
-    a: "No. MatchColombia atiende consultas, responde preguntas, agenda visitas y te informa. Tú no expones tu teléfono ni recibes mensajes directos.",
-  },
-  {
-    q: "¿Cuánto cuesta publicar?",
-    a: "Publicar tu inmueble es gratis en Bogotá y Barranquilla.",
-  },
-  {
-    q: "¿Cómo funciona la gestión de visitas?",
-    a: "Coordinamos horarios con arrendatarios filtrados, confirmamos asistencia y te avisamos.",
-  },
-  {
-    q: "¿Cómo elijo al arrendatario?",
-    a: "Cuando un candidato pasa nuestra evaluación, te enviamos su perfil. Tú apruebas o rechazas.",
-  },
-  {
-    q: "¿Puedo publicar en arriendo y venta?",
-    a: "Sí. Indica el tipo de operación al registrar tu propiedad.",
-  },
-  {
-    q: "¿En qué ciudades operan?",
-    a: "Bogotá y Barranquilla, con cobertura en las principales zonas.",
-  },
-];
-
 function OwnerBreadcrumb() {
   return (
     <div className="color-bar">
@@ -134,23 +107,6 @@ function OwnerSectionTitle({ title, subtitle, light = false, className, badge })
           {subtitle}
         </p>
       )}
-    </div>
-  );
-}
-
-function FaqItem({ q, a }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="border-b border-border/40 last:border-0">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between gap-4 py-4 text-left"
-      >
-        <span className="font-bold text-sm text-foreground pr-4">{q}</span>
-        <ChevronDown className={cn("w-4 h-4 text-muted-foreground shrink-0 transition-transform", open && "rotate-180")} />
-      </button>
-      {open && <p className="pb-4 text-sm text-muted-foreground leading-relaxed">{a}</p>}
     </div>
   );
 }
@@ -388,17 +344,7 @@ export default function Advertise() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="py-10 sm:py-14 bg-[hsl(0,0%,98%)] border-t border-border/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-10 items-start">
-          <OwnerSectionTitle title="Preguntas frecuentes" subtitle="Todo lo que necesitas saber antes de anunciar." />
-          <div className="bg-white rounded-2xl border border-border/40 px-5 sm:px-6">
-            {FAQ.map((item) => (
-              <FaqItem key={item.q} q={item.q} a={item.a} />
-            ))}
-          </div>
-        </div>
-      </section>
+      <OwnerFaqSection />
 
       {/* Formulario */}
       <section id="publicar-form" className="bg-brand-dark text-white">
