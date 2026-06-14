@@ -86,7 +86,7 @@ export default function MapExploreSection() {
               onMarkerClick={handleMarkerClick}
             />
 
-            <div className="absolute bottom-6 left-6 right-6 z-10 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 flex items-center gap-3 shadow-lg border border-white pointer-events-none">
+            <div className="absolute bottom-6 left-6 right-6 z-[1000] bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 flex items-center gap-3 shadow-lg border border-white pointer-events-none">
               <MapPin className="w-5 h-5 text-primary shrink-0" />
               <div>
                 <p className="text-xs font-bold text-foreground">Bogotá y Barranquilla</p>

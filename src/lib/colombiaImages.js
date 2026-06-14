@@ -5,7 +5,90 @@ export function pexels(id, w = 1200, h) {
   return `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?${params}`;
 }
 
-// Interiores — apartamentos reales
+/**
+ * Solo inmuebles vacíos — sin personas, carros ni tiendas.
+ * Cada propiedad tiene portada única (UNIQUE_COVERS).
+ */
+const UNIQUE_COVERS = {
+  "prop-1": 439391,
+  "prop-2": 1571460,
+  "prop-3": 2062432,
+  "prop-4": 1643384,
+  "prop-5": 271624,
+  "prop-10": 276724,
+  "prop-11": 1080721,
+  "prop-12": 1457842,
+  "prop-13": 1571453,
+  "prop-14": 1571455,
+  "prop-15": 1571458,
+  "prop-16": 1571461,
+  "prop-17": 1571463,
+  "prop-18": 1571468,
+  "prop-19": 1743229,
+  "prop-20": 1457841,
+  "prop-21": 1918291,
+  "prop-22": 259588,
+  "prop-23": 259960,
+};
+
+/** Galerías fijas para inmuebles que necesitan fotos específicas */
+const GALLERY_OVERRIDES = {
+  "prop-19": [1743229, 3962285, 1029599, 4391475, 1571461, 1643384],
+};
+
+/** Fotos adicionales para galería (interiores). La portada nunca se repite entre inmuebles. */
+const GALLERY_FILL_POOL = [
+  439391, 1571460, 2062432, 1643384, 271624, 276724, 1080721, 1457842,
+  1571453, 1571455, 1571458, 1571461, 1571463, 1571468,
+  3962285, 1454360, 1029599, 4391475, 5843404, 6195806, 269135, 2724749,
+  1743229, 259960, 6785153, 1918292, 534228, 323780,
+];
+
+const PROPERTY_IDS = [
+  "prop-1", "prop-2", "prop-3", "prop-4", "prop-5",
+  "prop-10", "prop-11", "prop-12", "prop-13",
+  "prop-14", "prop-15", "prop-16", "prop-17", "prop-18", "prop-19",
+  "prop-20", "prop-21", "prop-22", "prop-23",
+];
+
+const GALLERY_SIZES = [6, 6, 6, 5, 6, 6, 5, 6, 4, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6];
+
+function buildPropertyGalleries() {
+  const galleries = {};
+  const allCovers = new Set(Object.values(UNIQUE_COVERS));
+
+  PROPERTY_IDS.forEach((propId, propIndex) => {
+    if (GALLERY_OVERRIDES[propId]) {
+      galleries[propId] = GALLERY_OVERRIDES[propId].map((id) => pexels(id, 1200, 800));
+      return;
+    }
+
+    const size = GALLERY_SIZES[propIndex] || 6;
+    const coverId = UNIQUE_COVERS[propId];
+    const used = new Set();
+    const images = [];
+
+    if (coverId) {
+      images.push(pexels(coverId, 1200, 800));
+      used.add(coverId);
+    }
+
+    let cursor = propIndex * 5 + 1;
+    while (images.length < size) {
+      const id = GALLERY_FILL_POOL[cursor % GALLERY_FILL_POOL.length];
+      cursor += 1;
+      if (used.has(id)) continue;
+      if (allCovers.has(id) && id !== coverId) continue;
+      used.add(id);
+      images.push(pexels(id, 1200, 800));
+    }
+
+    galleries[propId] = images;
+  });
+
+  return galleries;
+}
+
 export const INTERIORS = {
   sala: pexels(439391, 1200, 800),
   sala2: pexels(1571460, 1200, 800),
@@ -15,36 +98,38 @@ export const INTERIORS = {
   estudio: pexels(276724, 1200, 800),
   balcon: pexels(1080721, 1200, 800),
   bano: pexels(1457842, 1200, 800),
-  conjunto: pexels(667838, 1200, 800),
-  conjunto2: pexels(259588, 1200, 800),
+  conjunto: pexels(1571461, 1200, 800),
+  conjunto2: pexels(1571463, 1200, 800),
   casa: pexels(1918291, 1200, 800),
   casa2: pexels(1571463, 1200, 800),
-  habitacion: pexels(271624, 1200, 800),
-  comedor: pexels(1571460, 1200, 800),
+  habitacion: pexels(1571468, 1200, 800),
+  comedor: pexels(1571458, 1200, 800),
   vista: pexels(1080721, 1200, 800),
 };
 
 export const CITIES_IMG = {
-  bogota: pexels(3136818, 900, 600),
-  barranquilla: pexels(1486222, 900, 600),
-  skyline: pexels(2373710, 1400, 900),
+  bogota: pexels(439391, 900, 600),
+  barranquilla: pexels(1571460, 900, 600),
+  skyline: pexels(2062432, 1400, 900),
   hero: pexels(439391, 1920, 1080),
 };
 
-/** Collage hero — 3 apartamentos distintos */
-export const PEOPLE = {
+export const HERO_COLLAGE = {
   collageMain: pexels(439391, 1400, 1200),
   collageBedroom: pexels(1643384, 900, 1100),
   collageKitchen: pexels(2062432, 900, 900),
 };
 
+/** @deprecated Usar HERO_COLLAGE */
+export const PEOPLE = HERO_COLLAGE;
+
 export const BOGOTA = {
-  skyline: CITIES_IMG.skyline,
-  cerros: CITIES_IMG.bogota,
-  chapinero: pexels(439391, 900, 600),
-  usaquen: pexels(1571460, 900, 600),
-  candelaria: pexels(276724, 900, 600),
-  suba: pexels(667838, 900, 600),
+  skyline: INTERIORS.casa,
+  cerros: INTERIORS.sala,
+  chapinero: INTERIORS.sala,
+  usaquen: INTERIORS.sala2,
+  candelaria: INTERIORS.estudio,
+  suba: INTERIORS.dormitorio,
 };
 
 export const GALLERY_SETS = {
@@ -54,28 +139,22 @@ export const GALLERY_SETS = {
   habitacion: [INTERIORS.habitacion, INTERIORS.estudio, INTERIORS.cocina, INTERIORS.conjunto],
   duplex: [INTERIORS.vista, INTERIORS.sala, INTERIORS.dormitorio, INTERIORS.cocina, INTERIORS.balcon],
   penthouse: [INTERIORS.vista, INTERIORS.sala2, INTERIORS.comedor, INTERIORS.dormitorio, INTERIORS.balcon, INTERIORS.bano],
-  default: [INTERIORS.conjunto, INTERIORS.sala, INTERIORS.cocina, INTERIORS.dormitorio, INTERIORS.balcon],
+  default: [INTERIORS.sala, INTERIORS.cocina, INTERIORS.dormitorio, INTERIORS.balcon, INTERIORS.bano],
 };
 
-/** Galerías únicas por propiedad — evita la misma foto de fachada en scroll */
-export const PROPERTY_GALLERIES = {
-  "prop-1": [pexels(439391, 1200, 800), pexels(2062432, 1200, 800), pexels(1643384, 1200, 800), pexels(1080721, 1200, 800), pexels(1571460, 1200, 800), pexels(1457842, 1200, 800)],
-  "prop-2": [pexels(1571460, 1200, 800), pexels(271624, 1200, 800), pexels(259588, 1200, 800), pexels(1918291, 1200, 800), pexels(667838, 1200, 800), pexels(276724, 1200, 800), pexels(3136818, 1200, 800), pexels(1486222, 1200, 800)],
-  "prop-3": [pexels(1918291, 1200, 800), pexels(1571463, 1200, 800), pexels(259588, 1200, 800), pexels(667838, 1200, 800), pexels(2062432, 1200, 800), pexels(1080721, 1200, 800)],
-  "prop-4": [pexels(276724, 1200, 800), pexels(271624, 1200, 800), pexels(1457842, 1200, 800), pexels(439391, 1200, 800), pexels(2062432, 1200, 800)],
-  "prop-5": [pexels(667838, 1200, 800), pexels(259588, 1200, 800), pexels(1643384, 1200, 800), pexels(1571460, 1200, 800), pexels(1080721, 1200, 800), pexels(1457842, 1200, 800)],
-  "prop-10": [pexels(1486222, 1200, 800), pexels(3136818, 1200, 800), pexels(2373710, 1200, 800), pexels(1571463, 1200, 800), pexels(271624, 1200, 800), pexels(2062432, 1200, 800)],
-  "prop-11": [pexels(3136818, 1200, 800), pexels(1486222, 1200, 800), pexels(439391, 1200, 800), pexels(1643384, 1200, 800), pexels(1080721, 1200, 800)],
-  "prop-12": [pexels(1571463, 1200, 800), pexels(1918291, 1200, 800), pexels(259588, 1200, 800), pexels(667838, 1200, 800), pexels(276724, 1200, 800), pexels(2062432, 1200, 800)],
-  "prop-13": [pexels(271624, 1200, 800), pexels(276724, 1200, 800), pexels(439391, 1200, 800), pexels(1457842, 1200, 800)],
-};
+export const PROPERTY_GALLERIES = buildPropertyGalleries();
+
+export const IMAGES_VERSION = 5;
 
 export const ROOM_LABELS = ["Sala", "Cocina", "Habitación", "Balcón", "Comedor", "Baño", "Vista", "Exterior"];
 
-export function getPropertyImages(property) {
-  if (property?.images?.length >= 3) return property.images;
-  const set = GALLERY_SETS[property?.property_type] || GALLERY_SETS.default;
-  return set;
+export function getGalleryForProperty(propertyId, propertyType) {
+  return PROPERTY_GALLERIES[propertyId] || GALLERY_SETS[propertyType] || GALLERY_SETS.default;
 }
 
-export const FALLBACK_IMAGE = INTERIORS.conjunto;
+export function getPropertyImages(property) {
+  if (!property) return GALLERY_SETS.default;
+  return getGalleryForProperty(property.id, property.property_type);
+}
+
+export const FALLBACK_IMAGE = INTERIORS.sala;

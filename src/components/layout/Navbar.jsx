@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getUserRole, PANEL_HOME, ROLE_LABELS, ROLES } from "@/lib/roles";
-import { LayoutDashboard, User, Menu, X, Heart, LogOut, LogIn, UserPlus, MessageSquare } from "lucide-react";
-import { useProcessNotifications } from "@/lib/useProcessNotifications";
+import { LayoutDashboard, User, Menu, X, Heart, LogOut, LogIn, UserPlus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -81,7 +80,6 @@ export default function Navbar() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const location = useLocation();
   const { user, isAuthenticated, logout, isLoadingAuth } = useAuth();
-  const unreadCount = useProcessNotifications();
 
   const handleLogout = async () => {
     setUserMenuOpen(false);
@@ -90,7 +88,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border/60 shadow-[0_1px_0_hsl(var(--border)),0_2px_8px_rgba(15,23,42,0.04)]">
+    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border/50">
       <div className="color-bar h-[2px] w-full" />
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="flex items-center justify-between h-[56px]">
@@ -113,17 +111,7 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-2">
-            {isAuthenticated && (
-              <Link to="/portal/mensajes" className="touch-target rounded-full hover:bg-secondary transition-colors" aria-label="Mensajes">
-                <MessageSquare className="w-5 h-5 text-foreground/45" />
-                {unreadCount > 0 && (
-                  <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center leading-none">
-                    {unreadCount > 9 ? "9+" : unreadCount}
-                  </span>
-                )}
-              </Link>
-            )}
-            <Link to="/favoritos" className="touch-target rounded-full hover:bg-secondary transition-colors" aria-label="Favoritos">
+            <Link to="/favoritos" className="p-2 rounded-full hover:bg-secondary transition-colors">
               <Heart className="w-5 h-5 text-foreground/45" />
             </Link>
 
@@ -134,7 +122,7 @@ export default function Navbar() {
                   onClick={() => setUserMenuOpen((v) => !v)}
                   className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full border border-border/60 hover:bg-secondary transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-full bg-[hsl(var(--brand-violet))] flex items-center justify-center text-white text-xs font-extrabold transition-smooth">
+                  <div className="w-8 h-8 rounded-full gradient-cta flex items-center justify-center text-white text-xs font-extrabold">
                     {user.name?.[0]?.toUpperCase() || user.username?.[0]?.toUpperCase() || "U"}
                   </div>
                   <span className="text-sm font-bold max-w-[100px] truncate">{user.username}</span>
@@ -212,7 +200,7 @@ export default function Navbar() {
               Match inteligente
             </button>
 
-            <button className="lg:hidden touch-target rounded-full hover:bg-secondary" onClick={() => setMobileOpen(!mobileOpen)} aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}>
+            <button className="lg:hidden p-2 rounded-full hover:bg-secondary" onClick={() => setMobileOpen(!mobileOpen)}>
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
@@ -227,63 +215,47 @@ export default function Navbar() {
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden border-t border-border/50 bg-white overflow-hidden"
           >
-            <div className="px-4 py-4 pb-safe space-y-4">
-              <div className="grid grid-cols-2 gap-2">
-                {seekerLinks.map((link) => (
-                  <Link
-                    key={link.label}
-                    to={link.to}
-                    onClick={() => setMobileOpen(false)}
-                    className={cn(
-                      "text-center px-3 py-3 text-sm font-semibold rounded-xl transition-colors",
-                      navLinkClass(link.theme, isNavLinkActive(link, location.pathname, location.search))
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-                {ownerLinks.map((link) => (
-                  <Link
-                    key={link.label}
-                    to={link.to}
-                    onClick={() => setMobileOpen(false)}
-                    className={cn(
-                      "text-center px-3 py-3 text-sm font-semibold rounded-xl transition-colors",
-                      navLinkClass(link.theme, isNavLinkActive(link, location.pathname, location.search))
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+            <div className="px-4 py-3 space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="flex flex-1 gap-0.5 p-0.5 rounded-lg bg-secondary/70">
+                  {seekerLinks.map((link) => (
+                    <Link
+                      key={link.label}
+                      to={link.to}
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(
+                        "flex-1 text-center px-2 py-2 text-xs rounded-md transition-colors",
+                        navLinkClass(link.theme, isNavLinkActive(link, location.pathname, location.search))
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="w-px h-4 bg-border/80 shrink-0" aria-hidden />
+
+                <div className="flex flex-1 gap-0.5 p-0.5 rounded-lg bg-secondary/70">
+                  {ownerLinks.map((link) => (
+                    <Link
+                      key={link.label}
+                      to={link.to}
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(
+                        "flex-1 text-center px-2 py-2 text-xs rounded-md transition-colors",
+                        navLinkClass(link.theme, isNavLinkActive(link, location.pathname, location.search))
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
               </div>
 
               {isAuthenticated && user ? (
                 <>
-                  <div className="px-3 py-3 text-xs text-muted-foreground border-t border-border/40">
+                  <div className="px-3 py-3 text-xs text-muted-foreground border-t border-border/40 mt-2">
                     Sesión: <span className="font-bold text-foreground">@{user.username}</span>
-                  </div>
-                  <div className="grid grid-cols-1 gap-1">
-                    <Link
-                      to={PANEL_HOME[getUserRole(user)] || "/portal"}
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center gap-2 px-3 py-3 text-sm font-semibold hover:bg-secondary rounded-xl"
-                    >
-                      <LayoutDashboard className="w-4 h-4" /> Mi panel
-                    </Link>
-                    <Link
-                      to="/favoritos"
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center gap-2 px-3 py-3 text-sm font-semibold hover:bg-secondary rounded-xl"
-                    >
-                      <Heart className="w-4 h-4" /> Mis guardados
-                    </Link>
-                    <Link
-                      to="/publicar"
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center gap-2 px-3 py-3 text-sm font-semibold hover:bg-secondary rounded-xl"
-                    >
-                      <User className="w-4 h-4" /> Publicar inmueble
-                    </Link>
                   </div>
                   <button
                     onClick={handleLogout}

@@ -15,7 +15,7 @@ export default function CompareStrip({ properties }) {
         <div className="grid gap-3" style={{ gridTemplateColumns: `140px repeat(${properties.length}, minmax(0, 1fr))` }}>
           <div />
           {properties.map((p) => (
-            <Link key={p.id} to={`/explorar?inmueble=${p.id}`} className="font-extrabold text-sm hover:text-brand-violet transition-colors line-clamp-2">
+            <Link key={p.id} to={`/propiedad/${p.id}`} className="font-extrabold text-sm hover:text-brand-violet transition-colors line-clamp-2">
               {p.neighborhood}
             </Link>
           ))}
@@ -24,7 +24,7 @@ export default function CompareStrip({ properties }) {
             { label: "Precio / mes", render: (p) => formatCOP(p.monthly_rent) },
             { label: "Habitaciones", icon: Bed, render: (p) => p.bedrooms },
             { label: "Baños", icon: Bath, render: (p) => p.bathrooms },
-            { label: "Área", icon: Maximize, render: (p) => (p.area_sqm ? `${p.area_sqm} m²` : "N/D") },
+            { label: "Área", icon: Maximize, render: (p) => (p.area_sqm ? `${p.area_sqm} m²` : "—") },
           ].map((row) => (
             <React.Fragment key={row.label}>
               <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground py-2 border-t border-border/40">

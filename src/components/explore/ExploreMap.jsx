@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Navigation, Layers, X, CalendarCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { usePropertyPanel } from "@/lib/PropertyPanelContext";
 import InteractiveMap from "@/components/map/InteractiveMap";
 import SmartImage from "@/components/ui/SmartImage";
 import { clusterMarkers } from "@/lib/mapClusters";
@@ -28,7 +28,7 @@ export default function ExploreMap({
   highlightedId,
   onHighlight,
 }) {
-  const { openProperty, isOpen: panelOpen } = usePropertyPanel();
+  const navigate = useNavigate();
   const [hoveredId, setHoveredId] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [selectedCluster, setSelectedCluster] = useState(null);
@@ -49,6 +49,7 @@ export default function ExploreMap({
           label: formatCompactCOP(total),
           sublabel: property.neighborhood,
           color: pin.hex,
+          href: `/propiedad/${property.id}`,
           property,
         };
       }),
@@ -84,15 +85,15 @@ export default function ExploreMap({
   return (
     <div
       className={cn(
-        "relative isolate overflow-hidden bg-white",
+        "relative overflow-hidden bg-white",
         pane ? "h-full rounded-none border-0 shadow-none" : "rounded-[1.35rem] border border-border/30 shadow-[0_8px_30px_rgba(15,23,42,0.08)]",
         sticky && !pane && "xl:sticky xl:top-[210px]",
         pane && "h-full",
         className
       )}
     >
-      {!pane && !panelOpen && (
-      <div className="absolute top-4 left-4 z-10 flex items-center gap-2 pointer-events-none">
+      {!pane && (
+      <div className="absolute top-4 left-4 z-[1000] flex items-center gap-2">
         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-bold text-foreground border border-border/40 shadow-sm">
           <Layers className="w-3 h-3 text-brand-violet" />
           {mapMarkers.filter((m) => m.type === "cluster").length > 0
@@ -102,8 +103,8 @@ export default function ExploreMap({
       </div>
       )}
 
-      {pane && !panelOpen && (
-        <div className="absolute top-3 left-3 z-10 pointer-events-none">
+      {pane && (
+        <div className="absolute top-3 left-3 z-[1000] pointer-events-none">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-bold text-foreground border border-[hsl(0,0%,88%)] shadow-sm">
             <MapPin className="w-3 h-3 text-brand-magenta" />
             {properties.length} en el mapa
@@ -126,7 +127,7 @@ export default function ExploreMap({
         activeMarkerId={activeId}
       />
 
-      <div className={cn("absolute bottom-4 left-4 right-4 z-10 flex flex-col gap-3 pointer-events-none", pane && "bottom-3 left-3 right-3", panelOpen && "hidden")}>
+      <div className={cn("absolute bottom-4 left-4 right-4 z-[1000] flex flex-col gap-3 pointer-events-none", pane && "bottom-3 left-3 right-3")}>
         {!pane && (
         <div className="bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3 border border-white/80 shadow-lg flex items-center gap-3 pointer-events-auto">
           <div className="w-9 h-9 rounded-xl gradient-cta flex items-center justify-center shrink-0">
@@ -160,7 +161,7 @@ export default function ExploreMap({
                     setSelectedId(null);
                     onHighlight?.(null);
                   }}
-                  className="absolute top-2 right-2 touch-target rounded-full bg-black/45 text-white hover:bg-black/60"
+                  className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/45 text-white flex items-center justify-center hover:bg-black/60"
                   aria-label="Cerrar"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -174,26 +175,19 @@ export default function ExploreMap({
                   <span>· {previewProperty.city}</span>
                 </p>
                 <div className="flex gap-2 mt-2.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedId(null);
-                      openProperty(previewProperty, { focusBooking: false });
-                    }}
-                    className="flex-1 text-center text-xs font-bold py-3 min-h-11 rounded-lg border border-border hover:bg-secondary transition-colors"
+                  <Link
+                    to={`/propiedad/${previewProperty.id}`}
+                    className="flex-1 text-center text-[11px] font-bold py-2 rounded-lg border border-border hover:bg-secondary transition-colors"
                   >
                     Ver detalle
-                  </button>
+                  </Link>
                   <button
                     type="button"
-                    onClick={() => {
-                      setSelectedId(null);
-                      openProperty(previewProperty, { focusBooking: true });
-                    }}
-                    className="flex-1 flex items-center justify-center gap-1 gradient-cta text-white text-xs font-bold py-3 min-h-11 rounded-lg"
+                    onClick={() => navigate(`/propiedad/${previewProperty.id}?visita=1`)}
+                    className="flex-1 flex items-center justify-center gap-1 gradient-cta text-white text-[11px] font-bold py-2 rounded-lg"
                   >
                     <CalendarCheck className="w-3 h-3" />
-                    Agendar visita
+                    Visita
                   </button>
                 </div>
               </div>

@@ -11,7 +11,7 @@ export default function WhatsAppFab() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chatear por WhatsApp"
-      className="fixed bottom-5 right-5 z-[60] flex items-center gap-2 gradient-cta text-white font-bold text-sm pl-4 pr-5 py-3.5 rounded-full shadow-lg shadow-brand-magenta/30 hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all mb-[env(safe-area-inset-bottom,0px)]"
+      className="fixed bottom-5 right-5 z-[60] flex items-center gap-2 gradient-cta text-white font-bold text-sm pl-4 pr-5 py-3.5 rounded-full shadow-lg shadow-brand-magenta/30 hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all"
     >
       <MessageCircle className="w-5 h-5 shrink-0" strokeWidth={2.25} />
       <span className="hidden sm:inline">¿Dudas? Escríbenos</span>

@@ -50,7 +50,7 @@ export default function SeekerVisits() {
             </div>
             {v.status === "confirmada" && (
               <p className="text-xs text-brand-violet font-semibold mt-3 bg-brand-violet/10 px-3 py-2 rounded-lg">
-                ✓ Visita confirmada. Te esperamos en la dirección indicada.
+                ✓ Visita confirmada — te esperamos en la dirección indicada.
               </p>
             )}
           </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 import { Input } from "@/components/ui/input";
@@ -9,9 +9,7 @@ import AuthLayout from "@/components/AuthLayout";
 
 export default function Register() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { checkUserAuth } = useAuth();
-  const from = location.state?.from || "/";
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -33,7 +31,7 @@ export default function Register() {
       return;
     }
     if (!/^[a-zA-Z0-9._-]{3,20}$/.test(username)) {
-      setError("Usuario: 3 a 20 caracteres (letras, números, . _ -)");
+      setError("Usuario: 3–20 caracteres (letras, números, . _ -)");
       return;
     }
 
@@ -41,7 +39,7 @@ export default function Register() {
     try {
       await base44.auth.register({ name, username, email, password });
       await checkUserAuth();
-      navigate(from, { replace: true });
+      navigate("/", { replace: true });
     } catch (err) {
       setError(err.message || "No se pudo crear la cuenta");
     } finally {

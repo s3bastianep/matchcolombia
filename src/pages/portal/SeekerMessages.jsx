@@ -1,21 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 import { EmptyState } from "@/components/panels/PipelineBoard";
 import { Link } from "react-router-dom";
 import { Send } from "lucide-react";
-import { markAllRead } from "@/lib/processNotifications";
 
 export default function SeekerMessages() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const [selectedProperty, setSelectedProperty] = React.useState(null);
-  const [text, setText] = React.useState("");
-
-  useEffect(() => {
-    markAllRead();
-  }, []);
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [text, setText] = useState("");
 
   const { data: messages = [] } = useQuery({
     queryKey: ["my-messages", user?.id],

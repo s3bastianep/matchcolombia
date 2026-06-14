@@ -70,7 +70,7 @@ const BENEFITS = [
 const PROCESS = [
   { title: "Registras tu propiedad", desc: "Fotos, precio en COP, zona y características.", icon: Home },
   { title: "Publicamos por ti", desc: "Revisamos, activamos y promocionamos en tu zona.", icon: Camera },
-  { title: "Gestionamos interesados", desc: "Consultas, visitas y evaluación, sin que tú hables con nadie.", icon: Users },
+  { title: "Gestionamos interesados", desc: "Consultas, visitas y evaluación — sin que tú hables con nadie.", icon: Users },
   { title: "Eliges con confianza", desc: "Te presentamos al mejor candidato. Seguimos el proceso.", icon: BadgeCheck },
 ];
 
@@ -154,7 +154,7 @@ function ManagementCard() {
         </div>
       </div>
       <div className="space-y-2">
-        {["Visita confirmada, sábado 10am", "Candidato verificado, 91% match"].map((line) => (
+        {["Visita confirmada — sábado 10am", "Candidato verificado — 91% match"].map((line) => (
           <div key={line} className="flex items-center gap-2 text-[11px] font-semibold text-foreground/80 bg-background rounded-lg px-2.5 py-2">
             <Check className="w-3 h-3 text-brand-violet shrink-0" />
             {line}
@@ -264,7 +264,7 @@ export default function Advertise() {
               Nos encargamos de todo tu arriendo
             </h1>
             <p className="mt-5 text-white/75 text-sm sm:text-base leading-relaxed">
-              Publica gratis. {BRAND.name} gestiona consultas, visitas y candidatos. Tú no hablas con los interesados; solo recibes información clara.
+              Publica gratis. {BRAND.name} gestiona consultas, visitas y candidatos. Tú no hablas con los interesados — solo recibes información clara.
             </p>
             <div className="mt-4">
               <VerifiedBadge size="sm" />

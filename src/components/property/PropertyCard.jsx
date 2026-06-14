@@ -1,13 +1,12 @@
-import React, { memo, useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { Bed, Bath, Maximize, MapPin, Sparkles, Car, PawPrint, Building2, ChevronLeft, ChevronRight, Calendar, Sofa, CalendarCheck, Layers } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Heart, Bed, Bath, Maximize, MapPin, Sparkles, Car, PawPrint, Building2, ChevronLeft, ChevronRight, Calendar, Sofa, CalendarCheck, Layers } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
 import SmartImage from "@/components/ui/SmartImage";
 import { INTERIORS, FALLBACK_IMAGE } from "@/lib/colombiaImages";
-import FavoriteButton from "@/components/ui/FavoriteButton";
-import { isInShortlist } from "@/lib/shortlist";
+import { isInShortlist, toggleShortlist } from "@/lib/shortlist";
 import { getEstratoLabel, getEstratoChipStyle } from "@/lib/propertyLabels";
 import { getParkingSpots, hasElevator } from "@/lib/propertyFilters";
 import {
@@ -17,7 +16,6 @@ import {
 } from "@/lib/propertyCardUtils";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
 import ElevatorIcon from "@/components/icons/ElevatorIcon";
-import { usePropertyPanel } from "@/lib/PropertyPanelContext";
 
 const formatCOP = (value) =>
   new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(value || 0);
@@ -71,14 +69,12 @@ function FeatureChip({ icon: Icon, children, className }) {
   );
 }
 
-export default memo(function PropertyCard({ property, index = 0, matchScore, showMatch, variant = "default", highlighted = false }) {
+export default function PropertyCard({ property, index = 0, matchScore, showMatch, variant = "default", highlighted = false }) {
   const navigate = useNavigate();
-  const { openProperty } = usePropertyPanel();
   const { isAuthenticated } = useAuth();
   const [liked, setLiked] = useState(isInShortlist(property.id));
   const images = property.images?.length ? property.images : [INTERIORS.sala];
   const [photoIdx, setPhotoIdx] = useState(0);
-  const touchStartX = useRef(0);
   const image = images[photoIdx] || INTERIORS.sala;
   const typeColor = typeColors[property.property_type] || "bg-primary";
   const isGrid = variant === "grid";
@@ -91,43 +87,24 @@ export default memo(function PropertyCard({ property, index = 0, matchScore, sho
   const furnishedLabel = getFurnishedLabel(property.furnished);
   const availableFrom = formatAvailableFrom(property.available_from);
 
-  const handleOpen = (focusBooking = false) => {
-    openProperty(property, { focusBooking });
-  };
-
   useEffect(() => {
     const handler = () => setLiked(isInShortlist(property.id));
     window.addEventListener("shortlist-updated", handler);
     return () => window.removeEventListener("shortlist-updated", handler);
   }, [property.id]);
 
-  const handlePhotoSwipe = (e) => {
-    if (!isGrid || images.length <= 1) return;
-    const diff = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(diff) < 40) return;
-    if (diff > 0) setPhotoIdx((i) => (i - 1 + images.length) % images.length);
-    else setPhotoIdx((i) => (i + 1) % images.length);
-  };
-
-  const cardClassName = cn(
-    "card-hover",
-    highlighted && "ring-2 ring-brand-violet ring-offset-2",
-    isGrid ? "rounded-xl" : "rounded-[1.35rem]"
-  );
-
-  const cardInner = (
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => handleOpen(false)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            handleOpen(false);
-          }
-        }}
-        className="group block cursor-pointer"
-      >
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.03, duration: 0.3 }}
+      className={cn(
+        "card-hover",
+        highlighted && "ring-2 ring-brand-violet ring-offset-2",
+        isGrid ? "rounded-xl" : "rounded-[1.35rem]"
+      )}
+    >
+      <Link to={`/propiedad/${property.id}`} className="group block">
         <article
           className={cn(
             "bg-white overflow-hidden transition-all duration-300",
@@ -139,48 +116,56 @@ export default memo(function PropertyCard({ property, index = 0, matchScore, sho
               : !isGrid && "border border-border/40 shadow-sm group-hover:shadow-xl group-hover:border-brand-violet/25"
           )}
         >
-          <div
-            className={cn("relative overflow-hidden bg-muted", isGrid ? "aspect-[5/4] rounded-t-xl" : isExplore ? "aspect-[16/10]" : "aspect-[4/3]")}
-            onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
-            onTouchEnd={handlePhotoSwipe}
-          >
+          <div className={cn("relative overflow-hidden bg-muted", isGrid ? "aspect-[5/4] rounded-t-xl" : isExplore ? "aspect-[16/10]" : "aspect-[4/3]")}>
             <SmartImage
               src={image}
               alt={property.title}
               fallback={FALLBACK_IMAGE}
               className="absolute inset-0"
-              priority={index < 4}
               imgClassName="group-hover:scale-[1.03] transition-transform duration-700 ease-out"
             />
             {!isGrid && <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/5" />}
 
             {!isGrid && (
-              <div className="absolute top-3.5 right-3.5 z-10">
-                <FavoriteButton
-                  propertyId={property.id}
-                  liked={liked}
-                  onToggle={setLiked}
-                  requireAuth={!isAuthenticated}
-                  onRequireAuth={() => navigate("/login", { state: { from: window.location.pathname } })}
-                />
-              </div>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (!isAuthenticated) {
+                    navigate("/login", { state: { from: window.location.pathname } });
+                    return;
+                  }
+                  setLiked(toggleShortlist(property.id));
+                }}
+                className={cn(
+                  "absolute top-3.5 right-3.5 w-10 h-10 rounded-full flex items-center justify-center z-10 transition-all",
+                  liked ? "bg-primary text-white shadow-lg" : "bg-white/95 text-gray-400 hover:text-primary shadow-sm"
+                )}
+              >
+                <Heart className={cn("w-4 h-4", liked && "fill-current")} />
+              </button>
             )}
 
             {isGrid && (
-              <div className="absolute top-2.5 right-2.5 z-10">
-                <FavoriteButton
-                  propertyId={property.id}
-                  liked={liked}
-                  onToggle={setLiked}
-                  requireAuth={!isAuthenticated}
-                  onRequireAuth={() => navigate("/login", { state: { from: window.location.pathname } })}
-                  size="sm"
-                  className={cn(
-                    "ring-2 ring-black/20 shadow-[0_2px_8px_rgba(0,0,0,0.25)] backdrop-blur-sm",
-                    liked ? "ring-primary/30" : "text-gray-700 hover:bg-white"
-                  )}
-                />
-              </div>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (!isAuthenticated) {
+                    navigate("/login", { state: { from: window.location.pathname } });
+                    return;
+                  }
+                  setLiked(toggleShortlist(property.id));
+                }}
+                className={cn(
+                  "absolute top-2.5 right-2.5 w-9 h-9 rounded-full flex items-center justify-center z-10 transition-all",
+                  "ring-2 ring-black/20 shadow-[0_2px_8px_rgba(0,0,0,0.25)] backdrop-blur-sm",
+                  liked ? "bg-primary text-white ring-primary/30" : "bg-white/95 text-gray-700 hover:text-primary hover:bg-white"
+                )}
+                aria-label="Guardar en favoritos"
+              >
+                <Heart className={cn("w-4 h-4", liked && "fill-current")} strokeWidth={2.25} />
+              </button>
             )}
 
             {isGrid && images.length > 1 && (
@@ -198,7 +183,7 @@ export default memo(function PropertyCard({ property, index = 0, matchScore, sho
                     e.stopPropagation();
                     setPhotoIdx((i) => (i - 1 + images.length) % images.length);
                   }}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 touch-target rounded-full bg-white/95 shadow-sm opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-white"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/95 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
                   aria-label="Foto anterior"
                 >
                   <ChevronLeft className="w-4 h-4 text-foreground/70" />
@@ -210,7 +195,7 @@ export default memo(function PropertyCard({ property, index = 0, matchScore, sho
                     e.stopPropagation();
                     setPhotoIdx((i) => (i + 1) % images.length);
                   }}
-                  className="absolute right-10 top-1/2 -translate-y-1/2 z-10 touch-target rounded-full bg-white/95 shadow-sm opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-white"
+                  className="absolute right-10 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/95 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
                   aria-label="Foto siguiente"
                 >
                   <ChevronRight className="w-4 h-4 text-foreground/70" />
@@ -350,7 +335,7 @@ export default memo(function PropertyCard({ property, index = 0, matchScore, sho
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    handleOpen(true);
+                    navigate(`/propiedad/${property.id}?visita=1`);
                   }}
                   className="mt-3 w-full flex items-center justify-center gap-1.5 gradient-cta text-white text-xs font-bold py-2.5 rounded-lg hover:opacity-95 transition-opacity"
                 >
@@ -423,21 +408,7 @@ export default memo(function PropertyCard({ property, index = 0, matchScore, sho
             </div>
           </div>
         </article>
-      </div>
-  );
-
-  if (isGrid) {
-    return <div className={cardClassName}>{cardInner}</div>;
-  }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: Math.min(index * 0.02, 0.1), duration: 0.2 }}
-      className={cardClassName}
-    >
-      {cardInner}
+      </Link>
     </motion.div>
   );
-});
+}

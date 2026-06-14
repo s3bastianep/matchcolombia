@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { FALLBACK_IMAGE } from "@/lib/colombiaImages";
 
-export default function SmartImage({ src, alt, className, fallback = FALLBACK_IMAGE, priority = false, ...props }) {
+export default function SmartImage({ src, alt, className, fallback = FALLBACK_IMAGE, ...props }) {
   const imgRef = useRef(null);
   const [current, setCurrent] = useState(src || fallback);
   const [loaded, setLoaded] = useState(false);
@@ -25,9 +25,6 @@ export default function SmartImage({ src, alt, className, fallback = FALLBACK_IM
         {...props}
         src={current}
         alt={alt}
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
-        fetchPriority={priority ? "high" : "auto"}
         onLoad={() => setLoaded(true)}
         onError={() => {
           if (current !== fallback) {

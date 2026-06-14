@@ -31,7 +31,7 @@ export default function AdminProperties() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-extrabold">Propiedades</h2>
-          <p className="text-sm text-muted-foreground">CRUD completo: fotos, precio, ubicación y estado.</p>
+          <p className="text-sm text-muted-foreground">CRUD completo — fotos, precio, ubicación y estado.</p>
         </div>
         <Link to="/publicar/nuevo" className="inline-flex items-center gap-2 gradient-cta text-white text-sm font-bold px-4 py-2.5 rounded-xl">
           <Plus className="w-4 h-4" /> Nueva propiedad
@@ -75,7 +75,7 @@ export default function AdminProperties() {
                     </td>
                     <td className="p-4">
                       <div className="flex items-center justify-end gap-2">
-                        <Link to={`/explorar?inmueble=${p.id}`} className="p-2 rounded-lg hover:bg-secondary" title="Ver">
+                        <Link to={`/propiedad/${p.id}`} className="p-2 rounded-lg hover:bg-secondary" title="Ver">
                           <ExternalLink className="w-4 h-4" />
                         </Link>
                         <Link to={`/admin/propiedades/${p.id}`} className="p-2 rounded-lg hover:bg-secondary" title="Editar">

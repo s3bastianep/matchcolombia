@@ -13,7 +13,7 @@ export default function OwnerTickets() {
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-extrabold">Mantenimiento</h2>
-        <p className="text-sm text-muted-foreground">Tickets del inquilino. Aprueba reparaciones y gastos.</p>
+        <p className="text-sm text-muted-foreground">Tickets del inquilino — aprueba reparaciones y gastos.</p>
       </div>
       <div className="space-y-3">
         {tickets.map((t) => (

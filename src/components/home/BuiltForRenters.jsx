@@ -11,7 +11,7 @@ const cards = [
   },
   {
     title: "Menos estrés, más ¡sí!",
-    desc: "100% verificados. Nosotros gestionamos todo, sin estafas ni sustos.",
+    desc: "100% verificados. Nosotros gestionamos todo — sin estafas, sin sustos.",
     img: BOGOTA.chapinero,
     accent: "hsl(var(--brand-violet))",
   },

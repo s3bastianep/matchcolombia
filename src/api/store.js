@@ -8,20 +8,12 @@ export function createStore(storageKey, seedData = []) {
     } catch {
       /* empty */
     }
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(seedData));
-    } catch (err) {
-      console.warn(`MatchColombia: no se pudo inicializar ${storageKey}`, err);
-    }
+    localStorage.setItem(storageKey, JSON.stringify(seedData));
     return [...seedData];
   }
 
   function save(items) {
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(items));
-    } catch (err) {
-      console.warn(`MatchColombia: no se pudo guardar ${storageKey}`, err);
-    }
+    localStorage.setItem(storageKey, JSON.stringify(items));
   }
 
   function matches(item, criteria) {
@@ -54,17 +46,19 @@ export function createStore(storageKey, seedData = []) {
 
   return {
     async filter(criteria = {}, sort = "-created_date", limit = 200) {
+      await delay();
       let list = load().filter((item) => matches(item, criteria));
       list = sortList(list, sort);
       return list.slice(0, limit);
     },
 
     async get(id) {
+      await delay();
       return load().find((item) => item.id === id) || null;
     },
 
     async create(data, idPrefix = "item") {
-      await delay(120);
+      await delay(350);
       const items = load();
       const item = {
         ...data,
@@ -78,7 +72,7 @@ export function createStore(storageKey, seedData = []) {
     },
 
     async update(id, patch) {
-      await delay(120);
+      await delay(300);
       const items = load();
       const idx = items.findIndex((item) => item.id === id);
       if (idx === -1) throw new Error("Registro no encontrado");
@@ -88,7 +82,7 @@ export function createStore(storageKey, seedData = []) {
     },
 
     async delete(id) {
-      await delay(80);
+      await delay(300);
       const items = load().filter((item) => item.id !== id);
       save(items);
       return { ok: true };

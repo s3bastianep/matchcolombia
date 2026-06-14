@@ -93,7 +93,7 @@ const FAQ = [
   },
   {
     q: "¿Cuánto cuesta?",
-    a: "Publicar es gratis. Te explicamos honorarios y opciones cuando registres tu propiedad, sin letra pequeña.",
+    a: "Publicar es gratis. Te explicamos honorarios y opciones cuando registres tu propiedad — sin letra pequeña.",
   },
   {
     q: "¿Tengo que hablar con los interesados?",
