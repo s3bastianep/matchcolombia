@@ -17,7 +17,7 @@ const FAQ_ITEMS = [
     a: `${BRAND.name} no es solo un portal de anuncios. Es administración completa: filtramos interesados, coordinamos visitas, evaluamos candidatos y te damos seguimiento digital sin que expongas tu número.`,
     points: [
       "Publicación premium con fotos y verificación documental",
-      "Equipo real en Bogotá y Barranquilla — no un bot",
+      "Equipo real en Bogotá y Barranquilla, no un bot",
       "Panel con pagos, contratos, tickets y estado del inmueble",
     ],
   },
@@ -44,7 +44,7 @@ const FAQ_ITEMS = [
   {
     q: "¿Cómo funciona la gestión de visitas?",
     tag: "Visitas coordinadas",
-    a: "Filtramos a quienes realmente encajan con tu inmueble, proponemos horarios, confirmamos asistencia y te avisamos. Presencial o virtual — siempre con seguimiento.",
+    a: "Filtramos a quienes realmente encajan con tu inmueble, proponemos horarios, confirmamos asistencia y te avisamos. Presencial o virtual, siempre con seguimiento.",
     points: [
       "Solo visitas con interesados pre-calificados",
       "Confirmación y recordatorios automáticos",
@@ -54,7 +54,7 @@ const FAQ_ITEMS = [
   {
     q: "¿Cómo elijo al arrendatario?",
     tag: "Decisión informada",
-    a: "Cuando un candidato pasa nuestro estudio (documentos, referencias e ingresos), te enviamos su perfil completo. Tú apruebas o rechazas — nosotros seguimos el proceso hasta la firma.",
+    a: "Cuando un candidato pasa nuestro estudio (documentos, referencias e ingresos), te enviamos su perfil completo. Tú apruebas o rechazas. Nosotros seguimos el proceso hasta la firma.",
     points: [
       "Evaluación documental antes de presentarte candidatos",
       "Tú tienes la última palabra en la decisión",
@@ -74,7 +74,7 @@ const FAQ_ITEMS = [
   {
     q: "¿En qué ciudades operan?",
     tag: "Cobertura",
-    a: "Hoy operamos en Bogotá y Barranquilla, con cobertura en las principales zonas de arriendo. Si tu inmueble está en otra ciudad, contáctanos — te orientamos sobre disponibilidad.",
+    a: "Hoy operamos en Bogotá y Barranquilla, con cobertura en las principales zonas de arriendo. Si tu inmueble está en otra ciudad, contáctanos y te orientamos sobre disponibilidad.",
     points: [
       "Bogotá: Chapinero, Usaquén, Suba, Cedritos y más",
       "Barranquilla: Riomar, Alto Prado, Villa Carolina y más",

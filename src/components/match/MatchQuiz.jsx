@@ -10,11 +10,11 @@ import { cn } from "@/lib/utils";
 
 const STEPS = [
   { id: "city", title: "¿En qué ciudad?", subtitle: "Solo inmuebles verificados en Bogotá y Barranquilla" },
-  { id: "zone", title: "¿En qué zona?", subtitle: "Opcional — entre opciones revisadas por nuestro equipo" },
+  { id: "zone", title: "¿En qué zona?", subtitle: "Opcional. Solo opciones revisadas por nuestro equipo" },
   { id: "type", title: "¿Qué tipo de inmueble?", subtitle: "Apartamento, casa, estudio… todos verificados" },
   { id: "beds", title: "¿Cuántas habitaciones?", subtitle: "Para afinar tu match inteligente" },
   { id: "budget", title: "¿Cuál es tu presupuesto?", subtitle: "Precio real, sin sorpresas ni cargos ocultos" },
-  { id: "extras", title: "¿Qué más necesitas?", subtitle: "Último paso — te mostramos solo lo que encaja" },
+  { id: "extras", title: "¿Qué más necesitas?", subtitle: "Último paso. Te mostramos solo lo que encaja" },
 ];
 
 const TYPES = [

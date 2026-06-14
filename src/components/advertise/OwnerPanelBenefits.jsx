@@ -6,7 +6,7 @@ const RENT_BENEFITS = [
   { icon: DollarSign, title: "Pagos recibidos", desc: "Sabes cuándo entró el canon y el estado de cada periodo." },
   { icon: FileText, title: "Contratos activos", desc: "Fechas de inicio, fin y renovación siempre a la vista." },
   { icon: Wrench, title: "Tickets abiertos", desc: "Mantenimiento y solicitudes con seguimiento claro." },
-  { icon: Building2, title: "Estado del inmueble", desc: "Disponible, en proceso o arrendado — sin llamar a nadie." },
+  { icon: Building2, title: "Estado del inmueble", desc: "Disponible, en proceso o arrendado, sin llamar a nadie." },
   { icon: Users, title: "Leads e interesados", desc: "Quién preguntó, en qué etapa va y qué propiedad le interesa." },
   { icon: Smartphone, title: "Desde cualquier dispositivo", desc: "Consulta tu arriendo en tiempo real, donde estés." },
   { icon: MessageCircleOff, title: "Sin depender del WhatsApp", desc: "Resúmenes organizados, no cientos de chats sueltos." },
@@ -14,7 +14,7 @@ const RENT_BENEFITS = [
 
 const SELL_BENEFITS = [
   { icon: Users, title: "Interesados activos", desc: "Compradores filtrados y en qué etapa va cada uno." },
-  { icon: Building2, title: "Estado del inmueble", desc: "En venta, en negociación o cerrado — todo centralizado." },
+  { icon: Building2, title: "Estado del inmueble", desc: "En venta, en negociación o cerrado, todo centralizado." },
   { icon: FileText, title: "Visitas y ofertas", desc: "Agenda confirmada y seguimiento hasta el cierre." },
   { icon: Wrench, title: "Tickets y trámites", desc: "Documentación y pendientes con seguimiento claro." },
   { icon: Smartphone, title: "Desde cualquier dispositivo", desc: "Tu venta visible en tiempo real, donde estés." },

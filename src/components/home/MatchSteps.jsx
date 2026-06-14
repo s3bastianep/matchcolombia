@@ -11,7 +11,7 @@ const steps = [
     num: "01",
     icon: Sparkles,
     title: "Cuéntanos qué buscas",
-    desc: "Ciudad, habitaciones y presupuesto — solo para filtrar entre inmuebles verificados.",
+    desc: "Ciudad, habitaciones y presupuesto, solo para filtrar entre inmuebles verificados.",
     tag: "Match inteligente",
     accent: "from-brand-magenta to-brand-violet",
     pills: ["Verificados", "Sin estafas", "Sin sustos"],

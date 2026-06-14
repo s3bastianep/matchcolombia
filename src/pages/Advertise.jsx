@@ -69,7 +69,7 @@ const BENEFITS = [
 const PROCESS = [
   { title: "Registras tu propiedad", desc: "Fotos, precio en COP, zona y características.", icon: Home },
   { title: "Publicamos por ti", desc: "Revisamos, activamos y promocionamos en tu zona.", icon: Camera },
-  { title: "Gestionamos interesados", desc: "Consultas, visitas y evaluación — sin que tú hables con nadie.", icon: Users },
+  { title: "Gestionamos interesados", desc: "Consultas, visitas y evaluación, sin que tú hables con nadie.", icon: Users },
   { title: "Eliges con confianza", desc: "Te presentamos al mejor candidato. Seguimos el proceso.", icon: BadgeCheck },
 ];
 
@@ -192,7 +192,7 @@ export default function Advertise() {
                 Nos encargamos de todo tu arriendo
               </h1>
               <p className="mt-4 text-white/75 text-sm sm:text-base leading-relaxed max-w-lg">
-                Publica gratis. {BRAND.name} gestiona consultas, visitas y candidatos. Tú no hablas con los interesados — solo recibes información clara en tu panel.
+                Publica gratis. {BRAND.name} gestiona consultas, visitas y candidatos. Tú no hablas con los interesados. Solo recibes información clara en tu panel.
               </p>
               <div className="mt-3">
                 <VerifiedBadge size="sm" />
@@ -233,7 +233,7 @@ export default function Advertise() {
           <OwnerSectionTitle
             badge="Tecnología MatchColombia"
             title="Tu panel propietario, siempre visible"
-            subtitle="Pagos, contratos, tickets y estado de cada inmueble — en tiempo real, desde cualquier dispositivo."
+            subtitle="Pagos, contratos, tickets y estado de cada inmueble, en tiempo real y desde cualquier dispositivo."
             className="mb-8 sm:mb-10"
           />
           <OwnerPanelBenefits />

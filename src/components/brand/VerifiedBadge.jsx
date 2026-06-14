@@ -12,7 +12,7 @@ export default function VerifiedBadge({ score, className, size = "sm", showToolt
 
   return (
     <span
-      title={showTooltip ? "Propietario verificado por MatchColombia — inmueble revisado por nuestro equipo" : undefined}
+      title={showTooltip ? "Propietario verificado por MatchColombia. Inmueble revisado por nuestro equipo" : undefined}
       className={cn(
         "badge-verified",
         size === "xs" && "text-[9px] px-2 py-0.5 gap-0.5",

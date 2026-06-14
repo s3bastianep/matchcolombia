@@ -106,7 +106,7 @@ const FAQ = [
   },
   {
     q: "¿Cuánto cuesta?",
-    a: "Publicar es gratis. Te explicamos honorarios y opciones cuando registres tu propiedad — sin letra pequeña.",
+    a: "Publicar es gratis. Te explicamos honorarios y opciones cuando registres tu propiedad, sin letra pequeña.",
   },
   {
     q: "¿Tengo que hablar con los interesados?",
@@ -311,7 +311,7 @@ export default function Sell() {
             <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider text-brand-magenta mb-2">Tecnología MatchColombia</span>
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight">Tu panel propietario, siempre visible</h2>
             <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-2xl leading-relaxed">
-              Interesados, visitas, ofertas y estado de cada inmueble — en tiempo real, desde cualquier dispositivo.
+              Interesados, visitas, ofertas y estado de cada inmueble, en tiempo real y desde cualquier dispositivo.
             </p>
           </div>
           <OwnerPanelBenefits mode="sell" />
