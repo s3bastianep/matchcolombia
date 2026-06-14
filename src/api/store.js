@@ -1,4 +1,6 @@
-const delay = (ms = 250) => new Promise((r) => setTimeout(r, ms));
+import { apiDelay } from "../lib/apiDelay";
+
+const delay = apiDelay;
 
 export function createStore(storageKey, seedData = []) {
   function load() {

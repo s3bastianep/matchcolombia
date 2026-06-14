@@ -1,5 +1,4 @@
 import React, { Suspense, useEffect, lazy } from "react";
-import { initLocalApi } from "@/api/localApi";
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -13,11 +12,10 @@ import AppLayout from './components/layout/AppLayout';
 import RequireAuth from './components/RequireAuth';
 import RequireRole from './components/RequireRole';
 
-import AdminLayout from './layouts/AdminLayout';
-import SeekerLayout from './layouts/SeekerLayout';
-import TenantLayout from './layouts/TenantLayout';
-import OwnerLayout from './layouts/OwnerLayout';
-
+const AdminLayout = lazy(() => import('./layouts/AdminLayout'));
+const SeekerLayout = lazy(() => import('./layouts/SeekerLayout'));
+const TenantLayout = lazy(() => import('./layouts/TenantLayout'));
+const OwnerLayout = lazy(() => import('./layouts/OwnerLayout'));
 const Home = lazy(() => import('./pages/Home'));
 const Explore = lazy(() => import('./pages/Explore'));
 const PropertyRedirect = lazy(() => import('./pages/PropertyRedirect'));
@@ -86,7 +84,7 @@ function AppRoutes() {
         </Route>
 
         <Route element={<RequireRole roles={[ROLES.ADMIN]} />}>
-          <Route element={<AdminLayout />}>
+          <Route element={<Suspense fallback={<PageLoader />}><AdminLayout /></Suspense>}>
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/propiedades" element={<AdminProperties />} />
             <Route path="/admin/propiedades/:id" element={<AdminPropertyEdit />} />
@@ -102,7 +100,7 @@ function AppRoutes() {
         </Route>
 
         <Route element={<RequireRole roles={[ROLES.SEEKER, ROLES.ADMIN]} />}>
-          <Route element={<SeekerLayout />}>
+          <Route element={<Suspense fallback={<PageLoader />}><SeekerLayout /></Suspense>}>
             <Route path="/portal" element={<SeekerPortal />} />
             <Route path="/portal/aplicaciones" element={<SeekerApplications />} />
             <Route path="/portal/mensajes" element={<SeekerMessages />} />
@@ -111,7 +109,7 @@ function AppRoutes() {
         </Route>
 
         <Route element={<RequireRole roles={[ROLES.TENANT, ROLES.ADMIN]} />}>
-          <Route element={<TenantLayout />}>
+          <Route element={<Suspense fallback={<PageLoader />}><TenantLayout /></Suspense>}>
             <Route path="/inquilino" element={<TenantPortal />} />
             <Route path="/inquilino/contrato" element={<TenantContract />} />
             <Route path="/inquilino/pagos" element={<TenantPayments />} />
@@ -121,7 +119,7 @@ function AppRoutes() {
         </Route>
 
         <Route element={<RequireRole roles={[ROLES.OWNER, ROLES.ADMIN]} />}>
-          <Route element={<OwnerLayout />}>
+          <Route element={<Suspense fallback={<PageLoader />}><OwnerLayout /></Suspense>}>
             <Route path="/propietario" element={<OwnerPortal />} />
             <Route path="/propietario/propiedades" element={<OwnerProperties />} />
             <Route path="/propietario/leads" element={<OwnerLeads />} />
@@ -138,15 +136,14 @@ function AppRoutes() {
 
 function App() {
   useEffect(() => {
-    const run = () => initLocalApi();
+    const run = () => import("@/api/localApi").then((m) => m.initLocalApi());
     if (typeof requestIdleCallback !== "undefined") {
-      const id = requestIdleCallback(run);
+      const id = requestIdleCallback(run, { timeout: 2000 });
       return () => cancelIdleCallback(id);
     }
     const timer = setTimeout(run, 0);
     return () => clearTimeout(timer);
   }, []);
-
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>

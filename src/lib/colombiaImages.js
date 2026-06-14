@@ -1,5 +1,5 @@
 /** URLs fiables — Pexels (estables en producción) */
-export function pexels(id, w = 1200, h) {
+export function pexels(id, w = 800, h) {
   const params = new URLSearchParams({ auto: "compress", cs: "tinysrgb", w: String(w), fit: "crop" });
   if (h) params.set("h", String(h));
   return `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?${params}`;
@@ -115,9 +115,9 @@ export const CITIES_IMG = {
 };
 
 export const HERO_COLLAGE = {
-  collageMain: pexels(439391, 1400, 1200),
-  collageBedroom: pexels(1643384, 900, 1100),
-  collageKitchen: pexels(2062432, 900, 900),
+  collageMain: pexels(439391, 800, 700),
+  collageBedroom: pexels(1643384, 500, 600),
+  collageKitchen: pexels(2062432, 500, 500),
 };
 
 /** @deprecated Usar HERO_COLLAGE */

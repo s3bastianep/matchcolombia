@@ -1,10 +1,11 @@
 import { ROLES } from "./roles";
+import { apiDelay } from "./apiDelay";
 
 const USERS_KEY = "matchcolombia_users";
 const SESSION_KEY = "matchcolombia_session";
 const DEMO_USERS_SEEDED = "matchcolombia_demo_users_seeded";
 
-const delay = (ms = 200) => new Promise((r) => setTimeout(r, ms));
+const delay = apiDelay;
 
 async function hashPassword(password) {
   const data = new TextEncoder().encode(password);
@@ -84,6 +85,10 @@ async function seedDemoUsers() {
   localStorage.setItem(DEMO_USERS_SEEDED, "1");
 }
 
+export function initLocalAuth() {
+  seedDemoUsers().catch(() => {});
+}
+
 export async function register({ name, username, email, password, role = ROLES.SEEKER }) {
   await delay(400);
   await seedDemoUsers();
@@ -160,8 +165,6 @@ export async function loginViaEmailPassword(identifier, password) {
 }
 
 export async function me() {
-  await delay(100);
-  await seedDemoUsers();
   const session = loadSession();
   if (!session) return null;
 

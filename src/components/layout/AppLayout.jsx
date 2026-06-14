@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import MatchQuiz from "../match/MatchQuiz";
 import WhatsAppFab from "./WhatsAppFab";
 import { cn } from "@/lib/utils";
+
+const MatchQuiz = lazy(() => import("../match/MatchQuiz"));
 
 export default function AppLayout() {
   const [quizOpen, setQuizOpen] = useState(false);
@@ -25,7 +26,11 @@ export default function AppLayout() {
       </main>
       {!isExplore && <Footer />}
       <WhatsAppFab />
-      <MatchQuiz open={quizOpen} onOpenChange={setQuizOpen} />
+      {quizOpen && (
+        <Suspense fallback={null}>
+          <MatchQuiz open={quizOpen} onOpenChange={setQuizOpen} />
+        </Suspense>
+      )}
     </div>
   );
 }

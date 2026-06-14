@@ -22,6 +22,8 @@ export default function SmartImage({ src, alt, className, fallback = FALLBACK_IM
       {!loaded && <div className="absolute inset-0 shimmer" />}
       <img
         ref={imgRef}
+        loading="lazy"
+        decoding="async"
         {...props}
         src={current}
         alt={alt}

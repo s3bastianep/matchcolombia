@@ -7,7 +7,7 @@ import VerifiedBadge from "../brand/VerifiedBadge";
 import { PEOPLE } from "@/lib/colombiaImages";
 import { cn } from "@/lib/utils";
 
-function CollagePhoto({ src, alt, className }) {
+function CollagePhoto({ src, alt, className, priority = false }) {
   return (
     <div
       className={cn(
@@ -15,7 +15,14 @@ function CollagePhoto({ src, alt, className }) {
         className
       )}
     >
-      <img src={src} alt={alt} loading="eager" decoding="async" className="absolute inset-0 w-full h-full object-cover object-center" />
+      <img
+        src={src}
+        alt={alt}
+        loading={priority ? "eager" : "lazy"}
+        decoding="async"
+        fetchPriority={priority ? "high" : "auto"}
+        className="absolute inset-0 w-full h-full object-cover object-center"
+      />
     </div>
   );
 }
@@ -28,7 +35,7 @@ function HeroCollage() {
 
       <div className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[420px] aspect-square mx-auto">
         <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.55 }} className="absolute inset-[6%] z-10">
-          <CollagePhoto src={PEOPLE.collageMain} alt="Sala moderna de apartamento" className="w-full h-full shadow-2xl" />
+          <CollagePhoto src={PEOPLE.collageMain} alt="Sala moderna de apartamento" className="w-full h-full shadow-2xl" priority />
         </motion.div>
         <motion.div initial={{ opacity: 0, x: -12, rotate: -6 }} animate={{ opacity: 1, x: 0, rotate: -6 }} transition={{ duration: 0.5, delay: 0.12 }} className="absolute bottom-0 left-[-2%] w-[44%] aspect-[4/5] z-20">
           <CollagePhoto src={PEOPLE.collageBedroom} alt="Habitación de apartamento" className="w-full h-full" />

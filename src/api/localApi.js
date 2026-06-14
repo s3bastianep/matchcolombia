@@ -18,7 +18,9 @@ const POIS_KEY = "matchcolombia_pois";
 const SETTINGS_KEY = "matchcolombia_admin_settings";
 const PORTAL_SEEDED_KEY = "matchcolombia_portal_seeded_v2";
 
-const delay = (ms = 300) => new Promise((r) => setTimeout(r, ms));
+import { apiDelay } from "../lib/apiDelay";
+
+const delay = apiDelay;
 
 function loadProperties() {
   try {
@@ -136,6 +138,7 @@ export function initLocalApi() {
   try {
     seedPortalIfNeeded();
     seedAdminNotificationsIfNeeded();
+    localAuth.initLocalAuth();
   } catch (err) {
     console.warn("MatchColombia: seed del portal falló", err);
   }
