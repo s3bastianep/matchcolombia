@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SlidersHorizontal, X, Sparkles, Search, Map, Check, ArrowUpDown, MousePointer2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import VerifiedBadge from "../components/brand/VerifiedBadge";
+import { loadPreferences, scoreProperty } from "@/lib/matchPreferences";
 import { CITIES } from "@/lib/colombia";
 import {
   DEFAULT_ADVANCED_FILTERS,

@@ -8,6 +8,7 @@ import SmartImage from "@/components/ui/SmartImage";
 import { INTERIORS, FALLBACK_IMAGE } from "@/lib/colombiaImages";
 import { isInShortlist, toggleShortlist } from "@/lib/shortlist";
 import { getEstratoLabel, getEstratoChipStyle } from "@/lib/propertyLabels";
+import { getParkingSpots } from "@/lib/propertyFilters";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
 
 const formatCOP = (value) =>

@@ -16,8 +16,15 @@ const PORTAL_SEEDED_KEY = "matchcolombia_portal_seeded";
 const delay = (ms = 300) => new Promise((r) => setTimeout(r, ms));
 
 function loadProperties() {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) return JSON.parse(stored);
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch {
+    localStorage.removeItem(STORAGE_KEY);
+  }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED_PROPERTIES));
   return [...SEED_PROPERTIES];
 }
@@ -46,18 +53,22 @@ function sortList(list, sortField) {
 }
 
 function seedPortalIfNeeded() {
-  if (localStorage.getItem(PORTAL_SEEDED_KEY)) return;
-  const props = loadProperties();
-  const ids = props.slice(0, 2).map((p) => p.id);
-  const seed = getPortalSeedData(ids);
-  localStorage.setItem(INQUIRIES_KEY, JSON.stringify(seed.inquiries));
-  localStorage.setItem(VISITS_KEY, JSON.stringify(seed.visits));
-  localStorage.setItem(MESSAGES_KEY, JSON.stringify(seed.messages));
-  localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(seed.applications));
-  localStorage.setItem(LEASES_KEY, JSON.stringify(seed.leases));
-  localStorage.setItem(PAYMENTS_KEY, JSON.stringify(seed.payments));
-  localStorage.setItem(TICKETS_KEY, JSON.stringify(seed.tickets));
-  localStorage.setItem(PORTAL_SEEDED_KEY, "1");
+  try {
+    if (localStorage.getItem(PORTAL_SEEDED_KEY)) return;
+    const props = loadProperties();
+    const ids = props.slice(0, 2).map((p) => p.id);
+    const seed = getPortalSeedData(ids);
+    localStorage.setItem(INQUIRIES_KEY, JSON.stringify(seed.inquiries));
+    localStorage.setItem(VISITS_KEY, JSON.stringify(seed.visits));
+    localStorage.setItem(MESSAGES_KEY, JSON.stringify(seed.messages));
+    localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(seed.applications));
+    localStorage.setItem(LEASES_KEY, JSON.stringify(seed.leases));
+    localStorage.setItem(PAYMENTS_KEY, JSON.stringify(seed.payments));
+    localStorage.setItem(TICKETS_KEY, JSON.stringify(seed.tickets));
+    localStorage.setItem(PORTAL_SEEDED_KEY, "1");
+  } catch {
+    /* ignore corrupt demo seed data */
+  }
 }
 
 seedPortalIfNeeded();

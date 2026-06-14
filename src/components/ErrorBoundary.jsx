@@ -20,6 +20,11 @@ export default class ErrorBoundary extends React.Component {
             <p className="text-sm text-muted-foreground mb-6">
               Recarga la página. Si persiste, borra el caché del navegador.
             </p>
+            {import.meta.env.DEV && this.state.error?.message && (
+              <p className="text-xs text-left bg-secondary/60 rounded-xl p-3 mb-4 font-mono break-all text-destructive">
+                {this.state.error.message}
+              </p>
+            )}
             <button
               type="button"
               onClick={() => window.location.reload()}
