@@ -24,7 +24,7 @@ import {
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
-import OwnerDashboardPreview from "@/components/advertise/OwnerDashboardPreview";
+import OwnerPanelBenefits from "@/components/advertise/OwnerPanelBenefits";
 
 const STATS = [
   { value: "100%", label: "Propiedades verificadas" },
@@ -249,8 +249,8 @@ export default function Advertise() {
                   Publicar mi inmueble
                   <ArrowRight className="w-4 h-4" />
                 </Link>
-                <a href="#panel-propietario" className="inline-flex items-center justify-center gap-2 border border-white/30 text-white font-bold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm">
-                  Ver el panel
+                <a href="#beneficios-panel" className="inline-flex items-center justify-center gap-2 border border-white/30 text-white font-bold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm">
+                  Ver beneficios
                 </a>
               </div>
             </motion.div>
@@ -271,16 +271,16 @@ export default function Advertise() {
         </div>
       </section>
 
-      {/* PRIORIDAD #1 — Panel del propietario */}
-      <section id="panel-propietario" className="py-10 sm:py-14 lg:py-16 bg-white border-b border-border/40">
+      {/* Beneficios del panel — sin mock visual */}
+      <section id="beneficios-panel" className="py-10 sm:py-14 lg:py-16 bg-white border-b border-border/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-8">
           <OwnerSectionTitle
             badge="Tecnología MatchColombia"
             title="Tu panel propietario, siempre visible"
-            subtitle="Pagos recibidos, contratos activos, tickets abiertos y estado de cada inmueble — en tiempo real, desde cualquier dispositivo."
+            subtitle="Pagos, contratos, tickets y estado de cada inmueble — en tiempo real, desde cualquier dispositivo."
             className="mb-8 sm:mb-10"
           />
-          <OwnerDashboardPreview />
+          <OwnerPanelBenefits />
         </div>
       </section>
 

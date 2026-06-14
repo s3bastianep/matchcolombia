@@ -28,7 +28,7 @@ import {
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
-import OwnerDashboardPreview from "@/components/advertise/OwnerDashboardPreview";
+import OwnerPanelBenefits from "@/components/advertise/OwnerPanelBenefits";
 import { CITIES } from "@/lib/colombia";
 import { INTERIORS } from "@/lib/colombiaImages";
 
@@ -286,8 +286,8 @@ export default function Sell() {
                   Empezar a vender
                   <ArrowRight className="w-4 h-4" />
                 </Link>
-                <a href="#panel-propietario" className="inline-flex items-center justify-center gap-2 border border-white/30 font-bold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm">
-                  Ver el panel
+                <a href="#beneficios-panel" className="inline-flex items-center justify-center gap-2 border border-white/30 font-bold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm">
+                  Ver beneficios
                 </a>
               </div>
             </motion.div>
@@ -305,7 +305,7 @@ export default function Sell() {
       </section>
 
       {/* Panel propietario */}
-      <section id="panel-propietario" className="py-10 sm:py-14 lg:py-16 bg-white border-b border-border/40">
+      <section id="beneficios-panel" className="py-10 sm:py-14 lg:py-16 bg-white border-b border-border/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-8">
           <div className="border-l-4 border-brand-magenta pl-4 sm:pl-5 mb-8 sm:mb-10">
             <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider text-brand-magenta mb-2">Tecnología MatchColombia</span>
@@ -314,7 +314,7 @@ export default function Sell() {
               Interesados, visitas, ofertas y estado de cada inmueble — en tiempo real, desde cualquier dispositivo.
             </p>
           </div>
-          <OwnerDashboardPreview mode="sell" />
+          <OwnerPanelBenefits mode="sell" />
         </div>
       </section>
 
