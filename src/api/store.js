@@ -8,12 +8,20 @@ export function createStore(storageKey, seedData = []) {
     } catch {
       /* empty */
     }
-    localStorage.setItem(storageKey, JSON.stringify(seedData));
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(seedData));
+    } catch (err) {
+      console.warn(`MatchColombia: no se pudo inicializar ${storageKey}`, err);
+    }
     return [...seedData];
   }
 
   function save(items) {
-    localStorage.setItem(storageKey, JSON.stringify(items));
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(items));
+    } catch (err) {
+      console.warn(`MatchColombia: no se pudo guardar ${storageKey}`, err);
+    }
   }
 
   function matches(item, criteria) {

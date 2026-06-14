@@ -2,18 +2,8 @@ import { SEED_PROPERTIES } from "./mockData";
 import { createStore } from "./store";
 import { getPortalSeedData } from "./portalSeed";
 import * as localAuth from "../lib/localAuth";
-import { getGalleryForProperty, IMAGES_VERSION } from "../lib/colombiaImages";
 
-const STORAGE_KEY = "matchcolombia_properties_v11";
-const IMAGES_VERSION_KEY = "matchcolombia_images_version";
-const LEGACY_PROPERTY_KEYS = [
-  "matchcolombia_properties",
-  "matchcolombia_properties_v6",
-  "matchcolombia_properties_v7",
-  "matchcolombia_properties_v8",
-  "matchcolombia_properties_v9",
-  "matchcolombia_properties_v10",
-];
+const STORAGE_KEY = "matchcolombia_properties_v8";
 const INQUIRIES_KEY = "matchcolombia_inquiries";
 const VISITS_KEY = "matchcolombia_visits";
 const MESSAGES_KEY = "matchcolombia_messages";
@@ -25,39 +15,31 @@ const PORTAL_SEEDED_KEY = "matchcolombia_portal_seeded";
 
 const delay = (ms = 300) => new Promise((r) => setTimeout(r, ms));
 
-function hydrateProperties(properties) {
-  return properties.map((property) => ({
-    ...property,
-    images: getGalleryForProperty(property.id, property.property_type),
-  }));
-}
-
-function reseedProperties() {
-  LEGACY_PROPERTY_KEYS.forEach((key) => localStorage.removeItem(key));
-  localStorage.removeItem(STORAGE_KEY);
-  const fresh = hydrateProperties(SEED_PROPERTIES);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
-  localStorage.setItem(IMAGES_VERSION_KEY, String(IMAGES_VERSION));
-  return [...fresh];
-}
-
 function loadProperties() {
   try {
-    const storedVersion = Number(localStorage.getItem(IMAGES_VERSION_KEY) || 0);
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored && storedVersion >= IMAGES_VERSION) {
+    if (stored) {
       const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed) && parsed.length >= SEED_PROPERTIES.length) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
   } catch {
-    /* fall through to reseed */
+    localStorage.removeItem(STORAGE_KEY);
   }
 
-  return reseedProperties();
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED_PROPERTIES));
+  } catch (err) {
+    console.warn("MatchColombia: no se pudo guardar propiedades iniciales", err);
+  }
+  return [...SEED_PROPERTIES];
 }
 
 function saveProperties(properties) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(properties));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(properties));
+  } catch (err) {
+    console.warn("MatchColombia: no se pudo guardar propiedades", err);
+  }
 }
 
 function generateId(prefix = "prop") {
@@ -98,7 +80,14 @@ function seedPortalIfNeeded() {
   }
 }
 
-seedPortalIfNeeded();
+export function initLocalApi() {
+  if (typeof window === "undefined") return;
+  try {
+    seedPortalIfNeeded();
+  } catch (err) {
+    console.warn("MatchColombia: seed del portal falló", err);
+  }
+}
 
 const Property = {
   async filter(criteria = {}, sort = "-created_date", limit = 100) {

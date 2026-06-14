@@ -1,0 +1,10 @@
+{
+  "name": "MatchColombia",
+  "short_name": "MatchColombia",
+  "description": "Encuentra tu espacio ideal. Arriendos en Colombia.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8B5CF6",
+  "lang": "es"
+}
