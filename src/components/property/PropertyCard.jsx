@@ -100,17 +100,18 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
       transition={{ delay: index * 0.03, duration: 0.3 }}
       className={cn(
         "min-w-0",
+        isGrid && "h-full",
         !isGrid && "card-hover",
         highlighted && "ring-2 ring-brand-violet ring-offset-2",
         isGrid ? "rounded-xl" : "rounded-[1.35rem]"
       )}
     >
-      <Link to={`/propiedad/${property.id}`} className="group block">
+      <Link to={`/propiedad/${property.id}`} className={cn("group block", isGrid && "h-full")}>
         <article
           className={cn(
             "bg-white overflow-hidden transition-all duration-300",
             isGrid
-              ? "rounded-xl border border-[hsl(0,0%,92%)] group-hover:border-brand-violet/25 group-hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]"
+              ? "h-full flex flex-col rounded-xl border border-[hsl(0,0%,92%)] group-hover:border-brand-violet/25 group-hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]"
               : "rounded-[1.35rem]",
             !isGrid && isExplore
               ? "border border-[hsl(0,0%,92%)] shadow-[0_4px_24px_rgba(15,23,42,0.05)] group-hover:shadow-[0_12px_36px_rgba(15,23,42,0.09)] group-hover:-translate-y-0.5"
@@ -118,14 +119,14 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
           )}
         >
           {isGrid ? (
-            <div className="p-3 pb-2">
-              <div className="relative size-[7.25rem] rounded-lg overflow-hidden bg-muted">
+            <div className="px-3 pt-3 pb-2 shrink-0">
+              <div className="relative w-full aspect-[5/4] rounded-lg overflow-hidden bg-muted">
                 <SmartImage
                   src={image}
                   alt={property.title}
                   fallback={FALLBACK_IMAGE}
                   className="absolute inset-0"
-                  imgClassName="group-hover:scale-[1.04] transition-transform duration-500 ease-out"
+                  imgClassName="group-hover:scale-[1.03] transition-transform duration-500 ease-out"
                 />
                 <button
                   onClick={(e) => {
@@ -138,7 +139,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                     setLiked(toggleShortlist(property.id));
                   }}
                   className={cn(
-                    "absolute top-1.5 right-1.5 w-7 h-7 rounded-full flex items-center justify-center z-10 transition-all",
+                    "absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center z-10 transition-all",
                     "ring-1 ring-black/15 shadow-sm backdrop-blur-sm",
                     liked ? "bg-primary text-white" : "bg-white/95 text-gray-600 hover:text-primary"
                   )}
@@ -146,8 +147,8 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                 >
                   <Heart className={cn("w-3.5 h-3.5", liked && "fill-current")} strokeWidth={2.25} />
                 </button>
-                <div className="absolute top-1.5 left-1.5 z-10">
-                  <VerifiedBadge size="xs" score={showMatch && matchScore > 0 ? matchScore : undefined} />
+                <div className="absolute top-2 left-2 z-10">
+                  <VerifiedBadge size="sm" score={showMatch && matchScore > 0 ? matchScore : undefined} />
                 </div>
                 {images.length > 1 && (
                   <>
@@ -158,10 +159,10 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                         e.stopPropagation();
                         setPhotoIdx((i) => (i - 1 + images.length) % images.length);
                       }}
-                      className="absolute left-1 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white/95 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute left-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/95 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                       aria-label="Foto anterior"
                     >
-                      <ChevronLeft className="w-3.5 h-3.5 text-foreground/70" />
+                      <ChevronLeft className="w-4 h-4 text-foreground/70" />
                     </button>
                     <button
                       type="button"
@@ -170,12 +171,12 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                         e.stopPropagation();
                         setPhotoIdx((i) => (i + 1) % images.length);
                       }}
-                      className="absolute right-1 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white/95 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/95 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                       aria-label="Foto siguiente"
                     >
-                      <ChevronRight className="w-3.5 h-3.5 text-foreground/70" />
+                      <ChevronRight className="w-4 h-4 text-foreground/70" />
                     </button>
-                    <span className="absolute bottom-1 right-1 z-10 px-1.5 py-0.5 rounded bg-black/55 text-white text-[9px] font-bold tabular-nums">
+                    <span className="absolute bottom-2 right-2 z-10 px-1.5 py-0.5 rounded-md bg-black/55 text-white text-[10px] font-bold tabular-nums">
                       {photoIdx + 1}/{images.length}
                     </span>
                   </>
@@ -273,22 +274,18 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
           </div>
           )}
 
-          <div className={cn(isGrid ? "px-3 pt-0 pb-3" : isExplore ? "p-4 sm:p-5" : "p-5")}>
+          <div className={cn(isGrid ? "px-3 pt-0 pb-3 flex-1 flex flex-col" : isExplore ? "p-4 sm:p-5" : "p-5")}>
             {isGrid && (
               <>
                 <p className="font-extrabold text-base text-foreground leading-tight tracking-tight">
                   {formatCOP(totalMonthly)}
                   <span className="text-[11px] font-semibold text-muted-foreground"> / mes</span>
                 </p>
-                {property.admin_fee > 0 ? (
-                  <p className="text-[10px] text-muted-foreground mt-0.5">
-                    + Adm. {formatCOP(property.admin_fee)}
-                  </p>
-                ) : (
-                  <p className="text-[10px] text-muted-foreground mt-0.5">Sin administración</p>
-                )}
+                <p className="text-[10px] text-muted-foreground mt-0.5 min-h-[1rem]">
+                  {property.admin_fee > 0 ? `+ Adm. ${formatCOP(property.admin_fee)}` : "Sin administración"}
+                </p>
 
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 text-[10px] font-semibold text-foreground/75">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 min-h-[1.25rem] text-[10px] font-semibold text-foreground/75">
                   {property.area_sqm && (
                     <span className="inline-flex items-center gap-0.5">
                       <Maximize className="w-3.5 h-3.5 text-brand-violet" />
@@ -318,27 +315,25 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                   </span>
                 </div>
 
-                {(property.floor != null && property.floor !== "") || furnishedLabel || availableFrom ? (
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {property.floor != null && property.floor !== "" && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
-                        Piso {property.floor}
-                      </span>
-                    )}
-                    {furnishedLabel && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
-                        {furnishedLabel}
-                      </span>
-                    )}
-                    {availableFrom && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
-                        Desde {availableFrom}
-                      </span>
-                    )}
-                  </div>
-                ) : null}
+                <div className="flex flex-wrap gap-1 mt-2 min-h-[2.5rem] content-start">
+                  {property.floor != null && property.floor !== "" && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+                      Piso {property.floor}
+                    </span>
+                  )}
+                  {furnishedLabel && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+                      {furnishedLabel}
+                    </span>
+                  )}
+                  {availableFrom && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+                      Desde {availableFrom}
+                    </span>
+                  )}
+                </div>
 
-                <p className="text-xs font-bold text-foreground mt-2 line-clamp-1 flex items-center gap-1">
+                <p className="text-xs font-bold text-foreground mt-2 min-h-[1.25rem] line-clamp-1 flex items-center gap-1">
                   <MapPin className="w-3.5 h-3.5 shrink-0 text-brand-magenta" />
                   {property.neighborhood || property.locality || "Zona"}
                   {property.city ? ` · ${property.city}` : ""}
@@ -351,7 +346,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                     e.stopPropagation();
                     navigate(`/propiedad/${property.id}?visita=1`);
                   }}
-                  className="mt-2.5 w-full flex items-center justify-center gap-1.5 gradient-cta text-white text-[11px] font-bold py-2 rounded-lg hover:opacity-95 transition-opacity"
+                  className="mt-auto pt-2.5 w-full flex items-center justify-center gap-1.5 gradient-cta text-white text-[11px] font-bold py-2 rounded-lg hover:opacity-95 transition-opacity"
                 >
                   <CalendarCheck className="w-3.5 h-3.5" />
                   Agendar visita

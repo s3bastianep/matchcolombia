@@ -57,12 +57,12 @@ const QUICK_FILTERS = [
 
 function ExploreSkeleton() {
   return (
-    <div className="overflow-hidden rounded-xl border border-[hsl(0,0%,92%)] p-3">
-      <div className="size-[7.25rem] rounded-lg shimmer" />
-      <div className="pt-3 space-y-2">
+    <div className="overflow-hidden rounded-xl border border-[hsl(0,0%,92%)] p-3 h-full flex flex-col">
+      <div className="w-full aspect-[5/4] rounded-lg shimmer shrink-0" />
+      <div className="pt-3 space-y-2 flex-1 flex flex-col">
         <div className="h-4 w-2/3 rounded shimmer" />
         <div className="h-3 w-1/2 rounded shimmer" />
-        <div className="h-8 w-full rounded-lg shimmer mt-2" />
+        <div className="h-8 w-full rounded-lg shimmer mt-auto" />
       </div>
     </div>
   );
@@ -432,7 +432,7 @@ export default function Explore() {
       {isLoading ? (
         <>
           <div className="hidden lg:grid lg:flex-1 lg:min-h-0 lg:grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)] min-w-0">
-            <div className="px-6 py-5 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            <div className="px-6 py-5 grid grid-cols-2 lg:grid-cols-3 gap-3 items-stretch">
               {Array(9).fill(0).map((_, i) => (
                 <ExploreSkeleton key={i} />
               ))}
@@ -526,16 +526,16 @@ export default function Explore() {
               )}
 
               <div className={cn(
-                "grid gap-x-3 gap-y-4 mt-5 min-w-0",
+                "grid items-stretch gap-x-3 gap-y-4 mt-5 min-w-0",
                 viewMode === "list"
-                  ? "grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
-                  : "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                  ? "grid-cols-2 sm:grid-cols-3 xl:grid-cols-4"
+                  : "grid-cols-2 lg:grid-cols-3"
               )}>
                 {filtered.flatMap((property, i) => {
                   const items = [
                     <div
                       key={property.id}
-                      className="min-w-0"
+                      className="min-w-0 h-full"
                       onMouseEnter={() => setHighlightedId(property.id)}
                       onMouseLeave={() => setHighlightedId(null)}
                     >
@@ -589,7 +589,7 @@ export default function Explore() {
               <h1 className="text-lg font-extrabold tracking-tight leading-snug">{resultsTitle}</h1>
               <ResultsCount count={filtered.length} query={initialQ} />
             </div>
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
               {filtered.flatMap((property, i) => {
                 const items = [
                   <PropertyCard
