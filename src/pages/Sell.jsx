@@ -33,10 +33,10 @@ import { CITIES } from "@/lib/colombia";
 import { INTERIORS } from "@/lib/colombiaImages";
 
 const STATS = [
-  { value: "100%", label: "Propiedades verificadas" },
-  { value: "95%", label: "Ocupación promedio" },
-  { value: "72 h", label: "Promedio respuesta tickets" },
-  { value: "100%", label: "Seguimiento digital" },
+  { label: "Seguimiento digital", desc: "Ofertas, visitas y estado en un solo lugar." },
+  { label: "Contratos digitales", desc: "Firma y consulta sin correos ni papeles perdidos." },
+  { label: "Verificación documental", desc: "Inmueble revisado antes de publicar." },
+  { label: "Atención centralizada", desc: "Un equipo coordina todo el proceso por ti." },
 ];
 
 const ADMIN_INCLUDES = [
@@ -321,17 +321,17 @@ export default function Sell() {
       {/* Resultados concretos */}
       <section className="color-bar">
         <div className="max-w-6xl mx-auto px-4 sm:px-8 py-5 sm:py-6 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-          {STATS.map(({ value, label }, i) => (
+          {STATS.map(({ label, desc }, i) => (
             <motion.div
               key={label}
               initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.04 }}
-              className="text-center text-white px-1"
+              className="text-white px-1"
             >
-              <p className="text-xl sm:text-2xl lg:text-3xl font-extrabold leading-none">{value}</p>
-              <p className="text-[10px] sm:text-xs font-semibold text-white/90 mt-1.5 leading-snug">{label}</p>
+              <p className="text-sm sm:text-base font-extrabold leading-snug">{label}</p>
+              <p className="text-[10px] sm:text-xs font-medium text-white/80 mt-1.5 leading-snug">{desc}</p>
             </motion.div>
           ))}
         </div>

@@ -5,9 +5,9 @@ import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
 
 const VALUE_PILLARS = [
-  { icon: Shield, label: "100% verificados", desc: "Inmuebles y candidatos revisados antes de publicar." },
-  { icon: MessageCircleOff, label: "Cero contacto directo", desc: "Tu teléfono no aparece en el anuncio." },
-  { icon: Zap, label: "Gestión exclusiva", desc: "Un solo equipo coordina todo el proceso." },
+  { icon: Shield, label: "Verificación documental", desc: "Inmuebles y candidatos revisados antes de publicar." },
+  { icon: MessageCircleOff, label: "Sin llamadas ni correos", desc: "Seguimiento centralizado, sin exponer tu teléfono." },
+  { icon: Zap, label: "Seguimiento digital", desc: "Pagos, contratos y tickets en un solo lugar." },
 ];
 
 const FAQ_ITEMS = [
@@ -67,8 +67,8 @@ const FAQ_ITEMS = [
     a: "Significa que MatchColombia es tu único intermediario en el proceso. Centralizamos consultas, visitas, aplicaciones y seguimiento para que no tengas que repartir información entre varios canales.",
     points: [
       "Un flujo claro de principio a fin",
-      "95% de ocupación promedio en propiedades gestionadas",
-      "Respuesta a tickets en menos de 72 horas",
+      "Contratos digitales y cobro de cánones centralizado",
+      "Tickets de mantenimiento con trazabilidad",
     ],
   },
   {
@@ -175,17 +175,17 @@ export default function OwnerFaqSection({ publishLink = "/publicar/nuevo" }) {
             </div>
 
             <div className="rounded-2xl color-bar p-5 sm:p-6 text-white">
-              <p className="text-xs font-bold uppercase tracking-wider text-white/70">Resultados</p>
-              <div className="grid grid-cols-2 gap-4 mt-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-white/70">Lo que sí puedes verificar</p>
+              <div className="grid grid-cols-2 gap-3 mt-3">
                 {[
-                  { v: "100%", l: "Verificados" },
-                  { v: "95%", l: "Ocupación" },
-                  { v: "72 h", l: "Respuesta" },
-                  { v: "100%", l: "Digital" },
-                ].map(({ v, l }) => (
-                  <div key={l}>
-                    <p className="text-lg sm:text-xl font-extrabold">{v}</p>
-                    <p className="text-[10px] font-semibold text-white/85">{l}</p>
+                  "Seguimiento digital",
+                  "Contratos digitales",
+                  "Verificación documental",
+                  "Atención centralizada",
+                ].map((item) => (
+                  <div key={item} className="flex items-start gap-2">
+                    <Check className="w-3.5 h-3.5 shrink-0 mt-0.5 text-white/90" strokeWidth={2.5} />
+                    <p className="text-[11px] sm:text-xs font-semibold leading-snug">{item}</p>
                   </div>
                 ))}
               </div>
