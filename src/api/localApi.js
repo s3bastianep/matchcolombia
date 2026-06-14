@@ -42,24 +42,18 @@ function reseedProperties() {
 }
 
 function loadProperties() {
-  let list = null;
-
   try {
+    const storedVersion = Number(localStorage.getItem(IMAGES_VERSION_KEY) || 0);
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
+    if (stored && storedVersion >= IMAGES_VERSION) {
       const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed) && parsed.length >= SEED_PROPERTIES.length) list = parsed;
+      if (Array.isArray(parsed) && parsed.length >= SEED_PROPERTIES.length) return parsed;
     }
   } catch {
     /* fall through to reseed */
   }
 
-  if (!list) return reseedProperties();
-
-  const hydrated = hydrateProperties(list);
-  localStorage.setItem(IMAGES_VERSION_KEY, String(IMAGES_VERSION));
-  saveProperties(hydrated);
-  return hydrated;
+  return reseedProperties();
 }
 
 function saveProperties(properties) {
