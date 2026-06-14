@@ -431,7 +431,7 @@ export default function Explore() {
 
       {isLoading ? (
         <>
-          <div className="hidden lg:grid lg:flex-1 lg:min-h-0 lg:grid-cols-[7fr_3fr]">
+          <div className="hidden lg:grid lg:flex-1 lg:min-h-0 lg:grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)] min-w-0">
             <div className="px-6 py-5 grid grid-cols-2 xl:grid-cols-3 gap-5">
               {Array(9).fill(0).map((_, i) => (
                 <ExploreSkeleton key={i} />
@@ -454,10 +454,10 @@ export default function Explore() {
       ) : filtered.length > 0 ? (
         <>
           <div className={cn(
-            "hidden lg:grid lg:flex-1 lg:min-h-0 border-t border-[hsl(0,0%,90%)]",
-            viewMode === "list" ? "grid-cols-1" : "grid-cols-[7fr_3fr]"
+            "hidden lg:grid lg:flex-1 lg:min-h-0 border-t border-[hsl(0,0%,90%)] min-w-0",
+            viewMode === "list" ? "grid-cols-1" : "grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)]"
           )}>
-            <div className="overflow-y-auto bg-[hsl(0,0%,99%)] px-6 py-5">
+            <div className="overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] px-6 py-5 min-w-0">
               <div className="flex flex-wrap items-start justify-between gap-3 mb-1">
                 <div>
                   <h1 className="text-xl font-extrabold tracking-tight text-foreground">
@@ -526,13 +526,16 @@ export default function Explore() {
               )}
 
               <div className={cn(
-                "grid gap-x-4 gap-y-7 mt-5",
-                viewMode === "list" ? "grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : "grid-cols-2 xl:grid-cols-3"
+                "grid gap-x-4 gap-y-7 mt-5 min-w-0",
+                viewMode === "list"
+                  ? "grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+                  : "grid-cols-1 min-[1100px]:grid-cols-2"
               )}>
                 {filtered.flatMap((property, i) => {
                   const items = [
                     <div
                       key={property.id}
+                      className="min-w-0"
                       onMouseEnter={() => setHighlightedId(property.id)}
                       onMouseLeave={() => setHighlightedId(null)}
                     >
@@ -555,7 +558,7 @@ export default function Explore() {
             </div>
 
             {viewMode === "split" && (
-            <div className="flex flex-col border-l border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] min-h-0">
+            <div className="flex flex-col border-l border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] min-h-0 min-w-0 overflow-hidden">
               <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-[hsl(0,0%,90%)] shrink-0 bg-white">
                 <div className="min-w-0">
                   <p className="text-xs font-extrabold text-foreground truncate">{cityLabel}</p>

@@ -99,7 +99,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03, duration: 0.3 }}
       className={cn(
-        "card-hover",
+        "card-hover min-w-0",
         highlighted && "ring-2 ring-brand-violet ring-offset-2",
         isGrid ? "rounded-xl" : "rounded-[1.35rem]"
       )}
