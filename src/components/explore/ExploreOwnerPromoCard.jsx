@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { MapPin } from "lucide-react";
+import { Home, Plus, Megaphone, MapPin } from "lucide-react";
 
 export default function ExploreOwnerPromoCard() {
   return (
@@ -12,10 +12,37 @@ export default function ExploreOwnerPromoCard() {
       >
         <article className="h-full flex flex-col bg-white rounded-xl border border-brand-magenta/35 overflow-hidden transition-all group-hover:border-brand-violet/45 group-hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
           <div className="px-3 pt-3 pb-2 shrink-0">
-            <div className="relative w-full aspect-[5/4] rounded-lg bg-gradient-to-br from-brand-magenta/8 via-white to-brand-violet/10 flex items-center justify-center">
-              <div className="w-14 h-14 rounded-2xl gradient-cta flex items-center justify-center shadow-md shadow-brand-magenta/20 group-hover:scale-[1.03] transition-transform">
-                <span className="text-2xl font-extrabold text-white leading-none">M</span>
+            <div className="relative w-full aspect-[5/4] rounded-lg overflow-hidden bg-gradient-to-br from-brand-magenta/14 via-brand-violet/10 to-brand-magenta/8">
+              <div
+                className="absolute inset-0 opacity-40"
+                style={{
+                  backgroundImage: "radial-gradient(circle at 1px 1px, hsl(var(--brand-violet) / 0.12) 1px, transparent 0)",
+                  backgroundSize: "14px 14px",
+                }}
+                aria-hidden
+              />
+              <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-brand-violet/12 blur-sm" aria-hidden />
+              <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full bg-brand-magenta/12 blur-sm" aria-hidden />
+
+              <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-1 px-2 py-1 rounded-md bg-white/95 shadow-sm border border-brand-magenta/15">
+                <Megaphone className="w-3.5 h-3.5 text-brand-magenta shrink-0" strokeWidth={2.25} />
+                <span className="text-[9px] font-bold text-brand-magenta leading-none">Anuncia</span>
               </div>
+
+              <div className="absolute inset-0 flex items-center justify-center p-5">
+                <div className="relative group-hover:scale-[1.03] transition-transform duration-300">
+                  <div className="w-[4.5rem] h-[4.5rem] sm:w-20 sm:h-20 rounded-2xl bg-white shadow-[0_8px_24px_rgba(15,23,42,0.1)] border border-white/90 flex items-center justify-center">
+                    <Home className="w-9 h-9 sm:w-10 sm:h-10 text-brand-violet" strokeWidth={1.65} />
+                  </div>
+                  <div className="absolute -bottom-1.5 -right-1.5 w-8 h-8 rounded-full gradient-cta flex items-center justify-center shadow-md ring-2 ring-white">
+                    <Plus className="w-4 h-4 text-white" strokeWidth={3} />
+                  </div>
+                </div>
+              </div>
+
+              <p className="absolute bottom-2 inset-x-2 text-center text-[9px] font-bold text-brand-violet/80 leading-tight">
+                Sube fotos y publica en minutos
+              </p>
             </div>
           </div>
 
