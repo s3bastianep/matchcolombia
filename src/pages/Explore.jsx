@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import PropertyCard from "../components/property/PropertyCard";
+import ExploreOwnerPromoCard from "../components/explore/ExploreOwnerPromoCard";
 import AdvancedFilters from "../components/explore/AdvancedFilters";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
@@ -25,6 +26,10 @@ const ExploreMap = lazy(() => import("../components/explore/ExploreMap"));
 
 function MapPaneFallback({ className }) {
   return <div className={cn("shimmer bg-muted/20", className)} aria-hidden />;
+}
+
+function shouldInsertOwnerPromo(index) {
+  return index === 1 || (index > 1 && (index - 1) % 10 === 0);
 }
 
 const TYPES_LABEL = {
@@ -524,22 +529,28 @@ export default function Explore() {
                 "grid gap-x-4 gap-y-7 mt-5",
                 viewMode === "list" ? "grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : "grid-cols-2 xl:grid-cols-3"
               )}>
-                {filtered.map((property, i) => (
-                  <div
-                    key={property.id}
-                    onMouseEnter={() => setHighlightedId(property.id)}
-                    onMouseLeave={() => setHighlightedId(null)}
-                  >
-                    <PropertyCard
-                      property={property}
-                      index={i}
-                      matchScore={property.matchScore}
-                      showMatch={isMatched}
-                      variant="grid"
-                      highlighted={highlightedId === property.id}
-                    />
-                  </div>
-                ))}
+                {filtered.flatMap((property, i) => {
+                  const items = [
+                    <div
+                      key={property.id}
+                      onMouseEnter={() => setHighlightedId(property.id)}
+                      onMouseLeave={() => setHighlightedId(null)}
+                    >
+                      <PropertyCard
+                        property={property}
+                        index={i}
+                        matchScore={property.matchScore}
+                        showMatch={isMatched}
+                        variant="grid"
+                        highlighted={highlightedId === property.id}
+                      />
+                    </div>,
+                  ];
+                  if (shouldInsertOwnerPromo(i)) {
+                    items.push(<ExploreOwnerPromoCard key={`owner-promo-${i}`} />);
+                  }
+                  return items;
+                })}
               </div>
             </div>
 
@@ -576,16 +587,22 @@ export default function Explore() {
               <ResultsCount count={filtered.length} query={initialQ} />
             </div>
             <div className="grid grid-cols-1 gap-4">
-              {filtered.map((property, i) => (
-                <PropertyCard
-                  key={property.id}
-                  property={property}
-                  index={i}
-                  matchScore={property.matchScore}
-                  showMatch={isMatched}
-                  variant="grid"
-                />
-              ))}
+              {filtered.flatMap((property, i) => {
+                const items = [
+                  <PropertyCard
+                    key={property.id}
+                    property={property}
+                    index={i}
+                    matchScore={property.matchScore}
+                    showMatch={isMatched}
+                    variant="grid"
+                  />,
+                ];
+                if (shouldInsertOwnerPromo(i)) {
+                  items.push(<ExploreOwnerPromoCard key={`owner-promo-mobile-${i}`} />);
+                }
+                return items;
+              })}
             </div>
           </div>
         </>
