@@ -50,25 +50,27 @@ export default function ExploreOwnerPromoCard() {
             <h3 className="font-extrabold text-base text-foreground leading-tight tracking-tight line-clamp-2 min-h-[2.5rem]">
               ¿Quieres publicar tu propiedad?
             </h3>
-            <p className="text-[10px] text-muted-foreground mt-0.5 min-h-[1rem]">
+            <p className="text-[11px] text-muted-foreground mt-0.5 min-h-[1.125rem]">
               Publica gratis y arrienda en tiempo récord.
             </p>
 
-            <div className="mt-2 min-h-[1.25rem] text-[10px] font-semibold text-foreground/75">
-              Sin comisiones ocultas · Cobro garantizado
+            <div className="mt-2.5 rounded-lg border border-brand-magenta/15 bg-brand-magenta/5 px-2.5 py-3 min-h-[4.75rem] flex items-center">
+              <p className="text-xs font-semibold text-foreground/80 leading-relaxed text-center w-full">
+                Llega a miles de arrendatarios verificados en Bogotá y Barranquilla.
+              </p>
             </div>
 
-            <div className="flex flex-wrap gap-1 mt-2 min-h-[2.5rem] content-start">
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+            <div className="flex flex-wrap gap-1.5 mt-2 min-h-[2.75rem] content-start">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
                 Publicación gratis
               </span>
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
                 Sin exclusividad
               </span>
             </div>
 
-            <p className="text-xs font-bold text-foreground mt-2 min-h-[1.25rem] line-clamp-1 flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5 shrink-0 text-brand-magenta" />
+            <p className="text-sm font-bold text-foreground mt-2 min-h-[1.375rem] line-clamp-1 flex items-center gap-1.5">
+              <MapPin className="w-4 h-4 shrink-0 text-brand-magenta" strokeWidth={2.25} />
               MatchColombia · Propietarios
             </p>
 

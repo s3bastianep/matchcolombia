@@ -46,12 +46,13 @@ const typeLabel = {
   comercial: "Comercial",
 };
 
-function ParkingIcon({ muted }) {
+function ParkingIcon({ muted, className }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center justify-center w-3.5 h-3.5 rounded-[3px] text-[8px] font-extrabold leading-none shrink-0",
-        muted ? "bg-foreground/12 text-foreground/40" : "bg-brand-violet text-white"
+        "inline-flex items-center justify-center w-4 h-4 rounded-[4px] text-[9px] font-extrabold leading-none shrink-0",
+        muted ? "bg-foreground/12 text-foreground/40" : "bg-brand-violet text-white",
+        className
       )}
       aria-hidden
     >
@@ -66,6 +67,15 @@ function FeatureChip({ icon: Icon, children, className }) {
       {Icon && <Icon className="w-3 h-3 shrink-0" />}
       {children}
     </span>
+  );
+}
+
+function GridSpecItem({ icon, label, title }) {
+  return (
+    <div className="flex items-center justify-center gap-1.5 min-w-0 px-0.5" title={title}>
+      <span className="shrink-0 w-5 flex items-center justify-center text-brand-violet">{icon}</span>
+      <span className="text-xs font-bold text-foreground leading-none truncate">{label}</span>
+    </div>
   );
 }
 
@@ -281,60 +291,67 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                   {formatCOP(totalMonthly)}
                   <span className="text-[11px] font-semibold text-muted-foreground"> / mes</span>
                 </p>
-                <p className="text-[10px] text-muted-foreground mt-0.5 min-h-[1rem]">
+                <p className="text-[11px] text-muted-foreground mt-0.5 min-h-[1.125rem]">
                   {property.admin_fee > 0 ? `+ Adm. ${formatCOP(property.admin_fee)}` : "Sin administración"}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 min-h-[1.25rem] text-[10px] font-semibold text-foreground/75">
-                  {property.area_sqm && (
-                    <span className="inline-flex items-center gap-0.5">
-                      <Maximize className="w-3.5 h-3.5 text-brand-violet" />
-                      {property.area_sqm} m²
-                    </span>
-                  )}
-                  <span className="inline-flex items-center gap-0.5">
-                    <Bed className="w-3.5 h-3.5 text-brand-violet" />
-                    {property.bedrooms} hab.
-                  </span>
-                  <span className="inline-flex items-center gap-0.5">
-                    <Bath className="w-3.5 h-3.5 text-brand-magenta" />
-                    {property.bathrooms} baño{property.bathrooms !== 1 ? "s" : ""}
-                  </span>
-                  <span className="text-foreground/25" aria-hidden>·</span>
-                  <span className="inline-flex items-center gap-0.5" title="Parqueadero">
-                    <ParkingIcon muted={parkingSpots <= 0} />
-                    {parkingSpots > 0 ? parkingSpots : "No"}
-                  </span>
-                  <span className="inline-flex items-center gap-0.5" title="Ascensor">
-                    <ElevatorIcon muted={!elevator} />
-                    {elevator ? "Sí" : "No"}
-                  </span>
-                  <span className="inline-flex items-center gap-0.5" title="Mascotas">
-                    <PawPrint className="w-3.5 h-3.5 text-brand-magenta" strokeWidth={2.25} />
-                    {property.pets_allowed ? "Sí" : "No"}
-                  </span>
+                <div className="mt-2.5 rounded-lg border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,97%)] px-2 py-2.5 min-h-[4.75rem]">
+                  <div className="grid grid-cols-3 gap-y-3">
+                    {property.area_sqm && (
+                      <GridSpecItem
+                        icon={<Maximize className="w-4 h-4" strokeWidth={2.25} />}
+                        label={`${property.area_sqm} m²`}
+                        title="Área"
+                      />
+                    )}
+                    <GridSpecItem
+                      icon={<Bed className="w-4 h-4" strokeWidth={2.25} />}
+                      label={`${property.bedrooms} hab.`}
+                      title="Habitaciones"
+                    />
+                    <GridSpecItem
+                      icon={<Bath className="w-4 h-4 text-brand-magenta" strokeWidth={2.25} />}
+                      label={`${property.bathrooms} baño${property.bathrooms !== 1 ? "s" : ""}`}
+                      title="Baños"
+                    />
+                    <GridSpecItem
+                      icon={<ParkingIcon muted={parkingSpots <= 0} />}
+                      label={parkingSpots > 0 ? `${parkingSpots} parq.` : "Sin parq."}
+                      title="Parqueadero"
+                    />
+                    <GridSpecItem
+                      icon={<ElevatorIcon muted={!elevator} className="w-4 h-4" />}
+                      label={elevator ? "Ascensor" : "Sin asc."}
+                      title="Ascensor"
+                    />
+                    <GridSpecItem
+                      icon={<PawPrint className="w-4 h-4 text-brand-magenta" strokeWidth={2.25} />}
+                      label={property.pets_allowed ? "Mascotas" : "Sin masc."}
+                      title="Mascotas"
+                    />
+                  </div>
                 </div>
 
-                <div className="flex flex-wrap gap-1 mt-2 min-h-[2.5rem] content-start">
+                <div className="flex flex-wrap gap-1.5 mt-2 min-h-[2.75rem] content-start">
                   {property.floor != null && property.floor !== "" && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
                       Piso {property.floor}
                     </span>
                   )}
                   {furnishedLabel && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
                       {furnishedLabel}
                     </span>
                   )}
                   {availableFrom && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
                       Desde {availableFrom}
                     </span>
                   )}
                 </div>
 
-                <p className="text-xs font-bold text-foreground mt-2 min-h-[1.25rem] line-clamp-1 flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 shrink-0 text-brand-magenta" />
+                <p className="text-sm font-bold text-foreground mt-2 min-h-[1.375rem] line-clamp-1 flex items-center gap-1.5">
+                  <MapPin className="w-4 h-4 shrink-0 text-brand-magenta" strokeWidth={2.25} />
                   {property.neighborhood || property.locality || "Zona"}
                   {property.city ? ` · ${property.city}` : ""}
                 </p>
