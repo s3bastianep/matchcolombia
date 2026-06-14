@@ -1,6 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Home, Plus, Megaphone, MapPin } from "lucide-react";
+import { Home, Plus, MapPin, Check, Sparkles, ShieldCheck, BadgePercent } from "lucide-react";
+
+function PromoBenefit({ icon: Icon, label }) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-1.5 text-center min-w-0 px-0.5">
+      <Icon className="w-4 h-4 text-brand-violet shrink-0" strokeWidth={2.25} />
+      <span className="text-[11px] font-bold text-foreground leading-none">{label}</span>
+    </div>
+  );
+}
 
 export default function ExploreOwnerPromoCard() {
   return (
@@ -10,38 +19,31 @@ export default function ExploreOwnerPromoCard() {
         className="group block h-full min-w-0"
         aria-label="Publicar mi propiedad en MatchColombia"
       >
-        <article className="h-full flex flex-col bg-white rounded-xl border border-brand-magenta/35 overflow-hidden transition-all group-hover:border-brand-violet/45 group-hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
+        <article className="h-full flex flex-col bg-white rounded-xl border border-[hsl(0,0%,92%)] ring-1 ring-brand-magenta/20 overflow-hidden transition-all group-hover:border-brand-violet/30 group-hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
           <div className="px-3 pt-3 pb-2 shrink-0">
-            <div className="relative w-full aspect-[5/4] rounded-lg overflow-hidden bg-gradient-to-br from-brand-magenta/14 via-brand-violet/10 to-brand-magenta/8">
+            <div className="relative w-full aspect-[5/4] rounded-lg overflow-hidden gradient-cta flex flex-col items-center justify-center text-center px-4">
               <div
-                className="absolute inset-0 opacity-40"
-                style={{
-                  backgroundImage: "radial-gradient(circle at 1px 1px, hsl(var(--brand-violet) / 0.12) 1px, transparent 0)",
-                  backgroundSize: "14px 14px",
-                }}
+                className="absolute inset-0 opacity-30"
                 aria-hidden
+                style={{
+                  backgroundImage: "radial-gradient(circle at 20% 15%, white 0%, transparent 42%), radial-gradient(circle at 80% 85%, rgba(255,255,255,0.15) 0%, transparent 40%)",
+                }}
               />
-              <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-brand-violet/12 blur-sm" aria-hidden />
-              <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full bg-brand-magenta/12 blur-sm" aria-hidden />
 
-              <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-1 px-2 py-1 rounded-md bg-white/95 shadow-sm border border-brand-magenta/15">
-                <Megaphone className="w-3.5 h-3.5 text-brand-magenta shrink-0" strokeWidth={2.25} />
-                <span className="text-[9px] font-bold text-brand-magenta leading-none">Anuncia</span>
-              </div>
-
-              <div className="absolute inset-0 flex items-center justify-center p-5">
-                <div className="relative group-hover:scale-[1.03] transition-transform duration-300">
-                  <div className="w-[4.5rem] h-[4.5rem] sm:w-20 sm:h-20 rounded-2xl bg-white shadow-[0_8px_24px_rgba(15,23,42,0.1)] border border-white/90 flex items-center justify-center">
-                    <Home className="w-9 h-9 sm:w-10 sm:h-10 text-brand-violet" strokeWidth={1.65} />
-                  </div>
-                  <div className="absolute -bottom-1.5 -right-1.5 w-8 h-8 rounded-full gradient-cta flex items-center justify-center shadow-md ring-2 ring-white">
-                    <Plus className="w-4 h-4 text-white" strokeWidth={3} />
-                  </div>
+              <div className="relative mb-3">
+                <div className="w-[4.25rem] h-[4.25rem] sm:w-[4.75rem] sm:h-[4.75rem] rounded-2xl bg-white/20 backdrop-blur-[2px] border border-white/25 flex items-center justify-center shadow-lg">
+                  <Home className="w-10 h-10 sm:w-11 sm:h-11 text-white" strokeWidth={1.6} />
                 </div>
+                <span className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-white text-brand-magenta flex items-center justify-center shadow-md">
+                  <Plus className="w-4 h-4" strokeWidth={3} />
+                </span>
               </div>
 
-              <p className="absolute bottom-2 inset-x-2 text-center text-[9px] font-bold text-brand-violet/80 leading-tight">
-                Sube fotos y publica en minutos
+              <p className="relative text-white font-extrabold text-sm sm:text-[15px] leading-tight">
+                Publica tu inmueble hoy
+              </p>
+              <p className="relative text-white/90 text-[11px] mt-1 font-semibold">
+                Gratis · Sin exclusividad
               </p>
             </div>
           </div>
@@ -51,20 +53,24 @@ export default function ExploreOwnerPromoCard() {
               ¿Quieres publicar tu propiedad?
             </h3>
             <p className="text-[11px] text-muted-foreground mt-0.5 min-h-[1.125rem]">
-              Publica gratis y arrienda en tiempo récord.
+              Miles de arrendatarios verificados te esperan.
             </p>
 
-            <div className="mt-2.5 rounded-lg border border-brand-magenta/15 bg-brand-magenta/5 px-2.5 py-3 min-h-[4.75rem] flex items-center">
-              <p className="text-xs font-semibold text-foreground/80 leading-relaxed text-center w-full">
-                Llega a miles de arrendatarios verificados en Bogotá y Barranquilla.
-              </p>
+            <div className="mt-2.5 rounded-lg border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,97%)] px-2 py-2.5 min-h-[4.75rem]">
+              <div className="grid grid-cols-3 gap-y-3 h-full items-center">
+                <PromoBenefit icon={BadgePercent} label="0% publicar" />
+                <PromoBenefit icon={ShieldCheck} label="Verificados" />
+                <PromoBenefit icon={Sparkles} label="Rápido" />
+              </div>
             </div>
 
             <div className="flex flex-wrap gap-1.5 mt-2 min-h-[2.75rem] content-start">
-              <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
+                <Check className="w-3.5 h-3.5 text-brand-violet shrink-0" strokeWidth={2.5} />
                 Publicación gratis
               </span>
-              <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
+                <Check className="w-3.5 h-3.5 text-brand-violet shrink-0" strokeWidth={2.5} />
                 Sin exclusividad
               </span>
             </div>
