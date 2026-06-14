@@ -9,11 +9,19 @@ const STEPS = [
   { label: "Cierre", status: "pending" },
 ];
 
-const DOT = {
-  done: "🟢",
-  active: "🟡",
-  pending: "⚪",
-};
+function StatusDot({ status }) {
+  return (
+    <span
+      className={cn(
+        "w-3 h-3 rounded-full shrink-0 ring-4",
+        status === "done" && "bg-[hsl(152,55%,42%)] ring-[hsl(152,55%,42%)]/15",
+        status === "active" && "bg-brand-magenta ring-brand-magenta/15",
+        status === "pending" && "bg-border ring-border/30"
+      )}
+      aria-hidden
+    />
+  );
+}
 
 export default function SaleProgressTracker() {
   return (
@@ -28,21 +36,32 @@ export default function SaleProgressTracker() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-border/40 bg-[hsl(0,0%,98%)] p-5 sm:p-8">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-0">
+        <div className="rounded-2xl border border-border/40 bg-[hsl(0,0%,98%)] p-5 sm:p-8 overflow-x-auto">
+          <div className="flex min-w-[640px] sm:min-w-0 items-start justify-between gap-2">
             {STEPS.map((step, i) => (
-              <div key={step.label} className="flex sm:flex-1 items-center gap-3 sm:flex-col sm:text-center sm:gap-2">
-                <div className="flex items-center gap-3 sm:flex-col sm:gap-2 w-full sm:w-auto">
-                  <span className="text-xl shrink-0" role="img" aria-hidden>{DOT[step.status]}</span>
-                  <p className={cn(
-                    "text-sm font-bold leading-snug",
-                    step.status === "pending" ? "text-muted-foreground" : "text-foreground"
-                  )}>
-                    {step.label}
-                  </p>
-                </div>
+              <div key={step.label} className="flex flex-1 flex-col items-center text-center relative">
                 {i < STEPS.length - 1 && (
-                  <div className="hidden sm:block flex-1 h-px bg-border/60 mx-2 mt-[-1.5rem]" aria-hidden />
+                  <div
+                    className={cn(
+                      "absolute top-[0.35rem] left-[calc(50%+0.5rem)] right-[calc(-50%+0.5rem)] h-px",
+                      step.status === "pending" ? "bg-border/50" : "bg-brand-violet/25"
+                    )}
+                    aria-hidden
+                  />
+                )}
+                <StatusDot status={step.status} />
+                <p
+                  className={cn(
+                    "mt-3 text-xs sm:text-sm font-bold leading-snug max-w-[7rem]",
+                    step.status === "pending" ? "text-muted-foreground" : "text-foreground"
+                  )}
+                >
+                  {step.label}
+                </p>
+                {step.status === "active" && (
+                  <span className="mt-1.5 text-[10px] font-bold uppercase tracking-wider text-brand-magenta">
+                    En curso
+                  </span>
                 )}
               </div>
             ))}

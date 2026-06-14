@@ -16,6 +16,10 @@ import {
   Eye,
   Headphones,
   Handshake,
+  BarChart3,
+  Users,
+  Calendar,
+  Banknote,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
@@ -26,12 +30,12 @@ import SaleProgressTracker from "@/components/advertise/SaleProgressTracker";
 import { CITIES } from "@/lib/colombia";
 
 const SALE_VISIBILITY = [
-  { emoji: "📈", title: "Personas que vieron el inmueble" },
-  { emoji: "👥", title: "Compradores interesados" },
-  { emoji: "📅", title: "Visitas programadas" },
-  { emoji: "💰", title: "Ofertas recibidas" },
-  { emoji: "🤝", title: "Estado de negociación" },
-  { emoji: "📲", title: "Seguimiento en tiempo real" },
+  { icon: BarChart3, title: "Personas que vieron el inmueble" },
+  { icon: Users, title: "Compradores interesados" },
+  { icon: Calendar, title: "Visitas programadas" },
+  { icon: Banknote, title: "Ofertas recibidas" },
+  { icon: Handshake, title: "Estado de negociación" },
+  { icon: Smartphone, title: "Seguimiento en tiempo real" },
 ];
 
 const OWNER_VIEWS = [
@@ -354,10 +358,12 @@ export default function Sell() {
             <SellDashboardScreen />
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            {SALE_VISIBILITY.map((item) => (
-              <div key={item.title} className="p-3.5 sm:p-4 rounded-xl bg-[hsl(0,0%,98%)] border border-border/40 text-center">
-                <span className="text-xl sm:text-2xl block mb-1.5" role="img" aria-hidden>{item.emoji}</span>
-                <p className="text-[11px] sm:text-xs font-bold leading-snug">{item.title}</p>
+            {SALE_VISIBILITY.map(({ icon: Icon, title }) => (
+              <div key={title} className="p-3.5 sm:p-4 rounded-xl bg-[hsl(0,0%,98%)] border border-border/40">
+                <div className="w-9 h-9 rounded-lg bg-white border border-border/50 flex items-center justify-center mb-2.5 mx-auto sm:mx-0">
+                  <Icon className="w-4 h-4 text-brand-violet" strokeWidth={2} />
+                </div>
+                <p className="text-[11px] sm:text-xs font-bold leading-snug text-center sm:text-left">{title}</p>
               </div>
             ))}
           </div>
