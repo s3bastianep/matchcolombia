@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, Bed, Bath, Maximize, MapPin, Sparkles, Car, PawPrint, Building2, ChevronLeft, ChevronRight, Calendar, Sofa, CalendarCheck, Layers } from "lucide-react";
+import { Heart, Bed, Bath, Maximize, MapPin, Sparkles, Car, PawPrint, Building2, ChevronLeft, ChevronRight, CalendarCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -99,7 +99,8 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03, duration: 0.3 }}
       className={cn(
-        "card-hover min-w-0",
+        "min-w-0",
+        !isGrid && "card-hover",
         highlighted && "ring-2 ring-brand-violet ring-offset-2",
         isGrid ? "rounded-xl" : "rounded-[1.35rem]"
       )}
@@ -116,7 +117,73 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
               : !isGrid && "border border-border/40 shadow-sm group-hover:shadow-xl group-hover:border-brand-violet/25"
           )}
         >
-          <div className={cn("relative overflow-hidden bg-muted", isGrid ? "aspect-[5/4] rounded-t-xl" : isExplore ? "aspect-[16/10]" : "aspect-[4/3]")}>
+          {isGrid ? (
+            <div className="p-3 pb-2">
+              <div className="relative size-[7.25rem] rounded-lg overflow-hidden bg-muted">
+                <SmartImage
+                  src={image}
+                  alt={property.title}
+                  fallback={FALLBACK_IMAGE}
+                  className="absolute inset-0"
+                  imgClassName="group-hover:scale-[1.04] transition-transform duration-500 ease-out"
+                />
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!isAuthenticated) {
+                      navigate("/login", { state: { from: window.location.pathname } });
+                      return;
+                    }
+                    setLiked(toggleShortlist(property.id));
+                  }}
+                  className={cn(
+                    "absolute top-1.5 right-1.5 w-7 h-7 rounded-full flex items-center justify-center z-10 transition-all",
+                    "ring-1 ring-black/15 shadow-sm backdrop-blur-sm",
+                    liked ? "bg-primary text-white" : "bg-white/95 text-gray-600 hover:text-primary"
+                  )}
+                  aria-label="Guardar en favoritos"
+                >
+                  <Heart className={cn("w-3.5 h-3.5", liked && "fill-current")} strokeWidth={2.25} />
+                </button>
+                <div className="absolute top-1.5 left-1.5 z-10">
+                  <VerifiedBadge size="xs" score={showMatch && matchScore > 0 ? matchScore : undefined} />
+                </div>
+                {images.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setPhotoIdx((i) => (i - 1 + images.length) % images.length);
+                      }}
+                      className="absolute left-1 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white/95 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      aria-label="Foto anterior"
+                    >
+                      <ChevronLeft className="w-3.5 h-3.5 text-foreground/70" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setPhotoIdx((i) => (i + 1) % images.length);
+                      }}
+                      className="absolute right-1 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white/95 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      aria-label="Foto siguiente"
+                    >
+                      <ChevronRight className="w-3.5 h-3.5 text-foreground/70" />
+                    </button>
+                    <span className="absolute bottom-1 right-1 z-10 px-1.5 py-0.5 rounded bg-black/55 text-white text-[9px] font-bold tabular-nums">
+                      {photoIdx + 1}/{images.length}
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
+          ) : (
+          <div className={cn("relative overflow-hidden bg-muted", isExplore ? "aspect-[16/10]" : "aspect-[4/3]")}>
             <SmartImage
               src={image}
               alt={property.title}
@@ -146,35 +213,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
               </button>
             )}
 
-            {isGrid && (
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  if (!isAuthenticated) {
-                    navigate("/login", { state: { from: window.location.pathname } });
-                    return;
-                  }
-                  setLiked(toggleShortlist(property.id));
-                }}
-                className={cn(
-                  "absolute top-2.5 right-2.5 w-9 h-9 rounded-full flex items-center justify-center z-10 transition-all",
-                  "ring-2 ring-black/20 shadow-[0_2px_8px_rgba(0,0,0,0.25)] backdrop-blur-sm",
-                  liked ? "bg-primary text-white ring-primary/30" : "bg-white/95 text-gray-700 hover:text-primary hover:bg-white"
-                )}
-                aria-label="Guardar en favoritos"
-              >
-                <Heart className={cn("w-4 h-4", liked && "fill-current")} strokeWidth={2.25} />
-              </button>
-            )}
-
-            {isGrid && images.length > 1 && (
-              <span className="absolute bottom-2.5 right-2.5 z-10 px-2 py-0.5 rounded-md bg-black/55 backdrop-blur-sm text-white text-[10px] font-bold tabular-nums">
-                {photoIdx + 1}/{images.length}
-              </span>
-            )}
-
-            {isGrid && images.length > 1 && (
+            {!isGrid && images.length > 1 && (
               <>
                 <button
                   type="button"
@@ -195,22 +234,11 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                     e.stopPropagation();
                     setPhotoIdx((i) => (i + 1) % images.length);
                   }}
-                  className="absolute right-10 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/95 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/95 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
                   aria-label="Foto siguiente"
                 >
                   <ChevronRight className="w-4 h-4 text-foreground/70" />
                 </button>
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex gap-1">
-                  {images.slice(0, 5).map((_, i) => (
-                    <span
-                      key={i}
-                      className={cn(
-                        "w-1.5 h-1.5 rounded-full transition-all",
-                        i === photoIdx ? "bg-white scale-110" : "bg-white/50"
-                      )}
-                    />
-                  ))}
-                </div>
               </>
             )}
 
@@ -225,12 +253,6 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                   {matchScore}%
                 </span>
               )}
-              </div>
-            )}
-
-            {isGrid && (
-              <div className="absolute top-2.5 left-2.5 z-10">
-                <VerifiedBadge size="card" score={showMatch && matchScore > 0 ? matchScore : undefined} />
               </div>
             )}
 
@@ -249,86 +271,78 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
               </div>
             )}
           </div>
+          )}
 
-          <div className={cn(isGrid ? "px-3 pt-3 pb-3.5" : isExplore ? "p-4 sm:p-5" : "p-5")}>
+          <div className={cn(isGrid ? "px-3 pt-0 pb-3" : isExplore ? "p-4 sm:p-5" : "p-5")}>
             {isGrid && (
               <>
-                <p className="font-extrabold text-lg sm:text-xl text-foreground leading-tight tracking-tight">
+                <p className="font-extrabold text-base text-foreground leading-tight tracking-tight">
                   {formatCOP(totalMonthly)}
-                  <span className="text-xs font-semibold text-muted-foreground"> / mes total</span>
+                  <span className="text-[11px] font-semibold text-muted-foreground"> / mes</span>
                 </p>
                 {property.admin_fee > 0 ? (
-                  <p className="text-[11px] text-muted-foreground mt-0.5">
-                    Administración {formatCOP(property.admin_fee)}
+                  <p className="text-[10px] text-muted-foreground mt-0.5">
+                    + Adm. {formatCOP(property.admin_fee)}
                   </p>
                 ) : (
-                  <p className="text-[11px] text-muted-foreground mt-0.5">sin administración adicional</p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">Sin administración</p>
                 )}
 
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-foreground/70 mt-2.5 font-semibold">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 text-[10px] font-semibold text-foreground/75">
                   {property.area_sqm && (
-                    <span className="flex items-center gap-1">
-                      <Maximize className="w-3 h-3 text-brand-violet" />
+                    <span className="inline-flex items-center gap-0.5">
+                      <Maximize className="w-3.5 h-3.5 text-brand-violet" />
                       {property.area_sqm} m²
                     </span>
                   )}
-                  <span className="flex items-center gap-1">
-                    <Bed className="w-3 h-3 text-brand-violet" />
+                  <span className="inline-flex items-center gap-0.5">
+                    <Bed className="w-3.5 h-3.5 text-brand-violet" />
                     {property.bedrooms} hab.
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Bath className="w-3 h-3 text-brand-magenta" />
+                  <span className="inline-flex items-center gap-0.5">
+                    <Bath className="w-3.5 h-3.5 text-brand-magenta" />
                     {property.bathrooms} baño{property.bathrooms !== 1 ? "s" : ""}
                   </span>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 px-2.5 py-1.5 rounded-lg bg-[hsl(0,0%,97%)] text-[10px] font-semibold text-foreground/60">
-                  <span className="flex items-center gap-1" title="Parqueadero">
+                  <span className="text-foreground/25" aria-hidden>·</span>
+                  <span className="inline-flex items-center gap-0.5" title="Parqueadero">
                     <ParkingIcon muted={parkingSpots <= 0} />
                     {parkingSpots > 0 ? parkingSpots : "No"}
                   </span>
-                  <span className="w-px h-3 bg-border/60" aria-hidden />
-                  <span className="flex items-center gap-1" title="Ascensor">
+                  <span className="inline-flex items-center gap-0.5" title="Ascensor">
                     <ElevatorIcon muted={!elevator} />
                     {elevator ? "Sí" : "No"}
                   </span>
-                  <span className="w-px h-3 bg-border/60" aria-hidden />
-                  <span className="flex items-center gap-1" title="Mascotas">
-                    <PawPrint className="w-3.5 h-3.5 shrink-0 text-brand-magenta" strokeWidth={2.25} />
+                  <span className="inline-flex items-center gap-0.5" title="Mascotas">
+                    <PawPrint className="w-3.5 h-3.5 text-brand-magenta" strokeWidth={2.25} />
                     {property.pets_allowed ? "Sí" : "No"}
                   </span>
                 </div>
 
-                <div className="flex flex-wrap gap-1.5 mt-2.5">
-                  {property.floor != null && property.floor !== "" && (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[hsl(0,0%,96%)] text-[10px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
-                      <Layers className="w-3 h-3 text-brand-violet shrink-0" strokeWidth={2.25} />
-                      Piso {property.floor}
-                    </span>
-                  )}
-                  {availableFrom && (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[hsl(0,0%,96%)] text-[10px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
-                      <Calendar className="w-3 h-3 text-brand-violet shrink-0" strokeWidth={2.25} />
-                      Disponible desde {availableFrom}
-                    </span>
-                  )}
-                  {furnishedLabel && (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[hsl(0,0%,96%)] text-[10px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
-                      <Sofa className="w-3 h-3 text-brand-violet shrink-0" strokeWidth={2.25} />
-                      {furnishedLabel}
-                    </span>
-                  )}
-                </div>
+                {(property.floor != null && property.floor !== "") || furnishedLabel || availableFrom ? (
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {property.floor != null && property.floor !== "" && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+                        Piso {property.floor}
+                      </span>
+                    )}
+                    {furnishedLabel && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+                        {furnishedLabel}
+                      </span>
+                    )}
+                    {availableFrom && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(0,0%,96%)] text-[9px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+                        Desde {availableFrom}
+                      </span>
+                    )}
+                  </div>
+                ) : null}
 
-                <div className="mt-2.5">
-                  <p className="text-sm sm:text-base font-bold text-foreground line-clamp-1 flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 shrink-0 text-brand-magenta" />
-                    {property.neighborhood || property.locality || "Zona"}
-                  </p>
-                  {property.city && (
-                    <p className="text-[11px] text-muted-foreground mt-0.5 pl-5">{property.city}</p>
-                  )}
-                </div>
+                <p className="text-xs font-bold text-foreground mt-2 line-clamp-1 flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5 shrink-0 text-brand-magenta" />
+                  {property.neighborhood || property.locality || "Zona"}
+                  {property.city ? ` · ${property.city}` : ""}
+                </p>
 
                 <button
                   type="button"
@@ -337,7 +351,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                     e.stopPropagation();
                     navigate(`/propiedad/${property.id}?visita=1`);
                   }}
-                  className="mt-3 w-full flex items-center justify-center gap-1.5 gradient-cta text-white text-xs font-bold py-2.5 rounded-lg hover:opacity-95 transition-opacity"
+                  className="mt-2.5 w-full flex items-center justify-center gap-1.5 gradient-cta text-white text-[11px] font-bold py-2 rounded-lg hover:opacity-95 transition-opacity"
                 >
                   <CalendarCheck className="w-3.5 h-3.5" />
                   Agendar visita
