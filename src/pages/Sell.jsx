@@ -28,14 +28,27 @@ import {
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
+import OwnerDashboardPreview from "@/components/advertise/OwnerDashboardPreview";
 import { CITIES } from "@/lib/colombia";
 import { INTERIORS } from "@/lib/colombiaImages";
 
 const STATS = [
-  { value: "Gratis", label: "Publicar inmueble" },
-  { value: "100%", label: "Gestión por MatchColombia" },
-  { value: "0", label: "Contacto directo" },
-  { value: "2", label: "Ciudades activas" },
+  { value: "100%", label: "Propiedades verificadas" },
+  { value: "95%", label: "Ocupación promedio" },
+  { value: "72 h", label: "Promedio respuesta tickets" },
+  { value: "100%", label: "Seguimiento digital" },
+];
+
+const ADMIN_INCLUDES = [
+  "Publicación premium",
+  "Fotografías profesionales",
+  "Verificación documental",
+  "Gestión de visitas",
+  "Filtrado de compradores",
+  "Seguimiento de ofertas",
+  "Contratos digitales",
+  "Asesoría en cierre",
+  "Panel de seguimiento",
 ];
 
 const VALUE_PILLARS = [
@@ -236,94 +249,127 @@ export default function Sell() {
         </div>
       </div>
 
-      {/* Hero con valor claro */}
+      {/* Hero compacto */}
       <section className="relative overflow-hidden bg-brand-dark text-white">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-brand-magenta/20 blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-brand-violet/15 blur-3xl" />
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-brand-magenta/15 blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-brand-violet/10 blur-3xl" />
         </div>
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-8 py-14 sm:py-20 lg:py-24 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-            <SectionEyebrow light>Por qué vender con nosotros</SectionEyebrow>
-            <h1 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold leading-[1.08] tracking-tight">
-              Vende sin estrés.{" "}
-              <span className="text-brand-magenta">Nosotros gestionamos todo.</span>
-            </h1>
-            <p className="mt-5 text-white/75 text-sm sm:text-base leading-relaxed max-w-lg">
-              Publicar es gratis. {BRAND.name} verifica tu inmueble, filtra compradores y coordina visitas. Tú decides; nosotros hacemos el trabajo pesado.
-            </p>
-            <div className="mt-4">
-              <VerifiedBadge size="sm" />
-            </div>
-            <ul className="mt-6 space-y-3">
-              {[
-                "Listado verificado con sello de confianza",
-                "Cero contacto directo con interesados",
-                "Equipo real en Bogotá y Barranquilla",
-              ].map((text) => (
-                <li key={text} className="flex items-center gap-3 text-sm font-semibold text-white/90">
-                  <div className="w-6 h-6 rounded-full bg-brand-magenta/20 flex items-center justify-center shrink-0">
-                    <Check className="w-3.5 h-3.5 text-brand-magenta" strokeWidth={3} />
-                  </div>
-                  {text}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <Link to="/publicar/nuevo" className="inline-flex items-center justify-center gap-2 gradient-cta text-white font-bold px-7 py-3.5 rounded-xl hover:opacity-95 transition-opacity text-sm shadow-lg">
-                Empezar a vender
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <a href="#por-que" className="inline-flex items-center justify-center gap-2 border border-white/30 font-bold px-7 py-3.5 rounded-xl hover:bg-white/10 transition-colors text-sm">
-                Ver el valor
-              </a>
-            </div>
-          </motion.div>
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-8 py-8 sm:py-10 lg:py-12">
+          <div className="grid lg:grid-cols-[1fr_0.9fr] gap-8 lg:gap-10 items-center">
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+              <SectionEyebrow light>Por qué vender con nosotros</SectionEyebrow>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-[1.12] tracking-tight">
+                Vende sin estrés.{" "}
+                <span className="text-brand-magenta">Nosotros gestionamos todo.</span>
+              </h1>
+              <p className="mt-4 text-white/75 text-sm sm:text-base leading-relaxed max-w-lg">
+                Publicar es gratis. {BRAND.name} verifica tu inmueble, filtra compradores y coordina visitas. Todo visible en tu panel.
+              </p>
+              <div className="mt-3">
+                <VerifiedBadge size="sm" />
+              </div>
+              <ul className="mt-5 space-y-2">
+                {[
+                  "Listado verificado con sello de confianza",
+                  "Cero contacto directo con interesados",
+                  "Equipo real en Bogotá y Barranquilla",
+                ].map((text) => (
+                  <li key={text} className="flex items-center gap-2.5 text-sm font-semibold text-white/90">
+                    <Check className="w-3.5 h-3.5 text-brand-magenta shrink-0" strokeWidth={3} />
+                    {text}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <Link to="/publicar/nuevo" className="inline-flex items-center justify-center gap-2 gradient-cta text-white font-bold px-6 py-3 rounded-xl hover:opacity-95 transition-opacity text-sm shadow-lg">
+                  Empezar a vender
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <a href="#panel-propietario" className="inline-flex items-center justify-center gap-2 border border-white/30 font-bold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm">
+                  Ver el panel
+                </a>
+              </div>
+            </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.15 }}
-            className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] lg:aspect-auto lg:min-h-[380px]"
-          >
-            <img src={INTERIORS.casa} alt="Inmueble en venta" className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 space-y-3">
-              {VALUE_PILLARS.map(({ tag, title, accent }) => (
-                <div key={tag} className="flex items-center gap-3 bg-white/10 backdrop-blur-md rounded-xl px-4 py-3 border border-white/15">
-                  <div className={cn("w-2 h-8 rounded-full bg-gradient-to-b shrink-0", accent)} />
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/60">{tag}</p>
-                    <p className="text-sm font-extrabold">{title}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="hidden sm:block rounded-2xl overflow-hidden border border-white/10 shadow-2xl max-h-[220px] lg:max-h-[260px]"
+            >
+              <img src={INTERIORS.casa} alt="Inmueble en venta" className="w-full h-full object-cover" />
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Stats color bar */}
-      <section className="bg-white border-b border-border/40 py-8 sm:py-10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      {/* Panel propietario */}
+      <section id="panel-propietario" className="py-10 sm:py-14 lg:py-16 bg-white border-b border-border/40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+          <div className="border-l-4 border-brand-magenta pl-4 sm:pl-5 mb-8 sm:mb-10">
+            <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider text-brand-magenta mb-2">Tecnología MatchColombia</span>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight">Tu panel propietario, siempre visible</h2>
+            <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-2xl leading-relaxed">
+              Interesados, visitas, ofertas y estado de cada inmueble — en tiempo real, desde cualquier dispositivo.
+            </p>
+          </div>
+          <OwnerDashboardPreview mode="sell" />
+        </div>
+      </section>
+
+      {/* Resultados concretos */}
+      <section className="color-bar">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-5 sm:py-6 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {STATS.map(({ value, label }, i) => (
             <motion.div
               key={label}
               initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              className="text-center p-5 rounded-2xl border border-border/40 bg-gradient-to-br from-white to-brand-violet/5"
+              transition={{ delay: i * 0.04 }}
+              className="text-center text-white px-1"
             >
-              <p className="text-xl sm:text-2xl font-extrabold text-gradient">{value}</p>
-              <p className="text-[11px] sm:text-xs font-semibold text-muted-foreground mt-1">{label}</p>
+              <p className="text-xl sm:text-2xl lg:text-3xl font-extrabold leading-none">{value}</p>
+              <p className="text-[10px] sm:text-xs font-semibold text-white/90 mt-1.5 leading-snug">{label}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
+      {/* Administración */}
+      <section className="py-10 sm:py-14 lg:py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+          <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-start">
+            <div className="border-l-4 border-brand-magenta pl-4 sm:pl-5">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight">Administración MatchColombia</h2>
+              <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-xl leading-relaxed">
+                Todo lo que necesitas para vender sin estrés, en un solo servicio.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+              {ADMIN_INCLUDES.map((item, i) => (
+                <motion.div
+                  key={item}
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.03 }}
+                  className="flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-white border border-border/40 shadow-sm"
+                >
+                  <span className="w-7 h-7 rounded-lg bg-brand-violet/10 flex items-center justify-center shrink-0">
+                    <Check className="w-4 h-4 text-brand-violet" strokeWidth={2.5} />
+                  </span>
+                  <span className="text-sm font-bold text-foreground">{item}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 3 pilares de valor */}
-      <section id="por-que" className="py-16 sm:py-20">
+      <section id="por-que" className="py-10 sm:py-14 bg-[hsl(0,0%,98%)] border-y border-border/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <SectionEyebrow>El valor de MatchColombia</SectionEyebrow>

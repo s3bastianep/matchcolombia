@@ -8,7 +8,6 @@ import {
   Check,
   ChevronDown,
   ChevronRight,
-  Headphones,
   Home,
   MessageCircleOff,
   Shield,
@@ -25,13 +24,25 @@ import {
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
-import { INTERIORS } from "@/lib/colombiaImages";
+import OwnerDashboardPreview from "@/components/advertise/OwnerDashboardPreview";
 
 const STATS = [
-  { value: "100%", label: "Gestión por MatchColombia" },
-  { value: "0", label: "Contacto directo" },
-  { value: "Gratis", label: "Publicar inmueble" },
-  { value: "2", label: "Ciudades activas" },
+  { value: "100%", label: "Propiedades verificadas" },
+  { value: "95%", label: "Ocupación promedio" },
+  { value: "72 h", label: "Promedio respuesta tickets" },
+  { value: "100%", label: "Seguimiento digital" },
+];
+
+const ADMIN_INCLUDES = [
+  "Publicación premium",
+  "Fotografías profesionales",
+  "Verificación documental",
+  "Gestión de visitas",
+  "Estudio de arrendatarios",
+  "Contratos digitales",
+  "Cobro de cánones",
+  "Gestión de mantenimiento",
+  "Panel de seguimiento",
 ];
 
 const BENEFITS = [
@@ -52,18 +63,6 @@ const BENEFITS = [
     tag: "Sin estrés",
     headline: "Nosotros hablamos con los clientes",
     desc: "Tú recibes resúmenes claros, no cientos de mensajes sueltos.",
-  },
-  {
-    icon: ClipboardCheck,
-    tag: "Transparente",
-    headline: "Todo tu proceso en un solo lugar",
-    desc: "Consultas, visitas y estado de tu publicación siempre visibles.",
-  },
-  {
-    icon: Handshake,
-    tag: "Simple",
-    headline: "Tú decides, nosotros ejecutamos",
-    desc: "Te presentamos candidatos serios; el seguimiento lo hacemos nosotros.",
   },
 ];
 
@@ -104,7 +103,7 @@ const FAQ = [
 function OwnerBreadcrumb() {
   return (
     <div className="color-bar">
-      <div className="max-w-6xl mx-auto px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div className="max-w-6xl mx-auto px-4 sm:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
         <nav className="flex items-center gap-1.5 text-xs font-semibold text-white/80">
           <Link to="/" className="hover:text-white transition-colors">Inicio</Link>
           <ChevronRight className="w-3 h-3 text-white/40" />
@@ -121,47 +120,21 @@ function OwnerBreadcrumb() {
   );
 }
 
-function OwnerSectionTitle({ title, subtitle, light = false, className }) {
+function OwnerSectionTitle({ title, subtitle, light = false, className, badge }) {
   return (
-    <div className={cn("border-l-4 border-brand-magenta pl-5", className)}>
-      <h2 className={cn("text-2xl sm:text-3xl font-extrabold tracking-tight", light ? "text-white" : "text-foreground")}>
+    <div className={cn("border-l-4 border-brand-magenta pl-4 sm:pl-5", className)}>
+      {badge && (
+        <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider text-brand-magenta mb-2">{badge}</span>
+      )}
+      <h2 className={cn("text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight", light ? "text-white" : "text-foreground")}>
         {title}
       </h2>
       {subtitle && (
-        <p className={cn("mt-2 text-sm sm:text-base leading-relaxed max-w-xl", light ? "text-white/70" : "text-muted-foreground")}>
+        <p className={cn("mt-2 text-sm sm:text-base leading-relaxed max-w-2xl", light ? "text-white/70" : "text-muted-foreground")}>
           {subtitle}
         </p>
       )}
     </div>
-  );
-}
-
-function ManagementCard() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
-      className="absolute bottom-6 left-6 right-6 sm:left-auto sm:right-8 sm:bottom-8 sm:w-72 bg-white rounded-2xl shadow-2xl border border-white/80 p-4"
-    >
-      <div className="flex items-center gap-2 mb-3">
-        <div className="w-8 h-8 rounded-lg gradient-cta flex items-center justify-center">
-          <Headphones className="w-4 h-4 text-white" />
-        </div>
-        <div>
-          <p className="text-[10px] font-bold text-muted-foreground uppercase">Hoy</p>
-          <p className="text-xs font-extrabold">3 consultas gestionadas</p>
-        </div>
-      </div>
-      <div className="space-y-2">
-        {["Visita confirmada — sábado 10am", "Candidato verificado — 91% match"].map((line) => (
-          <div key={line} className="flex items-center gap-2 text-[11px] font-semibold text-foreground/80 bg-background rounded-lg px-2.5 py-2">
-            <Check className="w-3 h-3 text-brand-violet shrink-0" />
-            {line}
-          </div>
-        ))}
-      </div>
-    </motion.div>
   );
 }
 
@@ -250,49 +223,70 @@ export default function Advertise() {
     <div className="w-full overflow-x-hidden bg-background">
       <OwnerBreadcrumb />
 
-      {/* Hero split — panel oscuro + imagen (distinto a home) */}
-      <section className="grid lg:grid-cols-[minmax(0,46%)_1fr] min-h-[480px] lg:min-h-[520px]">
-        <div className="bg-brand-dark text-white px-6 sm:px-10 lg:px-12 py-12 lg:py-16 flex flex-col justify-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-brand-magenta/15 blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-brand-violet/10 blur-3xl pointer-events-none" />
-          <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} className="relative max-w-md">
-            <div className="flex items-center gap-2 mb-6">
-              <Building2 className="w-5 h-5 text-brand-magenta" />
-              <span className="text-xs font-bold uppercase tracking-widest text-white/60">Portal propietarios</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-extrabold leading-[1.1] tracking-tight">
-              Nos encargamos de todo tu arriendo
-            </h1>
-            <p className="mt-5 text-white/75 text-sm sm:text-base leading-relaxed">
-              Publica gratis. {BRAND.name} gestiona consultas, visitas y candidatos. Tú no hablas con los interesados — solo recibes información clara.
-            </p>
-            <div className="mt-4">
-              <VerifiedBadge size="sm" />
-            </div>
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <Link
-                to="/publicar/nuevo"
-                className="inline-flex items-center justify-center gap-2 gradient-cta text-white font-bold px-6 py-3.5 rounded-xl hover:opacity-95 transition-opacity text-sm shadow-lg"
-              >
-                Publicar mi inmueble
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <a href="#publicar-form" className="inline-flex items-center justify-center gap-2 border border-white/30 text-white font-bold px-6 py-3.5 rounded-xl hover:bg-white/10 transition-colors text-sm">
-                Déjanos tus datos
-              </a>
-            </div>
-          </motion.div>
-        </div>
-        <div className="relative min-h-[280px] lg:min-h-full bg-brand-dark/80">
-          <img src={INTERIORS.conjunto} alt="Propiedad en Colombia" className="absolute inset-0 w-full h-full object-cover opacity-90" />
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/40 via-transparent to-transparent lg:bg-gradient-to-l lg:from-brand-dark/50 lg:via-transparent lg:to-transparent" />
-          <ManagementCard />
+      {/* Hero compacto — menos altura para equilibrar la página */}
+      <section className="bg-brand-dark text-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-8 sm:py-10 lg:py-12">
+          <div className="grid lg:grid-cols-[1fr_0.9fr] gap-8 lg:gap-10 items-center">
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="relative">
+              <div className="flex items-center gap-2 mb-4">
+                <Building2 className="w-5 h-5 text-brand-magenta" />
+                <span className="text-xs font-bold uppercase tracking-widest text-white/60">Portal propietarios</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-[1.12] tracking-tight">
+                Nos encargamos de todo tu arriendo
+              </h1>
+              <p className="mt-4 text-white/75 text-sm sm:text-base leading-relaxed max-w-lg">
+                Publica gratis. {BRAND.name} gestiona consultas, visitas y candidatos. Tú no hablas con los interesados — solo recibes información clara en tu panel.
+              </p>
+              <div className="mt-3">
+                <VerifiedBadge size="sm" />
+              </div>
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <Link
+                  to="/publicar/nuevo"
+                  className="inline-flex items-center justify-center gap-2 gradient-cta text-white font-bold px-6 py-3 rounded-xl hover:opacity-95 transition-opacity text-sm shadow-lg"
+                >
+                  Publicar mi inmueble
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <a href="#panel-propietario" className="inline-flex items-center justify-center gap-2 border border-white/30 text-white font-bold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm">
+                  Ver el panel
+                </a>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="hidden sm:block rounded-2xl overflow-hidden border border-white/10 shadow-2xl max-h-[220px] lg:max-h-[260px]"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=500&fit=crop&q=80"
+                alt="Interior de propiedad en Colombia"
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Stats — barra de color */}
+      {/* PRIORIDAD #1 — Panel del propietario */}
+      <section id="panel-propietario" className="py-10 sm:py-14 lg:py-16 bg-white border-b border-border/40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+          <OwnerSectionTitle
+            badge="Tecnología MatchColombia"
+            title="Tu panel propietario, siempre visible"
+            subtitle="Pagos recibidos, contratos activos, tickets abiertos y estado de cada inmueble — en tiempo real, desde cualquier dispositivo."
+            className="mb-8 sm:mb-10"
+          />
+          <OwnerDashboardPreview />
+        </div>
+      </section>
+
+      {/* PRIORIDAD #2 — Resultados concretos */}
       <section className="color-bar">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-6 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-5 sm:py-6 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {STATS.map(({ value, label }, i) => (
             <motion.div
               key={label}
@@ -300,75 +294,37 @@ export default function Advertise() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.04 }}
-              className="text-center text-white"
+              className="text-center text-white px-1"
             >
-              <p className="text-2xl sm:text-3xl font-extrabold">{value}</p>
-              <p className="text-[11px] sm:text-xs font-semibold text-white/85 mt-0.5">{label}</p>
+              <p className="text-xl sm:text-2xl lg:text-3xl font-extrabold leading-none">{value}</p>
+              <p className="text-[10px] sm:text-xs font-semibold text-white/90 mt-1.5 leading-snug">{label}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* Beneficios — filas alternadas */}
-      <section className="py-16 sm:py-20">
+      {/* PRIORIDAD #3 — Qué incluye la administración */}
+      <section className="py-10 sm:py-14 lg:py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-8">
-          <OwnerSectionTitle
-            title="Cuidamos tu propiedad"
-            subtitle="Administración eficiente. Sin llamadas, sin mensajes sueltos, sin visitas mal coordinadas."
-            className="mb-12"
-          />
-          <div className="mt-10 space-y-3">
-            {BENEFITS.map(({ icon: Icon, tag, headline, desc }, i) => (
-              <motion.div
-                key={tag}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -12 : 12 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className={cn(
-                  "flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 p-5 sm:p-6 rounded-2xl border",
-                  i % 2 === 0 ? "bg-white border-border/40" : "bg-brand-violet/5 border-brand-violet/15"
-                )}
-              >
-                <div className="flex items-center gap-4 sm:w-48 shrink-0">
-                  <div className="w-11 h-11 rounded-xl gradient-cta flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-white" />
-                  </div>
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-brand-violet">{tag}</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-extrabold text-base sm:text-lg">{headline}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Proceso — timeline vertical */}
-      <section className="py-16 sm:py-20 bg-white border-y border-border/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
-          <OwnerSectionTitle title="Cómo funciona" subtitle="Tú publicas. Nosotros hacemos el resto." />
-          <div className="mt-12 max-w-2xl mx-auto relative">
-            <div className="absolute left-[19px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-brand-magenta/40 via-brand-violet/30 to-brand-magenta/40 hidden sm:block" />
-            <div className="space-y-8">
-              {PROCESS.map(({ title, desc, icon: Icon }, i) => (
+          <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-start">
+            <OwnerSectionTitle
+              title="Administración MatchColombia"
+              subtitle="Todo lo que necesitas para arrendar sin estrés, en un solo servicio."
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+              {ADMIN_INCLUDES.map((item, i) => (
                 <motion.div
-                  key={title}
-                  initial={{ opacity: 0, y: 12 }}
+                  key={item}
+                  initial={{ opacity: 0, y: 8 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
-                  className="flex gap-5 sm:gap-6 relative"
+                  transition={{ delay: i * 0.03 }}
+                  className="flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-white border border-border/40 shadow-sm"
                 >
-                  <div className="w-10 h-10 rounded-full gradient-cta flex items-center justify-center shrink-0 z-10 ring-4 ring-white">
-                    <Icon className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="pt-1.5 pb-2">
-                    <span className="text-[10px] font-extrabold text-brand-magenta uppercase tracking-wider">Paso {i + 1}</span>
-                    <h3 className="font-extrabold text-lg mt-0.5">{title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{desc}</p>
-                  </div>
+                  <span className="w-7 h-7 rounded-lg bg-brand-violet/10 flex items-center justify-center shrink-0">
+                    <Check className="w-4 h-4 text-brand-violet" strokeWidth={2.5} />
+                  </span>
+                  <span className="text-sm font-bold text-foreground">{item}</span>
                 </motion.div>
               ))}
             </div>
@@ -376,11 +332,67 @@ export default function Advertise() {
         </div>
       </section>
 
+      {/* Beneficios — más compacto */}
+      <section className="py-10 sm:py-14 bg-[hsl(0,0%,98%)] border-y border-border/40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+          <OwnerSectionTitle
+            title="Cuidamos tu propiedad"
+            subtitle="Administración eficiente. Sin llamadas, sin mensajes sueltos, sin visitas mal coordinadas."
+            className="mb-8"
+          />
+          <div className="grid sm:grid-cols-3 gap-4">
+            {BENEFITS.map(({ icon: Icon, tag, headline, desc }, i) => (
+              <motion.div
+                key={tag}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06 }}
+                className="p-5 rounded-2xl bg-white border border-border/40"
+              >
+                <div className="w-10 h-10 rounded-xl gradient-cta flex items-center justify-center mb-3">
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-brand-violet">{tag}</span>
+                <h3 className="font-extrabold text-base mt-1">{headline}</h3>
+                <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Proceso */}
+      <section className="py-10 sm:py-14 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+          <OwnerSectionTitle title="Cómo funciona" subtitle="Tú publicas. Nosotros hacemos el resto." />
+          <div className="mt-8 sm:mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+            {PROCESS.map(({ title, desc, icon: Icon }, i) => (
+              <motion.div
+                key={title}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06 }}
+                className="p-5 rounded-2xl border border-border/40 bg-background"
+              >
+                <div className="w-9 h-9 rounded-full gradient-cta flex items-center justify-center mb-3">
+                  <Icon className="w-4 h-4 text-white" />
+                </div>
+                <span className="text-[10px] font-extrabold text-brand-magenta uppercase tracking-wider">Paso {i + 1}</span>
+                <h3 className="font-extrabold text-base mt-1">{title}</h3>
+                <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* FAQ */}
-      <section className="py-16 sm:py-20 bg-white border-t border-border/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 grid lg:grid-cols-[1fr_1.2fr] gap-10 items-start">
+      <section className="py-10 sm:py-14 bg-[hsl(0,0%,98%)] border-t border-border/40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-10 items-start">
           <OwnerSectionTitle title="Preguntas frecuentes" subtitle="Todo lo que necesitas saber antes de anunciar." />
-          <div className="bg-background rounded-2xl border border-border/40 px-5 sm:px-6">
+          <div className="bg-white rounded-2xl border border-border/40 px-5 sm:px-6">
             {FAQ.map((item) => (
               <FaqItem key={item.q} q={item.q} a={item.a} />
             ))}
@@ -388,35 +400,31 @@ export default function Advertise() {
         </div>
       </section>
 
-      {/* Formulario — panel oscuro */}
+      {/* Formulario */}
       <section id="publicar-form" className="bg-brand-dark text-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-16 sm:py-20 grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-10 sm:py-14 lg:py-16 grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           <div>
             <OwnerSectionTitle
               light
               title="¿Listo para arrendar sin estrés?"
               subtitle={`Completa tus datos y deja que ${BRAND.name} gestione tu propiedad con exclusividad. Nosotros atendemos a los interesados.`}
             />
-            <ul className="mt-8 space-y-4">
-              {[
-                "Arriendo seguro y 100% gestionado",
-                "Tu propiedad en buenas manos",
-                "Asesoría del equipo MatchColombia",
-              ].map((text) => (
+            <ul className="mt-6 space-y-3">
+              {ADMIN_INCLUDES.slice(0, 4).map((text) => (
                 <li key={text} className="flex items-center gap-3 text-sm font-semibold text-white/85">
                   <Check className="w-4 h-4 text-brand-magenta shrink-0" />
                   {text}
                 </li>
               ))}
             </ul>
-            <Link to="/explorar" className="inline-flex items-center gap-1.5 mt-8 text-sm font-bold text-white/60 hover:text-white transition-colors">
+            <Link to="/explorar" className="inline-flex items-center gap-1.5 mt-6 text-sm font-bold text-white/60 hover:text-white transition-colors">
               ¿Buscas arrendar? Ir a inmuebles
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-          <div className="bg-white/5 backdrop-blur-sm border border-white/15 rounded-2xl p-6 sm:p-8">
+          <div className="bg-white/5 backdrop-blur-sm border border-white/15 rounded-2xl p-5 sm:p-7">
             <h3 className="font-extrabold text-lg mb-1">Publica gratis</h3>
-            <p className="text-sm text-white/60 mb-6">Bogotá y Barranquilla</p>
+            <p className="text-sm text-white/60 mb-5">Bogotá y Barranquilla</p>
             <LeadForm dark />
           </div>
         </div>
