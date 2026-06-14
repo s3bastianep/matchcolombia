@@ -1,18 +1,17 @@
-import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import PropertyCard from "../components/property/PropertyCard";
 import AdvancedFilters from "../components/explore/AdvancedFilters";
+import ExploreMap from "../components/explore/ExploreMap";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
-import { SlidersHorizontal, X, Sparkles, Search, Map, Check, ArrowUpDown, MousePointer2, ShieldCheck, LayoutGrid, Columns2 } from "lucide-react";
+import { SlidersHorizontal, X, Sparkles, Search, Map, Check, ArrowUpDown, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import VerifiedBadge from "../components/brand/VerifiedBadge";
 import { loadPreferences, scoreProperty } from "@/lib/matchPreferences";
 import { CITIES } from "@/lib/colombia";
-import { usePropertyPanel } from "@/lib/PropertyPanelContext";
-import { PROPERTY_LIST_QUERY } from "@/lib/queryOptions";
 import {
   DEFAULT_ADVANCED_FILTERS,
   parseAdvancedFiltersFromUrl,
@@ -20,12 +19,6 @@ import {
   countAdvancedFilters,
   advancedFiltersToUrlParams,
 } from "@/lib/propertyFilters";
-
-const ExploreMap = lazy(() => import("../components/explore/ExploreMap"));
-
-function MapPaneFallback({ className }) {
-  return <div className={cn("shimmer bg-muted/20", className)} aria-hidden />;
-}
 
 const TYPES_LABEL = {
   apartamento: "Apartamento",
@@ -65,42 +58,12 @@ function ExploreSkeleton() {
 
 function ActiveFilterChip({ label, onRemove }) {
   return (
-    <span className="inline-flex items-center gap-1.5 pl-3 pr-1.5 py-2 rounded-full bg-white border border-brand-magenta/25 text-[11px] font-semibold text-brand-magenta">
+    <span className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full bg-white border border-brand-magenta/25 text-[11px] font-semibold text-brand-magenta">
       {label}
-      <button type="button" onClick={onRemove} className="touch-target p-0 rounded-full hover:bg-brand-magenta/10">
-        <X className="w-3.5 h-3.5" />
+      <button type="button" onClick={onRemove} className="p-0.5 rounded-full hover:bg-brand-magenta/10">
+        <X className="w-3 h-3" />
       </button>
     </span>
-  );
-}
-
-function CityFilterChips({ initialCity, setCityFilter, className }) {
-  return (
-    <div className={cn("flex items-center gap-1 p-1 rounded-full bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)]", className)}>
-      <button
-        type="button"
-        onClick={() => setCityFilter("")}
-        className={cn(
-          "h-9 px-3.5 rounded-full text-xs font-bold transition-all shrink-0",
-          !initialCity ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
-        )}
-      >
-        Todas
-      </button>
-      {CITIES.map((c) => (
-        <button
-          key={c.id}
-          type="button"
-          onClick={() => setCityFilter(c.name)}
-          className={cn(
-            "h-9 px-3.5 rounded-full text-xs font-bold transition-all shrink-0",
-            initialCity === c.name ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
-          )}
-        >
-          {c.name}
-        </button>
-      ))}
-    </div>
   );
 }
 
@@ -137,16 +100,9 @@ export default function Explore() {
   const [sortBy, setSortBy] = useState(isMatched ? "match" : "newest");
   const [activeQuick, setActiveQuick] = useState([]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [viewMode, setViewMode] = useState("split");
+  const [viewMode, setViewMode] = useState("list");
   const [highlightedId, setHighlightedId] = useState(null);
   const [locality, setLocality] = useState(initialQ);
-  const { openProperty, property: openPanelProperty } = usePropertyPanel();
-  const inmuebleId = searchParams.get("inmueble");
-  const visitaFromUrl = searchParams.get("visita") === "1";
-
-  useEffect(() => {
-    if (window.innerWidth < 1024) setViewMode("list");
-  }, []);
 
   const applyLocalitySearch = useCallback(() => {
     const next = new URLSearchParams(searchParams);
@@ -167,15 +123,7 @@ export default function Explore() {
   const { data: properties = [], isLoading } = useQuery({
     queryKey: ["properties-all"],
     queryFn: () => base44.entities.Property.filter({ status: "disponible" }, "-created_date", 100),
-    ...PROPERTY_LIST_QUERY,
   });
-
-  useEffect(() => {
-    if (!inmuebleId || isLoading) return;
-    if (openPanelProperty?.id === inmuebleId) return;
-    const match = properties.find((p) => p.id === inmuebleId);
-    if (match) openProperty(match, { focusBooking: visitaFromUrl, fromUrl: true });
-  }, [inmuebleId, isLoading, properties, openPanelProperty?.id, visitaFromUrl, openProperty]);
 
   const updateAdvancedFilters = useCallback((next) => {
     setSearchParams(syncFiltersToUrl(searchParams, next), { replace: true });
@@ -267,8 +215,8 @@ export default function Explore() {
   );
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="bg-white border-b border-[hsl(0,0%,90%)] sticky top-[58px] z-30">
+    <div className="h-full min-h-0 bg-white flex flex-col">
+      <div className="bg-white border-b border-[hsl(0,0%,90%)] sticky top-[58px] z-30 shrink-0">
         {isMatched && prefs && (
           <motion.div
             initial={{ opacity: 0, y: -8 }}
@@ -290,7 +238,7 @@ export default function Explore() {
         )}
 
         <div className="px-4 lg:px-6 py-3 flex flex-wrap items-center gap-2.5">
-          <div className="relative flex-1 min-w-0 basis-full sm:basis-auto sm:min-w-[200px] max-w-xl">
+          <div className="relative flex-1 min-w-[200px] max-w-xl">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
             <input
               type="search"
@@ -304,17 +252,31 @@ export default function Explore() {
             />
           </div>
 
-          <CityFilterChips
-            initialCity={initialCity}
-            setCityFilter={setCityFilter}
-            className="hidden sm:flex shrink-0"
-          />
-
-          <CityFilterChips
-            initialCity={initialCity}
-            setCityFilter={setCityFilter}
-            className="sm:hidden w-full overflow-x-auto scrollbar-none"
-          />
+          <div className="hidden sm:flex items-center gap-1 p-1 rounded-full bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)]">
+            <button
+              type="button"
+              onClick={() => setCityFilter("")}
+              className={cn(
+                "h-8 px-3 rounded-full text-[11px] font-bold transition-all",
+                !initialCity ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Todas
+            </button>
+            {CITIES.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => setCityFilter(c.name)}
+                className={cn(
+                  "h-8 px-3 rounded-full text-[11px] font-bold transition-all",
+                  initialCity === c.name ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {c.name}
+              </button>
+            ))}
+          </div>
 
           <button
             type="button"
@@ -337,31 +299,6 @@ export default function Explore() {
 
           <div className="hidden lg:block shrink-0">{sortSelect}</div>
 
-          <div className="hidden lg:flex items-center gap-1 p-1 rounded-full bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)] shrink-0">
-            <button
-              type="button"
-              onClick={() => setViewMode("split")}
-              title="Lista + mapa"
-              className={cn(
-                "h-8 px-2.5 rounded-full transition-all flex items-center gap-1",
-                viewMode === "split" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              <Columns2 className="w-3.5 h-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode("list")}
-              title="Solo lista"
-              className={cn(
-                "h-8 px-2.5 rounded-full transition-all flex items-center gap-1",
-                viewMode === "list" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              <LayoutGrid className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
           <div className="lg:hidden flex items-center gap-2 shrink-0 ml-auto">
             {sortSelect}
             <button
@@ -380,11 +317,11 @@ export default function Explore() {
           </div>
         </div>
 
-        <div className="px-4 lg:px-6 pb-2">
+        <div className="px-4 lg:px-6 pb-2 hidden lg:block">
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[hsl(var(--brand-verified-bg))] border border-[hsl(var(--brand-verified-border))]">
             <ShieldCheck className="w-4 h-4 shrink-0 text-[hsl(var(--brand-verified))]" strokeWidth={2.25} />
             <p className="text-[11px] sm:text-xs font-semibold text-[hsl(var(--brand-verified-fg))] leading-snug">
-              Cada inmueble está verificado por MatchColombia. Arrienda con tranquilidad
+              Cada inmueble está verificado por MatchColombia — arrienda con tranquilidad
             </p>
           </div>
         </div>
@@ -425,34 +362,27 @@ export default function Explore() {
       </div>
 
       {isLoading ? (
-        <>
-          <div className="hidden lg:grid lg:grid-cols-[7fr_3fr] lg:h-[calc(100vh-168px)]">
-            <div className="px-6 py-5 grid grid-cols-2 xl:grid-cols-3 gap-5">
-              {Array(9).fill(0).map((_, i) => (
+        <div className="flex-1 min-h-0 overflow-hidden">
+          <div className="hidden lg:block h-full overflow-y-auto px-4 sm:px-6 py-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+              {Array(10).fill(0).map((_, i) => (
                 <ExploreSkeleton key={i} />
               ))}
             </div>
-            <div className="border-l border-[hsl(0,0%,90%)] shimmer min-h-[400px]" />
           </div>
-          <div className="lg:hidden px-4 py-5 grid grid-cols-1 gap-4">
+          <div className="lg:hidden h-full overflow-y-auto px-4 py-4 grid grid-cols-1 gap-4">
             {Array(4).fill(0).map((_, i) => (
               <ExploreSkeleton key={i} />
             ))}
           </div>
-        </>
+        </div>
       ) : filtered.length > 0 && viewMode === "map" ? (
-        <div className="lg:hidden h-[calc(100dvh-13.5rem)] min-h-[280px]">
-          <Suspense fallback={<MapPaneFallback className="h-full" />}>
-            <ExploreMap properties={filtered} activeCity={initialCity || undefined} pane className="h-full" />
-          </Suspense>
+        <div className="lg:hidden flex-1 min-h-0">
+          <ExploreMap properties={filtered} activeCity={initialCity || undefined} pane className="h-full" />
         </div>
       ) : filtered.length > 0 ? (
         <>
-          <div className={cn(
-            "hidden lg:grid lg:h-[calc(100vh-168px)] border-t border-[hsl(0,0%,90%)]",
-            viewMode === "list" ? "grid-cols-1" : "grid-cols-[7fr_3fr]"
-          )}>
-            <div className="overflow-y-auto bg-[hsl(0,0%,99%)] px-6 py-5">
+          <div className="hidden lg:block flex-1 min-h-0 overflow-y-auto border-t border-[hsl(0,0%,90%)] bg-[hsl(0,0%,99%)] px-4 sm:px-6 py-4">
               <div className="flex flex-wrap items-start justify-between gap-3 mb-1">
                 <div>
                   <h1 className="text-xl font-extrabold tracking-tight text-foreground">
@@ -460,12 +390,6 @@ export default function Explore() {
                   </h1>
                   <ResultsCount count={filtered.length} query={initialQ} />
                 </div>
-                {viewMode === "split" && (
-                  <p className="hidden xl:flex items-center gap-1.5 text-[11px] text-muted-foreground bg-white border border-[hsl(0,0%,90%)] rounded-full px-3 py-1.5 shrink-0">
-                    <MousePointer2 className="w-3 h-3" />
-                    Pasa el cursor para ubicar en el mapa
-                  </p>
-                )}
               </div>
 
               {totalFilterCount > 0 && (
@@ -520,10 +444,7 @@ export default function Explore() {
                 </div>
               )}
 
-              <div className={cn(
-                "grid gap-x-4 gap-y-7 mt-5",
-                viewMode === "list" ? "grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : "grid-cols-2 xl:grid-cols-3"
-              )}>
+              <div className="grid gap-x-4 gap-y-6 mt-5 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {filtered.map((property, i) => (
                   <div
                     key={property.id}
@@ -541,38 +462,11 @@ export default function Explore() {
                   </div>
                 ))}
               </div>
-            </div>
-
-            {viewMode === "split" && (
-            <div className="flex flex-col border-l border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] min-h-0">
-              <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-[hsl(0,0%,90%)] shrink-0 bg-white">
-                <div className="min-w-0">
-                  <p className="text-xs font-extrabold text-foreground truncate">{cityLabel}</p>
-                  <p className="text-[10px] text-muted-foreground">{filtered.length} en el mapa</p>
-                </div>
-                <p className="text-[10px] text-muted-foreground text-right leading-tight max-w-[9rem]">
-                  Toca un precio para ver el inmueble
-                </p>
-              </div>
-              <div className="flex-1 min-h-0">
-                <Suspense fallback={<MapPaneFallback className="h-full" />}>
-                  <ExploreMap
-                    properties={filtered}
-                    activeCity={initialCity || undefined}
-                    pane
-                    highlightedId={highlightedId}
-                    onHighlight={setHighlightedId}
-                    className="h-full"
-                  />
-                </Suspense>
-              </div>
-            </div>
-            )}
           </div>
 
-          <div className={cn("lg:hidden px-4 py-4 pb-safe space-y-4", viewMode === "map" && "hidden")}>
+          <div className={cn("lg:hidden flex-1 min-h-0 overflow-y-auto px-4 py-4 pb-safe space-y-4", viewMode === "map" && "hidden")}>
             <div>
-              <h1 className="text-lg font-extrabold tracking-tight leading-snug">{resultsTitle}</h1>
+              <h1 className="text-lg font-extrabold tracking-tight">{resultsTitle}</h1>
               <ResultsCount count={filtered.length} query={initialQ} />
             </div>
             <div className="grid grid-cols-1 gap-4">
@@ -590,7 +484,7 @@ export default function Explore() {
           </div>
         </>
       ) : (
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-6 sm:py-8">
+        <div className="flex-1 min-h-0 overflow-y-auto max-w-[1440px] w-full mx-auto px-5 sm:px-8 py-6 sm:py-8">
           <div className="text-center py-20 sm:py-24 rounded-3xl bg-white border border-border/50 shadow-sm">
             <div className="w-16 h-16 rounded-2xl bg-brand-violet/10 flex items-center justify-center mx-auto mb-5">
               <Search className="w-8 h-8 text-brand-violet" />
@@ -632,7 +526,7 @@ export default function Explore() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 320 }}
-              className="relative w-full lg:max-w-md bg-[hsl(0,0%,96%)] rounded-t-3xl lg:rounded-2xl p-5 pb-safe max-h-[88dvh] overflow-y-auto"
+              className="relative w-full lg:max-w-md bg-[hsl(0,0%,96%)] rounded-t-3xl lg:rounded-2xl p-5 max-h-[88vh] overflow-y-auto"
             >
               <div className="w-10 h-1 bg-border rounded-full mx-auto mb-4" />
               <div className="flex items-center justify-between mb-4">
@@ -640,7 +534,7 @@ export default function Explore() {
                 <button
                   type="button"
                   onClick={() => setMobileFiltersOpen(false)}
-                  className="touch-target rounded-xl hover:bg-white"
+                  className="p-2 rounded-xl hover:bg-white"
                 >
                   <X className="w-5 h-5" />
                 </button>
