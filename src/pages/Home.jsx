@@ -5,6 +5,7 @@ import { PROPERTY_LIST_QUERY } from "@/lib/queryOptions";
 import HeroSection from "../components/home/HeroSection";
 import FeaturedProperties from "../components/home/FeaturedProperties";
 import RentEasySection from "../components/home/RentEasySection";
+import MatchSteps from "../components/home/MatchSteps";
 import ZonesSection from "../components/home/ZonesSection";
 
 const startQuiz = () => window.dispatchEvent(new CustomEvent("open-match-quiz"));
