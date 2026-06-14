@@ -57,9 +57,9 @@ function ExploreSkeleton() {
 
 function ActiveFilterChip({ label, onRemove }) {
   return (
-    <span className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full bg-white border border-[hsl(340,82%,52%)]/25 text-[11px] font-semibold text-[hsl(340,82%,42%)]">
+    <span className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full bg-white border border-brand-magenta/25 text-[11px] font-semibold text-brand-magenta">
       {label}
-      <button type="button" onClick={onRemove} className="p-0.5 rounded-full hover:bg-[hsl(340,82%,52%)]/10">
+      <button type="button" onClick={onRemove} className="p-0.5 rounded-full hover:bg-brand-magenta/10">
         <X className="w-3 h-3" />
       </button>
     </span>
@@ -226,7 +226,7 @@ export default function Explore() {
             </div>
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
-              className="ml-auto text-[11px] font-bold text-[hsl(265,75%,50%)] hover:underline shrink-0"
+              className="ml-auto text-[11px] font-bold text-brand-violet hover:underline shrink-0"
             >
               Editar
             </button>
@@ -244,7 +244,7 @@ export default function Explore() {
               onBlur={applyLocalitySearch}
               placeholder="Buscar por localidad o barrio"
               aria-label="Buscar por localidad"
-              className="w-full h-11 pl-11 pr-4 rounded-full bg-[hsl(0,0%,97%)] border border-[hsl(0,0%,88%)] text-sm font-medium placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(265,75%,58%)]/20 focus:border-[hsl(265,75%,58%)]/30"
+              className="w-full h-11 pl-11 pr-4 rounded-full bg-[hsl(0,0%,97%)] border border-[hsl(0,0%,88%)] text-sm font-medium placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand-violet/20 focus:border-brand-violet/30"
             />
           </div>
 
@@ -280,14 +280,14 @@ export default function Explore() {
             className={cn(
               "flex items-center gap-1.5 h-10 px-4 rounded-full text-xs font-bold border transition-all shrink-0",
               advancedCount > 0
-                ? "border-[hsl(265,75%,58%)]/30 bg-[hsl(265,75%,58%)]/10 text-[hsl(265,75%,45%)]"
+                ? "border-brand-violet/30 bg-brand-violet/10 text-brand-violet"
                 : "bg-white border-[hsl(0,0%,88%)] text-foreground hover:border-foreground/20"
             )}
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
             Más filtros
             {advancedCount > 0 && (
-              <span className="w-5 h-5 rounded-full bg-[hsl(265,75%,58%)] text-white text-[10px] font-bold flex items-center justify-center">
+              <span className="w-5 h-5 rounded-full bg-brand-violet text-white text-[10px] font-bold flex items-center justify-center">
                 {advancedCount}
               </span>
             )}
@@ -303,7 +303,7 @@ export default function Explore() {
               className={cn(
                 "flex items-center gap-1.5 h-10 px-3.5 rounded-full text-xs font-bold border transition-all",
                 viewMode === "map"
-                  ? "border-[hsl(265,75%,58%)]/30 bg-[hsl(265,75%,58%)]/10 text-[hsl(265,75%,45%)]"
+                  ? "border-brand-violet/30 bg-brand-violet/10 text-brand-violet"
                   : "bg-white border-[hsl(0,0%,88%)] text-foreground"
               )}
             >
@@ -500,8 +500,8 @@ export default function Explore() {
       ) : (
         <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-6 sm:py-8">
           <div className="text-center py-20 sm:py-24 rounded-3xl bg-white border border-border/50 shadow-sm">
-            <div className="w-16 h-16 rounded-2xl bg-[hsl(265,75%,58%)]/10 flex items-center justify-center mx-auto mb-5">
-              <Search className="w-8 h-8 text-[hsl(265,75%,50%)]" />
+            <div className="w-16 h-16 rounded-2xl bg-brand-violet/10 flex items-center justify-center mx-auto mb-5">
+              <Search className="w-8 h-8 text-brand-violet" />
             </div>
             <h3 className="font-extrabold text-xl mb-2">Sin resultados por ahora</h3>
             <p className="text-muted-foreground text-sm mb-6 max-w-sm mx-auto leading-relaxed">

@@ -37,7 +37,7 @@ export default function OwnerPortal() {
               <p className="font-extrabold">{item.title}</p>
               <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
             </div>
-            <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-[hsl(32,95%,45%)]" />
+            <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-brand-magenta" />
           </Link>
         ))}
       </div>

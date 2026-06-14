@@ -22,10 +22,10 @@ export default function SimilarProperties({ property }) {
     <section className="mt-12 pt-12 border-t border-border/40">
       <div className="flex items-end justify-between mb-8">
         <div>
-          <p className="text-xs font-bold uppercase tracking-widest text-[hsl(265,75%,50%)] mb-2">También te puede gustar</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-brand-violet mb-2">También te puede gustar</p>
           <h2 className="text-2xl font-extrabold">Inmuebles similares</h2>
         </div>
-        <Link to={`/explorar?city=${encodeURIComponent(property.city)}`} className="hidden sm:flex items-center gap-1.5 text-sm font-bold text-[hsl(265,75%,50%)] hover:underline">
+        <Link to={`/explorar?city=${encodeURIComponent(property.city)}`} className="hidden sm:flex items-center gap-1.5 text-sm font-bold text-brand-violet hover:underline">
           Ver más <ArrowRight className="w-4 h-4" />
         </Link>
       </div>

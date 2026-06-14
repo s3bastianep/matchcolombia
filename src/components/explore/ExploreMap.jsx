@@ -81,7 +81,7 @@ export default function ExploreMap({
       {!pane && (
       <div className="absolute top-4 left-4 z-[1000] flex items-center gap-2">
         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-bold text-foreground border border-border/40 shadow-sm">
-          <Layers className="w-3 h-3 text-[hsl(265,75%,50%)]" />
+          <Layers className="w-3 h-3 text-brand-violet" />
           {mapMarkers.filter((m) => m.type === "cluster").length > 0
             ? `${mapMarkers.length} zonas · ${properties.length} inmuebles`
             : `${properties.length} en el mapa`}
@@ -92,7 +92,7 @@ export default function ExploreMap({
       {pane && (
         <div className="absolute top-3 left-3 z-[1000] pointer-events-none">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-bold text-foreground border border-[hsl(0,0%,88%)] shadow-sm">
-            <MapPin className="w-3 h-3 text-[hsl(340,82%,52%)]" />
+            <MapPin className="w-3 h-3 text-brand-magenta" />
             {properties.length} en el mapa
           </span>
         </div>
@@ -142,8 +142,8 @@ export default function ExploreMap({
                 <MapPin className="w-3 h-3" />
                 {hovered.neighborhood}, {hovered.city}
               </p>
-              <p className="text-sm font-extrabold text-[hsl(340,82%,52%)] mt-1">{formatCOP(hovered.monthly_rent)}/mes</p>
-              <Link to={`/propiedad/${hovered.id}`} className="text-xs font-bold text-[hsl(265,75%,50%)] mt-2 inline-block hover:underline">
+              <p className="text-sm font-extrabold text-brand-magenta mt-1">{formatCOP(hovered.monthly_rent)}/mes</p>
+              <Link to={`/propiedad/${hovered.id}`} className="text-xs font-bold text-brand-violet mt-2 inline-block hover:underline">
                 Ver detalle →
               </Link>
             </motion.div>
@@ -180,7 +180,7 @@ export default function ExploreMap({
                       <p className="text-xs font-bold truncate">{marker.property?.title || marker.sublabel}</p>
                       <p className="text-[10px] text-muted-foreground">{marker.sublabel}</p>
                     </div>
-                    <span className="text-xs font-extrabold text-[hsl(340,82%,52%)] shrink-0">{marker.label}</span>
+                    <span className="text-xs font-extrabold text-brand-magenta shrink-0">{marker.label}</span>
                   </Link>
                 ))}
               </div>

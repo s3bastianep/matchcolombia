@@ -13,7 +13,7 @@ const steps = [
     title: "Cuéntanos qué buscas",
     desc: "Ciudad, habitaciones y presupuesto — solo para filtrar entre inmuebles verificados.",
     tag: "Match inteligente",
-    accent: "from-[hsl(340,82%,52%)] to-[hsl(265,75%,58%)]",
+    accent: "from-brand-magenta to-brand-violet",
     pills: ["Verificados", "Sin estafas", "Sin sustos"],
   },
   {
@@ -40,8 +40,8 @@ export default function MatchSteps({ onStartQuiz }) {
   return (
     <section className="section-pad relative overflow-hidden bg-white border-y border-border/40">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-0 w-64 h-64 rounded-full bg-[hsl(265,75%,58%)]/5 blur-3xl -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-[hsl(340,82%,52%)]/5 blur-3xl" />
+        <div className="absolute top-1/2 left-0 w-64 h-64 rounded-full bg-brand-violet/5 blur-3xl -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-brand-magenta/5 blur-3xl" />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-8">
@@ -57,7 +57,7 @@ export default function MatchSteps({ onStartQuiz }) {
             className="max-w-xl"
           />
           <div className="hidden lg:flex items-center gap-2 text-sm font-semibold text-muted-foreground shrink-0 pb-1">
-            <Compass className="w-4 h-4 text-[hsl(265,75%,50%)]" />
+            <Compass className="w-4 h-4 text-brand-violet" />
             Bogotá y Barranquilla
           </div>
         </div>
@@ -82,7 +82,7 @@ export default function MatchSteps({ onStartQuiz }) {
                 >
                   {/* Línea vertical en mobile */}
                   {i < steps.length - 1 && (
-                    <div className="lg:hidden absolute left-[1.65rem] top-14 bottom-0 w-px bg-gradient-to-b from-[hsl(265,75%,58%)]/30 to-transparent" />
+                    <div className="lg:hidden absolute left-[1.65rem] top-14 bottom-0 w-px bg-gradient-to-b from-brand-violet/30 to-transparent" />
                   )}
 
                   <div className="relative shrink-0 z-10">
@@ -105,7 +105,7 @@ export default function MatchSteps({ onStartQuiz }) {
                   </div>
 
                   <div className="flex-1 lg:flex-none pt-1 lg:pt-6">
-                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[hsl(240,40%,98%)] text-muted-foreground border border-border/50">
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-background text-muted-foreground border border-border/50">
                       {step.tag}
                     </span>
                     <h3 className="font-extrabold text-xl sm:text-[1.35rem] mt-3 mb-2 tracking-tight">{step.title}</h3>
@@ -116,7 +116,7 @@ export default function MatchSteps({ onStartQuiz }) {
                     pill === "Verificados" ? (
                       <VerifiedBadge key={pill} size="xs" className="!rounded-full" />
                     ) : (
-                      <span key={pill} className="px-2.5 py-1 rounded-full bg-[hsl(240,40%,98%)] text-[10px] font-bold text-foreground border border-border/40">
+                      <span key={pill} className="px-2.5 py-1 rounded-full bg-background text-[10px] font-bold text-foreground border border-border/40">
                         {pill}
                       </span>
                     )
@@ -152,7 +152,7 @@ export default function MatchSteps({ onStartQuiz }) {
           </button>
           <Link
             to="/explorar"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-bold text-foreground border-2 border-border/60 bg-[hsl(240,40%,98%)] hover:bg-secondary/60 transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-bold text-foreground border-2 border-border/60 bg-background hover:bg-secondary/60 transition-colors"
           >
             Explorar manualmente
           </Link>

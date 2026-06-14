@@ -10,17 +10,10 @@ export default function PanelLayout({ title, subtitle, navItems, accent = "purpl
   const location = useLocation();
   const [open, setOpen] = React.useState(false);
 
-  const accentRing =
-    accent === "orange"
-      ? "bg-[hsl(32,95%,54%)]"
-      : accent === "green"
-        ? "bg-[hsl(168,72%,40%)]"
-        : accent === "blue"
-          ? "bg-[hsl(200,70%,42%)]"
-          : "bg-[hsl(265,75%,58%)]";
+  const accentRing = accent === "magenta" ? "bg-brand-magenta" : "bg-brand-violet";
 
   return (
-    <div className="min-h-screen bg-[hsl(240,30%,98%)] flex">
+    <div className="min-h-screen bg-background flex">
       <aside
         className={cn(
           "fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-border/40 flex flex-col transition-transform lg:translate-x-0",
@@ -44,7 +37,7 @@ export default function PanelLayout({ title, subtitle, navItems, accent = "purpl
                 onClick={() => setOpen(false)}
                 className={cn(
                   "flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors",
-                  active ? "bg-[hsl(265,75%,58%)]/10 text-[hsl(265,75%,45%)]" : "text-foreground/70 hover:bg-secondary hover:text-foreground"
+                  active ? "bg-brand-violet/10 text-brand-violet" : "text-foreground/70 hover:bg-secondary hover:text-foreground"
                 )}
               >
                 {item.icon && <item.icon className="w-4 h-4 shrink-0" />}

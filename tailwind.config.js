@@ -15,6 +15,7 @@ module.exports = {
   			brand: {
   				violet: 'hsl(var(--brand-violet))',
   				magenta: 'hsl(var(--brand-magenta))',
+  				dark: 'hsl(var(--brand-dark))',
   				verified: 'hsl(var(--brand-verified))',
   				'verified-bg': 'hsl(var(--brand-verified-bg))',
   				'verified-fg': 'hsl(var(--brand-verified-fg))',

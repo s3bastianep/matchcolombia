@@ -10,5 +10,5 @@ const nav = [
 ];
 
 export default function TenantLayout() {
-  return <PanelLayout title="Mi arriendo" subtitle="Inquilino activo" navItems={nav} accent="green" />;
+  return <PanelLayout title="Mi arriendo" subtitle="Inquilino activo" navItems={nav} accent="violet" />;
 }

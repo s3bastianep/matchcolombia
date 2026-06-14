@@ -37,12 +37,12 @@ export default function AdminDashboard() {
           { to: "/admin/visitas", title: "Visitas", desc: "Calendario y confirmaciones" },
           { to: "/admin/inquilinos", title: "Inquilinos activos", desc: "Contratos, pagos y tickets" },
         ].map((item) => (
-          <Link key={item.to} to={item.to} className="group bg-white rounded-2xl border border-border/40 p-5 hover:border-[hsl(265,75%,58%)]/30 hover:shadow-md transition-all flex items-center justify-between">
+          <Link key={item.to} to={item.to} className="group bg-white rounded-2xl border border-border/40 p-5 hover:border-brand-violet/30 hover:shadow-md transition-all flex items-center justify-between">
             <div>
               <p className="font-extrabold">{item.title}</p>
               <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
             </div>
-            <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-[hsl(265,75%,50%)]" />
+            <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-brand-violet" />
           </Link>
         ))}
       </div>

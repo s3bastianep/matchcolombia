@@ -9,5 +9,5 @@ const nav = [
 ];
 
 export default function OwnerLayout() {
-  return <PanelLayout title="Propietario" subtitle="Tu activo en tiempo real" navItems={nav} accent="orange" />;
+  return <PanelLayout title="Propietario" subtitle="Tu activo en tiempo real" navItems={nav} accent="magenta" />;
 }

@@ -26,7 +26,7 @@ export default function PropertyLocationMap({ property }) {
     <section className="bg-white rounded-3xl p-6 sm:p-7 border border-border/40 shadow-sm overflow-hidden">
       <h2 className="text-xl font-extrabold mb-1">Ubicación</h2>
       <p className="text-sm text-muted-foreground mb-5 flex items-center gap-1.5">
-        <MapPin className="w-4 h-4 text-[hsl(340,82%,52%)]" />
+        <MapPin className="w-4 h-4 text-brand-magenta" />
         {property.neighborhood}, {property.locality || property.city}
       </p>
       <div className="relative h-48 sm:h-56 rounded-2xl overflow-hidden border border-border/30">
@@ -34,7 +34,7 @@ export default function PropertyLocationMap({ property }) {
       </div>
       <Link
         to={`/explorar?city=${encodeURIComponent(property.city)}&q=${encodeURIComponent(property.neighborhood)}`}
-        className="inline-block mt-4 text-sm font-bold text-[hsl(265,75%,50%)] hover:underline"
+        className="inline-block mt-4 text-sm font-bold text-brand-violet hover:underline"
       >
         Ver más en {property.neighborhood} →
       </Link>

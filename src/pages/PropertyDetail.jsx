@@ -21,6 +21,7 @@ import { getParkingSpots } from "@/lib/propertyFilters";
 import { isInShortlist, toggleShortlist } from "@/lib/shortlist";
 import { useAuth } from "@/lib/AuthContext";
 import { BRAND } from "@/lib/brand";
+import VerifiedBadge from "@/components/brand/VerifiedBadge";
 
 const formatCOP = (v) =>
   v ? new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v) : "$0";
@@ -29,11 +30,11 @@ const furnishedLabels = { amoblado: "Amoblado", semi_amoblado: "Semi-amoblado", 
 const typeLabel = { apartamento: "Apartamento", casa: "Casa", estudio: "Estudio", habitacion: "Habitación", penthouse: "Penthouse", duplex: "Dúplex" };
 
 const SPEC_COLORS = [
-  { bg: "bg-[hsl(340,82%,52%)]/10", icon: "text-[hsl(340,82%,52%)]" },
-  { bg: "bg-[hsl(265,75%,58%)]/10", icon: "text-[hsl(265,75%,58%)]" },
-  { bg: "bg-[hsl(168,72%,40%)]/10", icon: "text-[hsl(168,72%,40%)]" },
-  { bg: "bg-[hsl(200,90%,50%)]/10", icon: "text-[hsl(200,90%,50%)]" },
-  { bg: "bg-[hsl(32,95%,54%)]/10", icon: "text-[hsl(32,95%,54%)]" },
+  { bg: "bg-brand-magenta/10", icon: "text-brand-magenta" },
+  { bg: "bg-brand-violet/10", icon: "text-brand-violet" },
+  { bg: "bg-brand-magenta/10", icon: "text-brand-magenta" },
+  { bg: "bg-brand-violet/10", icon: "text-brand-violet" },
+  { bg: "bg-secondary", icon: "text-foreground/70" },
 ];
 
 function ContactForm({ id }) {
@@ -144,7 +145,7 @@ export default function PropertyDetail() {
   ].filter(Boolean);
 
   return (
-    <div className="min-h-screen bg-[hsl(240,40%,98%)] pb-28 lg:pb-12">
+    <div className="min-h-screen bg-background pb-28 lg:pb-12">
       {/* Floating top bar */}
       <div className="fixed top-[61px] left-0 right-0 z-40 px-4 py-3 pointer-events-none">
         <div className="max-w-6xl mx-auto flex items-center justify-between pointer-events-auto">
@@ -177,8 +178,8 @@ export default function PropertyDetail() {
             className="bg-white rounded-3xl shadow-xl shadow-black/8 border border-border/40 p-6 sm:p-8 -mt-8 sm:-mt-12 relative"
           >
             <div className="flex flex-wrap items-center gap-2 mb-4">
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <VerifiedBadge size="sm" />
+              <span className="text-xs font-bold text-brand-violet bg-brand-violet/10 px-3 py-1.5 rounded-full border border-brand-violet/20">
                 Disponible
               </span>
               <span className="text-xs font-bold text-white gradient-cta px-3 py-1.5 rounded-full">
@@ -189,7 +190,7 @@ export default function PropertyDetail() {
                   {furnishedLabels[property.furnished]}
                 </span>
               )}
-              <span className="text-xs font-bold text-[hsl(200,90%,40%)] bg-[hsl(200,90%,50%)]/10 px-3 py-1.5 rounded-full flex items-center gap-1">
+              <span className="text-xs font-bold text-brand-violet bg-brand-violet/10 px-3 py-1.5 rounded-full flex items-center gap-1">
                 <Camera className="w-3 h-3" />
                 {images.length} fotos
               </span>
@@ -284,7 +285,7 @@ export default function PropertyDetail() {
                 <h2 className="text-xl font-extrabold mb-5">Amenidades</h2>
                 <div className="flex flex-wrap gap-2">
                   {property.amenities.map((a) => (
-                    <span key={a} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[hsl(168,72%,40%)]/8 border border-[hsl(168,72%,40%)]/20 text-sm font-semibold text-[hsl(168,72%,30%)]">
+                    <span key={a} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-secondary border border-border/50 text-sm font-semibold text-foreground/80">
                       <Check className="w-3.5 h-3.5" strokeWidth={3} />
                       {a}
                     </span>

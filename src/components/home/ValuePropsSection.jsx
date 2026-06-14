@@ -26,7 +26,7 @@ export default function ValuePropsSection({ onStartQuiz }) {
     <section className="section-pad philosophy-bg">
       <div className="max-w-6xl mx-auto px-4 sm:px-8">
         <div className="text-center mb-12">
-          <p className="text-xs font-bold uppercase tracking-widest text-[hsl(265,75%,50%)] mb-2">Nuestra filosofía</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-brand-violet mb-2">Nuestra filosofía</p>
           <h2 className="text-2xl sm:text-[2rem] font-extrabold leading-tight mb-6">
             Hecho para quienes odian el scroll infinito
           </h2>

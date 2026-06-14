@@ -11,5 +11,5 @@ const nav = [
 ];
 
 export default function SeekerLayout() {
-  return <PanelLayout title="Mi cuenta" subtitle="Buscar arriendo o compra" navItems={nav} accent="blue" />;
+  return <PanelLayout title="Mi cuenta" subtitle="Buscar arriendo o compra" navItems={nav} accent="violet" />;
 }

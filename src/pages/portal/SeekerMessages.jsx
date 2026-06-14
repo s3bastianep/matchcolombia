@@ -73,7 +73,7 @@ export default function SeekerMessages() {
         <div className="flex-1 p-4 space-y-3 overflow-y-auto max-h-[400px]">
           {threadMessages.map((m) => (
             <div key={m.id} className={`flex ${m.sender_role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm ${m.sender_role === "user" ? "bg-[hsl(265,75%,58%)] text-white" : "bg-secondary"}`}>
+              <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm ${m.sender_role === "user" ? "bg-brand-violet text-white" : "bg-secondary"}`}>
                 {m.body}
               </div>
             </div>

@@ -62,7 +62,7 @@ export default function AdminTenants() {
                   </button>
                 )}
                 {t.status === "en_proceso" && (
-                  <button type="button" onClick={() => updateTicket.mutate({ id: t.id, status: "resuelto" })} className="text-xs font-bold px-3 py-1.5 rounded-lg bg-[hsl(168,72%,40%)]/10 text-[hsl(168,72%,32%)]">
+                  <button type="button" onClick={() => updateTicket.mutate({ id: t.id, status: "resuelto" })} className="text-xs font-bold px-3 py-1.5 rounded-lg bg-brand-violet/10 text-brand-violet">
                     Resolver
                   </button>
                 )}

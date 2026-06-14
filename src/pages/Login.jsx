@@ -40,7 +40,7 @@ export default function Login() {
       footer={
         <>
           ¿No tienes cuenta?{" "}
-          <Link to="/register" className="font-bold text-[hsl(265,75%,50%)] hover:underline">
+          <Link to="/register" className="font-bold text-brand-violet hover:underline">
             Regístrate gratis
           </Link>
         </>
@@ -77,7 +77,7 @@ export default function Login() {
             <Label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Contraseña
             </Label>
-            <Link to="/olvide-contrasena" className="text-xs font-semibold text-[hsl(265,75%,50%)] hover:underline">
+            <Link to="/olvide-contrasena" className="text-xs font-semibold text-brand-violet hover:underline">
               ¿Olvidaste tu contraseña?
             </Link>
           </div>

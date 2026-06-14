@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Building2, Sparkles, ShieldCheck, ArrowRight, MapPin } from "lucide-react";
+import { Building2, Sparkles, ArrowRight, MapPin } from "lucide-react";
+import VerifiedBadge from "@/components/brand/VerifiedBadge";
 import { INTERIORS } from "@/lib/colombiaImages";
 import { cn } from "@/lib/utils";
 
@@ -11,8 +12,8 @@ const features = [
     title: "Listados completos",
     desc: "Explora inmuebles verificados en Bogotá y Barranquilla. Filtra por zona, precio y habitaciones sin scroll infinito.",
     tag: "Inventario real",
-    accent: "from-[hsl(340,82%,52%)] to-[hsl(265,75%,58%)]",
-    ring: "ring-[hsl(340,82%,52%)]/20",
+    accent: "from-brand-magenta to-brand-violet",
+    ring: "ring-brand-magenta/20",
     image: INTERIORS.conjunto,
     preview: (
       <div className="flex flex-wrap gap-1.5">
@@ -29,8 +30,8 @@ const features = [
     title: "Recursos útiles",
     desc: "Match inteligente, filtros avanzados, mapa interactivo y herramientas para decidir mejor en Colombia.",
     tag: "Match + mapa",
-    accent: "from-[hsl(265,75%,58%)] to-[hsl(200,90%,50%)]",
-    ring: "ring-[hsl(265,75%,58%)]/20",
+    accent: "from-brand-violet to-brand-magenta",
+    ring: "ring-brand-violet/20",
     image: INTERIORS.sala2,
     preview: (
       <div className="flex items-center gap-2">
@@ -49,18 +50,16 @@ const features = [
     ),
   },
   {
-    icon: ShieldCheck,
+    icon: Sparkles,
     title: "Tranquilidad de espíritu",
     desc: "Anuncios verificados y un equipo real que gestiona consultas y visitas. Arrienda con confianza.",
     tag: "Gestión completa",
-    accent: "from-[hsl(168,72%,40%)] to-[hsl(32,95%,54%)]",
-    ring: "ring-[hsl(168,72%,40%)]/20",
+    accent: "from-brand-magenta to-brand-violet",
+    ring: "ring-brand-magenta/20",
     image: INTERIORS.dormitorio,
     preview: (
       <div className="flex flex-wrap gap-1.5 text-[10px] font-bold text-foreground/80">
-        <span className="px-2.5 py-1 rounded-lg bg-white/95 border border-border/40 shadow-sm flex items-center gap-1">
-          <ShieldCheck className="w-3 h-3 text-[hsl(168,72%,40%)]" /> Verificado
-        </span>
+        <VerifiedBadge size="xs" />
         <span className="px-2.5 py-1 rounded-lg bg-white/95 border border-border/40 shadow-sm">Equipo Match</span>
       </div>
     ),
@@ -69,10 +68,10 @@ const features = [
 
 export default function RentEasySection() {
   return (
-    <section className="relative overflow-hidden bg-[hsl(240,40%,98%)] border-b border-border/40 py-16 sm:py-20 lg:py-24">
+    <section className="relative overflow-hidden bg-background border-b border-border/40 py-16 sm:py-20 lg:py-24">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-20 left-1/3 w-[420px] h-[420px] rounded-full bg-[hsl(265,75%,58%)]/6 blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-[360px] h-[360px] rounded-full bg-[hsl(340,82%,52%)]/6 blur-3xl" />
+        <div className="absolute -top-20 left-1/3 w-[420px] h-[420px] rounded-full bg-brand-violet/6 blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[360px] h-[360px] rounded-full bg-brand-magenta/6 blur-3xl" />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-8">
@@ -82,9 +81,7 @@ export default function RentEasySection() {
           viewport={{ once: true }}
           className="text-center max-w-3xl mx-auto mb-12 sm:mb-16"
         >
-          <p className="text-xs font-bold uppercase tracking-widest text-[hsl(265,75%,50%)] mb-3">
-            Por qué MatchColombia
-          </p>
+          <p className="text-eyebrow mb-3">Por qué MatchColombia</p>
           <h2 className="text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold text-foreground leading-[1.12] tracking-tight">
             Arrendar nunca fue{" "}
             <span className="text-gradient">tan fácil</span>
@@ -157,7 +154,7 @@ export default function RentEasySection() {
         >
           <Link
             to="/explorar"
-            className="inline-flex items-center gap-2 text-sm font-bold text-[hsl(265,75%,50%)] hover:underline group"
+            className="inline-flex items-center gap-2 text-sm font-bold text-brand-violet hover:underline group"
           >
             Ver todos los inmuebles
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />

@@ -26,7 +26,7 @@ export default function StatsBar() {
                 className="text-center lg:text-left"
               >
                 <div className="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-white border border-border/50 shadow-sm mb-3 lg:mb-4">
-                  <Icon className="w-5 h-5 text-[hsl(265,75%,50%)]" strokeWidth={2} />
+                  <Icon className="w-5 h-5 text-brand-violet" strokeWidth={2} />
                 </div>
                 <p className="text-xl sm:text-2xl font-extrabold tracking-tight">{stat.value}</p>
                 <p className="text-xs sm:text-sm text-muted-foreground mt-1">{stat.label}</p>

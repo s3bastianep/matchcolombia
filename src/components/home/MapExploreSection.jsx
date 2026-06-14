@@ -34,7 +34,7 @@ export default function MapExploreSection() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[hsl(168,76%,42%)]/10 text-[hsl(168,76%,35%)] text-xs font-bold uppercase tracking-wider mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-violet/10 text-brand-violet text-xs font-bold uppercase tracking-wider mb-4">
               <Navigation className="w-3.5 h-3.5" />
               Mapa interactivo
             </div>

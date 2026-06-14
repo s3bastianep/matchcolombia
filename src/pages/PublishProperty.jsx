@@ -173,14 +173,14 @@ export default function PublishProperty() {
   const progress = ((step + 1) / STEPS.length) * 100;
 
   return (
-    <div className="min-h-screen bg-[hsl(240,40%,98%)]">
+    <div className="min-h-screen bg-background">
       <div className="bg-white border-b border-border/50">
         <div className="max-w-3xl mx-auto px-5 sm:px-8 py-8 sm:py-10">
           <Link to="/publicar" className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground mb-4 transition-colors">
             <ArrowLeft className="w-3.5 h-3.5" />
             Volver a vender
           </Link>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[hsl(340,82%,52%)]/10 text-[hsl(340,82%,45%)] text-xs font-bold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-magenta/10 text-brand-magenta text-xs font-bold uppercase tracking-wider mb-4">
             <Sparkles className="w-3.5 h-3.5" />
             Publicar gratis
           </div>
@@ -203,7 +203,7 @@ export default function PublishProperty() {
                       className={cn(
                         "w-9 h-9 rounded-xl flex items-center justify-center transition-all",
                         done && "gradient-cta text-white",
-                        active && !done && "bg-[hsl(265,75%,58%)]/15 text-[hsl(265,75%,50%)] ring-2 ring-[hsl(265,75%,58%)]/30",
+                        active && !done && "bg-brand-violet/15 text-brand-violet ring-2 ring-brand-violet/30",
                         !done && !active && "bg-secondary text-muted-foreground"
                       )}
                     >
@@ -386,12 +386,12 @@ export default function PublishProperty() {
             {step === 3 && (
               <SectionCard title="Fotos y datos del propietario" subtitle="Sube fotos y déjanos tus datos. Nosotros gestionamos todo con los interesados.">
                 <div className="space-y-6">
-                  <div className="rounded-2xl border border-[hsl(265,75%,58%)]/20 bg-[hsl(265,75%,58%)]/5 p-5">
+                  <div className="rounded-2xl border border-brand-violet/20 bg-brand-violet/5 p-5">
                     <p className="font-extrabold text-sm mb-3">¿Cómo funciona con {BRAND.name}?</p>
                     <ul className="space-y-2">
                       {MANAGEMENT_PERKS.map((perk) => (
                         <li key={perk} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                          <Check className="w-4 h-4 text-[hsl(265,75%,50%)] shrink-0 mt-0.5" strokeWidth={3} />
+                          <Check className="w-4 h-4 text-brand-violet shrink-0 mt-0.5" strokeWidth={3} />
                           {perk}
                         </li>
                       ))}
@@ -412,13 +412,13 @@ export default function PublishProperty() {
                           </button>
                         </div>
                       ))}
-                      <label className="aspect-square rounded-2xl border-2 border-dashed border-[hsl(265,75%,58%)]/30 hover:border-[hsl(265,75%,58%)]/60 flex flex-col items-center justify-center cursor-pointer transition-colors bg-white">
+                      <label className="aspect-square rounded-2xl border-2 border-dashed border-brand-violet/30 hover:border-brand-violet/60 flex flex-col items-center justify-center cursor-pointer transition-colors bg-white">
                         <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
                         {uploading ? (
                           <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                         ) : (
                           <>
-                            <Upload className="w-6 h-6 text-[hsl(265,75%,58%)] mb-1" />
+                            <Upload className="w-6 h-6 text-brand-violet mb-1" />
                             <span className="text-xs font-semibold text-muted-foreground">Subir</span>
                           </>
                         )}

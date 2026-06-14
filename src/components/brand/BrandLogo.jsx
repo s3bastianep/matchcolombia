@@ -12,7 +12,7 @@ export default function BrandLogo({ className, size = "md", link = true }) {
 
   const content = (
     <div className={cn("flex items-center gap-2.5 shrink-0", className)}>
-      <div className={cn(s.box, "gradient-cta flex items-center justify-center shadow-md shadow-[hsl(265,75%,58%)]/25")}>
+      <div className={cn(s.box, "gradient-cta flex items-center justify-center shadow-md shadow-brand-violet/25")}>
         <span className={cn("font-extrabold text-white leading-none", s.icon)}>M</span>
       </div>
       <span className={cn("font-extrabold text-foreground leading-none", s.text)}>

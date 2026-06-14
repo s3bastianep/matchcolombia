@@ -54,7 +54,7 @@ export default function SeekerApplications() {
             </div>
             <div className="flex gap-1 mb-4">
               {STEPS.map((s, i) => (
-                <div key={s} className={`h-1.5 flex-1 rounded-full ${i <= stepIdx ? "bg-[hsl(265,75%,58%)]" : "bg-secondary"}`} />
+                <div key={s} className={`h-1.5 flex-1 rounded-full ${i <= stepIdx ? "bg-brand-violet" : "bg-secondary"}`} />
               ))}
             </div>
             <p className="text-xs text-muted-foreground mb-4">

@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/AuthContext";
 function AuthLoading() {
   return (
     <div className="min-h-[50vh] flex items-center justify-center">
-      <div className="w-10 h-10 rounded-full border-2 border-[hsl(265,75%,58%)] border-t-transparent animate-spin" />
+      <div className="w-10 h-10 rounded-full border-2 border-brand-violet border-t-transparent animate-spin" />
     </div>
   );
 }

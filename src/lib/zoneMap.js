@@ -90,21 +90,21 @@ export function getBoundsForMap(center, zoom, city) {
 export const HOME_ZONE_MARKERS = [
   { id: "chapinero", label: "Chapinero", count: 320, color: "#e11d6f", city: "Bogotá", zone: "Chapinero" },
   { id: "usaquen", label: "Usaquén", count: 215, color: "#8b5cf6", city: "Bogotá", zone: "Usaquén" },
-  { id: "teusaquillo", label: "Teusaquillo", count: 175, color: "#14b8a6", city: "Bogotá", zone: "Teusaquillo" },
-  { id: "kennedy", label: "Kennedy", count: 290, color: "#f59e0b", city: "Bogotá", zone: "Kennedy" },
-  { id: "suba", label: "Suba", count: 410, color: "#0ea5e9", city: "Bogotá", zone: "Suba" },
+  { id: "teusaquillo", label: "Teusaquillo", count: 175, color: "#d946ef", city: "Bogotá", zone: "Teusaquillo" },
+  { id: "kennedy", label: "Kennedy", count: 290, color: "#7c3aed", city: "Bogotá", zone: "Kennedy" },
+  { id: "suba", label: "Suba", count: 410, color: "#db2777", city: "Bogotá", zone: "Suba" },
   { id: "candelaria", label: "La Candelaria", count: 98, color: "#e11d6f", city: "Bogotá", zone: "La Candelaria" },
 ];
 
 const PIN_COLORS = [
-  "bg-[hsl(340,82%,52%)]",
-  "bg-[hsl(265,75%,58%)]",
-  "bg-[hsl(168,72%,40%)]",
-  "bg-[hsl(32,95%,54%)]",
-  "bg-[hsl(200,90%,50%)]",
+  "bg-brand-magenta",
+  "bg-brand-violet",
+  "bg-brand-magenta",
+  "bg-brand-violet",
+  "bg-brand-magenta",
 ];
 
-const PIN_HEX = ["#e11d6f", "#8b5cf6", "#14b8a6", "#f59e0b", "#0ea5e9"];
+const PIN_HEX = ["#e11d6f", "#8b5cf6", "#d946ef", "#7c3aed", "#db2777"];
 
 function resolveZone(city, ...names) {
   const cityMap = ZONE_LAT_LNG[city] || ZONE_LAT_LNG.Bogotá;

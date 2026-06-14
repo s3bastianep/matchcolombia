@@ -8,9 +8,9 @@ export function getEstratoLabel(estrato) {
 
 export function getEstratoChipStyle(estrato) {
   const value = String(estrato || "").toLowerCase();
-  if (value === "comercial") return "bg-[hsl(32,95%,54%)]/12 text-[hsl(32,95%,38%)] border-[hsl(32,95%,54%)]/25";
-  if (value === "rural") return "bg-[hsl(168,72%,40%)]/12 text-[hsl(168,72%,32%)] border-[hsl(168,72%,40%)]/25";
-  return "bg-[hsl(200,90%,50%)]/10 text-[hsl(200,90%,38%)] border-[hsl(200,90%,50%)]/20";
+  if (value === "comercial") return "bg-brand-magenta/10 text-brand-magenta border-brand-magenta/25";
+  if (value === "rural") return "bg-brand-violet/10 text-brand-violet border-brand-violet/25";
+  return "bg-secondary text-foreground/75 border-border/50";
 }
 
 export function formatEstratoFilterLabel(value) {

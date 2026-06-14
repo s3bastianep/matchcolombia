@@ -38,8 +38,8 @@ export default function TenantPortal() {
       </div>
 
       {pending && (
-        <div className="bg-[hsl(32,95%,54%)]/10 border border-[hsl(32,95%,54%)]/25 rounded-2xl p-4 flex items-center gap-3">
-          <AlertCircle className="w-5 h-5 text-[hsl(32,95%,40%)] shrink-0" />
+        <div className="bg-brand-magenta/10 border border-brand-magenta/25 rounded-2xl p-4 flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 text-brand-magenta shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="font-bold text-sm">Pago pendiente: {formatCOP(pending.amount)}</p>
             <p className="text-xs text-muted-foreground">Vence {pending.due_date}</p>
@@ -62,7 +62,7 @@ export default function TenantPortal() {
           { to: "/portal/mensajes", label: "Chat con MatchColombia", icon: MessageSquare },
         ].map((item) => (
           <Link key={item.to} to={item.to} className="bg-white rounded-2xl border border-border/40 p-5 hover:shadow-md transition-all flex items-center gap-3">
-            <item.icon className="w-5 h-5 text-[hsl(265,75%,50%)]" />
+            <item.icon className="w-5 h-5 text-brand-violet" />
             <span className="font-bold">{item.label}</span>
           </Link>
         ))}

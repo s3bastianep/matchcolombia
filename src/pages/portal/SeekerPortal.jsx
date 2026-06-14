@@ -34,7 +34,7 @@ export default function SeekerPortal() {
           { to: "/portal/visitas", label: "Visitas", icon: Calendar, desc: `${visits.length} agendadas` },
         ].map((item) => (
           <Link key={item.to} to={item.to} className="bg-white rounded-2xl border border-border/40 p-5 hover:shadow-md transition-all group">
-            <item.icon className="w-5 h-5 text-[hsl(265,75%,50%)] mb-3" />
+            <item.icon className="w-5 h-5 text-brand-violet mb-3" />
             <p className="font-extrabold">{item.label}</p>
             <p className="text-xs text-muted-foreground mt-1">{item.desc}</p>
             <ArrowRight className="w-4 h-4 text-muted-foreground mt-3 group-hover:translate-x-0.5 transition-transform" />

@@ -29,7 +29,7 @@ export default function ForgotPassword() {
       title="Recuperar contraseña"
       subtitle="Te enviaremos instrucciones a tu correo"
       footer={
-        <Link to="/login" className="font-bold text-[hsl(265,75%,50%)] hover:underline inline-flex items-center gap-1">
+        <Link to="/login" className="font-bold text-brand-violet hover:underline inline-flex items-center gap-1">
           <ArrowLeft className="w-3.5 h-3.5" />
           Volver a iniciar sesión
         </Link>

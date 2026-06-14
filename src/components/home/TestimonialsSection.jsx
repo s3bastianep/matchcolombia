@@ -14,7 +14,7 @@ export default function TestimonialsSection() {
   return (
     <section className="section-pad bg-white overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-8 text-center mb-10">
-        <p className="text-xs font-bold uppercase tracking-widest text-[hsl(265,75%,50%)] mb-2">Comunidad</p>
+        <p className="text-xs font-bold uppercase tracking-widest text-brand-violet mb-2">Comunidad</p>
         <h2 className="text-2xl sm:text-3xl font-extrabold">Arrendatarios más felices</h2>
       </div>
 
@@ -27,7 +27,7 @@ export default function TestimonialsSection() {
             >
               <div className="flex gap-0.5 mb-3">
                 {Array(5).fill(0).map((_, j) => (
-                  <Star key={j} className="w-3.5 h-3.5 fill-[hsl(32,95%,54%)] text-[hsl(32,95%,54%)]" />
+                  <Star key={j} className="w-3.5 h-3.5 fill-brand-magenta text-brand-magenta" />
                 ))}
               </div>
               <p className="text-sm text-foreground/85 leading-relaxed font-medium">&ldquo;{q.text}&rdquo;</p>

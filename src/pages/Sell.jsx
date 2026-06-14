@@ -12,8 +12,6 @@ import {
   Shield,
   Users,
   Zap,
-  Camera,
-  ClipboardCheck,
   Handshake,
   Phone,
   Mail,
@@ -29,6 +27,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
+import VerifiedBadge from "@/components/brand/VerifiedBadge";
 import { CITIES } from "@/lib/colombia";
 import { INTERIORS } from "@/lib/colombiaImages";
 
@@ -45,24 +44,24 @@ const VALUE_PILLARS = [
     tag: "Confianza",
     title: "Listado verificado",
     desc: "Tu inmueble pasa revisión antes de publicarse. Los compradores ven un anuncio serio, no uno más del montón.",
-    accent: "from-[hsl(340,82%,52%)] to-[hsl(265,75%,58%)]",
-    bg: "bg-[hsl(340,82%,52%)]/8",
+    accent: "from-brand-magenta to-brand-violet",
+    bg: "bg-brand-magenta/8",
   },
   {
     icon: Headphones,
     tag: "Gestión",
     title: "Nosotros atendemos por ti",
     desc: "Consultas, visitas y seguimiento los maneja nuestro equipo. Tú no recibes 50 WhatsApps ni expones tu número.",
-    accent: "from-[hsl(265,75%,58%)] to-[hsl(200,90%,50%)]",
-    bg: "bg-[hsl(265,75%,58%)]/8",
+    accent: "from-brand-violet to-brand-magenta",
+    bg: "bg-brand-violet/8",
   },
   {
     icon: Eye,
     tag: "Exposición",
     title: "Compradores que buscan en tu zona",
     desc: "Promocionamos tu propiedad a quienes ya exploran Bogotá y Barranquilla en MatchColombia.",
-    accent: "from-[hsl(168,72%,40%)] to-[hsl(32,95%,54%)]",
-    bg: "bg-[hsl(168,72%,40%)]/8",
+    accent: "from-brand-magenta to-brand-violet",
+    bg: "bg-brand-magenta/8",
   },
 ];
 
@@ -81,10 +80,10 @@ const WITH_US = [
 ];
 
 const PROCESS = [
-  { title: "Registras tu inmueble", desc: "Barrio, precio, fotos y lo esencial.", icon: Home, accent: "from-[hsl(340,82%,52%)] to-[hsl(265,75%,58%)]" },
-  { title: "Verificamos y publicamos", desc: "Revisamos datos y activamos tu listado.", icon: FileCheck, accent: "from-[hsl(265,75%,58%)] to-[hsl(200,90%,50%)]" },
-  { title: "Gestionamos compradores", desc: "Consultas y visitas sin que tú hables con nadie.", icon: Users, accent: "from-[hsl(200,90%,50%)] to-[hsl(168,72%,40%)]" },
-  { title: "Cierras con apoyo", desc: "Te acompañamos hasta concretar la operación.", icon: BadgeCheck, accent: "from-[hsl(168,72%,40%)] to-[hsl(32,95%,54%)]" },
+  { title: "Registras tu inmueble", desc: "Barrio, precio, fotos y lo esencial.", icon: Home, accent: "from-brand-magenta to-brand-violet" },
+  { title: "Verificamos y publicamos", desc: "Revisamos datos y activamos tu listado.", icon: FileCheck, accent: "from-brand-violet to-brand-magenta" },
+  { title: "Gestionamos compradores", desc: "Consultas y visitas sin que tú hables con nadie.", icon: Users, accent: "from-brand-magenta to-brand-violet" },
+  { title: "Cierras con apoyo", desc: "Te acompañamos hasta concretar la operación.", icon: BadgeCheck, accent: "from-brand-violet to-brand-magenta" },
 ];
 
 const FAQ = [
@@ -114,7 +113,7 @@ function SectionEyebrow({ children, light = false }) {
   return (
     <p className={cn(
       "text-xs font-bold uppercase tracking-widest mb-3",
-      light ? "text-[hsl(340,82%,65%)]" : "text-[hsl(265,75%,50%)]"
+      light ? "text-brand-magenta" : "text-brand-violet"
     )}>
       {children}
     </p>
@@ -154,7 +153,7 @@ function LeadForm({ dark = false }) {
   };
 
   const inputClass = cn(
-    "w-full pl-10 pr-4 py-3 rounded-xl border text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[hsl(340,82%,52%)]/30",
+    "w-full pl-10 pr-4 py-3 rounded-xl border text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-magenta/30",
     dark ? "bg-white/10 border-white/20 text-white placeholder:text-white/40" : "bg-white border-border/50"
   );
   const labelClass = cn("text-[10px] font-bold uppercase tracking-wider mb-1.5 block", dark ? "text-white/60" : "text-muted-foreground");
@@ -165,14 +164,14 @@ function LeadForm({ dark = false }) {
         <div>
           <label className={labelClass}>Nombre</label>
           <div className="relative">
-            <User className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-[hsl(265,75%,58%)]")} />
+            <User className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-brand-violet")} />
             <input type="text" required value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className={inputClass} placeholder="Tu nombre" />
           </div>
         </div>
         <div>
           <label className={labelClass}>Correo</label>
           <div className="relative">
-            <Mail className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-[hsl(340,82%,52%)]")} />
+            <Mail className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-brand-magenta")} />
             <input type="email" required value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} className={inputClass} placeholder="tu@email.com" />
           </div>
         </div>
@@ -181,7 +180,7 @@ function LeadForm({ dark = false }) {
         <div>
           <label className={labelClass}>Barrio</label>
           <div className="relative">
-            <MapPin className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-[hsl(168,72%,40%)]")} />
+            <MapPin className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-brand-violet")} />
             <input type="text" value={form.neighborhood} onChange={(e) => setForm((f) => ({ ...f, neighborhood: e.target.value }))} className={inputClass} placeholder="Ej: Chapinero" />
           </div>
         </div>
@@ -197,7 +196,7 @@ function LeadForm({ dark = false }) {
       <div>
         <label className={labelClass}>Celular</label>
         <div className="relative">
-          <Phone className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-[hsl(168,72%,40%)]")} />
+          <Phone className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-brand-magenta")} />
           <input type="tel" required value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} className={inputClass} placeholder="+57 300 000 0000" />
         </div>
       </div>
@@ -221,7 +220,7 @@ function LeadForm({ dark = false }) {
 
 export default function Sell() {
   return (
-    <div className="w-full overflow-x-hidden bg-[hsl(265,18%,97%)]">
+    <div className="w-full overflow-x-hidden bg-background">
       {/* Breadcrumb con color */}
       <div className="color-bar">
         <div className="max-w-6xl mx-auto px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
@@ -238,30 +237,33 @@ export default function Sell() {
       </div>
 
       {/* Hero con valor claro */}
-      <section className="relative overflow-hidden bg-[hsl(265,35%,22%)] text-white">
+      <section className="relative overflow-hidden bg-brand-dark text-white">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-[hsl(340,82%,52%)]/20 blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[hsl(265,75%,58%)]/15 blur-3xl" />
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-brand-magenta/20 blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-brand-violet/15 blur-3xl" />
         </div>
         <div className="relative max-w-6xl mx-auto px-4 sm:px-8 py-14 sm:py-20 lg:py-24 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <SectionEyebrow light>Por qué vender con nosotros</SectionEyebrow>
             <h1 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold leading-[1.08] tracking-tight">
               Vende sin estrés.{" "}
-              <span className="text-[hsl(340,82%,65%)]">Nosotros gestionamos todo.</span>
+              <span className="text-brand-magenta">Nosotros gestionamos todo.</span>
             </h1>
             <p className="mt-5 text-white/75 text-sm sm:text-base leading-relaxed max-w-lg">
               Publicar es gratis. {BRAND.name} verifica tu inmueble, filtra compradores y coordina visitas. Tú decides; nosotros hacemos el trabajo pesado.
             </p>
-            <ul className="mt-8 space-y-3">
+            <div className="mt-4">
+              <VerifiedBadge size="sm" />
+            </div>
+            <ul className="mt-6 space-y-3">
               {[
                 "Listado verificado con sello de confianza",
                 "Cero contacto directo con interesados",
                 "Equipo real en Bogotá y Barranquilla",
               ].map((text) => (
                 <li key={text} className="flex items-center gap-3 text-sm font-semibold text-white/90">
-                  <div className="w-6 h-6 rounded-full bg-[hsl(168,72%,40%)]/20 flex items-center justify-center shrink-0">
-                    <Check className="w-3.5 h-3.5 text-[hsl(168,72%,55%)]" strokeWidth={3} />
+                  <div className="w-6 h-6 rounded-full bg-brand-magenta/20 flex items-center justify-center shrink-0">
+                    <Check className="w-3.5 h-3.5 text-brand-magenta" strokeWidth={3} />
                   </div>
                   {text}
                 </li>
@@ -285,7 +287,7 @@ export default function Sell() {
             className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] lg:aspect-auto lg:min-h-[380px]"
           >
             <img src={INTERIORS.casa} alt="Inmueble en venta" className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[hsl(265,35%,22%)]/80 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 space-y-3">
               {VALUE_PILLARS.map(({ tag, title, accent }) => (
                 <div key={tag} className="flex items-center gap-3 bg-white/10 backdrop-blur-md rounded-xl px-4 py-3 border border-white/15">
@@ -311,7 +313,7 @@ export default function Sell() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="text-center p-5 rounded-2xl border border-border/40 bg-gradient-to-br from-white to-[hsl(265,75%,58%)]/5"
+              className="text-center p-5 rounded-2xl border border-border/40 bg-gradient-to-br from-white to-brand-violet/5"
             >
               <p className="text-xl sm:text-2xl font-extrabold text-gradient">{value}</p>
               <p className="text-[11px] sm:text-xs font-semibold text-muted-foreground mt-1">{label}</p>
@@ -370,7 +372,7 @@ export default function Sell() {
             </h2>
           </div>
           <div className="grid md:grid-cols-2 gap-5 sm:gap-6">
-            <div className="rounded-3xl border border-border/50 bg-[hsl(240,40%,98%)] p-6 sm:p-8">
+            <div className="rounded-3xl border border-border/50 bg-background p-6 sm:p-8">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
                   <X className="w-5 h-5 text-muted-foreground" />
@@ -380,14 +382,14 @@ export default function Sell() {
               <ul className="space-y-4">
                 {WITHOUT_US.map((text) => (
                   <li key={text} className="flex items-start gap-3 text-sm text-muted-foreground">
-                    <X className="w-4 h-4 shrink-0 mt-0.5 text-[hsl(340,82%,52%)]/60" />
+                    <X className="w-4 h-4 shrink-0 mt-0.5 text-brand-magenta/60" />
                     {text}
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="rounded-3xl border-2 border-[hsl(265,75%,58%)]/30 bg-gradient-to-br from-[hsl(265,75%,58%)]/8 via-white to-[hsl(340,82%,52%)]/5 p-6 sm:p-8 shadow-lg relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-[hsl(340,82%,52%)]/10 blur-2xl" />
+            <div className="rounded-3xl border-2 border-brand-violet/30 bg-gradient-to-br from-brand-violet/8 via-white to-brand-magenta/5 p-6 sm:p-8 shadow-lg relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-brand-magenta/10 blur-2xl" />
               <div className="relative">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-xl gradient-cta flex items-center justify-center">
@@ -398,7 +400,7 @@ export default function Sell() {
                 <ul className="space-y-4">
                   {WITH_US.map((text) => (
                     <li key={text} className="flex items-start gap-3 text-sm font-semibold text-foreground/90">
-                      <Check className="w-4 h-4 shrink-0 mt-0.5 text-[hsl(168,72%,40%)]" strokeWidth={3} />
+                      <Check className="w-4 h-4 shrink-0 mt-0.5 text-brand-violet" strokeWidth={3} />
                       {text}
                     </li>
                   ))}
@@ -457,7 +459,7 @@ export default function Sell() {
             <p className="text-white font-extrabold text-xl sm:text-2xl">¿Listo para vender con respaldo real?</p>
             <p className="text-white/80 text-sm mt-2">Publica gratis · Bogotá y Barranquilla</p>
           </div>
-          <Link to="/publicar/nuevo" className="inline-flex items-center gap-2 bg-white text-[hsl(265,35%,22%)] font-bold px-8 py-3.5 rounded-xl hover:bg-white/90 transition-colors shrink-0">
+          <Link to="/publicar/nuevo" className="inline-flex items-center gap-2 bg-white text-brand-dark font-bold px-8 py-3.5 rounded-xl hover:bg-white/90 transition-colors shrink-0">
             Vender mi inmueble
             <ArrowRight className="w-4 h-4" />
           </Link>
@@ -465,7 +467,7 @@ export default function Sell() {
       </section>
 
       {/* FAQ en panel oscuro */}
-      <section className="py-16 sm:py-20 bg-[hsl(265,35%,22%)] text-white">
+      <section className="py-16 sm:py-20 bg-brand-dark text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-8 grid lg:grid-cols-[1fr_1.2fr] gap-10 items-start">
           <div>
             <SectionEyebrow light>Preguntas frecuentes</SectionEyebrow>
@@ -487,7 +489,7 @@ export default function Sell() {
       </section>
 
       {/* Formulario */}
-      <section id="vender-form" className="py-16 sm:py-20 bg-[hsl(265,18%,97%)]">
+      <section id="vender-form" className="py-16 sm:py-20 bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-8 grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
           <div>
             <SectionEyebrow>Empieza hoy</SectionEyebrow>
@@ -499,10 +501,10 @@ export default function Sell() {
             </p>
             <div className="mt-8 grid sm:grid-cols-2 gap-3">
               {[
-                { icon: Shield, label: "Verificación", color: "text-[hsl(340,82%,52%)]" },
-                { icon: Zap, label: "Gestión total", color: "text-[hsl(265,75%,50%)]" },
-                { icon: MessageCircleOff, label: "Sin contacto directo", color: "text-[hsl(200,90%,50%)]" },
-                { icon: Handshake, label: "Tú decides", color: "text-[hsl(168,72%,40%)]" },
+                { icon: Shield, label: "Verificación", color: "text-brand-magenta" },
+                { icon: Zap, label: "Gestión total", color: "text-brand-violet" },
+                { icon: MessageCircleOff, label: "Sin contacto directo", color: "text-brand-magenta" },
+                { icon: Handshake, label: "Tú decides", color: "text-brand-violet" },
               ].map(({ icon: Icon, label, color }) => (
                 <div key={label} className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-border/40">
                   <Icon className={cn("w-4 h-4 shrink-0", color)} />
@@ -511,7 +513,7 @@ export default function Sell() {
               ))}
             </div>
           </div>
-          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-border/50 ring-1 ring-[hsl(265,75%,58%)]/10">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-border/50 ring-1 ring-brand-violet/10">
             <div className="h-1 w-16 rounded-full gradient-cta mb-6" />
             <h3 className="font-extrabold text-lg mb-1">Registra tu propiedad</h3>
             <p className="text-sm text-muted-foreground mb-6">Bogotá y Barranquilla · Gratis</p>

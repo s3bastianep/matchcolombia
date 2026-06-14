@@ -46,7 +46,7 @@ export default function AdminReports() {
             {stats.leadsPorProp.map((row) => (
               <li key={row.title} className="flex items-center justify-between text-sm">
                 <span className="font-semibold truncate pr-4">{row.title}</span>
-                <span className="font-extrabold text-[hsl(265,75%,50%)]">{row.count}</span>
+                <span className="font-extrabold text-brand-violet">{row.count}</span>
               </li>
             ))}
           </ul>

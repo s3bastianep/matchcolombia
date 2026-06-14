@@ -49,7 +49,7 @@ export default function SeekerVisits() {
               <StatusBadge status={v.status} />
             </div>
             {v.status === "confirmada" && (
-              <p className="text-xs text-[hsl(168,72%,32%)] font-semibold mt-3 bg-[hsl(168,72%,40%)]/10 px-3 py-2 rounded-lg">
+              <p className="text-xs text-brand-violet font-semibold mt-3 bg-brand-violet/10 px-3 py-2 rounded-lg">
                 ✓ Visita confirmada — te esperamos en la dirección indicada.
               </p>
             )}

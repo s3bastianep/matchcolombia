@@ -140,7 +140,7 @@ export default function Navbar() {
                         <div className="px-4 py-3 border-b border-border/40">
                           <p className="font-bold text-sm truncate">{user.name}</p>
                           <p className="text-xs text-muted-foreground truncate">@{user.username}</p>
-                          <p className="text-[10px] font-semibold text-[hsl(265,75%,50%)] mt-1">{ROLE_LABELS[getUserRole(user)]}</p>
+                          <p className="text-[10px] font-semibold text-brand-violet mt-1">{ROLE_LABELS[getUserRole(user)]}</p>
                         </div>
                         <Link
                           to={PANEL_HOME[getUserRole(user)] || "/portal"}
@@ -195,7 +195,7 @@ export default function Navbar() {
 
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
-              className="hidden md:block gradient-cta text-white text-sm font-bold px-5 py-2.5 rounded-full hover:opacity-95 transition-opacity shadow-md shadow-[hsl(265,75%,58%)]/20"
+              className="hidden md:block gradient-cta text-white text-sm font-bold px-5 py-2.5 rounded-full hover:opacity-95 transition-opacity shadow-md shadow-brand-violet/20"
             >
               Match inteligente
             </button>

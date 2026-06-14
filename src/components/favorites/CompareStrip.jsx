@@ -15,7 +15,7 @@ export default function CompareStrip({ properties }) {
         <div className="grid gap-3" style={{ gridTemplateColumns: `140px repeat(${properties.length}, minmax(0, 1fr))` }}>
           <div />
           {properties.map((p) => (
-            <Link key={p.id} to={`/propiedad/${p.id}`} className="font-extrabold text-sm hover:text-[hsl(265,75%,50%)] transition-colors line-clamp-2">
+            <Link key={p.id} to={`/propiedad/${p.id}`} className="font-extrabold text-sm hover:text-brand-violet transition-colors line-clamp-2">
               {p.neighborhood}
             </Link>
           ))}
@@ -39,7 +39,7 @@ export default function CompareStrip({ properties }) {
             </React.Fragment>
           ))}
         </div>
-        <Link to="/explorar" className="inline-flex items-center gap-1.5 mt-4 text-xs font-bold text-[hsl(265,75%,50%)] hover:underline">
+        <Link to="/explorar" className="inline-flex items-center gap-1.5 mt-4 text-xs font-bold text-brand-violet hover:underline">
           Agregar más a comparar <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>

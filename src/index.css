@@ -49,6 +49,7 @@
     /* Paleta de marca — 3 colores con propósito */
     --brand-violet: 265 75% 58%;
     --brand-magenta: 340 82% 52%;
+    --brand-dark: 265 35% 22%;
     /* Mint/turquesa — EXCLUSIVO badge verificado */
     --brand-verified: 168 52% 42%;
     --brand-verified-bg: 168 48% 94%;
@@ -139,6 +140,18 @@
 
   .text-brand-magenta {
     color: hsl(var(--brand-magenta));
+  }
+
+  .bg-brand-dark {
+    background-color: hsl(var(--brand-dark));
+  }
+
+  .text-eyebrow {
+    @apply text-xs font-bold uppercase tracking-widest text-brand-violet;
+  }
+
+  .section-alt {
+    @apply bg-secondary/40;
   }
 
   /* Barra superior — solo 2 colores marca */

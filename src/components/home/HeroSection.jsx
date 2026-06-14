@@ -23,7 +23,7 @@ function CollagePhoto({ src, alt, className }) {
 function HeroCollage() {
   return (
       <div className="relative w-full flex items-center justify-center px-4 sm:px-8 py-8 sm:py-10 lg:py-12 min-h-[240px] sm:min-h-[300px] lg:min-h-[360px]">
-      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(265,75%,58%)]/8 via-white to-[hsl(340,82%,52%)]/6 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-violet/8 via-white to-brand-magenta/6 pointer-events-none" />
       <div className="absolute top-[10%] right-[10%] w-64 h-64 rounded-full gradient-cta opacity-[0.14] blur-3xl pointer-events-none animate-pulse" />
 
       <div className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[420px] aspect-square mx-auto">
@@ -75,7 +75,7 @@ export default function HeroSection({ onStartQuiz }) {
             <button
               type="button"
               onClick={() => navigate("/explorar")}
-              className="text-sm font-bold text-[hsl(265,75%,50%)] hover:underline"
+              className="text-sm font-bold text-brand-violet hover:underline"
             >
               Ver todos los arriendos
             </button>

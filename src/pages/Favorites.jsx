@@ -25,10 +25,10 @@ export default function Favorites() {
   const saved = allProperties.filter((p) => ids.includes(p.id));
 
   return (
-    <div className="min-h-screen bg-[hsl(240,40%,98%)]">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
         <div className="mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[hsl(265,75%,58%)]/10 text-[hsl(265,75%,50%)] text-xs font-bold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-violet/10 text-brand-violet text-xs font-bold uppercase tracking-wider mb-4">
             <Heart className="w-3.5 h-3.5" />
             Short List
           </div>
@@ -50,8 +50,8 @@ export default function Favorites() {
             </div>
           </>
         ) : (
-          <div className="flex flex-col items-center justify-center py-24 rounded-3xl border-2 border-dashed border-[hsl(265,75%,58%)]/20 bg-white text-center">
-            <Heart className="w-14 h-14 text-[hsl(265,75%,58%)]/30 mb-4" />
+          <div className="flex flex-col items-center justify-center py-24 rounded-3xl border-2 border-dashed border-brand-violet/20 bg-white text-center">
+            <Heart className="w-14 h-14 text-brand-violet/30 mb-4" />
             <h2 className="font-extrabold text-xl mb-2">Tu Short List está vacía</h2>
             <p className="text-muted-foreground text-sm max-w-sm mb-6">
               Usa el match inteligente para ver inmuebles 100% verificados, o guarda cualquier opción con el corazón.

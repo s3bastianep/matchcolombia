@@ -7,25 +7,25 @@ const cards = [
     title: "Cero scroll infinito",
     desc: "Solo inmuebles verificados. Match inteligente, sin anuncios falsos.",
     img: INTERIORS.balcon,
-    accent: "hsl(340,82%,52%)",
+    accent: "hsl(var(--brand-magenta))",
   },
   {
     title: "Menos estrés, más ¡sí!",
     desc: "100% verificados. Nosotros gestionamos todo — sin estafas, sin sustos.",
     img: BOGOTA.chapinero,
-    accent: "hsl(265,75%,58%)",
+    accent: "hsl(var(--brand-violet))",
   },
   {
     title: "Ayuda real, no solo búsqueda",
     desc: "Match inteligente, favoritos y acompañamiento real por WhatsApp.",
     img: INTERIORS.sala,
-    accent: "hsl(168,72%,40%)",
+    accent: "hsl(var(--brand-magenta))",
   },
 ];
 
 export default function BuiltForRenters({ onStartQuiz }) {
   return (
-    <section className="py-16 bg-[#F7F3EE]">
+    <section className="py-16 bg-background">
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <h2 className="text-2xl sm:text-3xl font-extrabold mb-8 max-w-lg">
           Hecho para quien busca arriendo en Colombia

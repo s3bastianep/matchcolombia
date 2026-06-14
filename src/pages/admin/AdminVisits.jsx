@@ -46,13 +46,13 @@ export default function AdminVisits() {
               <StatusBadge status={v.status} />
             </div>
             <p className="flex items-center gap-2 text-sm font-semibold mt-4">
-              <Calendar className="w-4 h-4 text-[hsl(265,75%,58%)]" />
+              <Calendar className="w-4 h-4 text-brand-violet" />
               {fmt(v.scheduled_at)}
             </p>
             {v.notes && <p className="text-xs text-muted-foreground mt-2">{v.notes}</p>}
             <div className="flex flex-wrap gap-2 mt-4">
               {v.status === "pendiente" && (
-                <button type="button" onClick={() => updateVisit.mutate({ id: v.id, status: "confirmada" })} className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg bg-[hsl(168,72%,40%)]/10 text-[hsl(168,72%,32%)]">
+                <button type="button" onClick={() => updateVisit.mutate({ id: v.id, status: "confirmada" })} className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg bg-brand-violet/10 text-brand-violet">
                   <Check className="w-3.5 h-3.5" /> Confirmar
                 </button>
               )}

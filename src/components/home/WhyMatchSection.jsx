@@ -10,8 +10,8 @@ const pillars = [
     tag: "Comodidad",
     title: "Todo en un solo lugar",
     desc: "Publica, postula, agenda visitas o habla con nosotros. Todo desde tu celular o computadora, sin ir de portal en portal.",
-    accent: "from-[hsl(340,82%,52%)] to-[hsl(265,75%,58%)]",
-    bg: "bg-[hsl(340,82%,52%)]/5",
+    accent: "from-brand-magenta to-brand-violet",
+    bg: "bg-brand-magenta/5",
   },
   {
     id: "confianza",
@@ -19,8 +19,8 @@ const pillars = [
     tag: "Confianza",
     title: "Te respaldamos de verdad",
     desc: "Verificamos inmuebles, gestionamos consultas y te acompañamos en cada paso. Nosotros hablamos con los interesados por ti.",
-    accent: "from-[hsl(265,75%,58%)] to-[hsl(200,90%,50%)]",
-    bg: "bg-[hsl(265,75%,58%)]/5",
+    accent: "from-brand-violet to-brand-magenta",
+    bg: "bg-brand-violet/5",
   },
   {
     id: "simplicidad",
@@ -28,8 +28,8 @@ const pillars = [
     tag: "Simplicidad",
     title: "Arrienda sin estrés",
     desc: "Match inteligente sin scroll infinito. Solo ves lo que encaja contigo y nuestro equipo se encarga del resto.",
-    accent: "from-[hsl(168,72%,40%)] to-[hsl(32,95%,54%)]",
-    bg: "bg-[hsl(168,72%,40%)]/5",
+    accent: "from-brand-magenta to-brand-violet",
+    bg: "bg-brand-magenta/5",
   },
 ];
 
@@ -40,7 +40,7 @@ export default function WhyMatchSection() {
     <section className="section-pad bg-white overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-14">
-          <p className="text-xs font-bold uppercase tracking-widest text-[hsl(265,75%,50%)] mb-3">¿Por qué MatchColombia?</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-brand-violet mb-3">¿Por qué MatchColombia?</p>
           <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight mb-4">
             Hicimos el arriendo tan fácil
             <br />
@@ -64,8 +64,8 @@ export default function WhyMatchSection() {
                 className={cn(
                   "text-left rounded-3xl border transition-all duration-300 overflow-hidden",
                   isOpen
-                    ? "border-border/60 shadow-xl shadow-[hsl(265,75%,58%)]/8 bg-white lg:col-span-1"
-                    : "border-border/40 bg-[hsl(240,40%,98%)] hover:border-border/60"
+                    ? "border-border/60 shadow-xl shadow-brand-violet/8 bg-white lg:col-span-1"
+                    : "border-border/40 bg-background hover:border-border/60"
                 )}
               >
                 <div className={cn("p-6 sm:p-7", isOpen && pillar.bg)}>

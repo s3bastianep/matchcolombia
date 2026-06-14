@@ -39,7 +39,7 @@ export default function ZonesSection() {
   const navigate = useNavigate();
 
   return (
-    <section className="section-pad bg-[hsl(240,40%,98%)]">
+    <section className="section-pad bg-background">
       <div className="max-w-5xl mx-auto px-4 sm:px-8">
         <SectionHeader
           align="center"
@@ -56,7 +56,7 @@ export default function ZonesSection() {
         </div>
 
         <div className="flex justify-center mt-8">
-          <button onClick={() => navigate("/explorar")} className="text-sm font-bold text-[hsl(265,75%,50%)] hover:underline">
+          <button onClick={() => navigate("/explorar")} className="text-sm font-bold text-brand-violet hover:underline">
             Ver arriendos en ambas ciudades
           </button>
         </div>

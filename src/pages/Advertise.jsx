@@ -12,7 +12,6 @@ import {
   Home,
   MessageCircleOff,
   Shield,
-  UserCheck,
   Users,
   Zap,
   Camera,
@@ -25,6 +24,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
+import VerifiedBadge from "@/components/brand/VerifiedBadge";
 import { INTERIORS } from "@/lib/colombiaImages";
 
 const STATS = [
@@ -103,16 +103,16 @@ const FAQ = [
 
 function OwnerBreadcrumb() {
   return (
-    <div className="bg-[hsl(265,35%,22%)] text-white">
+    <div className="color-bar">
       <div className="max-w-6xl mx-auto px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
-        <nav className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
+        <nav className="flex items-center gap-1.5 text-xs font-semibold text-white/80">
           <Link to="/" className="hover:text-white transition-colors">Inicio</Link>
           <ChevronRight className="w-3 h-3 text-white/40" />
           <span className="text-white/90">Portal propietarios</span>
           <ChevronRight className="w-3 h-3 text-white/40" />
           <span className="text-white">Anunciar</span>
         </nav>
-        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-white/80 bg-white/10 px-3 py-1 rounded-full border border-white/15">
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-white bg-white/15 px-3 py-1 rounded-full border border-white/20">
           <KeyRound className="w-3 h-3" />
           Para quien tiene un inmueble
         </span>
@@ -123,7 +123,7 @@ function OwnerBreadcrumb() {
 
 function OwnerSectionTitle({ title, subtitle, light = false, className }) {
   return (
-    <div className={cn("border-l-4 border-[hsl(340,82%,52%)] pl-5", className)}>
+    <div className={cn("border-l-4 border-brand-magenta pl-5", className)}>
       <h2 className={cn("text-2xl sm:text-3xl font-extrabold tracking-tight", light ? "text-white" : "text-foreground")}>
         {title}
       </h2>
@@ -155,8 +155,8 @@ function ManagementCard() {
       </div>
       <div className="space-y-2">
         {["Visita confirmada — sábado 10am", "Candidato verificado — 91% match"].map((line) => (
-          <div key={line} className="flex items-center gap-2 text-[11px] font-semibold text-foreground/80 bg-[hsl(240,40%,98%)] rounded-lg px-2.5 py-2">
-            <Check className="w-3 h-3 text-[hsl(168,72%,40%)] shrink-0" />
+          <div key={line} className="flex items-center gap-2 text-[11px] font-semibold text-foreground/80 bg-background rounded-lg px-2.5 py-2">
+            <Check className="w-3 h-3 text-brand-violet shrink-0" />
             {line}
           </div>
         ))}
@@ -196,7 +196,7 @@ function LeadForm({ dark = false }) {
   };
 
   const inputClass = cn(
-    "w-full pl-10 pr-4 py-3 rounded-xl border text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[hsl(340,82%,52%)]/30",
+    "w-full pl-10 pr-4 py-3 rounded-xl border text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-magenta/30",
     dark ? "bg-white/10 border-white/20 text-white placeholder:text-white/40" : "bg-white border-border/50"
   );
 
@@ -208,14 +208,14 @@ function LeadForm({ dark = false }) {
         <div>
           <label className={labelClass}>Nombre</label>
           <div className="relative">
-            <User className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-[hsl(265,75%,58%)]")} />
+            <User className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-brand-violet")} />
             <input type="text" required value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className={inputClass} placeholder="Tu nombre" />
           </div>
         </div>
         <div>
           <label className={labelClass}>Correo</label>
           <div className="relative">
-            <Mail className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-[hsl(340,82%,52%)]")} />
+            <Mail className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-brand-magenta")} />
             <input type="email" required value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} className={inputClass} placeholder="tu@email.com" />
           </div>
         </div>
@@ -223,7 +223,7 @@ function LeadForm({ dark = false }) {
       <div>
         <label className={labelClass}>Celular</label>
         <div className="relative">
-          <Phone className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-[hsl(168,72%,40%)]")} />
+          <Phone className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-brand-violet")} />
           <input type="tel" required value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} className={inputClass} placeholder="+57 300 000 0000" />
         </div>
       </div>
@@ -247,17 +247,17 @@ function LeadForm({ dark = false }) {
 
 export default function Advertise() {
   return (
-    <div className="w-full overflow-x-hidden bg-[hsl(265,18%,97%)]">
+    <div className="w-full overflow-x-hidden bg-background">
       <OwnerBreadcrumb />
 
       {/* Hero split — panel oscuro + imagen (distinto a home) */}
       <section className="grid lg:grid-cols-[minmax(0,46%)_1fr] min-h-[480px] lg:min-h-[520px]">
-        <div className="bg-[hsl(265,35%,22%)] text-white px-6 sm:px-10 lg:px-12 py-12 lg:py-16 flex flex-col justify-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-[hsl(340,82%,52%)]/15 blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[hsl(168,72%,40%)]/10 blur-3xl pointer-events-none" />
+        <div className="bg-brand-dark text-white px-6 sm:px-10 lg:px-12 py-12 lg:py-16 flex flex-col justify-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-brand-magenta/15 blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-brand-violet/10 blur-3xl pointer-events-none" />
           <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} className="relative max-w-md">
             <div className="flex items-center gap-2 mb-6">
-              <Building2 className="w-5 h-5 text-[hsl(340,82%,60%)]" />
+              <Building2 className="w-5 h-5 text-brand-magenta" />
               <span className="text-xs font-bold uppercase tracking-widest text-white/60">Portal propietarios</span>
             </div>
             <h1 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-extrabold leading-[1.1] tracking-tight">
@@ -266,10 +266,13 @@ export default function Advertise() {
             <p className="mt-5 text-white/75 text-sm sm:text-base leading-relaxed">
               Publica gratis. {BRAND.name} gestiona consultas, visitas y candidatos. Tú no hablas con los interesados — solo recibes información clara.
             </p>
+            <div className="mt-4">
+              <VerifiedBadge size="sm" />
+            </div>
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <Link
                 to="/publicar/nuevo"
-                className="inline-flex items-center justify-center gap-2 bg-white text-[hsl(265,35%,22%)] font-bold px-6 py-3.5 rounded-xl hover:bg-white/90 transition-colors text-sm"
+                className="inline-flex items-center justify-center gap-2 gradient-cta text-white font-bold px-6 py-3.5 rounded-xl hover:opacity-95 transition-opacity text-sm shadow-lg"
               >
                 Publicar mi inmueble
                 <ArrowRight className="w-4 h-4" />
@@ -280,9 +283,9 @@ export default function Advertise() {
             </div>
           </motion.div>
         </div>
-        <div className="relative min-h-[280px] lg:min-h-full bg-[hsl(265,25%,30%)]">
+        <div className="relative min-h-[280px] lg:min-h-full bg-brand-dark/80">
           <img src={INTERIORS.conjunto} alt="Propiedad en Colombia" className="absolute inset-0 w-full h-full object-cover opacity-90" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(265,35%,22%)]/40 via-transparent to-transparent lg:bg-gradient-to-l lg:from-[hsl(265,35%,22%)]/50 lg:via-transparent lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/40 via-transparent to-transparent lg:bg-gradient-to-l lg:from-brand-dark/50 lg:via-transparent lg:to-transparent" />
           <ManagementCard />
         </div>
       </section>
@@ -323,14 +326,14 @@ export default function Advertise() {
                 viewport={{ once: true }}
                 className={cn(
                   "flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 p-5 sm:p-6 rounded-2xl border",
-                  i % 2 === 0 ? "bg-white border-border/40" : "bg-[hsl(265,30%,94%)] border-[hsl(265,75%,58%)]/15"
+                  i % 2 === 0 ? "bg-white border-border/40" : "bg-brand-violet/5 border-brand-violet/15"
                 )}
               >
                 <div className="flex items-center gap-4 sm:w-48 shrink-0">
-                  <div className="w-11 h-11 rounded-xl bg-[hsl(265,35%,22%)] flex items-center justify-center">
+                  <div className="w-11 h-11 rounded-xl gradient-cta flex items-center justify-center">
                     <Icon className="w-5 h-5 text-white" />
                   </div>
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[hsl(265,75%,45%)]">{tag}</span>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-brand-violet">{tag}</span>
                 </div>
                 <div className="flex-1">
                   <h3 className="font-extrabold text-base sm:text-lg">{headline}</h3>
@@ -347,7 +350,7 @@ export default function Advertise() {
         <div className="max-w-6xl mx-auto px-4 sm:px-8">
           <OwnerSectionTitle title="Cómo funciona" subtitle="Tú publicas. Nosotros hacemos el resto." />
           <div className="mt-12 max-w-2xl mx-auto relative">
-            <div className="absolute left-[19px] top-2 bottom-2 w-0.5 bg-[hsl(265,75%,58%)]/25 hidden sm:block" />
+            <div className="absolute left-[19px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-brand-magenta/40 via-brand-violet/30 to-brand-magenta/40 hidden sm:block" />
             <div className="space-y-8">
               {PROCESS.map(({ title, desc, icon: Icon }, i) => (
                 <motion.div
@@ -358,11 +361,11 @@ export default function Advertise() {
                   transition={{ delay: i * 0.08 }}
                   className="flex gap-5 sm:gap-6 relative"
                 >
-                  <div className="w-10 h-10 rounded-full bg-[hsl(265,35%,22%)] flex items-center justify-center shrink-0 z-10 ring-4 ring-white">
+                  <div className="w-10 h-10 rounded-full gradient-cta flex items-center justify-center shrink-0 z-10 ring-4 ring-white">
                     <Icon className="w-4 h-4 text-white" />
                   </div>
                   <div className="pt-1.5 pb-2">
-                    <span className="text-[10px] font-extrabold text-[hsl(340,82%,52%)] uppercase tracking-wider">Paso {i + 1}</span>
+                    <span className="text-[10px] font-extrabold text-brand-magenta uppercase tracking-wider">Paso {i + 1}</span>
                     <h3 className="font-extrabold text-lg mt-0.5">{title}</h3>
                     <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{desc}</p>
                   </div>
@@ -377,7 +380,7 @@ export default function Advertise() {
       <section className="py-16 sm:py-20 bg-white border-t border-border/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-8 grid lg:grid-cols-[1fr_1.2fr] gap-10 items-start">
           <OwnerSectionTitle title="Preguntas frecuentes" subtitle="Todo lo que necesitas saber antes de anunciar." />
-          <div className="bg-[hsl(265,18%,97%)] rounded-2xl border border-border/40 px-5 sm:px-6">
+          <div className="bg-background rounded-2xl border border-border/40 px-5 sm:px-6">
             {FAQ.map((item) => (
               <FaqItem key={item.q} q={item.q} a={item.a} />
             ))}
@@ -386,7 +389,7 @@ export default function Advertise() {
       </section>
 
       {/* Formulario — panel oscuro */}
-      <section id="publicar-form" className="bg-[hsl(265,35%,22%)] text-white">
+      <section id="publicar-form" className="bg-brand-dark text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-8 py-16 sm:py-20 grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
           <div>
             <OwnerSectionTitle
@@ -401,7 +404,7 @@ export default function Advertise() {
                 "Asesoría del equipo MatchColombia",
               ].map((text) => (
                 <li key={text} className="flex items-center gap-3 text-sm font-semibold text-white/85">
-                  <Check className="w-4 h-4 text-[hsl(168,72%,55%)] shrink-0" />
+                  <Check className="w-4 h-4 text-brand-magenta shrink-0" />
                   {text}
                 </li>
               ))}

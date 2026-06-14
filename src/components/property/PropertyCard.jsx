@@ -76,7 +76,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
       transition={{ delay: index * 0.03, duration: 0.3 }}
       className={cn(
         "card-hover",
-        highlighted && "ring-2 ring-[hsl(265,75%,58%)] ring-offset-2",
+        highlighted && "ring-2 ring-brand-violet ring-offset-2",
         isGrid ? "rounded-xl" : "rounded-[1.35rem]"
       )}
     >
@@ -85,11 +85,11 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
           className={cn(
             "bg-white overflow-hidden transition-all duration-300",
             isGrid
-              ? "rounded-xl border border-[hsl(0,0%,92%)] group-hover:border-[hsl(265,75%,58%)]/25 group-hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]"
+              ? "rounded-xl border border-[hsl(0,0%,92%)] group-hover:border-brand-violet/25 group-hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]"
               : "rounded-[1.35rem]",
             !isGrid && isExplore
               ? "border border-[hsl(0,0%,92%)] shadow-[0_4px_24px_rgba(15,23,42,0.05)] group-hover:shadow-[0_12px_36px_rgba(15,23,42,0.09)] group-hover:-translate-y-0.5"
-              : !isGrid && "border border-border/40 shadow-sm group-hover:shadow-xl group-hover:border-[hsl(265,75%,58%)]/25"
+              : !isGrid && "border border-border/40 shadow-sm group-hover:shadow-xl group-hover:border-brand-violet/25"
           )}
         >
           <div className={cn("relative overflow-hidden bg-muted", isGrid ? "aspect-[5/4] rounded-t-xl" : isExplore ? "aspect-[16/10]" : "aspect-[4/3]")}>
@@ -259,7 +259,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
             )}
             <h3
               className={cn(
-                "font-bold text-foreground line-clamp-1 group-hover:text-[hsl(265,75%,50%)] transition-colors",
+                "font-bold text-foreground line-clamp-1 group-hover:text-brand-violet transition-colors",
                 isGrid ? "hidden" : isExplore ? "text-base" : "text-sm"
               )}
             >
@@ -290,7 +290,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                   </FeatureChip>
                 )}
                 {pricePerSqm && (
-                  <FeatureChip className="bg-[hsl(265,75%,58%)]/8 text-[hsl(265,75%,45%)] border-[hsl(265,75%,58%)]/15">
+                  <FeatureChip className="bg-brand-violet/8 text-brand-violet border-brand-violet/15">
                     {formatCOP(pricePerSqm)}/m²
                   </FeatureChip>
                 )}

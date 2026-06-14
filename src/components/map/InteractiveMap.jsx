@@ -52,7 +52,7 @@ function MapMarker({ marker, position, onMarkerClick, onMarkerEnter, onMarkerLea
           <div
             className={cn(
               "min-w-[34px] h-[34px] px-1 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.18)] border border-[hsl(0,0%,88%)] flex items-center justify-center text-foreground text-xs font-extrabold transition-transform",
-              isActive ? "scale-110 ring-2 ring-[hsl(265,75%,58%)]/40" : "group-hover:scale-105"
+              isActive ? "scale-110 ring-2 ring-brand-violet/40" : "group-hover:scale-105"
             )}
           >
             {marker.count}
@@ -61,7 +61,7 @@ function MapMarker({ marker, position, onMarkerClick, onMarkerEnter, onMarkerLea
           <div
             className={cn(
               "whitespace-nowrap bg-white text-foreground text-[11px] font-bold px-2.5 py-1.5 rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.15)] border border-[hsl(0,0%,88%)] transition-transform",
-              isActive ? "scale-105 ring-2 ring-[hsl(265,75%,58%)]/40" : "group-hover:scale-[1.02]"
+              isActive ? "scale-105 ring-2 ring-brand-violet/40" : "group-hover:scale-[1.02]"
             )}
           >
             {marker.label}
