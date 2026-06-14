@@ -33,7 +33,7 @@ export default function AdminLeads() {
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-extrabold">Leads & mensajería</h2>
-        <p className="text-sm text-muted-foreground">Pipeline CRM — arrastra leads entre etapas con los botones.</p>
+        <p className="text-sm text-muted-foreground">Pipeline CRM. Arrastra leads entre etapas con los botones.</p>
       </div>
       <PipelineBoard
         stages={STAGES}

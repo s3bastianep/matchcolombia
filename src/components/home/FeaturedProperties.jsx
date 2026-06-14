@@ -82,8 +82,8 @@ export default function FeaturedProperties({ properties, isLoading }) {
               className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-thin scroll-smooth"
             >
               {filtered.map((p, i) => (
-                <div key={p.id} className="snap-start shrink-0 w-[min(320px,85vw)] sm:w-[340px]">
-                  <PropertyCard property={p} index={i} />
+                <div key={p.id} className="snap-start shrink-0 w-[min(300px,88vw)] sm:w-[300px]">
+                  <PropertyCard property={p} index={i} variant="grid" />
                 </div>
               ))}
             </motion.div>

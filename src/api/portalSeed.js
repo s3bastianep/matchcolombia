@@ -41,7 +41,7 @@ export function getPortalSeedData(propertyIds = []) {
       user_name: "Laura Méndez",
       scheduled_at: new Date(now.getTime() + 86400000 * 2).toISOString(),
       status: "confirmada",
-      notes: "Visita presencial — acompañar al edificio",
+      notes: "Visita presencial. Acompañar al edificio",
       created_date: new Date(now - 86400000).toISOString(),
     },
     {

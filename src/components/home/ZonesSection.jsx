@@ -18,7 +18,7 @@ function CityCard({ city, delay }) {
       viewport={{ once: true }}
       transition={{ delay, duration: 0.35 }}
       onClick={() => navigate(`/explorar?city=${encodeURIComponent(city.name)}`)}
-      className="relative overflow-hidden rounded-3xl group text-left w-full cursor-pointer min-h-[300px] sm:min-h-[360px] shadow-lg"
+      className="relative overflow-hidden rounded-3xl group text-left w-full cursor-pointer min-h-[220px] sm:min-h-[300px] lg:min-h-[360px] shadow-lg"
     >
       <img src={image} alt={city.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/10 group-hover:from-black/80 transition-colors" />

@@ -58,6 +58,14 @@ export const SEED_PROPERTIES = [
 
     amenities: ["Gimnasio", "Ascensor", "Seguridad 24h", "WiFi"],
 
+    year_built: 2014,
+
+    building_amenities: ["Gimnasio", "Salón comunal", "Seguridad 24h", "Ascensor"],
+
+    admin_fee_includes: ["Vigilancia 24h en portería", "Aseo de zonas comunes y ascensor", "Mantenimiento de equipos del conjunto"],
+
+    interior_features: ["Cocina integral", "Balcón con vista", "Luz en la mañana", "Citófono"],
+
     images: gallery("prop-1", "apartamento"),
 
     available_from: "2026-07-01",
@@ -123,6 +131,12 @@ export const SEED_PROPERTIES = [
     pets_allowed: true,
 
     amenities: ["Terraza", "Gimnasio", "Seguridad 24h", "Piscina", "Ascensor"],
+
+    year_built: 2018,
+
+    building_amenities: ["Gimnasio", "Piscina", "Salón comunal", "Zona BBQ", "Seguridad 24h", "Ascensor"],
+
+    admin_fee_includes: ["Vigilancia y control de acceso", "Aseo de zonas comunes", "Mantenimiento de piscina, gimnasio y ascensores"],
 
     images: gallery("prop-2", "apartamento"),
 
@@ -190,6 +204,10 @@ export const SEED_PROPERTIES = [
 
     amenities: ["Zona verde", "Depósito", "Portería"],
 
+    year_built: 2008,
+
+    building_amenities: ["Zona verde", "Portería"],
+
     images: gallery("prop-3", "casa"),
 
     available_from: "2026-08-01",
@@ -214,9 +232,22 @@ export const SEED_PROPERTIES = [
 
     id: "prop-4",
 
-    title: "Estudio en La Candelaria",
+    reference_code: "REF4281956",
 
-    description: "Estudio céntrico, ideal para estudiantes o profesionales. Cerca a TransMilenio y universidades. Totalmente amoblado.",
+    title: "Estudio amoblado y luminoso en el corazón de La Candelaria",
+
+    description: "Estudio en el corazón de La Candelaria, a dos cuadras de la estación TransMilenio Museo del Oro. Ideal si estudias en Los Andes o Jorge Tadeo, ambas a 15 min en TM. La cuadra es tranquila de día, con vigilancia del conjunto y buena luz natural por la tarde gracias a ventana oriente. Cocina integrada, escritorio amoblado y closet amplio. Nuestro equipo lo visitó en persona: el espacio es tal como en las fotos.",
+
+    nearby_points: [
+      "5 min caminando a TM Museo del Oro",
+      "8 min a Universidad Jorge Tadeo Lozano",
+      "Supermercado Éxito San Victorino a 3 cuadras",
+      "Plaza de Bolívar y Museo del Oro a 6 min",
+    ],
+
+    team_visit_date: "2026-05-28",
+
+    photos_by_team: true,
 
     property_type: "estudio",
 
@@ -255,6 +286,12 @@ export const SEED_PROPERTIES = [
     pets_allowed: false,
 
     amenities: ["Ascensor", "Citófono", "WiFi"],
+
+    year_built: 1998,
+
+    building_amenities: ["Ascensor", "Citófono", "Seguridad en recepción"],
+
+    admin_fee_includes: ["Vigilancia diurna", "Aseo de escaleras y zonas comunes", "Servicios básicos del edificio"],
 
     images: gallery("prop-4", "estudio"),
 
@@ -322,6 +359,14 @@ export const SEED_PROPERTIES = [
 
     amenities: ["Piscina", "Salón comunal", "Seguridad 24h", "Ascensor"],
 
+    year_built: 2023,
+
+    building_amenities: ["Piscina", "Salón comunal", "Zona BBQ", "Gimnasio", "Seguridad 24h", "Ascensor"],
+
+    admin_fee_includes: ["Vigilancia 24h", "Aseo de zonas comunes", "Mantenimiento de piscina, salón comunal y ascensor"],
+
+    interior_features: ["Cocina integral", "Piso en madera", "Zona de lavandería"],
+
     images: gallery("prop-5", "apartamento"),
 
     available_from: "2026-07-15",
@@ -387,6 +432,12 @@ export const SEED_PROPERTIES = [
     pets_allowed: true,
 
     amenities: ["Zona verde", "Portería", "Ascensor"],
+
+    year_built: 2005,
+
+    building_amenities: ["Zona verde", "Portería", "Ascensor", "Seguridad 24h"],
+
+    admin_fee_includes: ["Vigilancia y portería", "Aseo de zonas comunes", "Mantenimiento de ascensor y áreas verdes"],
 
     images: gallery("prop-10", "apartamento"),
 
@@ -454,6 +505,12 @@ export const SEED_PROPERTIES = [
 
     amenities: ["Ascensor", "Seguridad 24h", "Zona verde"],
 
+    year_built: 2011,
+
+    building_amenities: ["Ascensor", "Seguridad 24h", "Zona verde", "Salón comunal"],
+
+    admin_fee_includes: ["Vigilancia 24h", "Aseo de zonas comunes", "Mantenimiento de ascensor y jardines"],
+
     images: gallery("prop-11", "apartamento"),
 
     available_from: "2026-07-15",
@@ -520,6 +577,10 @@ export const SEED_PROPERTIES = [
 
     amenities: ["Piscina", "Zona BBQ", "Seguridad 24h"],
 
+    year_built: 2022,
+
+    building_amenities: ["Piscina", "Zona BBQ", "Salón comunal", "Gimnasio", "Seguridad 24h"],
+
     images: gallery("prop-12", "casa"),
 
     available_from: "2026-08-01",
@@ -585,6 +646,10 @@ export const SEED_PROPERTIES = [
     pets_allowed: false,
 
     amenities: ["WiFi", "Lavandería"],
+
+    year_built: 1985,
+
+    building_amenities: ["Lavandería compartida"],
 
     images: gallery("prop-13", "habitacion"),
 

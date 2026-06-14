@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider } from '@/lib/AuthContext';
 import { ROLES } from '@/lib/roles';
+import { PropertyPanelProvider } from '@/lib/PropertyPanelContext';
 
 import AppLayout from './components/layout/AppLayout';
 import RequireAuth from './components/RequireAuth';
@@ -19,7 +20,7 @@ import OwnerLayout from './layouts/OwnerLayout';
 
 const Home = lazy(() => import('./pages/Home'));
 const Explore = lazy(() => import('./pages/Explore'));
-const PropertyDetail = lazy(() => import('./pages/PropertyDetail'));
+const PropertyRedirect = lazy(() => import('./pages/PropertyRedirect'));
 const PublishProperty = lazy(() => import('./pages/PublishProperty'));
 const Sell = lazy(() => import('./pages/Sell'));
 const Advertise = lazy(() => import('./pages/Advertise'));
@@ -73,7 +74,7 @@ function AppRoutes() {
           <Route path="/explorar" element={<Explore />} />
           <Route path="/anunciar" element={<Advertise />} />
           <Route path="/publicar" element={<Sell />} />
-          <Route path="/propiedad/:id" element={<PropertyDetail />} />
+          <Route path="/propiedad/:id" element={<PropertyRedirect />} />
           <Route element={<RequireAuth />}>
             <Route path="/publicar/nuevo" element={<PublishProperty />} />
             <Route path="/favoritos" element={<Favorites />} />
@@ -129,14 +130,22 @@ function AppRoutes() {
 
 function App() {
   useEffect(() => {
-    initLocalApi();
+    const run = () => initLocalApi();
+    if (typeof requestIdleCallback !== "undefined") {
+      const id = requestIdleCallback(run);
+      return () => cancelIdleCallback(id);
+    }
+    const timer = setTimeout(run, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
-          <AppRoutes />
+          <PropertyPanelProvider>
+            <AppRoutes />
+          </PropertyPanelProvider>
         </Router>
         <Toaster />
       </QueryClientProvider>

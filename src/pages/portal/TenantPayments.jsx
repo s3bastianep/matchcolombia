@@ -24,7 +24,7 @@ export default function TenantPayments() {
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-extrabold">Estado de cuenta</h2>
-        <p className="text-sm text-muted-foreground">Historial de pagos — integración con pasarela colombiana próximamente.</p>
+        <p className="text-sm text-muted-foreground">Historial de pagos. Integración con pasarela colombiana próximamente.</p>
       </div>
       <div className="space-y-3">
         {payments.map((p) => (

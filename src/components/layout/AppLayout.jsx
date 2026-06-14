@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import MatchQuiz from "../match/MatchQuiz";
 import WhatsAppFab from "./WhatsAppFab";
+import { usePropertyPanel } from "@/lib/PropertyPanelContext";
+
+const MatchQuiz = lazy(() => import("../match/MatchQuiz"));
 
 export default function AppLayout() {
   const [quizOpen, setQuizOpen] = useState(false);
+  const { isOpen: propertyPanelOpen } = usePropertyPanel();
 
   useEffect(() => {
     const handler = () => setQuizOpen(true);
@@ -21,8 +24,12 @@ export default function AppLayout() {
         <Outlet />
       </main>
       <Footer />
-      <WhatsAppFab />
-      <MatchQuiz open={quizOpen} onOpenChange={setQuizOpen} />
+      {!propertyPanelOpen && <WhatsAppFab />}
+      {quizOpen && (
+        <Suspense fallback={null}>
+          <MatchQuiz open={quizOpen} onOpenChange={setQuizOpen} />
+        </Suspense>
+      )}
     </div>
   );
 }

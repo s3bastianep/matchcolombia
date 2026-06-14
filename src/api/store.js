@@ -54,19 +54,17 @@ export function createStore(storageKey, seedData = []) {
 
   return {
     async filter(criteria = {}, sort = "-created_date", limit = 200) {
-      await delay();
       let list = load().filter((item) => matches(item, criteria));
       list = sortList(list, sort);
       return list.slice(0, limit);
     },
 
     async get(id) {
-      await delay();
       return load().find((item) => item.id === id) || null;
     },
 
     async create(data, idPrefix = "item") {
-      await delay(350);
+      await delay(120);
       const items = load();
       const item = {
         ...data,
@@ -80,7 +78,7 @@ export function createStore(storageKey, seedData = []) {
     },
 
     async update(id, patch) {
-      await delay(300);
+      await delay(120);
       const items = load();
       const idx = items.findIndex((item) => item.id === id);
       if (idx === -1) throw new Error("Registro no encontrado");
@@ -90,7 +88,7 @@ export function createStore(storageKey, seedData = []) {
     },
 
     async delete(id) {
-      await delay(300);
+      await delay(80);
       const items = load().filter((item) => item.id !== id);
       save(items);
       return { ok: true };

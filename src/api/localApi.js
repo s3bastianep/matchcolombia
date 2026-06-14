@@ -3,7 +3,7 @@ import { createStore } from "./store";
 import { getPortalSeedData } from "./portalSeed";
 import * as localAuth from "../lib/localAuth";
 
-const STORAGE_KEY = "matchcolombia_properties_v8";
+const STORAGE_KEY = "matchcolombia_properties_v11";
 const INQUIRIES_KEY = "matchcolombia_inquiries";
 const VISITS_KEY = "matchcolombia_visits";
 const MESSAGES_KEY = "matchcolombia_messages";
@@ -91,19 +91,17 @@ export function initLocalApi() {
 
 const Property = {
   async filter(criteria = {}, sort = "-created_date", limit = 100) {
-    await delay();
     let list = loadProperties().filter((p) => matchesFilter(p, criteria));
     list = sortList(list, sort);
     return list.slice(0, limit);
   },
 
   async get(id) {
-    await delay();
     return loadProperties().find((p) => p.id === id) || null;
   },
 
   async create(data) {
-    await delay(500);
+    await delay(150);
     const properties = loadProperties();
     const property = {
       ...data,
@@ -121,7 +119,7 @@ const Property = {
   },
 
   async update(id, patch) {
-    await delay(400);
+    await delay(120);
     const properties = loadProperties();
     const idx = properties.findIndex((p) => p.id === id);
     if (idx === -1) throw new Error("Propiedad no encontrada");
@@ -135,7 +133,7 @@ const Property = {
   },
 
   async delete(id) {
-    await delay(400);
+    await delay(80);
     saveProperties(loadProperties().filter((p) => p.id !== id));
     return { ok: true };
   },

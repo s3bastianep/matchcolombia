@@ -33,7 +33,7 @@ export default function OwnerProperties() {
               </div>
               <p className="font-bold mt-3">{formatCOP(p.monthly_rent)}/mes</p>
               <p className="text-xs text-muted-foreground mt-2">{leads} lead{leads !== 1 ? "s" : ""} recibidos</p>
-              <Link to={`/propiedad/${p.id}`} className="text-xs font-bold text-brand-magenta mt-3 inline-block hover:underline">Ver publicación →</Link>
+              <Link to={`/explorar?inmueble=${p.id}`} className="text-xs font-bold text-brand-magenta mt-3 inline-block hover:underline">Ver publicación →</Link>
             </div>
           );
         })}

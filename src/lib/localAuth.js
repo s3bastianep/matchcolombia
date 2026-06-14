@@ -84,7 +84,67 @@ async function seedDemoUsers() {
   localStorage.setItem(DEMO_USERS_SEEDED, "1");
 }
 
-export async function register({ name, username, email, password, role = ROLES.SEEKER }) {
+function normalizePhone(phone) {
+  const digits = String(phone || "").replace(/\D/g, "");
+  if (digits.startsWith("57") && digits.length >= 12) return digits.slice(2);
+  return digits.slice(-10);
+}
+
+function createSessionForUser(user) {
+  const session = {
+    token: generateToken(),
+    userId: user.id,
+    user: sanitizeUser(user),
+    expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
+  };
+  saveSession(session);
+  return session;
+}
+
+export async function registerFromBooking({ name, phone }) {
+  await delay(350);
+  await seedDemoUsers();
+
+  if (!name?.trim()) throw new Error("Ingresa tu nombre");
+  const normalizedPhone = normalizePhone(phone);
+  if (normalizedPhone.length < 10) throw new Error("Ingresa un WhatsApp o celular válido");
+
+  const users = loadUsers();
+  let user = users.find((u) => normalizePhone(u.phone) === normalizedPhone);
+  let isNew = false;
+
+  if (user) {
+    if (name.trim() !== user.name) {
+      user.name = name.trim();
+      saveUsers(users);
+    }
+  } else {
+    const username = `u${normalizedPhone}`;
+    if (users.some((u) => normalizeUsername(u.username) === username)) {
+      user = users.find((u) => normalizeUsername(u.username) === username);
+    } else {
+      isNew = true;
+      user = {
+        id: `user-${Date.now()}`,
+        name: name.trim(),
+        username,
+        email: "",
+        phone: normalizedPhone,
+        role: ROLES.SEEKER,
+        passwordHash: await hashPassword(`mc${normalizedPhone.slice(-6)}`),
+        created_at: new Date().toISOString(),
+        created_via: "booking",
+      };
+      users.push(user);
+      saveUsers(users);
+    }
+  }
+
+  const session = createSessionForUser(user);
+  return { user: session.user, access_token: session.token, isNew };
+}
+
+export async function register({ name, username, email, password, role = ROLES.SEEKER, phone = "" }) {
   await delay(400);
   await seedDemoUsers();
 
@@ -108,6 +168,7 @@ export async function register({ name, username, email, password, role = ROLES.S
     name: name.trim(),
     username: username.trim(),
     email: email?.trim() || "",
+    phone: normalizePhone(phone) || "",
     role: role || ROLES.SEEKER,
     passwordHash: await hashPassword(password),
     created_at: new Date().toISOString(),
@@ -116,13 +177,7 @@ export async function register({ name, username, email, password, role = ROLES.S
   users.push(user);
   saveUsers(users);
 
-  const session = {
-    token: generateToken(),
-    userId: user.id,
-    user: sanitizeUser(user),
-    expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
-  };
-  saveSession(session);
+  const session = createSessionForUser(user);
 
   return { user: session.user, access_token: session.token };
 }
@@ -144,13 +199,7 @@ export async function login(username, password) {
   const hash = await hashPassword(password);
   if (user.passwordHash !== hash) throw new Error("Usuario o contraseña incorrectos");
 
-  const session = {
-    token: generateToken(),
-    userId: user.id,
-    user: sanitizeUser(user),
-    expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
-  };
-  saveSession(session);
+  const session = createSessionForUser(user);
 
   return { user: session.user, access_token: session.token };
 }
@@ -160,7 +209,6 @@ export async function loginViaEmailPassword(identifier, password) {
 }
 
 export async function me() {
-  await delay(100);
   await seedDemoUsers();
   const session = loadSession();
   if (!session) return null;
@@ -189,7 +237,6 @@ export function setToken(token) {
 }
 
 export async function logout() {
-  await delay(100);
   localStorage.removeItem(SESSION_KEY);
 }
 
