@@ -7,7 +7,7 @@ import AdvancedFilters from "../components/explore/AdvancedFilters";
 import ExploreMap from "../components/explore/ExploreMap";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
-import { SlidersHorizontal, X, Sparkles, Search, Map, Check, ArrowUpDown, MousePointer2 } from "lucide-react";
+import { SlidersHorizontal, X, Sparkles, Search, Map, Check, ArrowUpDown, MousePointer2, ShieldCheck, LayoutGrid, Columns2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import VerifiedBadge from "../components/brand/VerifiedBadge";
 import { loadPreferences, scoreProperty } from "@/lib/matchPreferences";
@@ -17,6 +17,7 @@ import {
   parseAdvancedFiltersFromUrl,
   applyAdvancedFilters,
   countAdvancedFilters,
+  advancedFiltersToUrlParams,
 } from "@/lib/propertyFilters";
 
 const TYPES_LABEL = {
@@ -67,17 +68,24 @@ function ActiveFilterChip({ label, onRemove }) {
 }
 
 function syncFiltersToUrl(params, advancedFilters, extra = {}) {
-  const next = new URLSearchParams(params);
-  const setOrDelete = (key, val) => {
-    if (val) next.set(key, val);
-    else next.delete(key);
-  };
-  setOrDelete("beds", advancedFilters.bedrooms);
-  setOrDelete("baths", advancedFilters.bathrooms);
-  setOrDelete("spots", advancedFilters.parkingSpots);
-  setOrDelete("estrato", advancedFilters.estrato);
-  Object.entries(extra).forEach(([k, v]) => setOrDelete(k, v));
+  const next = advancedFiltersToUrlParams(advancedFilters, params);
+  Object.entries(extra).forEach(([k, v]) => {
+    if (v) next.set(k, v);
+    else next.delete(k);
+  });
   return next;
+}
+
+function ResultsCount({ count, query }) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1.5">
+      <p className="text-sm text-muted-foreground">
+        <span className="font-extrabold text-foreground text-lg tabular-nums">{count}</span>{" "}
+        {count === 1 ? "inmueble verificado" : "inmuebles verificados"}
+        {query && <> en «{query}»</>}
+      </p>
+    </div>
+  );
 }
 
 export default function Explore() {
@@ -85,14 +93,12 @@ export default function Explore() {
   const initialQ = searchParams.get("q") || "";
   const initialCity = searchParams.get("city") || "";
   const initialType = searchParams.get("type") || "";
-  const initialMax = searchParams.get("max") || "";
   const isMatched = searchParams.get("matched") === "1";
   const intent = searchParams.get("intent");
   const prefs = loadPreferences();
 
   const [sortBy, setSortBy] = useState(isMatched ? "match" : "newest");
   const [activeQuick, setActiveQuick] = useState([]);
-  const [priceMax, setPriceMax] = useState(initialMax ? parseInt(initialMax) : (prefs?.maxPrice || 10000000));
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [viewMode, setViewMode] = useState("split");
   const [highlightedId, setHighlightedId] = useState(null);
@@ -163,8 +169,6 @@ export default function Explore() {
     if (activeQuick.includes("pets")) result = result.filter((p) => p.pets_allowed);
     if (activeQuick.includes("parking")) result = result.filter((p) => p.parking);
 
-    result = result.filter((p) => (p.monthly_rent || 0) <= priceMax);
-
     if (isMatched && prefs) {
       result = result.filter((p) => p.matchScore >= 40);
     }
@@ -175,7 +179,7 @@ export default function Explore() {
     else if (sortBy === "area") result.sort((a, b) => (b.area_sqm || 0) - (a.area_sqm || 0));
 
     return result;
-  }, [properties, initialQ, initialCity, initialType, advancedFilters, activeQuick, priceMax, sortBy, isMatched, prefs]);
+  }, [properties, initialQ, initialCity, initialType, advancedFilters, activeQuick, sortBy, isMatched, prefs]);
 
   const cityLabel = initialCity || prefs?.city || "Bogotá";
   const advancedCount = countAdvancedFilters(advancedFilters);
@@ -295,6 +299,31 @@ export default function Explore() {
 
           <div className="hidden lg:block shrink-0">{sortSelect}</div>
 
+          <div className="hidden lg:flex items-center gap-1 p-1 rounded-full bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)] shrink-0">
+            <button
+              type="button"
+              onClick={() => setViewMode("split")}
+              title="Lista + mapa"
+              className={cn(
+                "h-8 px-2.5 rounded-full transition-all flex items-center gap-1",
+                viewMode === "split" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Columns2 className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("list")}
+              title="Solo lista"
+              className={cn(
+                "h-8 px-2.5 rounded-full transition-all flex items-center gap-1",
+                viewMode === "list" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
           <div className="lg:hidden flex items-center gap-2 shrink-0 ml-auto">
             {sortSelect}
             <button
@@ -310,6 +339,15 @@ export default function Explore() {
               <Map className="w-3.5 h-3.5" />
               Mapa
             </button>
+          </div>
+        </div>
+
+        <div className="px-4 lg:px-6 pb-2">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[hsl(var(--brand-verified-bg))] border border-[hsl(var(--brand-verified-border))]">
+            <ShieldCheck className="w-4 h-4 shrink-0 text-[hsl(var(--brand-verified))]" strokeWidth={2.25} />
+            <p className="text-[11px] sm:text-xs font-semibold text-[hsl(var(--brand-verified-fg))] leading-snug">
+              Cada inmueble está verificado por MatchColombia — arrienda con tranquilidad
+            </p>
           </div>
         </div>
 
@@ -370,25 +408,24 @@ export default function Explore() {
         </div>
       ) : filtered.length > 0 ? (
         <>
-          <div className="hidden lg:grid lg:grid-cols-[7fr_3fr] lg:h-[calc(100vh-168px)] border-t border-[hsl(0,0%,90%)]">
+          <div className={cn(
+            "hidden lg:grid lg:h-[calc(100vh-168px)] border-t border-[hsl(0,0%,90%)]",
+            viewMode === "list" ? "grid-cols-1" : "grid-cols-[7fr_3fr]"
+          )}>
             <div className="overflow-y-auto bg-[hsl(0,0%,99%)] px-6 py-5">
               <div className="flex flex-wrap items-start justify-between gap-3 mb-1">
                 <div>
                   <h1 className="text-xl font-extrabold tracking-tight text-foreground">
                     {resultsTitle}
                   </h1>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    <span className="font-bold text-foreground">{filtered.length}</span>{" "}
-                    {filtered.length === 1 ? "resultado" : "resultados"}
-                    {initialQ && <> en «{initialQ}»</>}
-                    <span className="mx-2 text-border">·</span>
-                    {SORT_LABELS[sortBy]}
-                  </p>
+                  <ResultsCount count={filtered.length} query={initialQ} />
                 </div>
-                <p className="hidden xl:flex items-center gap-1.5 text-[11px] text-muted-foreground bg-white border border-[hsl(0,0%,90%)] rounded-full px-3 py-1.5 shrink-0">
-                  <MousePointer2 className="w-3 h-3" />
-                  Pasa el cursor para ubicar en el mapa
-                </p>
+                {viewMode === "split" && (
+                  <p className="hidden xl:flex items-center gap-1.5 text-[11px] text-muted-foreground bg-white border border-[hsl(0,0%,90%)] rounded-full px-3 py-1.5 shrink-0">
+                    <MousePointer2 className="w-3 h-3" />
+                    Pasa el cursor para ubicar en el mapa
+                  </p>
+                )}
               </div>
 
               {totalFilterCount > 0 && (
@@ -428,10 +465,25 @@ export default function Explore() {
                       onRemove={() => updateAdvancedFilters({ ...advancedFilters, parkingSpots: "" })}
                     />
                   )}
+                  {advancedFilters.elevator && (
+                    <ActiveFilterChip
+                      label={advancedFilters.elevator === "si" ? "Con ascensor" : "Sin ascensor"}
+                      onRemove={() => updateAdvancedFilters({ ...advancedFilters, elevator: "" })}
+                    />
+                  )}
+                  {advancedFilters.floor && (
+                    <ActiveFilterChip
+                      label={advancedFilters.floor === "10" ? "Piso 10+" : `Piso ${advancedFilters.floor}`}
+                      onRemove={() => updateAdvancedFilters({ ...advancedFilters, floor: "" })}
+                    />
+                  )}
                 </div>
               )}
 
-              <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-7 mt-5">
+              <div className={cn(
+                "grid gap-x-4 gap-y-7 mt-5",
+                viewMode === "list" ? "grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : "grid-cols-2 xl:grid-cols-3"
+              )}>
                 {filtered.map((property, i) => (
                   <div
                     key={property.id}
@@ -451,6 +503,7 @@ export default function Explore() {
               </div>
             </div>
 
+            {viewMode === "split" && (
             <div className="flex flex-col border-l border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] min-h-0">
               <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-[hsl(0,0%,90%)] shrink-0 bg-white">
                 <div className="min-w-0">
@@ -472,15 +525,13 @@ export default function Explore() {
                 />
               </div>
             </div>
+            )}
           </div>
 
           <div className={cn("lg:hidden px-4 py-5 space-y-5", viewMode === "map" && "hidden")}>
             <div>
               <h1 className="text-lg font-extrabold tracking-tight">{resultsTitle}</h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                <span className="font-bold text-foreground">{filtered.length}</span>{" "}
-                {filtered.length === 1 ? "resultado" : "resultados"} · {SORT_LABELS[sortBy]}
-              </p>
+              <ResultsCount count={filtered.length} query={initialQ} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {filtered.map((property, i) => (
@@ -563,7 +614,7 @@ export default function Explore() {
                 onClick={() => setMobileFiltersOpen(false)}
                 className="w-full mt-4 gradient-cta text-white font-bold py-3.5 rounded-xl"
               >
-                Ver {filtered.length} resultado{filtered.length !== 1 ? "s" : ""}
+                Ver {filtered.length} inmueble{filtered.length !== 1 ? "s" : ""} verificado{filtered.length !== 1 ? "s" : ""}
               </button>
             </motion.div>
           </div>

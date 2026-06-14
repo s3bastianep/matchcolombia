@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Input } from "@/components/ui/input";
@@ -74,9 +74,14 @@ function ContactForm({ id }) {
 export default function PropertyDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { isAuthenticated } = useAuth();
   const [liked, setLiked] = useState(false);
   const [showContact, setShowContact] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("visita") === "1") setShowContact(true);
+  }, [searchParams]);
 
   const { data: property, isLoading } = useQuery({
     queryKey: ["property", id],

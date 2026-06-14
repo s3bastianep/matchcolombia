@@ -57,6 +57,19 @@ export const GALLERY_SETS = {
   default: [INTERIORS.conjunto, INTERIORS.sala, INTERIORS.cocina, INTERIORS.dormitorio, INTERIORS.balcon],
 };
 
+/** Galerías únicas por propiedad — evita la misma foto de fachada en scroll */
+export const PROPERTY_GALLERIES = {
+  "prop-1": [pexels(439391, 1200, 800), pexels(2062432, 1200, 800), pexels(1643384, 1200, 800), pexels(1080721, 1200, 800), pexels(1571460, 1200, 800), pexels(1457842, 1200, 800)],
+  "prop-2": [pexels(1571460, 1200, 800), pexels(271624, 1200, 800), pexels(259588, 1200, 800), pexels(1918291, 1200, 800), pexels(667838, 1200, 800), pexels(276724, 1200, 800), pexels(3136818, 1200, 800), pexels(1486222, 1200, 800)],
+  "prop-3": [pexels(1918291, 1200, 800), pexels(1571463, 1200, 800), pexels(259588, 1200, 800), pexels(667838, 1200, 800), pexels(2062432, 1200, 800), pexels(1080721, 1200, 800)],
+  "prop-4": [pexels(276724, 1200, 800), pexels(271624, 1200, 800), pexels(1457842, 1200, 800), pexels(439391, 1200, 800), pexels(2062432, 1200, 800)],
+  "prop-5": [pexels(667838, 1200, 800), pexels(259588, 1200, 800), pexels(1643384, 1200, 800), pexels(1571460, 1200, 800), pexels(1080721, 1200, 800), pexels(1457842, 1200, 800)],
+  "prop-10": [pexels(1486222, 1200, 800), pexels(3136818, 1200, 800), pexels(2373710, 1200, 800), pexels(1571463, 1200, 800), pexels(271624, 1200, 800), pexels(2062432, 1200, 800)],
+  "prop-11": [pexels(3136818, 1200, 800), pexels(1486222, 1200, 800), pexels(439391, 1200, 800), pexels(1643384, 1200, 800), pexels(1080721, 1200, 800)],
+  "prop-12": [pexels(1571463, 1200, 800), pexels(1918291, 1200, 800), pexels(259588, 1200, 800), pexels(667838, 1200, 800), pexels(276724, 1200, 800), pexels(2062432, 1200, 800)],
+  "prop-13": [pexels(271624, 1200, 800), pexels(276724, 1200, 800), pexels(439391, 1200, 800), pexels(1457842, 1200, 800)],
+};
+
 export const ROOM_LABELS = ["Sala", "Cocina", "Habitación", "Balcón", "Comedor", "Baño", "Vista", "Exterior"];
 
 export function getPropertyImages(property) {

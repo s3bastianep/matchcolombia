@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import MatchQuiz from "../match/MatchQuiz";
+import WhatsAppFab from "./WhatsAppFab";
 
 export default function AppLayout() {
   const [quizOpen, setQuizOpen] = useState(false);
@@ -20,6 +21,7 @@ export default function AppLayout() {
         <Outlet />
       </main>
       <Footer />
+      <WhatsAppFab />
       <MatchQuiz open={quizOpen} onOpenChange={setQuizOpen} />
     </div>
   );

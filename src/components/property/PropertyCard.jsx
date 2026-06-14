@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, Bed, Bath, Maximize, MapPin, Sparkles, Car, PawPrint, Building2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Heart, Bed, Bath, Maximize, MapPin, Sparkles, Car, PawPrint, Building2, ChevronLeft, ChevronRight, Calendar, Sofa, CalendarCheck, Layers } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -8,8 +8,14 @@ import SmartImage from "@/components/ui/SmartImage";
 import { INTERIORS, FALLBACK_IMAGE } from "@/lib/colombiaImages";
 import { isInShortlist, toggleShortlist } from "@/lib/shortlist";
 import { getEstratoLabel, getEstratoChipStyle } from "@/lib/propertyLabels";
-import { getParkingSpots } from "@/lib/propertyFilters";
+import { getParkingSpots, hasElevator } from "@/lib/propertyFilters";
+import {
+  getTotalMonthly,
+  getFurnishedLabel,
+  formatAvailableFrom,
+} from "@/lib/propertyCardUtils";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
+import ElevatorIcon from "@/components/icons/ElevatorIcon";
 
 const formatCOP = (value) =>
   new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(value || 0);
@@ -40,6 +46,20 @@ const typeLabel = {
   comercial: "Comercial",
 };
 
+function ParkingIcon({ muted }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center justify-center w-3.5 h-3.5 rounded-[3px] text-[8px] font-extrabold leading-none shrink-0",
+        muted ? "bg-foreground/12 text-foreground/40" : "bg-brand-violet text-white"
+      )}
+      aria-hidden
+    >
+      P
+    </span>
+  );
+}
+
 function FeatureChip({ icon: Icon, children, className }) {
   return (
     <span className={cn("inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold border", className)}>
@@ -61,7 +81,11 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
   const isExplore = variant === "explore" || isGrid;
   const estratoLabel = getEstratoLabel(property.estrato);
   const parkingSpots = getParkingSpots(property);
+  const elevator = hasElevator(property);
   const pricePerSqm = property.area_sqm ? Math.round((property.monthly_rent || 0) / property.area_sqm) : null;
+  const totalMonthly = getTotalMonthly(property);
+  const furnishedLabel = getFurnishedLabel(property.furnished);
+  const availableFrom = formatAvailableFrom(property.available_from);
 
   useEffect(() => {
     const handler = () => setLiked(isInShortlist(property.id));
@@ -134,13 +158,20 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                   setLiked(toggleShortlist(property.id));
                 }}
                 className={cn(
-                  "absolute top-2.5 right-2.5 w-8 h-8 rounded-full flex items-center justify-center z-10 transition-all shadow-sm",
-                  liked ? "bg-primary text-white" : "bg-white/95 text-gray-400 hover:text-primary"
+                  "absolute top-2.5 right-2.5 w-9 h-9 rounded-full flex items-center justify-center z-10 transition-all",
+                  "ring-2 ring-black/20 shadow-[0_2px_8px_rgba(0,0,0,0.25)] backdrop-blur-sm",
+                  liked ? "bg-primary text-white ring-primary/30" : "bg-white/95 text-gray-700 hover:text-primary hover:bg-white"
                 )}
                 aria-label="Guardar en favoritos"
               >
-                <Heart className={cn("w-3.5 h-3.5", liked && "fill-current")} />
+                <Heart className={cn("w-4 h-4", liked && "fill-current")} strokeWidth={2.25} />
               </button>
+            )}
+
+            {isGrid && images.length > 1 && (
+              <span className="absolute bottom-2.5 right-2.5 z-10 px-2 py-0.5 rounded-md bg-black/55 backdrop-blur-sm text-white text-[10px] font-bold tabular-nums">
+                {photoIdx + 1}/{images.length}
+              </span>
             )}
 
             {isGrid && images.length > 1 && (
@@ -199,7 +230,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
 
             {isGrid && (
               <div className="absolute top-2.5 left-2.5 z-10">
-                <VerifiedBadge size="xs" score={showMatch && matchScore > 0 ? matchScore : undefined} />
+                <VerifiedBadge size="card" score={showMatch && matchScore > 0 ? matchScore : undefined} />
               </div>
             )}
 
@@ -222,16 +253,19 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
           <div className={cn(isGrid ? "px-3 pt-3 pb-3.5" : isExplore ? "p-4 sm:p-5" : "p-5")}>
             {isGrid && (
               <>
-                <p className="font-extrabold text-base text-foreground leading-tight tracking-tight">
-                  {formatCOP(property.monthly_rent)}
-                  <span className="text-xs font-semibold text-muted-foreground"> / mes</span>
+                <p className="font-extrabold text-lg sm:text-xl text-foreground leading-tight tracking-tight">
+                  {formatCOP(totalMonthly)}
+                  <span className="text-xs font-semibold text-muted-foreground"> / mes total</span>
                 </p>
-                {property.admin_fee > 0 && (
+                {property.admin_fee > 0 ? (
                   <p className="text-[11px] text-muted-foreground mt-0.5">
-                    {formatCOP(property.admin_fee)} administración aprox.
+                    Administración {formatCOP(property.admin_fee)}
                   </p>
+                ) : (
+                  <p className="text-[11px] text-muted-foreground mt-0.5">sin administración adicional</p>
                 )}
-                <div className="flex items-center gap-3 text-[11px] text-foreground/70 mt-2.5 font-semibold">
+
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-foreground/70 mt-2.5 font-semibold">
                   {property.area_sqm && (
                     <span className="flex items-center gap-1">
                       <Maximize className="w-3 h-3 text-brand-violet" />
@@ -240,21 +274,74 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                   )}
                   <span className="flex items-center gap-1">
                     <Bed className="w-3 h-3 text-brand-violet" />
-                    {property.bedrooms}
+                    {property.bedrooms} hab.
                   </span>
                   <span className="flex items-center gap-1">
                     <Bath className="w-3 h-3 text-brand-magenta" />
-                    {property.bathrooms}
+                    {property.bathrooms} baño{property.bathrooms !== 1 ? "s" : ""}
                   </span>
                 </div>
-                <p className="text-xs text-muted-foreground mt-2 line-clamp-1 flex items-center gap-1">
-                  <MapPin className="w-3 h-3 shrink-0 text-brand-magenta" />
-                  <span>
-                    {typeLabel[property.property_type] || "Inmueble"}
-                    {property.neighborhood ? ` ${property.neighborhood}` : ""}
-                    {property.city ? `, ${property.city}` : ""}
+
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 px-2.5 py-1.5 rounded-lg bg-[hsl(0,0%,97%)] text-[10px] font-semibold text-foreground/60">
+                  <span className="flex items-center gap-1" title="Parqueadero">
+                    <ParkingIcon muted={parkingSpots <= 0} />
+                    {parkingSpots > 0 ? parkingSpots : "No"}
                   </span>
-                </p>
+                  <span className="w-px h-3 bg-border/60" aria-hidden />
+                  <span className="flex items-center gap-1" title="Ascensor">
+                    <ElevatorIcon muted={!elevator} />
+                    {elevator ? "Sí" : "No"}
+                  </span>
+                  <span className="w-px h-3 bg-border/60" aria-hidden />
+                  <span className="flex items-center gap-1" title="Mascotas">
+                    <PawPrint className="w-3.5 h-3.5 shrink-0 text-brand-magenta" strokeWidth={2.25} />
+                    {property.pets_allowed ? "Sí" : "No"}
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5 mt-2.5">
+                  {property.floor != null && property.floor !== "" && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[hsl(0,0%,96%)] text-[10px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+                      <Layers className="w-3 h-3 text-brand-violet shrink-0" strokeWidth={2.25} />
+                      Piso {property.floor}
+                    </span>
+                  )}
+                  {availableFrom && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[hsl(0,0%,96%)] text-[10px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+                      <Calendar className="w-3 h-3 text-brand-violet shrink-0" strokeWidth={2.25} />
+                      Disponible desde {availableFrom}
+                    </span>
+                  )}
+                  {furnishedLabel && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[hsl(0,0%,96%)] text-[10px] font-semibold text-foreground/70 border border-[hsl(0,0%,90%)]">
+                      <Sofa className="w-3 h-3 text-brand-violet shrink-0" strokeWidth={2.25} />
+                      {furnishedLabel}
+                    </span>
+                  )}
+                </div>
+
+                <div className="mt-2.5">
+                  <p className="text-sm sm:text-base font-bold text-foreground line-clamp-1 flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 shrink-0 text-brand-magenta" />
+                    {property.neighborhood || property.locality || "Zona"}
+                  </p>
+                  {property.city && (
+                    <p className="text-[11px] text-muted-foreground mt-0.5 pl-5">{property.city}</p>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigate(`/propiedad/${property.id}?visita=1`);
+                  }}
+                  className="mt-3 w-full flex items-center justify-center gap-1.5 gradient-cta text-white text-xs font-bold py-2.5 rounded-lg hover:opacity-95 transition-opacity"
+                >
+                  <CalendarCheck className="w-3.5 h-3.5" />
+                  Agendar visita
+                </button>
               </>
             )}
             <h3

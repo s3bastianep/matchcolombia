@@ -3,7 +3,7 @@ import { createStore } from "./store";
 import { getPortalSeedData } from "./portalSeed";
 import * as localAuth from "../lib/localAuth";
 
-const STORAGE_KEY = "matchcolombia_properties_v5";
+const STORAGE_KEY = "matchcolombia_properties_v7";
 const INQUIRIES_KEY = "matchcolombia_inquiries";
 const VISITS_KEY = "matchcolombia_visits";
 const MESSAGES_KEY = "matchcolombia_messages";
