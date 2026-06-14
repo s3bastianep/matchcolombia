@@ -19,6 +19,7 @@ import TenantPortalScreen from "@/components/advertise/TenantPortalScreen";
 import AdminFlowSection from "@/components/advertise/AdminFlowSection";
 import TraditionalVsMatch from "@/components/advertise/TraditionalVsMatch";
 import AboutFounderSection from "@/components/advertise/AboutFounderSection";
+import OwnerSecuritySection from "@/components/advertise/OwnerSecuritySection";
 import OwnerFaqSection from "@/components/advertise/OwnerFaqSection";
 
 const VERIFIABLE = [
@@ -228,6 +229,8 @@ export default function Advertise() {
       </section>
 
       <TraditionalVsMatch />
+
+      <OwnerSecuritySection />
 
       <section className="py-10 sm:py-14 bg-white border-b border-border/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-8">
