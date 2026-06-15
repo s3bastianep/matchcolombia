@@ -86,6 +86,59 @@ function StepDots({ total, current }) {
   );
 }
 
+function StepQuestionIcon({ icon: Icon }) {
+  return (
+    <span className="w-11 h-11 rounded-2xl bg-white border border-brand-violet/15 flex items-center justify-center shrink-0 shadow-sm">
+      <Icon className="w-5 h-5 text-brand-violet" strokeWidth={1.75} />
+    </span>
+  );
+}
+
+function NumberSelectGrid({ values, selected, onSelect, unit, icon: Icon }) {
+  return (
+    <div className="grid grid-cols-5 gap-2 sm:gap-2.5">
+      {values.map((v) => {
+        const isSelected = selected === v;
+        const display = v === "5" ? "5+" : v;
+        const unitLabel = v === "1" ? unit.singular : unit.plural;
+
+        return (
+          <button
+            key={v}
+            type="button"
+            onClick={() => onSelect(v)}
+            className={cn(
+              "relative flex flex-col items-center justify-center gap-1 py-4 px-1.5 rounded-2xl border-2 transition-all min-h-[96px]",
+              isSelected
+                ? "border-brand-violet bg-white shadow-md ring-1 ring-brand-violet/15"
+                : "border-border/50 bg-white hover:border-brand-violet/25 hover:shadow-sm"
+            )}
+          >
+            {isSelected && (
+              <span className="absolute top-2 right-2 w-4 h-4 rounded-full gradient-cta flex items-center justify-center">
+                <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+              </span>
+            )}
+            <Icon
+              className={cn("w-4 h-4", isSelected ? "text-brand-violet" : "text-muted-foreground/45")}
+              strokeWidth={1.75}
+            />
+            <span
+              className={cn(
+                "text-2xl sm:text-[1.65rem] font-extrabold tabular-nums leading-none",
+                isSelected ? "text-brand-violet" : "text-foreground"
+              )}
+            >
+              {display}
+            </span>
+            <span className="text-[9px] font-bold uppercase tracking-wide text-muted-foreground">{unitLabel}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function TypeOptionCard({ type, selected, onClick }) {
   const Icon = type.icon;
   return (
@@ -212,8 +265,8 @@ export default function MatchQuiz({ open, onOpenChange }) {
 
           <div className="gradient-hero px-5 sm:px-7 pt-5 pb-4 border-b border-border/30">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-11 h-11 rounded-2xl gradient-cta flex items-center justify-center shadow-md shrink-0">
-                <Sparkles className="w-5 h-5 text-white" />
+              <div className="w-11 h-11 rounded-2xl bg-white border border-border/50 flex items-center justify-center shadow-sm shrink-0">
+                <Sparkles className="w-5 h-5 text-brand-violet" strokeWidth={2} />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
@@ -237,8 +290,8 @@ export default function MatchQuiz({ open, onOpenChange }) {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="flex items-start gap-3 mb-5">
-                <IconBubble icon={StepIcon} selected />
+              <div className="flex items-start gap-3 mb-6">
+                <StepQuestionIcon icon={StepIcon} />
                 <div>
                   <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight leading-tight">{current.title}</h2>
                   <p className="text-sm text-muted-foreground mt-1">{current.subtitle}</p>
@@ -309,22 +362,20 @@ export default function MatchQuiz({ open, onOpenChange }) {
               )}
 
               {current.id === "beds" && (
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {BEDS.map((b) => (
-                    <button
-                      key={b}
-                      type="button"
-                      onClick={() => setPrefs({ ...prefs, beds: b })}
-                      className={cn(
-                        "min-w-[3.25rem] h-12 px-5 rounded-2xl border-2 text-sm font-extrabold transition-all",
-                        prefs.beds === b
-                          ? "gradient-cta text-white border-transparent shadow-md"
-                          : "border-border/60 bg-white hover:border-brand-violet/30"
-                      )}
-                    >
-                      {b === "5" ? "5+" : b}
-                    </button>
-                  ))}
+                <div className="rounded-2xl border border-border/40 bg-white p-4 sm:p-5 shadow-sm">
+                  <NumberSelectGrid
+                    values={BEDS}
+                    selected={prefs.beds}
+                    onSelect={(b) => setPrefs({ ...prefs, beds: b })}
+                    unit={{ singular: "hab.", plural: "hab." }}
+                    icon={Bed}
+                  />
+                  <p className="text-center text-[11px] text-muted-foreground mt-4 font-medium">
+                    Seleccionado:{" "}
+                    <span className="font-bold text-foreground">
+                      {prefs.beds === "5" ? "5 o más habitaciones" : `${prefs.beds} habitación${prefs.beds !== "1" ? "es" : ""}`}
+                    </span>
+                  </p>
                 </div>
               )}
 
@@ -333,27 +384,23 @@ export default function MatchQuiz({ open, onOpenChange }) {
                   <QuizOption
                     selected={prefs.bathrooms === "all"}
                     onClick={() => setPrefs({ ...prefs, bathrooms: "all" })}
-                    className="text-center font-bold text-sm"
+                    className="flex items-center gap-3 bg-white"
                   >
-                    Cualquiera
+                    <StepQuestionIcon icon={Bath} />
+                    <div className="min-w-0 flex-1">
+                      <p className="font-bold text-sm">Cualquiera</p>
+                      <p className="text-xs text-muted-foreground">Sin mínimo de baños</p>
+                    </div>
+                    <OptionCheck selected={prefs.bathrooms === "all"} />
                   </QuizOption>
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {BATHS.map((b) => (
-                      <button
-                        key={b}
-                        type="button"
-                        onClick={() => setPrefs({ ...prefs, bathrooms: b })}
-                        className={cn(
-                          "min-w-[3.25rem] h-12 px-5 rounded-2xl border-2 text-sm font-extrabold transition-all inline-flex items-center justify-center gap-1.5",
-                          prefs.bathrooms === b
-                            ? "gradient-cta text-white border-transparent shadow-md"
-                            : "border-border/60 bg-white hover:border-brand-violet/30"
-                        )}
-                      >
-                        <Bath className="w-4 h-4" />
-                        {b === "5" ? "5+" : b}
-                      </button>
-                    ))}
+                  <div className="rounded-2xl border border-border/40 bg-white p-4 sm:p-5 shadow-sm">
+                    <NumberSelectGrid
+                      values={BATHS}
+                      selected={prefs.bathrooms}
+                      onSelect={(b) => setPrefs({ ...prefs, bathrooms: b })}
+                      unit={{ singular: "baño", plural: "baños" }}
+                      icon={Bath}
+                    />
                   </div>
                 </div>
               )}
