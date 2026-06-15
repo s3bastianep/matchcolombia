@@ -26,8 +26,11 @@ export default function AdminDashboard() {
     [properties, inquiries, visits, messages, leases, payments, tickets, owners]
   );
 
+  const pendingVisits = visits.filter((v) => v.status === "pendiente").length;
+
   const alerts = [
     m.unansweredLeads > 0 && { label: `${m.unansweredLeads} leads sin responder`, to: "/admin/leads", icon: MessageSquare },
+    pendingVisits > 0 && { label: `${pendingVisits} visitas por aprobar`, to: "/admin/visitas", icon: Calendar },
     m.pendingVerifications > 0 && { label: `${m.pendingVerifications} propietarios por verificar`, to: "/admin/propietarios", icon: Shield },
     m.overduePayments > 0 && { label: `${m.overduePayments} pagos atrasados`, to: "/admin/inquilinos", icon: DollarSign },
     m.staleProperties.length > 0 && { label: `${m.staleProperties.length} propiedades estancadas`, to: "/admin/propiedades", icon: AlertTriangle },

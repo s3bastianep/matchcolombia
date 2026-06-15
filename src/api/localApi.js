@@ -2,6 +2,7 @@ import { SEED_PROPERTIES } from "./mockData";
 import { createStore } from "./store";
 import { getPortalSeedData } from "./portalSeed";
 import { workflowToPublicStatus } from "../lib/adminConstants";
+import { validateVisitBooking } from "../lib/visitSlots";
 import { seedAdminNotificationsIfNeeded } from "../lib/adminNotifications";
 import * as localAuth from "../lib/localAuth";
 
@@ -64,6 +65,16 @@ function makeRefCode(id) {
   let hash = 0;
   for (let i = 0; i < id.length; i++) hash = (hash * 33 + id.charCodeAt(i)) >>> 0;
   return `REF${String(1000000 + (hash % 8999999))}`;
+}
+
+function loadVisits() {
+  try {
+    const raw = localStorage.getItem(VISITS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {
+    /* empty */
+  }
+  return [];
 }
 
 function loadOwners() {
@@ -274,7 +285,23 @@ const Inquiry = {
     }, "inq");
   },
 };
-const Visit = createStore(VISITS_KEY);
+const VisitStore = createStore(VISITS_KEY);
+const Visit = {
+  ...VisitStore,
+  async create(data) {
+    const existing = loadVisits();
+    validateVisitBooking({
+      scheduledAt: data.scheduled_at,
+      propertyId: data.property_id,
+      existingVisits: existing,
+    });
+    return VisitStore.create({
+      ...data,
+      status: data.status || "pendiente",
+      visit_type: data.visit_type || "presencial",
+    }, "visit");
+  },
+};
 const Message = createStore(MESSAGES_KEY);
 const Application = createStore(APPLICATIONS_KEY);
 const Lease = createStore(LEASES_KEY);

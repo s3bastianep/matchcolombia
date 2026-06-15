@@ -2,9 +2,10 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Gift, MapPin, Video } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
-  getTimeSlotsForType,
+  getAvailableSlotsForDate,
   getAvailableVisitDays,
   formatVisitDay,
+  VISIT_RULES_HINT,
 } from "@/lib/visitSlots";
 
 const selectedSolid =
@@ -24,17 +25,35 @@ function TimeSlotGrid({ slots, selectedSlot, onSlotChange }) {
     <div className="flex flex-wrap gap-2">
       {group.map((slot) => {
         const selected = selectedSlot === slot.id;
+        const disabled = !slot.available;
         return (
           <button
             key={slot.id}
             type="button"
+            disabled={disabled}
             onClick={() => onSlotChange(slot.id)}
+            title={
+              disabled
+                ? slot.reason === "completo"
+                  ? "Horario completo (2/2)"
+                  : slot.reason === "anticipacion"
+                    ? "Requiere 1 h 15 min de anticipación"
+                    : "No disponible"
+                : slot.spotsLeft === 1
+                  ? "Queda 1 cupo"
+                  : undefined
+            }
             className={cn(
-              "min-w-[3.75rem] h-9 px-2.5 rounded-md border text-[11px] font-semibold tabular-nums transition-all duration-200",
-              selected ? selectedSolid : defaultChip
+              "min-w-[3.75rem] min-h-[2.25rem] px-2.5 py-1 rounded-md border text-[11px] font-semibold tabular-nums transition-all duration-200",
+              disabled && "opacity-40 cursor-not-allowed border-border/40 bg-muted/30 text-muted-foreground",
+              !disabled && selected && selectedSolid,
+              !disabled && !selected && defaultChip
             )}
           >
             {shortTimeLabel(slot.label)}
+            {!disabled && slot.booked > 0 && (
+              <span className="block text-[9px] font-medium opacity-70">{slot.booked}/2</span>
+            )}
           </button>
         );
       })}
@@ -157,9 +176,13 @@ export default function VisitScheduler({
   selectedSlot,
   onDateChange,
   onSlotChange,
+  propertyId,
+  existingVisits = [],
 }) {
   const days = getAvailableVisitDays(21);
-  const timeSlots = getTimeSlotsForType(visitType);
+  const timeSlots = selectedDate && propertyId
+    ? getAvailableSlotsForDate(existingVisits, propertyId, selectedDate, visitType)
+    : [];
 
   return (
     <div className="space-y-6">
@@ -172,6 +195,7 @@ export default function VisitScheduler({
             <p className="text-sm text-foreground/70 mt-1.5 leading-snug">
               Sin costo. Nosotros coordinamos todo por ti.
             </p>
+            <p className="text-[11px] text-muted-foreground mt-1.5">{VISIT_RULES_HINT}</p>
           </div>
           <span className="inline-flex items-center gap-1.5 shrink-0 px-3 py-1.5 rounded-full bg-[hsl(var(--brand-magenta)/0.1)] border border-[hsl(var(--brand-magenta)/0.22)] text-xs font-bold text-[hsl(var(--brand-magenta))]">
             <Gift className="w-3.5 h-3.5" strokeWidth={2.5} />
@@ -283,11 +307,17 @@ export default function VisitScheduler({
           Hora
         </p>
 
-        <TimeSlotGrid
-          slots={timeSlots}
-          selectedSlot={selectedSlot}
-          onSlotChange={onSlotChange}
-        />
+        {!selectedDate ? (
+          <p className="text-sm text-muted-foreground">Selecciona una fecha para ver horarios disponibles.</p>
+        ) : timeSlots.every((s) => !s.available) ? (
+          <p className="text-sm text-amber-700 font-medium">No hay cupos este día. Prueba otra fecha.</p>
+        ) : (
+          <TimeSlotGrid
+            slots={timeSlots}
+            selectedSlot={selectedSlot}
+            onSlotChange={onSlotChange}
+          />
+        )}
       </div>
     </div>
   );

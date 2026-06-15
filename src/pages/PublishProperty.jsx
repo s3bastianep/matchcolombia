@@ -16,6 +16,8 @@ import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
 import { CITIES, getZonesForCity } from "@/lib/colombia";
 import { BEDROOM_OPTIONS, BATHROOM_OPTIONS, PARKING_OPTIONS, ESTRATO_OPTIONS } from "@/lib/propertyFilters";
+import { getCurrentUserId } from "@/lib/localAuth";
+import { pushAdminNotification } from "@/lib/adminNotifications";
 
 const STEPS = [
   { id: "basic", label: "Básico", icon: Home },
@@ -119,7 +121,7 @@ export default function PublishProperty() {
   };
 
   const createProperty = useMutation({
-    mutationFn: (data) => {
+    mutationFn: async (data) => {
       const cleaned = { ...data };
       ["monthly_rent", "deposit", "admin_fee", "bedrooms", "bathrooms", "area_sqm", "floor", "min_contract_months", "parking_spots"].forEach((k) => {
         if (cleaned[k] === "" || cleaned[k] == null) delete cleaned[k];
@@ -128,10 +130,55 @@ export default function PublishProperty() {
       if (cleaned.estrato === "" || cleaned.estrato == null) delete cleaned.estrato;
       else if (!isNaN(cleaned.estrato)) cleaned.estrato = Number(cleaned.estrato);
       cleaned.parking = (cleaned.parking_spots || 0) > 0;
-      return api.entities.Property.create(cleaned);
+
+      const userId = getCurrentUserId();
+      if (userId) {
+        let owner = await api.entities.Owner.getByUserId(userId);
+        if (!owner) {
+          owner = await api.entities.Owner.create({
+            user_id: userId,
+            name: cleaned.contact_name || user?.name || "Propietario",
+            email: cleaned.contact_email || user?.email || "",
+            phone: cleaned.contact_phone || "",
+            verification_status: "pendiente",
+            documents: (cleaned.images || []).slice(0, 3).map((url, i) => ({
+              type: "foto_inmueble",
+              name: `Foto ${i + 1}`,
+              url,
+              uploaded_at: new Date().toISOString(),
+            })),
+            internal_notes: "",
+          });
+        } else if (cleaned.images?.length) {
+          const photoDocs = cleaned.images.slice(0, 5).map((url, i) => ({
+            type: "foto_inmueble",
+            name: `Foto ${i + 1}`,
+            url,
+            uploaded_at: new Date().toISOString(),
+          }));
+          await api.entities.Owner.update(owner.id, {
+            verification_status: owner.verification_status === "verificado" ? "verificado" : "en_revision",
+            documents: [...(owner.documents || []), ...photoDocs],
+          });
+        }
+        cleaned.owner_user_id = userId;
+      }
+
+      cleaned.publication_status = "en_revision";
+      cleaned.status = "en_revision";
+      cleaned.created_by = userId || "owner";
+
+      const { contact_name, contact_phone, contact_email, ...propertyData } = cleaned;
+      return api.entities.Property.create(propertyData);
     },
     onSuccess: () => {
-      toast.success("¡Inmueble publicado! Nuestro equipo gestionará las consultas por ti.");
+      pushAdminNotification({
+        type: "owner",
+        title: "Nuevo inmueble en revisión",
+        message: "Un propietario envió un inmueble para revisión y publicación.",
+        link: "/admin/propiedades",
+      });
+      toast.success("¡Solicitud enviada! Nuestro equipo revisará tu inmueble y fotos antes de publicar.");
       navigate("/explorar");
     },
   });

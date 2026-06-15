@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Check, MessageCircle, ArrowRight, Receipt } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -29,6 +29,12 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
   const title = propertyTitle || property?.title;
   const refCode = property ? getPropertyReferenceCode(property) : null;
   const { user, isAuthenticated, checkUserAuth } = useAuth();
+
+  const { data: propertyVisits = [] } = useQuery({
+    queryKey: ["property-visits", id],
+    queryFn: () => api.entities.Visit.filter({ property_id: id }, "scheduled_at", 200),
+    enabled: !!id,
+  });
 
   const [form, setForm] = useState({ name: "", phone: "" });
   const [visitType, setVisitType] = useState("presencial");
@@ -84,6 +90,7 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
         user_name: payload.name,
         scheduled_at: payload.scheduledAt,
         status: "pendiente",
+        visit_type: payload.visitType,
         notes: `${payload.visitType === "virtual" ? "Virtual" : "Presencial"} · ${getSlotById(payload.visitSlot, payload.visitType)?.label}`,
       });
 
@@ -198,8 +205,13 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
         onVisitTypeChange={setVisitType}
         selectedDate={visitDate}
         selectedSlot={visitSlot}
-        onDateChange={setVisitDate}
+        onDateChange={(d) => {
+          setVisitDate(d);
+          setVisitSlot("");
+        }}
         onSlotChange={setVisitSlot}
+        propertyId={id}
+        existingVisits={propertyVisits}
       />
 
       {property && (

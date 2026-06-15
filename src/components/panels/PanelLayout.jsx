@@ -13,10 +13,10 @@ export default function PanelLayout({ title, subtitle, navItems, accent = "purpl
   const accentRing = accent === "magenta" ? "bg-brand-magenta" : "bg-brand-violet";
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-[hsl(240,28%,96%)] flex">
       <aside
         className={cn(
-          "fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-border/40 flex flex-col transition-transform lg:translate-x-0",
+          "fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-border/50 flex flex-col transition-transform lg:translate-x-0 shadow-sm",
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -37,13 +37,18 @@ export default function PanelLayout({ title, subtitle, navItems, accent = "purpl
                 onClick={() => setOpen(false)}
                 className={cn(
                   "flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors",
-                  active ? "bg-brand-violet/10 text-brand-violet" : "text-foreground/70 hover:bg-secondary hover:text-foreground"
+                  active
+                    ? "bg-brand-violet/12 text-brand-violet shadow-sm border border-brand-violet/15"
+                    : "text-foreground/70 hover:bg-white hover:text-foreground border border-transparent"
                 )}
               >
                 {item.icon && <item.icon className="w-4 h-4 shrink-0" />}
                 {item.label}
                 {item.badge != null && item.badge > 0 && (
-                  <span className="ml-auto text-[10px] font-bold bg-foreground text-white px-1.5 py-0.5 rounded-full">
+                  <span className={cn(
+                    "ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[1.25rem] text-center",
+                    item.badgeTone === "amber" ? "bg-amber-500 text-white" : "bg-brand-magenta text-white"
+                  )}>
                     {item.badge}
                   </span>
                 )}
@@ -83,7 +88,7 @@ export default function PanelLayout({ title, subtitle, navItems, accent = "purpl
             Ver sitio →
           </Link>
         </header>
-        <main className="flex-1 p-4 lg:p-8 overflow-auto">
+        <main className="flex-1 p-4 lg:p-8 overflow-auto bg-[hsl(240,28%,96%)]">
           <Outlet />
         </main>
       </div>

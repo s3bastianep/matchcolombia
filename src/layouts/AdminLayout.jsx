@@ -11,10 +11,10 @@ export default function AdminLayout() {
 
   const nav = [
     { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
-    { to: "/admin/propiedades", label: "Propiedades", icon: Building2 },
-    { to: "/admin/propietarios", label: "Propietarios", icon: Shield, badge: badges.owners },
+    { to: "/admin/propiedades", label: "Propiedades", icon: Building2, badge: badges.properties, badgeTone: "amber" },
+    { to: "/admin/propietarios", label: "Propietarios", icon: Shield, badge: badges.owners, badgeTone: "amber" },
     { to: "/admin/leads", label: "Leads", icon: Users, badge: badges.leads },
-    { to: "/admin/visitas", label: "Visitas", icon: Calendar, badge: badges.visits },
+    { to: "/admin/visitas", label: "Visitas", icon: Calendar, badge: badges.visits, badgeTone: "amber" },
     { to: "/admin/aplicaciones", label: "Aplicaciones", icon: FileText, badge: badges.applications },
     { to: "/admin/inquilinos", label: "Inquilinos", icon: UserCheck, badge: badges.tickets },
     { to: "/admin/reportes", label: "Reportes", icon: BarChart3 },
