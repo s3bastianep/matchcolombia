@@ -1,160 +1,129 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Sparkles, Target, KeyRound, ArrowRight, Compass } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import PropertyCard from "@/components/property/PropertyCard";
 import SectionHeader from "../ui/SectionHeader";
-import VerifiedBadge from "@/components/brand/VerifiedBadge";
 import { cn } from "@/lib/utils";
 
-const steps = [
+const STEPS = [
   {
     num: "01",
-    icon: Sparkles,
-    title: "Cuéntanos qué buscas",
-    desc: "Ciudad, habitaciones y presupuesto, solo para filtrar entre inmuebles verificados.",
-    tag: "Match inteligente",
-    accent: "from-brand-magenta to-brand-violet",
-    pills: ["Verificados", "Sin estafas", "Sin sustos"],
+    title: "Dices qué buscas",
+    problem: "Sin perder horas en portales sin filtro.",
+    desc: "Ciudad, presupuesto y habitaciones. MatchColombia filtra por ti.",
   },
   {
     num: "02",
-    icon: Target,
-    title: "Recibe tu selección",
-    desc: "Solo inmuebles 100% verificados por MatchColombia. Precio real, fotos reales.",
-    tag: "100% verificados",
-    accent: "from-brand-magenta to-brand-violet",
-    scores: [92, 88, 95],
+    title: "Ves solo inmuebles reales",
+    problem: "Sin anuncios dudosos ni precios inventados.",
+    desc: "Cada listado está verificado: fotos, precio y datos revisados.",
   },
   {
     num: "03",
-    icon: KeyRound,
-    title: "Haz tu mudanza",
-    desc: "Guarda favoritos, agenda visitas y nosotros gestionamos todo por ti.",
-    tag: "Gestión completa",
-    accent: "from-brand-violet to-brand-magenta",
-    pills: ["Favoritos", "Visita", "Equipo Match"],
+    title: "Nosotros coordinamos",
+    problem: "Sin perseguir dueños ni mensajes sueltos.",
+    desc: "Guardas favoritos, agendas visitas y el equipo Match te acompaña.",
   },
 ];
 
-export default function MatchSteps({ onStartQuiz }) {
+function CardSkeleton() {
   return (
-    <section className="section-pad relative overflow-hidden bg-white border-y border-border/40">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-0 w-64 h-64 rounded-full bg-brand-violet/5 blur-3xl -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-brand-magenta/5 blur-3xl" />
+    <div className="rounded-xl border border-border/40 overflow-hidden h-full min-h-[280px]">
+      <div className="aspect-[5/4] shimmer" />
+      <div className="p-3 space-y-2">
+        <div className="h-4 shimmer rounded w-1/2" />
+        <div className="h-3 shimmer rounded w-2/3" />
       </div>
+    </div>
+  );
+}
 
+export default function MatchSteps({ onStartQuiz, properties = [], isLoading = false }) {
+  const showcase = properties.slice(0, 3);
+
+  return (
+    <section className="section-pad relative overflow-hidden bg-[hsl(0,0%,98%)] border-y border-border/40">
       <div className="relative max-w-6xl mx-auto px-4 sm:px-8">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-14 sm:mb-16">
+        <div className="grid lg:grid-cols-[1fr_1.1fr] gap-6 lg:gap-10 items-start mb-10 sm:mb-12">
           <SectionHeader
-            eyebrow="Cómo funciona"
+            eyebrow="Por qué MatchColombia"
             title={
               <>
                 Tu match en <span className="text-gradient">3 pasos</span>
               </>
             }
-            subtitle="Match inteligente con inmuebles 100% verificados. Sin estafas, sin sustos."
-            className="max-w-xl"
+            subtitle="Menos tiempo buscando. Más confianza al arrendar."
           />
-          <div className="hidden lg:flex items-center gap-2 text-sm font-semibold text-muted-foreground shrink-0 pb-1">
-            <Compass className="w-4 h-4 text-brand-violet" />
-            Bogotá y Barranquilla
+          <div className="border-l-4 border-brand-magenta pl-4 sm:pl-5 py-1">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-brand-magenta mb-2">
+              El problema que resolvemos
+            </p>
+            <p className="text-sm sm:text-base text-foreground font-semibold leading-relaxed">
+              Buscar arriendo suele ser perder tiempo: anuncios falsos, precios que no cuadran y nadie que coordine visitas.
+            </p>
+            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+              MatchColombia verifica cada inmueble y te acompaña de la búsqueda a la visita.
+            </p>
           </div>
         </div>
 
-        {/* Timeline horizontal — sin fotos, distinto a RentEasy */}
-        <div className="relative">
-          <div className="hidden lg:block absolute top-[2.75rem] left-[12%] right-[12%] h-[2px]">
-            <div className="h-full bg-gradient-to-r from-brand-magenta/20 via-brand-violet/35 to-brand-magenta/20 rounded-full" />
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-5">
+          {STEPS.map((step, i) => (
+            <motion.div
+              key={step.num}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="flex flex-col"
+            >
+              <div className="mb-4">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-brand-violet">
+                  Paso {step.num}
+                </span>
+                <h3 className="font-extrabold text-lg sm:text-xl mt-1 tracking-tight">{step.title}</h3>
+                <p className="text-xs font-semibold text-foreground/80 mt-1">{step.problem}</p>
+                <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{step.desc}</p>
+              </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6">
-            {steps.map((step, i) => {
-              const Icon = step.icon;
-              return (
-                <motion.div
-                  key={step.num}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.12 }}
-                  className="relative flex gap-5 lg:flex-col lg:items-center lg:text-center"
-                >
-                  {/* Línea vertical en mobile */}
-                  {i < steps.length - 1 && (
-                    <div className="lg:hidden absolute left-[1.65rem] top-14 bottom-0 w-px bg-gradient-to-b from-brand-violet/30 to-transparent" />
-                  )}
-
-                  <div className="relative shrink-0 z-10">
-                    <div
-                      className={cn(
-                        "w-14 h-14 rounded-2xl bg-gradient-to-br flex items-center justify-center text-white shadow-lg ring-4 ring-white",
-                        step.accent
-                      )}
-                    >
-                      <Icon className="w-6 h-6" strokeWidth={2.25} />
-                    </div>
-                    <span
-                      className={cn(
-                        "absolute -top-2 -right-2 lg:-top-3 lg:-right-4 text-[10px] font-extrabold text-white px-2 py-0.5 rounded-full bg-gradient-to-r shadow-sm",
-                        step.accent
-                      )}
-                    >
-                      {step.num}
-                    </span>
+              <div className="mt-auto">
+                {isLoading ? (
+                  <CardSkeleton />
+                ) : showcase[i] ? (
+                  <PropertyCard property={showcase[i]} index={i} variant="grid" showMatch={i === 1} matchScore={92} />
+                ) : (
+                  <div className="rounded-xl border border-dashed border-border/50 bg-white p-6 text-center min-h-[200px] flex items-center justify-center">
+                    <p className="text-sm text-muted-foreground">Inmuebles verificados disponibles pronto</p>
                   </div>
-
-                  <div className="flex-1 lg:flex-none pt-1 lg:pt-6">
-                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-background text-muted-foreground border border-border/50">
-                      {step.tag}
-                    </span>
-                    <h3 className="font-extrabold text-xl sm:text-[1.35rem] mt-3 mb-2 tracking-tight">{step.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed max-w-xs lg:mx-auto">{step.desc}</p>
-
-                <div className="mt-4 flex flex-wrap gap-1.5 lg:justify-center">
-                  {step.pills?.map((pill) =>
-                    pill === "Verificados" ? (
-                      <VerifiedBadge key={pill} size="xs" className="!rounded-full" />
-                    ) : (
-                      <span key={pill} className="px-2.5 py-1 rounded-full bg-background text-[10px] font-bold text-foreground border border-border/40">
-                        {pill}
-                      </span>
-                    )
-                  )}
-                      {step.scores?.map((score) => (
-                        <span
-                          key={score}
-                          className="w-8 h-8 rounded-full gradient-cta flex items-center justify-center text-[9px] font-extrabold text-white"
-                        >
-                          {score}%
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+                )}
+              </div>
+            </motion.div>
+          ))}
         </div>
 
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-14 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
+          className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-3"
         >
           <button
+            type="button"
             onClick={onStartQuiz}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 gradient-cta btn-glow text-white font-bold px-8 py-3.5 rounded-full hover:opacity-95 transition-opacity"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 gradient-cta text-white font-bold px-8 py-3.5 rounded-full hover:opacity-95 transition-opacity"
           >
-            Match inteligente
+            Empezar match inteligente
             <ArrowRight className="w-4 h-4" />
           </button>
           <Link
             to="/explorar"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-bold text-foreground border-2 border-border/60 bg-background hover:bg-secondary/60 transition-colors"
+            className={cn(
+              "w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-bold",
+              "text-foreground border-2 border-border/60 bg-white hover:bg-secondary/60 transition-colors"
+            )}
           >
-            Explorar manualmente
+            Ver tarjetas de inmuebles
           </Link>
         </motion.div>
       </div>

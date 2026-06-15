@@ -20,7 +20,7 @@ export default function Home() {
     <div className="w-full overflow-x-hidden">
       <HeroSection onStartQuiz={startQuiz} />
       <RentEasySection />
-      <MatchSteps onStartQuiz={startQuiz} />
+      <MatchSteps onStartQuiz={startQuiz} properties={properties} isLoading={isLoading} />
       <FeaturedProperties properties={properties} isLoading={isLoading} />
     </div>
   );
