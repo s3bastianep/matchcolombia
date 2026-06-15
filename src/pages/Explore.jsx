@@ -34,9 +34,7 @@ function MapPaneFallback({ className }) {
   return <div className={cn("shimmer bg-muted/20", className)} aria-hidden />;
 }
 
-function shouldInsertOwnerPromo(index) {
-  return index === 1 || (index > 1 && (index - 1) % 10 === 0);
-}
+const SPLIT_LAYOUT_GRID = "lg:grid-cols-[minmax(280px,380px)_minmax(0,1fr)]";
 
 const TYPES_LABEL = {
   apartamento: "Apartamento",
@@ -429,13 +427,13 @@ export default function Explore() {
 
       {isLoading ? (
         <>
-          <div className="hidden lg:grid lg:flex-1 lg:min-h-0 lg:grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)] min-w-0">
-            <div className="px-6 py-5 grid grid-cols-2 lg:grid-cols-3 gap-3 items-stretch">
+          <div className={cn("hidden lg:grid lg:flex-1 lg:min-h-0 min-w-0", SPLIT_LAYOUT_GRID)}>
+            <div className="border-r border-[hsl(0,0%,90%)] shimmer min-h-[400px]" />
+            <div className="px-6 py-5 grid grid-cols-2 xl:grid-cols-3 gap-3 items-stretch">
               {Array(9).fill(0).map((_, i) => (
                 <ExploreSkeleton key={i} />
               ))}
             </div>
-            <div className="border-l border-[hsl(0,0%,90%)] shimmer min-h-[400px]" />
           </div>
           <div className="lg:hidden px-4 py-5 grid grid-cols-1 gap-4">
             {Array(4).fill(0).map((_, i) => (
@@ -453,8 +451,34 @@ export default function Explore() {
         <>
           <div className={cn(
             "hidden lg:grid lg:flex-1 lg:min-h-0 border-t border-[hsl(0,0%,90%)] min-w-0",
-            viewMode === "list" ? "grid-cols-1" : "grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)]"
+            viewMode === "list" ? "grid-cols-1" : SPLIT_LAYOUT_GRID
           )}>
+            {viewMode === "split" && (
+            <div className="flex flex-col border-r border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] min-h-0 min-w-0 overflow-hidden">
+              <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-[hsl(0,0%,90%)] shrink-0 bg-white">
+                <div className="min-w-0">
+                  <p className="text-xs font-extrabold text-foreground truncate">{cityLabel}</p>
+                  <p className="text-[10px] text-muted-foreground">{filtered.length} en el mapa</p>
+                </div>
+                <p className="text-[10px] text-muted-foreground text-right leading-tight max-w-[9rem] hidden xl:block">
+                  Toca un precio para ver el inmueble
+                </p>
+              </div>
+              <div className="flex-1 min-h-0">
+                <Suspense fallback={<MapPaneFallback className="h-full" />}>
+                  <ExploreMap
+                    properties={filtered}
+                    activeCity={initialCity || undefined}
+                    pane
+                    highlightedId={highlightedId}
+                    onHighlight={setHighlightedId}
+                    className="h-full"
+                  />
+                </Suspense>
+              </div>
+            </div>
+            )}
+
             <div className="overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] px-6 py-5 min-w-0">
               <div className="flex flex-wrap items-start justify-between gap-3 mb-1">
                 <div>
@@ -466,7 +490,7 @@ export default function Explore() {
                 {viewMode === "split" && (
                   <p className="hidden xl:flex items-center gap-1.5 text-[11px] text-muted-foreground bg-white border border-[hsl(0,0%,90%)] rounded-full px-3 py-1.5 shrink-0">
                     <MousePointer2 className="w-3 h-3" />
-                    Pasa el cursor para ubicar en el mapa
+                    Pasa el cursor en el mapa para ubicar
                   </p>
                 )}
               </div>
@@ -533,7 +557,7 @@ export default function Explore() {
                 "grid items-stretch gap-x-3 gap-y-4 mt-5 min-w-0",
                 viewMode === "list"
                   ? "grid-cols-2 sm:grid-cols-3 xl:grid-cols-4"
-                  : "grid-cols-2 lg:grid-cols-3"
+                  : "grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
               )}>
                 {filtered.flatMap((property, i) => {
                   const items = [
@@ -560,32 +584,6 @@ export default function Explore() {
                 })}
               </div>
             </div>
-
-            {viewMode === "split" && (
-            <div className="flex flex-col border-l border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] min-h-0 min-w-0 overflow-hidden">
-              <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-[hsl(0,0%,90%)] shrink-0 bg-white">
-                <div className="min-w-0">
-                  <p className="text-xs font-extrabold text-foreground truncate">{cityLabel}</p>
-                  <p className="text-[10px] text-muted-foreground">{filtered.length} en el mapa</p>
-                </div>
-                <p className="text-[10px] text-muted-foreground text-right leading-tight max-w-[9rem]">
-                  Toca un precio para ver el inmueble
-                </p>
-              </div>
-              <div className="flex-1 min-h-0">
-                <Suspense fallback={<MapPaneFallback className="h-full" />}>
-                  <ExploreMap
-                    properties={filtered}
-                    activeCity={initialCity || undefined}
-                    pane
-                    highlightedId={highlightedId}
-                    onHighlight={setHighlightedId}
-                    className="h-full"
-                  />
-                </Suspense>
-              </div>
-            </div>
-            )}
           </div>
 
           <div className={cn("lg:hidden flex-1 min-h-0 overflow-y-auto px-4 py-4 pb-safe space-y-4", viewMode === "map" && "hidden")}>
