@@ -17,7 +17,7 @@ const TICKETS_KEY = "matchcolombia_tickets";
 const OWNERS_KEY = "matchcolombia_owners";
 const POIS_KEY = "matchcolombia_pois";
 const SETTINGS_KEY = "matchcolombia_admin_settings";
-const PORTAL_SEEDED_KEY = "matchcolombia_portal_seeded_v2";
+const PORTAL_SEEDED_KEY = "matchcolombia_portal_seeded_v3";
 
 import { apiDelay } from "../lib/apiDelay";
 import { notifySiteBrandingUpdated } from "../lib/siteBranding";
@@ -124,6 +124,28 @@ function sortList(list, sortField) {
   return sorted;
 }
 
+function patchOwnerPropertyFinancials() {
+  const props = loadProperties();
+  const ids = props.slice(0, 2).map((p) => p.id);
+  if (!ids.length) return;
+
+  const values = {
+    [ids[0]]: { purchase_value: 385000000, owner_user_id: "user-owner-demo" },
+    [ids[1]]: { purchase_value: 520000000, owner_user_id: "user-owner-demo" },
+  };
+
+  let changed = false;
+  const next = props.map((p) => {
+    const patch = values[p.id];
+    if (!patch) return p;
+    if (p.purchase_value === patch.purchase_value && p.owner_user_id === patch.owner_user_id) return p;
+    changed = true;
+    return { ...p, ...patch };
+  });
+
+  if (changed) saveProperties(next);
+}
+
 function seedPortalIfNeeded() {
   try {
     const props = loadProperties();
@@ -142,7 +164,18 @@ function seedPortalIfNeeded() {
       localStorage.setItem(POIS_KEY, JSON.stringify(seed.pois));
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(seed.settings));
       localStorage.setItem(PORTAL_SEEDED_KEY, "1");
+      patchOwnerPropertyFinancials();
       return;
+    }
+
+    if (localStorage.getItem("matchcolombia_portal_seeded_v2") && !localStorage.getItem("matchcolombia_portal_finance_migrated")) {
+      localStorage.setItem(LEASES_KEY, JSON.stringify(seed.leases));
+      localStorage.setItem(PAYMENTS_KEY, JSON.stringify(seed.payments));
+      localStorage.setItem(TICKETS_KEY, JSON.stringify(seed.tickets));
+      localStorage.setItem("matchcolombia_portal_finance_migrated", "1");
+      patchOwnerPropertyFinancials();
+    } else {
+      patchOwnerPropertyFinancials();
     }
 
     if (!localStorage.getItem(OWNERS_KEY)) {

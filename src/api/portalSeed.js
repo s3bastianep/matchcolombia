@@ -1,6 +1,27 @@
 /** Datos demo para paneles admin, inquilino y propietario */
 import { DEFAULT_WHATSAPP_TEMPLATES } from "../lib/adminConstants";
 
+/** Genera historial de pagos pagados para un contrato */
+function buildPaidPayments(lease, startYear, startMonth, count) {
+  const payments = [];
+  for (let i = 0; i < count; i += 1) {
+    const d = new Date(startYear, startMonth - 1 + i, 5);
+    const period = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    payments.push({
+      id: `pay-${lease.id}-${period}`,
+      lease_id: lease.id,
+      user_id: lease.tenant_user_id,
+      amount: lease.monthly_rent + (lease.admin_fee || 0),
+      due_date: d.toISOString().slice(0, 10),
+      paid_at: new Date(d.getTime() - 86400000 * 3).toISOString(),
+      status: "pagado",
+      period,
+      created_date: new Date(d.getFullYear(), d.getMonth(), 1).toISOString(),
+    });
+  }
+  return payments;
+}
+
 export function getPortalSeedData(propertyIds = []) {
   const prop1 = propertyIds[0] || "prop-seed-1";
   const prop2 = propertyIds[1] || "prop-seed-2";
@@ -106,6 +127,32 @@ export function getPortalSeedData(propertyIds = []) {
 
   const leases = [
     {
+      id: "lease-seed-prev-1",
+      property_id: prop2,
+      tenant_user_id: "user-tenant-demo",
+      owner_user_id: "user-owner-demo",
+      start_date: "2023-06-01",
+      end_date: "2024-06-01",
+      monthly_rent: 2500000,
+      admin_fee: 280000,
+      status: "finalizado",
+      contract_url: "#",
+      created_date: "2023-05-15T00:00:00.000Z",
+    },
+    {
+      id: "lease-seed-prev-2",
+      property_id: prop2,
+      tenant_user_id: "user-tenant-demo",
+      owner_user_id: "user-owner-demo",
+      start_date: "2024-06-01",
+      end_date: "2025-06-01",
+      monthly_rent: 2650000,
+      admin_fee: 300000,
+      status: "finalizado",
+      contract_url: "#",
+      created_date: "2024-05-10T00:00:00.000Z",
+    },
+    {
       id: "lease-seed-1",
       property_id: prop2,
       tenant_user_id: "user-tenant-demo",
@@ -118,22 +165,28 @@ export function getPortalSeedData(propertyIds = []) {
       contract_url: "#",
       created_date: "2025-05-20T00:00:00.000Z",
     },
+    {
+      id: "lease-seed-prop1",
+      property_id: prop1,
+      tenant_user_id: "user-tenant-demo",
+      owner_user_id: "user-owner-demo",
+      start_date: "2024-01-01",
+      end_date: "2025-01-01",
+      monthly_rent: 2400000,
+      admin_fee: 280000,
+      status: "finalizado",
+      contract_url: "#",
+      created_date: "2023-12-10T00:00:00.000Z",
+    },
   ];
 
   const payments = [
+    ...buildPaidPayments(leases[0], 2023, 6, 12),
+    ...buildPaidPayments(leases[1], 2024, 6, 12),
+    ...buildPaidPayments(leases[2], 2025, 6, 11),
+    ...buildPaidPayments(leases[3], 2024, 1, 12),
     {
-      id: "pay-seed-1",
-      lease_id: "lease-seed-1",
-      user_id: "user-tenant-demo",
-      amount: 3120000,
-      due_date: "2026-06-05",
-      paid_at: "2026-05-28T00:00:00.000Z",
-      status: "pagado",
-      period: "2026-06",
-      created_date: "2026-05-01T00:00:00.000Z",
-    },
-    {
-      id: "pay-seed-2",
+      id: "pay-seed-pending",
       lease_id: "lease-seed-1",
       user_id: "user-tenant-demo",
       amount: 3120000,
@@ -152,11 +205,23 @@ export function getPortalSeedData(propertyIds = []) {
       lease_id: "lease-seed-1",
       user_id: "user-tenant-demo",
       title: "Nevera no enfría bien",
-      description: "Desde ayer la nevera no mantiene temperatura. Adjunto foto.",
+      description: "Desde ayer la nevera no mantiene temperatura. Adjunto foto del panel y del compartimento.",
       priority: "alta",
-      status: "en_proceso",
+      status: "pendiente_aprobacion",
+      owner_approval: "pendiente",
+      estimated_cost: 185000,
+      repair_summary: "El técnico revisó el equipo: requiere recarga de gas refrigerante y sellado del compresor. Tiempo estimado de reparación: 1 día.",
+      provider_name: "Servitec Bogotá",
       assigned_to: "admin",
-      images: [],
+      images: [
+        "https://images.pexels.com/photos/2343466/pexels-photo-2343466.jpeg?auto=compress&cs=tinysrgb&w=400",
+        "https://images.pexels.com/photos/4099237/pexels-photo-4099237.jpeg?auto=compress&cs=tinysrgb&w=400",
+      ],
+      timeline: [
+        { at: new Date(now - 86400000 * 2).toISOString(), text: "Inquilino reportó que la nevera no enfría.", by: "inquilino" },
+        { at: new Date(now - 86400000 * 1.5).toISOString(), text: "Técnico visitó el inmueble e inspeccionó el equipo.", by: "admin" },
+        { at: new Date(now - 86400000).toISOString(), text: "Cotización de $185.000 enviada al propietario para aprobación.", by: "admin" },
+      ],
       created_date: new Date(now - 86400000 * 2).toISOString(),
     },
     {
@@ -165,11 +230,67 @@ export function getPortalSeedData(propertyIds = []) {
       lease_id: "lease-seed-1",
       user_id: "user-tenant-demo",
       title: "Renovación de contrato",
-      description: "Quiero renovar por 12 meses más.",
+      description: "Quiero renovar por 12 meses más bajo las mismas condiciones.",
       priority: "media",
       status: "abierto",
+      owner_approval: null,
+      estimated_cost: 0,
       images: [],
+      timeline: [
+        { at: new Date(now - 86400000).toISOString(), text: "Inquilino solicitó renovación del contrato por 12 meses.", by: "inquilino" },
+      ],
       created_date: new Date(now - 86400000).toISOString(),
+    },
+    {
+      id: "ticket-seed-3",
+      property_id: prop2,
+      lease_id: "lease-seed-1",
+      user_id: "user-tenant-demo",
+      title: "Grifería cocina con goteo",
+      description: "La llave de la cocina gotea desde hace una semana.",
+      priority: "media",
+      status: "en_proceso",
+      owner_approval: "aprobado",
+      owner_decided_at: new Date(now - 86400000 * 4).toISOString(),
+      estimated_cost: 95000,
+      repair_summary: "Cambio de empaques y válvula interna. Reparación aprobada y programada.",
+      provider_name: "Plomería Express",
+      assigned_to: "admin",
+      images: [
+        "https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?auto=compress&cs=tinysrgb&w=400",
+      ],
+      timeline: [
+        { at: new Date(now - 86400000 * 5).toISOString(), text: "Inquilino reportó goteo en grifería.", by: "inquilino" },
+        { at: new Date(now - 86400000 * 4.5).toISOString(), text: "Cotización de $95.000 presentada al propietario.", by: "admin" },
+        { at: new Date(now - 86400000 * 4).toISOString(), text: "Propietario aprobó la reparación.", by: "propietario" },
+        { at: new Date(now - 86400000 * 2).toISOString(), text: "Proveedor confirmó visita para el arreglo.", by: "admin" },
+      ],
+      created_date: new Date(now - 86400000 * 5).toISOString(),
+    },
+    {
+      id: "ticket-seed-4",
+      property_id: prop1,
+      lease_id: "lease-seed-1",
+      user_id: "user-tenant-demo",
+      title: "Pintura hall de entrada",
+      description: "Manchas y desgaste en la pared del hall. Ya quedó repintado.",
+      priority: "baja",
+      status: "resuelto",
+      owner_approval: "aprobado",
+      owner_decided_at: new Date(now - 86400000 * 12).toISOString(),
+      estimated_cost: 320000,
+      repair_summary: "Retoque de pintura en hall y esquinas. Trabajo completado.",
+      provider_name: "Pinturas DC",
+      images: [
+        "https://images.pexels.com/photos/584399/living-room-584399.jpeg?auto=compress&cs=tinysrgb&w=400",
+      ],
+      timeline: [
+        { at: new Date(now - 86400000 * 14).toISOString(), text: "Solicitud de retoque de pintura.", by: "inquilino" },
+        { at: new Date(now - 86400000 * 12).toISOString(), text: "Propietario aprobó cotización de $320.000.", by: "propietario" },
+        { at: new Date(now - 86400000 * 8).toISOString(), text: "Reparación ejecutada y verificada.", by: "admin" },
+      ],
+      resolved_at: new Date(now - 86400000 * 8).toISOString(),
+      created_date: new Date(now - 86400000 * 14).toISOString(),
     },
   ];
 

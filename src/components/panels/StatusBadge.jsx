@@ -41,6 +41,8 @@ const STYLES = {
   virtual: M,
   abierto: M,
   resuelto: G,
+  pendiente_aprobacion: A,
+  finalizado: G,
   documentos_enviados: V,
   en_revision: A,
   pagado: G,
@@ -63,6 +65,9 @@ const LABELS = {
   verificado: "Verificado",
   presencial: "Presencial",
   virtual: "Virtual",
+  pendiente_aprobacion: "Por aprobar",
+  resuelto: "Finalizado",
+  finalizado: "Finalizado",
 };
 
 export default function StatusBadge({ status, className }) {

@@ -55,6 +55,7 @@ const OwnerPortal = lazy(() => import('./pages/portal/OwnerPortal'));
 const OwnerProperties = lazy(() => import('./pages/portal/OwnerProperties'));
 const OwnerLeads = lazy(() => import('./pages/portal/OwnerLeads'));
 const OwnerTickets = lazy(() => import('./pages/portal/OwnerTickets'));
+const OwnerFinance = lazy(() => import('./pages/portal/OwnerFinance'));
 
 function PageLoader() {
   return (
@@ -126,6 +127,7 @@ function AppRoutes() {
             <Route path="/propietario/propiedades" element={<OwnerProperties />} />
             <Route path="/propietario/leads" element={<OwnerLeads />} />
             <Route path="/propietario/tickets" element={<OwnerTickets />} />
+            <Route path="/propietario/rentabilidad" element={<OwnerFinance />} />
           </Route>
         </Route>
 

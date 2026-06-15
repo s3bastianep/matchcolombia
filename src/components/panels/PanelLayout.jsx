@@ -38,7 +38,9 @@ export default function PanelLayout({ title, subtitle, navItems, accent = "purpl
                 className={cn(
                   "flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors",
                   active
-                    ? "bg-brand-violet/12 text-brand-violet shadow-sm border border-brand-violet/15"
+                    ? accent === "magenta"
+                      ? "bg-brand-magenta/12 text-brand-magenta shadow-sm border border-brand-magenta/15"
+                      : "bg-brand-violet/12 text-brand-violet shadow-sm border border-brand-violet/15"
                     : "text-foreground/70 hover:bg-white hover:text-foreground border border-transparent"
                 )}
               >
