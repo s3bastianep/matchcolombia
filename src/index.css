@@ -273,4 +273,62 @@
   .detail-card-soft {
     @apply rounded-2xl border border-border/50 bg-[hsl(0,0%,98%)] shadow-sm;
   }
+
+  /* Leaflet — pins de precio estilo Explorar */
+  .leaflet-houm-marker,
+  .leaflet-dot-marker {
+    background: transparent !important;
+    border: none !important;
+  }
+
+  .leaflet-houm-price {
+    @apply whitespace-nowrap bg-white text-foreground text-[11px] font-bold px-2.5 py-1.5 rounded-lg shadow-md border border-[hsl(0,0%,88%)];
+    transform: translate(-50%, -100%);
+  }
+
+  .leaflet-houm-price.is-active {
+    @apply ring-2 ring-brand-violet/40 scale-105;
+  }
+
+  .leaflet-houm-cluster {
+    @apply min-w-[34px] h-[34px] px-1 rounded-full bg-white shadow-md border border-[hsl(0,0%,88%)] flex items-center justify-center text-foreground text-xs font-extrabold;
+    transform: translate(-50%, -50%);
+  }
+
+  .leaflet-houm-cluster.is-active {
+    @apply ring-2 ring-brand-violet/40 scale-110;
+  }
+
+  .leaflet-dot-pin {
+    width: 20px;
+    height: 20px;
+    border-radius: 9999px;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    transform: translate(-50%, -50%);
+  }
+
+  .leaflet-dot-pin.is-active {
+    transform: translate(-50%, -50%) scale(1.35);
+  }
+
+  .leaflet-dot-cluster {
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+  }
+
+  .leaflet-container {
+    font-family: inherit;
+    z-index: 0;
+  }
 }

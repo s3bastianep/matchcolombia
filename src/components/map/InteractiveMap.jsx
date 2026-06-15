@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { cn } from "@/lib/utils";
 import { getVisibleBounds, latLngToPercent } from "@/lib/zoneMap";
+import LeafletInteractiveMap from "./LeafletInteractiveMap";
 
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
 
@@ -188,17 +189,7 @@ function GoogleMapView({ markers, center, zoom, className, onMarkerClick, onMark
 
   if (loadError) {
     return (
-      <GoogleEmbedMap
-        markers={markers}
-        center={center}
-        zoom={zoom}
-        className={className}
-        onMarkerClick={onMarkerClick}
-        onMarkerEnter={onMarkerEnter}
-        onMarkerLeave={onMarkerLeave}
-        activeMarkerId={activeMarkerId}
-        markerVariant={markerVariant}
-      />
+      <LeafletInteractiveMap {...shared} />
     );
   }
 
@@ -220,7 +211,9 @@ function GoogleMapView({ markers, center, zoom, className, onMarkerClick, onMark
         options={{
           disableDefaultUI: true,
           zoomControl: true,
-          gestureHandling: "cooperative",
+          gestureHandling: "greedy",
+          draggable: true,
+          scrollwheel: true,
           styles: [{ featureType: "poi", stylers: [{ visibility: "off" }] }],
         }}
       >
@@ -277,5 +270,5 @@ export default function InteractiveMap({
     return <GoogleMapView {...shared} />;
   }
 
-  return <GoogleEmbedMap {...shared} />;
+  return <LeafletInteractiveMap {...shared} />;
 }
