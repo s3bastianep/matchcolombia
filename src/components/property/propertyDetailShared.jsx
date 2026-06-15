@@ -287,10 +287,12 @@ export function PersonalSearchSection() {
 
   return (
     <section className="detail-section">
-      <h2 className="detail-section-title">¿Quieres que te busquemos un inmueble?</h2>
-      <p className="detail-body text-xs -mt-4 mb-6">
-        Si lo que ves no es exactamente lo tuyo, hacemos la búsqueda por ti y te conectamos con quien te lo consiga.
-      </p>
+      <div className="space-y-2 mb-6">
+        <h2 className="detail-section-title">¿Quieres que te busquemos un inmueble?</h2>
+        <p className="detail-body">
+          Si lo que ves no es exactamente lo tuyo, hacemos la búsqueda por ti y te conectamos con quien te lo consiga.
+        </p>
+      </div>
 
       <ol className="space-y-3">
         {steps.map((step, i) => (

@@ -257,4 +257,20 @@
   .gradient-tile-teal {
     background: linear-gradient(135deg, hsl(var(--brand-violet)) 0%, hsl(265 65% 48%) 100%);
   }
+
+  .detail-section {
+    @apply space-y-4;
+  }
+  .detail-section-title {
+    @apply text-lg sm:text-xl font-extrabold text-foreground leading-snug tracking-tight;
+  }
+  .detail-body {
+    @apply text-sm text-muted-foreground leading-relaxed;
+  }
+  .detail-prose {
+    @apply text-sm sm:text-base text-foreground/80 leading-relaxed;
+  }
+  .detail-card-soft {
+    @apply rounded-2xl border border-border/50 bg-[hsl(0,0%,98%)] shadow-sm;
+  }
 }
