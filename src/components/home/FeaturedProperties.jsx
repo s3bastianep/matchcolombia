@@ -5,6 +5,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import PropertyCard from "../property/PropertyCard";
 import VerifiedBadge from "../brand/VerifiedBadge";
 import SectionHeader from "../ui/SectionHeader";
+import { VERIFIED_LISTINGS } from "@/lib/homeCopy";
 import { cn } from "@/lib/utils";
 
 const TABS = [
@@ -31,7 +32,7 @@ export default function FeaturedProperties({ properties, isLoading }) {
             <SectionHeader
               eyebrow="Nuevas publicaciones"
               title="Inmuebles verificados"
-              subtitle="100% verificados por MatchColombia. Sin estafas, sin sustos."
+              subtitle={VERIFIED_LISTINGS}
             />
             <VerifiedBadge size="sm" className="w-fit" />
           </div>

@@ -4,8 +4,8 @@ import { base44 } from "@/api/base44Client";
 import { PROPERTY_LIST_QUERY } from "@/lib/queryOptions";
 import HeroSection from "../components/home/HeroSection";
 import FeaturedProperties from "../components/home/FeaturedProperties";
-import RentEasySection from "../components/home/RentEasySection";
 import MatchSteps from "../components/home/MatchSteps";
+import OwnerCTA from "../components/home/OwnerCTA";
 
 const startQuiz = () => window.dispatchEvent(new CustomEvent("open-match-quiz"));
 
@@ -16,12 +16,19 @@ export default function Home() {
     ...PROPERTY_LIST_QUERY,
   });
 
+  const stepProperties = properties.slice(0, 3);
+  const featuredProperties = properties.length > 3 ? properties.slice(3) : properties;
+
   return (
     <div className="w-full overflow-x-hidden">
       <HeroSection onStartQuiz={startQuiz} />
-      <RentEasySection />
-      <MatchSteps onStartQuiz={startQuiz} properties={properties} isLoading={isLoading} />
-      <FeaturedProperties properties={properties} isLoading={isLoading} />
+      <MatchSteps
+        onStartQuiz={startQuiz}
+        properties={stepProperties}
+        isLoading={isLoading}
+      />
+      <FeaturedProperties properties={featuredProperties} isLoading={isLoading} />
+      <OwnerCTA />
     </div>
   );
 }
