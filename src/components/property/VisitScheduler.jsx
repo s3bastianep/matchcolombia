@@ -10,7 +10,58 @@ import {
 const selectedSolid =
   "border-[hsl(var(--brand-violet))] bg-[hsl(var(--brand-violet))] text-white shadow-sm";
 const defaultChip =
-  "border-border/70 bg-white text-foreground hover:border-[hsl(var(--brand-violet)/0.45)] hover:bg-[hsl(var(--brand-violet)/0.04)]";
+  "border-border/60 bg-[hsl(0,0%,97%)] text-foreground/80 hover:border-[hsl(var(--brand-violet)/0.35)] hover:bg-[hsl(var(--brand-violet)/0.05)]";
+
+function shortTimeLabel(label) {
+  return label.replace(/^0/, "").replace(/(am|pm)$/i, "");
+}
+
+function TimeSlotGrid({ slots, selectedSlot, onSlotChange }) {
+  const morning = slots.filter((s) => s.hour < 12);
+  const afternoon = slots.filter((s) => s.hour >= 12);
+
+  const renderGroup = (group) => (
+    <div className="flex flex-wrap gap-2">
+      {group.map((slot) => {
+        const selected = selectedSlot === slot.id;
+        return (
+          <button
+            key={slot.id}
+            type="button"
+            onClick={() => onSlotChange(slot.id)}
+            className={cn(
+              "min-w-[3.75rem] h-9 px-2.5 rounded-md border text-[11px] font-semibold tabular-nums transition-all duration-200",
+              selected ? selectedSolid : defaultChip
+            )}
+          >
+            {shortTimeLabel(slot.label)}
+          </button>
+        );
+      })}
+    </div>
+  );
+
+  return (
+    <div className="space-y-3.5">
+      {morning.length > 0 && (
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-foreground/45 mb-2">
+            Mañana
+          </p>
+          {renderGroup(morning)}
+        </div>
+      )}
+      {afternoon.length > 0 && (
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-foreground/45 mb-2">
+            Tarde
+          </p>
+          {renderGroup(afternoon)}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const VISIT_TYPE_UI = [
   { id: "presencial", label: "Presencial", hint: "En el inmueble", Icon: MapPin },
@@ -65,12 +116,20 @@ function ScrollRow({ children, className, ariaLabel, step = 148 }) {
 
       <div className="relative flex-1 min-w-0">
         {canScrollRight && (
-          <div className="absolute right-0 top-0 bottom-2 w-5 bg-gradient-to-l from-white/95 to-transparent pointer-events-none z-[1]" />
+          <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white to-transparent pointer-events-none z-[1]" />
         )}
         {canScrollLeft && (
-          <div className="absolute left-0 top-0 bottom-2 w-5 bg-gradient-to-r from-white/95 to-transparent pointer-events-none z-[1]" />
+          <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-white to-transparent pointer-events-none z-[1]" />
         )}
-        <div ref={ref} className={cn("scroll-chips", className)} aria-label={ariaLabel}>
+        <div
+          ref={ref}
+          className={cn(
+            "flex flex-nowrap overflow-x-auto overscroll-x-contain scroll-smooth snap-x snap-mandatory",
+            "gap-2 py-0.5 scrollbar-thin [-ms-overflow-style:none] [scrollbar-width:thin]",
+            className
+          )}
+          aria-label={ariaLabel}
+        >
           {children}
         </div>
       </div>
@@ -178,16 +237,11 @@ export default function VisitScheduler({
       </div>
 
       <div>
-        <p className="text-xs font-bold uppercase tracking-wide text-foreground/55 mb-2">
-          Fecha y hora
-        </p>
-        <p className="flex items-center gap-1.5 text-xs font-semibold text-foreground/80 mb-3">
-          <ChevronLeft className="w-3.5 h-3.5 text-brand-violet shrink-0" strokeWidth={2.5} />
-          Desliza para ver más fechas y horarios
-          <ChevronRight className="w-3.5 h-3.5 text-brand-violet shrink-0" strokeWidth={2.5} />
+        <p className="text-xs font-bold uppercase tracking-wide text-foreground/55 mb-3">
+          Fecha
         </p>
 
-        <ScrollRow ariaLabel="fechas disponibles" className="mb-4 gap-2" step={136}>
+        <ScrollRow ariaLabel="fechas disponibles" step={76}>
           {days.map((date) => {
             const info = formatVisitDay(date);
             const selected = selectedDate === info.iso;
@@ -197,25 +251,25 @@ export default function VisitScheduler({
                 type="button"
                 onClick={() => onDateChange(info.iso)}
                 className={cn(
-                  "w-[3.75rem] shrink-0 flex flex-col items-center py-3 px-1 rounded-xl border transition-all duration-200",
+                  "snap-start shrink-0 w-[3.5rem] h-[4.25rem] flex flex-col items-center justify-center gap-0.5 rounded-lg border transition-all duration-200",
                   selected ? selectedSolid : defaultChip
                 )}
               >
                 <span
                   className={cn(
-                    "text-[11px] font-semibold leading-none",
-                    selected ? "text-white/90" : "text-foreground/75"
+                    "text-[10px] font-semibold leading-none uppercase",
+                    selected ? "text-white/90" : "text-foreground/65"
                   )}
                 >
                   {info.weekday}
                 </span>
-                <span className="text-xl font-bold leading-none my-1 tabular-nums">
+                <span className="text-lg font-extrabold leading-none tabular-nums">
                   {info.dayNum}
                 </span>
                 <span
                   className={cn(
-                    "text-[11px] font-semibold leading-none",
-                    selected ? "text-white/90" : "text-foreground/75"
+                    "text-[10px] font-medium leading-none",
+                    selected ? "text-white/85" : "text-foreground/60"
                   )}
                 >
                   {info.month}
@@ -225,24 +279,15 @@ export default function VisitScheduler({
           })}
         </ScrollRow>
 
-        <ScrollRow ariaLabel="horarios disponibles" className="gap-2" step={120}>
-          {timeSlots.map((slot) => {
-            const selected = selectedSlot === slot.id;
-            return (
-              <button
-                key={slot.id}
-                type="button"
-                onClick={() => onSlotChange(slot.id)}
-                className={cn(
-                  "shrink-0 min-w-[5rem] py-2.5 px-3 rounded-full border text-xs font-bold transition-all duration-200 whitespace-nowrap",
-                  selected ? selectedSolid : defaultChip
-                )}
-              >
-                {slot.label}
-              </button>
-            );
-          })}
-        </ScrollRow>
+        <p className="text-xs font-bold uppercase tracking-wide text-foreground/55 mt-5 mb-3">
+          Hora
+        </p>
+
+        <TimeSlotGrid
+          slots={timeSlots}
+          selectedSlot={selectedSlot}
+          onSlotChange={onSlotChange}
+        />
       </div>
     </div>
   );

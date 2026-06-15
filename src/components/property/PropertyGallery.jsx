@@ -188,10 +188,10 @@ export default function PropertyGallery({ images, title, immersive = false, vari
                 type="button"
                 onClick={() => go(i)}
                 className={cn(
-                  "shrink-0 snap-start rounded-xl overflow-hidden transition-all",
-                  isModal ? "w-[4.75rem] h-[3.5rem] sm:w-20 sm:h-[3.75rem]" : "w-20 h-16",
+                  "shrink-0 snap-start overflow-hidden transition-all rounded-sm",
+                  isModal ? "w-16 h-16 sm:w-[4.25rem] sm:h-[4.25rem]" : "w-20 h-20",
                   i === idx
-                    ? "ring-2 ring-primary ring-offset-2 ring-offset-background opacity-100"
+                    ? "ring-2 ring-primary ring-offset-1 ring-offset-background opacity-100"
                     : "opacity-55 hover:opacity-85"
                 )}
               >
