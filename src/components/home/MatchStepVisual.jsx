@@ -8,7 +8,7 @@ import {
   Check,
   Heart,
   Calendar,
-  Sparkles,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -79,17 +79,24 @@ function MatchVisual() {
             <div className="absolute top-3 left-3 w-11 h-11 rounded-full gradient-cta flex items-center justify-center shadow-lg ring-4 ring-white">
               <Heart className="w-5 h-5 text-white fill-white" />
             </div>
-            <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-brand-violet" />
+            <div className="absolute top-3 right-3">
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-[hsl(var(--brand-verified-bg))] border border-[hsl(var(--brand-verified-border))] text-[9px] font-extrabold text-[hsl(var(--brand-verified-fg))] shadow-sm">
+                <ShieldCheck className="w-3 h-3" strokeWidth={2.5} />
+                Verificado
+              </span>
             </div>
             <div className="absolute bottom-3 left-3 right-3">
               <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/95 text-[10px] font-extrabold text-brand-violet">
                 <Check className="w-3 h-3" strokeWidth={3} />
-                Match alto
+                Revisado por el equipo
               </span>
             </div>
           </div>
           <div className="p-3 space-y-2">
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-[hsl(var(--brand-verified))]" strokeWidth={2.5} />
+              <span className="text-[10px] font-bold text-[hsl(var(--brand-verified-fg))]">Anuncio verificado</span>
+            </div>
             <div className="h-2.5 w-3/4 rounded-full bg-border/50" />
             <div className="h-2 w-1/2 rounded-full bg-border/35" />
             <div className="flex gap-1 pt-0.5">

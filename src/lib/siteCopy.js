@@ -6,6 +6,9 @@ export const HERO_SUBTITLE =
 export const VERIFIED_LISTINGS =
   "Inmuebles revisados antes de publicar. Fotos y datos verificados por nuestro equipo.";
 
+export const MATCH_STEPS_VERIFIED =
+  "Todos los anuncios son verificados por nuestro equipo antes de publicarse.";
+
 export const TRUST_TAGLINE =
   "Menos tiempo buscando. Más confianza al arrendar.";
 
