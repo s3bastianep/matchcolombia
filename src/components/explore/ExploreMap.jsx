@@ -86,7 +86,7 @@ export default function ExploreMap({
     <div
       className={cn(
         "relative overflow-hidden bg-white",
-        pane ? "h-full rounded-none border-0 shadow-none" : "rounded-[1.35rem] border border-border/30 shadow-[0_8px_30px_rgba(15,23,42,0.08)]",
+        pane ? "h-full border-0 shadow-none overflow-hidden" : "rounded-[1.35rem] border border-border/30 shadow-[0_8px_30px_rgba(15,23,42,0.08)]",
         sticky && !pane && "xl:sticky xl:top-[210px]",
         pane && "h-full",
         className

@@ -361,7 +361,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                 </div>
 
                 {(property.floor != null && property.floor !== "") || furnishedLabel || availableFrom ? (
-                  <div className="mt-2 h-12 flex flex-wrap content-start gap-1 overflow-hidden">
+                  <div className="mt-2 min-h-[2.75rem] flex flex-wrap content-start gap-1">
                     {property.floor != null && property.floor !== "" && (
                       <GridMetaTag>Piso {property.floor}</GridMetaTag>
                     )}

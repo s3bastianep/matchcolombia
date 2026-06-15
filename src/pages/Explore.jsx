@@ -27,7 +27,7 @@ import {
   countAdvancedFilters,
   advancedFiltersToUrlParams,
 } from "@/lib/propertyFilters";
-import { shouldInsertOwnerPromo, EXPLORE_SPLIT_LAYOUT } from "@/lib/exploreUtils";
+import { shouldInsertOwnerPromo, EXPLORE_SPLIT_LAYOUT, EXPLORE_GUTTER, EXPLORE_CONTENT_PAD } from "@/lib/exploreUtils";
 
 const ExploreMap = lazy(() => import("../components/explore/ExploreMap"));
 
@@ -39,15 +39,15 @@ const TYPES_LABEL = {
   apartamento: "Apartamento",
   casa: "Casa",
   estudio: "Estudio",
-  habitacion: "Habitación",
+  habitacion: "Habitaci?n",
 };
 
 const SORT_LABELS = {
   match: "Mejor match",
-  newest: "Más recientes",
+  newest: "M?s recientes",
   price_asc: "Menor precio",
   price_desc: "Mayor precio",
-  area: "Mayor área",
+  area: "Mayor ?rea",
 };
 
 const QUICK_FILTERS = [
@@ -90,7 +90,7 @@ function CityFilterSelect({ initialCity, setCityFilter, className }) {
     >
       <SelectTrigger
         className={cn(
-          "h-10 min-w-[6.5rem] bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)] rounded-full px-3.5 text-xs font-bold gap-1.5 shadow-sm shrink-0",
+          "h-9 min-w-[6.5rem] bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)] rounded-full px-3.5 text-xs font-bold gap-1.5 shadow-sm shrink-0",
           initialCity && "border-brand-violet/30 text-brand-violet",
           className
         )}
@@ -121,7 +121,7 @@ function ResultsCount({ count, query }) {
     <p className="text-xs text-muted-foreground mt-0.5">
       <span className="font-extrabold text-foreground tabular-nums">{count}</span>{" "}
       {listingsCountLabel(count)}
-      {query && <> en «{query}»</>}
+      {query && <> en ?{query}?</>}
     </p>
   );
 }
@@ -238,7 +238,7 @@ export default function Explore() {
     return result;
   }, [properties, initialQ, initialCity, initialType, advancedFilters, activeQuick, sortBy, isMatched, prefs]);
 
-  const cityLabel = initialCity || prefs?.city || "Bogotá";
+  const cityLabel = initialCity || prefs?.city || "Bogot?";
   const advancedCount = countAdvancedFilters(advancedFilters);
   const totalFilterCount = advancedCount + activeQuick.length;
   const resultsTitle =
@@ -257,28 +257,28 @@ export default function Explore() {
 
   const sortSelect = (
     <Select value={sortBy} onValueChange={setSortBy}>
-      <SelectTrigger className="h-10 min-w-[8.5rem] bg-white border border-[hsl(0,0%,88%)] text-xs font-bold rounded-full gap-1.5 px-3.5 shadow-sm">
+      <SelectTrigger className="h-9 min-w-[8.5rem] bg-white border border-[hsl(0,0%,88%)] text-xs font-bold rounded-full gap-1.5 px-3.5 shadow-sm">
         <ArrowUpDown className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
         <SelectValue placeholder="Ordenar" />
       </SelectTrigger>
       <SelectContent>
         {isMatched && <SelectItem value="match">Mejor match</SelectItem>}
-        <SelectItem value="newest">Más recientes</SelectItem>
+        <SelectItem value="newest">M?s recientes</SelectItem>
         <SelectItem value="price_asc">Menor precio</SelectItem>
         <SelectItem value="price_desc">Mayor precio</SelectItem>
-        <SelectItem value="area">Mayor área</SelectItem>
+        <SelectItem value="area">Mayor ?rea</SelectItem>
       </SelectContent>
     </Select>
   );
 
   return (
     <div className="h-full min-h-0 bg-white flex flex-col">
-      <div className="bg-white border-b border-[hsl(0,0%,90%)] sticky top-[56px] z-30 shrink-0">
+      <div className={cn("bg-white border-b border-[hsl(0,0%,90%)] sticky top-[58px] z-30 shrink-0", EXPLORE_GUTTER)}>
         {isMatched && prefs && (
           <motion.div
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mx-3 lg:mx-4 mt-2 px-3 py-2 rounded-lg bg-gradient-to-r from-brand-violet/8 to-brand-magenta/6 border border-brand-violet/15 flex items-center gap-2.5"
+            className="mt-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-brand-violet/8 to-brand-magenta/6 border border-brand-violet/15 flex items-center gap-2.5"
           >
             <Sparkles className="w-3.5 h-3.5 text-brand-violet shrink-0" />
             <div className="min-w-0 flex-1">
@@ -294,7 +294,7 @@ export default function Explore() {
           </motion.div>
         )}
 
-        <div className="px-3 lg:px-4 py-2 flex flex-wrap lg:flex-nowrap items-center gap-2">
+        <div className="py-1.5 flex flex-wrap lg:flex-nowrap items-center gap-2">
           <div className="relative flex-1 min-w-[180px] lg:max-w-xs">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
             <input
@@ -326,7 +326,7 @@ export default function Explore() {
             )}
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
-            Más filtros
+            M?s filtros
             {advancedCount > 0 && (
               <span className="w-5 h-5 rounded-full bg-brand-violet text-white text-[10px] font-bold flex items-center justify-center">
                 {advancedCount}
@@ -386,7 +386,7 @@ export default function Explore() {
           </div>
         </div>
 
-        <div className="px-3 lg:px-4 pb-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+        <div className="pb-1.5 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
           <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Tipo</span>
           {QUICK_FILTERS.map((f) => {
             const active = activeQuick.includes(f.key);
@@ -420,7 +420,7 @@ export default function Explore() {
           )}
         </div>
 
-        <div className="px-3 pb-2 lg:hidden">
+        <div className="pb-1.5 lg:hidden">
           <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[hsl(var(--brand-verified-bg))] border border-[hsl(var(--brand-verified-border))]">
             <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-[hsl(var(--brand-verified))]" strokeWidth={2.25} />
             <p className="text-[10px] font-semibold text-[hsl(var(--brand-verified-fg))] leading-snug">
@@ -432,50 +432,51 @@ export default function Explore() {
 
       {isLoading ? (
         <>
-          <div className={cn("hidden lg:grid lg:flex-1 lg:min-h-0 min-w-0", EXPLORE_SPLIT_LAYOUT)}>
-            <div className="border-r border-[hsl(0,0%,90%)] shimmer min-h-[400px]" />
-            <div className="px-6 py-5 grid grid-cols-2 xl:grid-cols-3 gap-3 items-stretch">
+          <div className={cn("hidden lg:grid lg:flex-1 lg:min-h-0 min-w-0 gap-4 lg:gap-5", EXPLORE_CONTENT_PAD, EXPLORE_SPLIT_LAYOUT)}>
+            <div className="border-r-0 shimmer min-h-[400px] rounded-xl" />
+            <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4 items-stretch">
               {Array(9).fill(0).map((_, i) => (
                 <ExploreSkeleton key={i} />
               ))}
             </div>
           </div>
-          <div className="lg:hidden px-4 py-5 grid grid-cols-1 gap-4">
+          <div className="lg:hidden px-5 lg:px-8 py-5 grid grid-cols-1 gap-4">
             {Array(4).fill(0).map((_, i) => (
               <ExploreSkeleton key={i} />
             ))}
           </div>
         </>
       ) : filtered.length > 0 && viewMode === "map" ? (
-        <div className="lg:hidden flex-1 min-h-0">
-          <Suspense fallback={<MapPaneFallback className="h-full" />}>
-            <ExploreMap properties={filtered} activeCity={initialCity || undefined} pane className="h-full" />
+        <div className={cn("lg:hidden flex-1 min-h-0 p-4 pb-6", EXPLORE_GUTTER)}>
+          <Suspense fallback={<MapPaneFallback className="h-full rounded-xl" />}>
+            <ExploreMap properties={filtered} activeCity={initialCity || undefined} pane className="h-full rounded-xl border border-[hsl(0,0%,90%)]" />
           </Suspense>
         </div>
       ) : filtered.length > 0 ? (
         <>
           <div className={cn(
-            "hidden lg:grid lg:flex-1 lg:min-h-0 border-t border-[hsl(0,0%,90%)] min-w-0",
+            "hidden lg:grid lg:flex-1 lg:min-h-0 min-w-0 gap-4 lg:gap-5",
+            EXPLORE_CONTENT_PAD,
             viewMode === "list" ? "grid-cols-1" : EXPLORE_SPLIT_LAYOUT
           )}>
             {viewMode === "split" && (
-            <div className="flex flex-col border-r border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] min-h-0 min-w-0 overflow-hidden">
+            <div className="flex flex-col bg-[hsl(0,0%,98%)] min-h-0 min-w-0 overflow-hidden rounded-xl border border-[hsl(0,0%,90%)] shadow-sm">
               <div className="flex-1 min-h-0">
-                <Suspense fallback={<MapPaneFallback className="h-full" />}>
+                <Suspense fallback={<MapPaneFallback className="h-full rounded-xl" />}>
                   <ExploreMap
                     properties={filtered}
                     activeCity={initialCity || undefined}
                     pane
                     highlightedId={highlightedId}
                     onHighlight={setHighlightedId}
-                    className="h-full"
+                    className="h-full rounded-xl"
                   />
                 </Suspense>
               </div>
             </div>
             )}
 
-            <div className="overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] px-4 py-3 min-w-0">
+            <div className="overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] min-w-0 pb-20">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <div className="min-w-0">
                   <h1 className="text-base lg:text-lg font-extrabold tracking-tight text-foreground leading-tight">
@@ -518,7 +519,7 @@ export default function Explore() {
                   )}
                   {advancedFilters.bathrooms && (
                     <ActiveFilterChip
-                      label={advancedFilters.bathrooms === "5" ? "5+ ba�os" : `${advancedFilters.bathrooms} ba�o${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
+                      label={advancedFilters.bathrooms === "5" ? "5+ baños" : `${advancedFilters.bathrooms} ba?o${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
                       onRemove={() => updateAdvancedFilters({ ...advancedFilters, bathrooms: "" })}
                     />
                   )}
@@ -550,7 +551,7 @@ export default function Explore() {
               )}
 
               <div className={cn(
-                "grid items-stretch gap-x-3 gap-y-3 min-w-0",
+                "grid items-stretch gap-x-3 gap-y-4 min-w-0",
                 viewMode === "list"
                   ? "grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 mt-4"
                   : "grid-cols-2 xl:grid-cols-3 mt-2"
@@ -582,7 +583,7 @@ export default function Explore() {
             </div>
           </div>
 
-          <div className={cn("lg:hidden flex-1 min-h-0 overflow-y-auto px-4 py-4 pb-safe space-y-4", viewMode === "map" && "hidden")}>
+          <div className={cn("lg:hidden flex-1 min-h-0 overflow-y-auto pb-24 space-y-4", EXPLORE_GUTTER, "py-4", viewMode === "map" && "hidden")}>
             <div>
               <h1 className="text-lg font-extrabold tracking-tight leading-snug">{resultsTitle}</h1>
               <ResultsCount count={filtered.length} query={initialQ} />
@@ -654,7 +655,7 @@ export default function Explore() {
             >
               <div className="w-10 h-1 bg-border rounded-full mx-auto mb-4" />
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-extrabold text-lg">Más filtros</h3>
+                <h3 className="font-extrabold text-lg">M?s filtros</h3>
                 <button
                   type="button"
                   onClick={() => setMobileFiltersOpen(false)}
