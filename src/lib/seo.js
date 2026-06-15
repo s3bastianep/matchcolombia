@@ -4,7 +4,18 @@ import { CITIES, ZONES_BY_CITY } from "@/lib/colombia";
 /** URL canónica del sitio — configurar VITE_SITE_URL en producción */
 export const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://matchcolombia.co").replace(/\/$/, "");
 
-const DEFAULT_OG_IMAGE = `${SITE_URL}/brand-mark.svg`;
+/** Imagen OG en JPG (1200×630) — mejor compatibilidad que SVG en redes sociales */
+export const DEFAULT_OG_IMAGE =
+  "https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop";
+
+export const OG_IMAGE_WIDTH = 1200;
+export const OG_IMAGE_HEIGHT = 630;
+
+/** Coordenadas para SEO local / GEO */
+export const CITY_GEO = {
+  Bogotá: { position: "4.7110;-74.0721", placename: "Bogotá, Colombia", latitude: 4.711, longitude: -74.0721 },
+  Barranquilla: { position: "10.9685;-74.7813", placename: "Barranquilla, Colombia", latitude: 10.9685, longitude: -74.7813 },
+};
 
 export const SEO_DEFAULTS = {
   siteName: BRAND.name,
@@ -12,12 +23,14 @@ export const SEO_DEFAULTS = {
   language: "es",
   region: "CO",
   geoPlacename: "Colombia",
+  geoPosition: "4.7110;-74.0721",
   title: `${BRAND.name} | Arriendos verificados en Colombia`,
   description:
     `${BRAND.name} conecta arrendatarios y propietarios en Colombia. Apartamentos y casas verificados en Bogotá y Barranquilla, match inteligente, visitas coordinadas y gestión completa del arriendo.`,
   keywords:
     "arriendo apartamentos Bogotá, arriendo Barranquilla, inmuebles verificados Colombia, arriendo casas, administración de arriendos, LUMORA HOME, match inteligente inmuebles",
   ogImage: DEFAULT_OG_IMAGE,
+  ogImageAlt: `${BRAND.name} — inmuebles verificados en Bogotá y Barranquilla`,
   twitterHandle: "@lumorahome",
 };
 
@@ -96,6 +109,17 @@ export function isNoIndexPath(pathname) {
   return NOINDEX_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
 }
 
+function cityGeoMeta(cityName) {
+  return CITY_GEO[cityName] || null;
+}
+
+function isKnownRoute(pathname) {
+  if (pathname === "/explorar" || ROUTE_SEO[pathname]) return true;
+  if (isNoIndexPath(pathname)) return true;
+  if (/^\/propiedad\/[^/]+$/.test(pathname)) return true;
+  return false;
+}
+
 function formatRent(property) {
   const amount = property.monthly_rent || property.sale_price || 0;
   return new Intl.NumberFormat("es-CO", {
@@ -140,11 +164,15 @@ export function getExploreSeo(searchParams) {
     ? `Encuentra inmuebles en venta en ${city} con ${BRAND.name}. Listados verificados, fotos reales y acompañamiento en todo el proceso de compra.`
     : `Arrienda ${typeLabel ? `${typeLabel.toLowerCase()}s` : "apartamentos y casas"} en ${city} con listados verificados. Match inteligente, visitas presenciales o virtuales y sin scroll infinito.`;
 
+  const geo = cityGeoMeta(city);
+
   return {
     title: buildTitle(title),
     description,
     url: exploreCanonical(searchParams),
     keywords: `${isSale ? "venta" : "arriendo"} inmuebles ${city}, apartamentos ${city}, casas ${city}, ${BRAND.name}`,
+    geoPlacename: geo?.placename || SEO_DEFAULTS.geoPlacename,
+    geoPosition: geo?.position || SEO_DEFAULTS.geoPosition,
     jsonLd: [
       organizationSchema(),
       websiteSchema(),
@@ -164,6 +192,7 @@ export function getPropertySeo(property) {
   const locality = property.locality ? `, ${property.locality}` : "";
   const typeLabel = TYPE_LABELS[property.property_type] || "Inmueble";
   const rent = formatRent(property);
+  const geo = cityGeoMeta(property.city);
 
   const title = `${property.title} — ${typeLabel} en ${city}`;
   const description =
@@ -174,8 +203,12 @@ export function getPropertySeo(property) {
     title: buildTitle(title),
     description,
     image: propertyImage(property),
+    imageAlt: `${property.title} — ${typeLabel} en ${city}`,
     url: absoluteUrl(`/explorar?inmueble=${property.id}`),
     keywords: `${typeLabel} arriendo ${city}, inmueble ${property.locality || city}, ${BRAND.name}`,
+    geoPlacename: geo?.placename || SEO_DEFAULTS.geoPlacename,
+    geoPosition: geo?.position || SEO_DEFAULTS.geoPosition,
+    ogType: "article",
     jsonLd: [
       organizationSchema(),
       realEstateListingSchema(property),
@@ -254,8 +287,25 @@ export function resolveRouteSeo(pathname, searchParams = new URLSearchParams()) 
     return getExploreSeo(searchParams);
   }
 
+  if (/^\/propiedad\/[^/]+$/.test(pathname)) {
+    return {
+      title: buildTitle("Inmueble"),
+      description: SEO_DEFAULTS.description,
+      url: pathname,
+      noindex: true,
+    };
+  }
+
   const config = ROUTE_SEO[pathname];
   if (!config) {
+    if (!isKnownRoute(pathname)) {
+      return {
+        title: buildTitle("Página no encontrada"),
+        description: `La página que buscas no existe en ${BRAND.name}. Explora inmuebles verificados en Bogotá y Barranquilla.`,
+        url: pathname,
+        noindex: true,
+      };
+    }
     return {
       title: SEO_DEFAULTS.title,
       description: SEO_DEFAULTS.description,
@@ -301,6 +351,11 @@ export function organizationSchema() {
       addressCountry: "CO",
       addressLocality: "Bogotá",
       addressRegion: "Cundinamarca",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: CITY_GEO.Bogotá.latitude,
+      longitude: CITY_GEO.Bogotá.longitude,
     },
     sameAs: [
       `https://wa.me/${BRAND.whatsapp}`,
@@ -402,6 +457,13 @@ export function realEstateListingSchema(property) {
       addressRegion: property.city,
       addressCountry: "CO",
     },
+    geo: CITY_GEO[property.city]
+      ? {
+          "@type": "GeoCoordinates",
+          latitude: CITY_GEO[property.city].latitude,
+          longitude: CITY_GEO[property.city].longitude,
+        }
+      : undefined,
     numberOfRooms: property.bedrooms,
     numberOfBathroomsTotal: property.bathrooms,
     floorSize: property.area_sqm

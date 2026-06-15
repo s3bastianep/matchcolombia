@@ -3,6 +3,7 @@ import React from "react";
 import { Bed, Bath, Car, Building2, X, DollarSign, Home, Clock, Layers } from "lucide-react";
 import ElevatorIcon from "@/components/icons/ElevatorIcon";
 import { cn } from "@/lib/utils";
+import { EXPLORE_MORE_FILTERS } from "@/lib/siteCopy";
 import { Slider } from "@/components/ui/slider";
 import {
   BEDROOM_OPTIONS,
@@ -214,7 +215,7 @@ export default function AdvancedFilters({ filters, onChange, onClear, className 
 
       <div className="flex items-center justify-between mb-2">
 
-        <h2 className="font-extrabold text-xl text-foreground tracking-tight">Más filtros</h2>
+        <h2 className="font-extrabold text-xl text-foreground tracking-tight">{EXPLORE_MORE_FILTERS}</h2>
 
         {activeCount > 0 && (
 

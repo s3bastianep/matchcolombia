@@ -40,6 +40,12 @@ export const EXPLORE_SORT_LABELS = {
 export const FOOTER_BLURB =
   "Arriendos en Bogotá y Barranquilla con listados revisados y match inteligente.";
 
+export const NAV_LABEL_RENT = "Arrendar";
+
+export const FAVORITES_BADGE = "Guardados";
+
+export const FAVORITES_EMPTY_TITLE = "Aún no tienes inmuebles guardados";
+
 export const FAVORITES_EMPTY_HINT =
   "Usa el match inteligente para encontrar opciones que encajen, o guarda cualquier inmueble con el corazón.";
 
@@ -76,7 +82,7 @@ export function viewListingsLabel(count) {
   return `Ver ${count} inmueble${count !== 1 ? "s" : ""}`;
 }
 
-export const EXPLORE_EMPTY_NO_LISTINGS_TITLE = "No hay propiedades en este momento";
+export const EXPLORE_EMPTY_NO_LISTINGS_TITLE = "No hay inmuebles en este momento";
 export const EXPLORE_EMPTY_NO_LISTINGS_DESC =
   "Estamos incorporando nuevos inmuebles verificados. Configura tu match inteligente y vuelve a buscar pronto: publicamos opciones nuevas con frecuencia.";
 export const EXPLORE_EMPTY_FILTERED_TITLE = "Sin resultados por ahora";

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { SEO_DEFAULTS } from "@/lib/seo";
+import { SEO_DEFAULTS, OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from "@/lib/seo";
 
 function upsertMeta(attr, key, content) {
   if (!content) return null;
@@ -49,8 +49,12 @@ export default function SeoHead({
   description = SEO_DEFAULTS.description,
   keywords = SEO_DEFAULTS.keywords,
   image = SEO_DEFAULTS.ogImage,
+  imageAlt = SEO_DEFAULTS.ogImageAlt,
   url,
   noindex = false,
+  ogType = "website",
+  geoPlacename = SEO_DEFAULTS.geoPlacename,
+  geoPosition = SEO_DEFAULTS.geoPosition,
   jsonLd = [],
 }) {
   const jsonLdKey = useMemo(() => JSON.stringify(jsonLd), [jsonLd]);
@@ -63,21 +67,29 @@ export default function SeoHead({
     upsertMeta("name", "keywords", keywords);
     upsertMeta("name", "robots", noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large");
     upsertMeta("name", "author", SEO_DEFAULTS.siteName);
-    upsertMeta("name", "geo.region", "CO");
-    upsertMeta("name", "geo.placename", SEO_DEFAULTS.geoPlacename);
+    upsertMeta("http-equiv", "content-language", "es-CO");
+    upsertMeta("name", "geo.region", SEO_DEFAULTS.region);
+    upsertMeta("name", "geo.placename", geoPlacename);
+    upsertMeta("name", "geo.position", geoPosition);
+    upsertMeta("name", "ICBM", geoPosition.replace(";", ", "));
 
-    upsertMeta("property", "og:type", "website");
+    upsertMeta("property", "og:type", ogType);
     upsertMeta("property", "og:site_name", SEO_DEFAULTS.siteName);
     upsertMeta("property", "og:locale", SEO_DEFAULTS.locale);
     upsertMeta("property", "og:title", title);
     upsertMeta("property", "og:description", description);
     upsertMeta("property", "og:image", image);
+    upsertMeta("property", "og:image:width", String(OG_IMAGE_WIDTH));
+    upsertMeta("property", "og:image:height", String(OG_IMAGE_HEIGHT));
+    upsertMeta("property", "og:image:alt", imageAlt);
     if (url) upsertMeta("property", "og:url", url);
 
     upsertMeta("name", "twitter:card", "summary_large_image");
+    upsertMeta("name", "twitter:site", SEO_DEFAULTS.twitterHandle);
     upsertMeta("name", "twitter:title", title);
     upsertMeta("name", "twitter:description", description);
     upsertMeta("name", "twitter:image", image);
+    upsertMeta("name", "twitter:image:alt", imageAlt);
 
     if (url) upsertLink("canonical", url);
 
@@ -93,7 +105,7 @@ export default function SeoHead({
     return () => {
       document.title = prevTitle;
     };
-  }, [title, description, keywords, image, url, noindex, jsonLdKey]);
+  }, [title, description, keywords, image, imageAlt, url, noindex, ogType, geoPlacename, geoPosition, jsonLdKey]);
 
   return null;
 }

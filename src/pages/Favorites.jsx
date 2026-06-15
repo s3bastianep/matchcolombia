@@ -7,7 +7,7 @@ import { Heart, ArrowRight, Sparkles } from "lucide-react";
 import PropertyCard from "../components/property/PropertyCard";
 import CompareStrip from "../components/favorites/CompareStrip";
 import { getShortlist } from "@/lib/shortlist";
-import { FAVORITES_EMPTY_HINT } from "@/lib/siteCopy";
+import { FAVORITES_EMPTY_HINT, FAVORITES_BADGE, FAVORITES_EMPTY_TITLE } from "@/lib/siteCopy";
 
 export default function Favorites() {
   const [ids, setIds] = useState(getShortlist());
@@ -31,7 +31,7 @@ export default function Favorites() {
         <div className="mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-violet/10 text-brand-violet text-xs font-bold uppercase tracking-wider mb-4">
             <Heart className="w-3.5 h-3.5" />
-            Short List
+            {FAVORITES_BADGE}
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
             Mis <span className="text-gradient">guardados</span>
@@ -53,7 +53,7 @@ export default function Favorites() {
         ) : (
           <div className="flex flex-col items-center justify-center py-24 rounded-3xl border-2 border-dashed border-brand-violet/20 bg-white text-center">
             <Heart className="w-14 h-14 text-brand-violet/30 mb-4" />
-            <h2 className="font-extrabold text-xl mb-2">Tu Short List está vacía</h2>
+            <h2 className="font-extrabold text-xl mb-2">{FAVORITES_EMPTY_TITLE}</h2>
             <p className="text-muted-foreground text-sm max-w-sm mb-6">
               {FAVORITES_EMPTY_HINT}
             </p>

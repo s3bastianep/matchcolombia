@@ -9,7 +9,7 @@ import BrandLogo from "../brand/BrandLogo";
 
 const seekerLinks = [
   { to: "/explorar?intent=compra", label: "Comprar", intent: "compra", theme: "compra" },
-  { to: "/explorar", label: "Rentar", intent: "arriendo", theme: "rentar" },
+  { to: "/explorar", label: "Arrendar", intent: "arriendo", theme: "rentar" },
 ];
 
 const ownerLinks = [

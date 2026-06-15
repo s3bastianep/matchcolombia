@@ -27,7 +27,7 @@ const STEPS = [
     num: "03",
     title: "Agenda tu visita",
     problem: "Sin perseguir dueños ni mensajes sueltos.",
-    desc: "Reserva visita presencial o virtual. El equipo Match te acompaña.",
+    desc: `Reserva visita presencial o virtual. El equipo de ${BRAND.name} te acompaña.`,
   },
 ];
 

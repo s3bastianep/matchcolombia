@@ -23,9 +23,13 @@ export default function RouteSeo() {
       title={seo.title}
       description={seo.description}
       keywords={seo.keywords}
-      image={seo.image}
+      image={seo.image || undefined}
+      imageAlt={seo.imageAlt}
       url={seo.url ? absoluteUrl(seo.url) : absoluteUrl(pathname)}
       noindex={seo.noindex}
+      ogType={seo.ogType}
+      geoPlacename={seo.geoPlacename}
+      geoPosition={seo.geoPosition}
       jsonLd={seo.jsonLd || []}
     />
   );
