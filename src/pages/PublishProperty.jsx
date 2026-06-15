@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -111,7 +111,7 @@ export default function PublishProperty() {
     setUploading(true);
     const urls = [];
     for (const file of files) {
-      const result = await base44.integrations.Core.UploadFile({ file });
+      const result = await api.integrations.Core.UploadFile({ file });
       urls.push(result.file_url);
     }
     setForm((f) => ({ ...f, images: [...f.images, ...urls] }));
@@ -128,7 +128,7 @@ export default function PublishProperty() {
       if (cleaned.estrato === "" || cleaned.estrato == null) delete cleaned.estrato;
       else if (!isNaN(cleaned.estrato)) cleaned.estrato = Number(cleaned.estrato);
       cleaned.parking = (cleaned.parking_spots || 0) > 0;
-      return base44.entities.Property.create(cleaned);
+      return api.entities.Property.create(cleaned);
     },
     onSuccess: () => {
       toast.success("¡Inmueble publicado! Nuestro equipo gestionará las consultas por ti.");

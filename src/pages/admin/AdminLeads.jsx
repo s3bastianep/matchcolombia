@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import PipelineBoard from "@/components/panels/PipelineBoard";
 import StatusBadge from "@/components/panels/StatusBadge";
 import { LEAD_PIPELINE } from "@/lib/adminConstants";
@@ -15,19 +15,19 @@ export default function AdminLeads() {
 
   const { data: inquiries = [] } = useQuery({
     queryKey: ["admin-inquiries"],
-    queryFn: () => base44.entities.Inquiry.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Inquiry.filter({}, "-created_date", 200),
   });
   const { data: properties = [] } = useQuery({
     queryKey: ["admin-properties"],
-    queryFn: () => base44.entities.Property.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Property.filter({}, "-created_date", 200),
   });
   const { data: settings } = useQuery({
     queryKey: ["admin-settings"],
-    queryFn: () => base44.entities.AdminSettings.get(),
+    queryFn: () => api.entities.AdminSettings.get(),
   });
 
   const move = useMutation({
-    mutationFn: ({ id, stage }) => base44.entities.Inquiry.update(id, {
+    mutationFn: ({ id, stage }) => api.entities.Inquiry.update(id, {
       pipeline_stage: stage,
       status: stage === "cerrado" ? "cerrado" : stage === "perdido" ? "perdido" : "contactado",
     }),
@@ -35,7 +35,7 @@ export default function AdminLeads() {
   });
 
   const updateLead = useMutation({
-    mutationFn: ({ id, patch }) => base44.entities.Inquiry.update(id, patch),
+    mutationFn: ({ id, patch }) => api.entities.Inquiry.update(id, patch),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-inquiries"] }),
   });
 

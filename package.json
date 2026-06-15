@@ -1,5 +1,5 @@
 {
-  "name": "base44-app",
+  "name": "lumora-home",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,8 +13,6 @@
     "start": "serve dist -s -l tcp://0.0.0.0:${PORT:-3000}"
   },
   "dependencies": {
-    "@base44/sdk": "^0.8.32",
-    "@base44/vite-plugin": "^1.0.21",
     "@hello-pangea/dnd": "^17.0.0",
     "@hookform/resolvers": "^4.1.2",
     "@radix-ui/react-accordion": "^1.2.3",

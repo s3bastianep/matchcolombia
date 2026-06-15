@@ -1,12 +1,12 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import StatusBadge from "@/components/panels/StatusBadge";
 
 export default function OwnerTickets() {
   const { data: tickets = [] } = useQuery({
     queryKey: ["admin-tickets"],
-    queryFn: () => base44.entities.Ticket.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Ticket.filter({}, "-created_date", 200),
   });
 
   return (

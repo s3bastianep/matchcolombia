@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { BRAND } from "@/lib/brand";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
 import { StatCard } from "@/components/panels/StatusBadge";
 import StatusBadge from "@/components/panels/StatusBadge";
@@ -14,17 +14,17 @@ export default function TenantPortal() {
   const { user } = useAuth();
   const { data: leases = [] } = useQuery({
     queryKey: ["tenant-leases", user?.id],
-    queryFn: () => base44.entities.Lease.filter({ tenant_user_id: user?.id }),
+    queryFn: () => api.entities.Lease.filter({ tenant_user_id: user?.id }),
     enabled: !!user?.id,
   });
   const { data: payments = [] } = useQuery({
     queryKey: ["tenant-payments", user?.id],
-    queryFn: () => base44.entities.Payment.filter({ user_id: user?.id }),
+    queryFn: () => api.entities.Payment.filter({ user_id: user?.id }),
     enabled: !!user?.id,
   });
   const { data: tickets = [] } = useQuery({
     queryKey: ["tenant-tickets", user?.id],
-    queryFn: () => base44.entities.Ticket.filter({ user_id: user?.id }),
+    queryFn: () => api.entities.Ticket.filter({ user_id: user?.id }),
     enabled: !!user?.id,
   });
 

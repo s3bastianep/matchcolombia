@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import StatusBadge from "@/components/panels/StatusBadge";
 import VisitCalendar from "@/components/admin/VisitCalendar";
 import { VISIT_TYPES } from "@/lib/adminConstants";
@@ -17,15 +17,15 @@ export default function AdminVisits() {
 
   const { data: visits = [] } = useQuery({
     queryKey: ["admin-visits"],
-    queryFn: () => base44.entities.Visit.filter({}, "scheduled_at", 200),
+    queryFn: () => api.entities.Visit.filter({}, "scheduled_at", 200),
   });
   const { data: properties = [] } = useQuery({
     queryKey: ["admin-properties"],
-    queryFn: () => base44.entities.Property.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Property.filter({}, "-created_date", 200),
   });
 
   const updateVisit = useMutation({
-    mutationFn: ({ id, patch }) => base44.entities.Visit.update(id, patch),
+    mutationFn: ({ id, patch }) => api.entities.Visit.update(id, patch),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-visits"] });
       setSelected(null);

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import StatusBadge from "@/components/panels/StatusBadge";
 import { PROPERTY_WORKFLOW } from "@/lib/adminConstants";
 import { Pencil, Trash2, Plus, ExternalLink } from "lucide-react";
@@ -13,20 +13,20 @@ export default function AdminProperties() {
   const [workflowFilter, setWorkflowFilter] = useState("all");
   const { data: properties = [], isLoading } = useQuery({
     queryKey: ["admin-properties"],
-    queryFn: () => base44.entities.Property.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Property.filter({}, "-created_date", 200),
   });
   const { data: owners = [] } = useQuery({
     queryKey: ["admin-owners"],
-    queryFn: () => base44.entities.Owner.filter({}, "-created_date", 100),
+    queryFn: () => api.entities.Owner.filter({}, "-created_date", 100),
   });
 
   const updateWorkflow = useMutation({
-    mutationFn: ({ id, publication_status }) => base44.entities.Property.update(id, { publication_status }),
+    mutationFn: ({ id, publication_status }) => api.entities.Property.update(id, { publication_status }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-properties"] }),
   });
 
   const remove = useMutation({
-    mutationFn: (id) => base44.entities.Property.delete(id),
+    mutationFn: (id) => api.entities.Property.delete(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-properties"] }),
   });
 

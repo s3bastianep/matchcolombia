@@ -1,27 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { getUnreadAdminCount } from "./adminNotifications";
 
 export function useAdminBadges() {
   const { data: inquiries = [] } = useQuery({
     queryKey: ["admin-inquiries"],
-    queryFn: () => base44.entities.Inquiry.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Inquiry.filter({}, "-created_date", 200),
   });
   const { data: visits = [] } = useQuery({
     queryKey: ["admin-visits"],
-    queryFn: () => base44.entities.Visit.filter({}, "scheduled_at", 200),
+    queryFn: () => api.entities.Visit.filter({}, "scheduled_at", 200),
   });
   const { data: owners = [] } = useQuery({
     queryKey: ["admin-owners"],
-    queryFn: () => base44.entities.Owner.filter({}, "-created_date", 100),
+    queryFn: () => api.entities.Owner.filter({}, "-created_date", 100),
   });
   const { data: applications = [] } = useQuery({
     queryKey: ["admin-applications"],
-    queryFn: () => base44.entities.Application.filter({}, "-created_date", 100),
+    queryFn: () => api.entities.Application.filter({}, "-created_date", 100),
   });
   const { data: tickets = [] } = useQuery({
     queryKey: ["admin-tickets"],
-    queryFn: () => base44.entities.Ticket.filter({}, "-created_date", 100),
+    queryFn: () => api.entities.Ticket.filter({}, "-created_date", 100),
   });
 
   const newLeads = inquiries.filter((i) => (i.pipeline_stage || i.status) === "nuevo" || i.status === "nueva").length;

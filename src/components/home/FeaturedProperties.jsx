@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import PropertyCard from "../property/PropertyCard";
 import { BRAND } from "@/lib/brand";
 import VerifiedBadge from "../brand/VerifiedBadge";
@@ -28,7 +28,7 @@ export default function FeaturedProperties() {
   const { data: properties = [], isLoading } = useQuery({
     queryKey: ["properties-featured"],
     queryFn: () =>
-      base44.entities.Property.filter({ status: "disponible" }, "-listed_date", FEATURED_POOL_SIZE),
+      api.entities.Property.filter({ status: "disponible" }, "-listed_date", FEATURED_POOL_SIZE),
     ...FEATURED_PROPERTIES_QUERY,
   });
 

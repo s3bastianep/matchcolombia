@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import StatusBadge from "@/components/panels/StatusBadge";
 import { Link } from "react-router-dom";
 
@@ -9,11 +9,11 @@ const formatCOP = (v) => new Intl.NumberFormat("es-CO", { style: "currency", cur
 export default function OwnerProperties() {
   const { data: properties = [] } = useQuery({
     queryKey: ["owner-properties"],
-    queryFn: () => base44.entities.Property.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Property.filter({}, "-created_date", 200),
   });
   const { data: inquiries = [] } = useQuery({
     queryKey: ["admin-inquiries"],
-    queryFn: () => base44.entities.Inquiry.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Inquiry.filter({}, "-created_date", 200),
   });
 
   return (

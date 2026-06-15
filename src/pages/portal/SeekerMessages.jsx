@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
 import { EmptyState } from "@/components/panels/PipelineBoard";
 import { Link } from "react-router-dom";
@@ -14,13 +14,13 @@ export default function SeekerMessages() {
 
   const { data: messages = [] } = useQuery({
     queryKey: ["my-messages", user?.id],
-    queryFn: () => base44.entities.Message.filter({ user_id: user?.id }),
+    queryFn: () => api.entities.Message.filter({ user_id: user?.id }),
     enabled: !!user?.id,
   });
 
   const { data: properties = [] } = useQuery({
     queryKey: ["msg-properties"],
-    queryFn: () => base44.entities.Property.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Property.filter({}, "-created_date", 200),
   });
 
   const threads = [...new Set(messages.map((m) => m.property_id))];
@@ -29,7 +29,7 @@ export default function SeekerMessages() {
 
   const send = useMutation({
     mutationFn: () =>
-      base44.entities.Message.create({
+      api.entities.Message.create({
         property_id: activeProperty,
         user_id: user.id,
         sender_role: "user",

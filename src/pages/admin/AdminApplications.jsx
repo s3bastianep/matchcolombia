@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import StatusBadge from "@/components/panels/StatusBadge";
 import { APPLICATION_STATUSES, APPLICATION_DOC_TYPES } from "@/lib/adminConstants";
 import { pushAdminNotification } from "@/lib/adminNotifications";
@@ -11,15 +11,15 @@ export default function AdminApplications() {
   const [filter, setFilter] = useState("all");
   const { data: applications = [] } = useQuery({
     queryKey: ["admin-applications"],
-    queryFn: () => base44.entities.Application.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Application.filter({}, "-created_date", 200),
   });
   const { data: properties = [] } = useQuery({
     queryKey: ["admin-properties"],
-    queryFn: () => base44.entities.Property.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Property.filter({}, "-created_date", 200),
   });
 
   const updateApp = useMutation({
-    mutationFn: ({ id, status }) => base44.entities.Application.update(id, { status }),
+    mutationFn: ({ id, status }) => api.entities.Application.update(id, { status }),
     onSuccess: (_, { status, id }) => {
       qc.invalidateQueries({ queryKey: ["admin-applications"] });
       if (status === "aprobado") {

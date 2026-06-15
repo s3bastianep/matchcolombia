@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
 import StatusBadge from "@/components/panels/StatusBadge";
 
@@ -11,12 +11,12 @@ export default function TenantPayments() {
   const qc = useQueryClient();
   const { data: payments = [] } = useQuery({
     queryKey: ["tenant-payments", user?.id],
-    queryFn: () => base44.entities.Payment.filter({ user_id: user?.id }),
+    queryFn: () => api.entities.Payment.filter({ user_id: user?.id }),
     enabled: !!user?.id,
   });
 
   const pay = useMutation({
-    mutationFn: (id) => base44.entities.Payment.update(id, { status: "pagado", paid_at: new Date().toISOString() }),
+    mutationFn: (id) => api.entities.Payment.update(id, { status: "pagado", paid_at: new Date().toISOString() }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["tenant-payments"] }),
   });
 

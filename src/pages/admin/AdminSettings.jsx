@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -13,11 +13,11 @@ export default function AdminSettings() {
   const qc = useQueryClient();
   const { data: settings, isLoading } = useQuery({
     queryKey: ["admin-settings"],
-    queryFn: () => base44.entities.AdminSettings.get(),
+    queryFn: () => api.entities.AdminSettings.get(),
   });
   const { data: pois = [] } = useQuery({
     queryKey: ["admin-pois"],
-    queryFn: () => base44.entities.POI.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.POI.filter({}, "-created_date", 200),
   });
 
   const [form, setForm] = useState(null);
@@ -33,7 +33,7 @@ export default function AdminSettings() {
   }, [settings, form]);
 
   const saveSettings = useMutation({
-    mutationFn: (patch) => base44.entities.AdminSettings.update(patch),
+    mutationFn: (patch) => api.entities.AdminSettings.update(patch),
     onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ["admin-settings"] });
       if ("site_logo" in (data || {})) {
@@ -44,7 +44,7 @@ export default function AdminSettings() {
   });
 
   const addPoi = useMutation({
-    mutationFn: (data) => base44.entities.POI.create(data, "poi"),
+    mutationFn: (data) => api.entities.POI.create(data, "poi"),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-pois"] });
       setNewPoi({ name: "", city: "Bogotá", neighborhood: "", category: "Comercio" });
@@ -52,7 +52,7 @@ export default function AdminSettings() {
   });
 
   const removePoi = useMutation({
-    mutationFn: (id) => base44.entities.POI.delete(id),
+    mutationFn: (id) => api.entities.POI.delete(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-pois"] }),
   });
 

@@ -1,39 +1,54 @@
-**Welcome to your Base44 project** 
+# LUMORA HOME
 
-**About**
+Plataforma web de arriendos verificados en Colombia. React + Vite, datos en `localStorage` para desarrollo y demo.
 
-View and Edit  your app on [Base44.com](http://Base44.com) 
+## Requisitos
 
-This project contains everything you need to run your app locally.
+- Node.js 18+
+- npm
 
-**Edit the code in your local development environment**
+## Instalación
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
-
-**Prerequisites:** 
-
-1. Clone the repository using the project's Git URL 
-2. Navigate to the project directory
-3. Install dependencies: `npm install`
-4. Create an `.env.local` file and set the right environment variables
-
-```
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=your_backend_url
-
-e.g.
-VITE_BASE44_APP_ID=cbef744a8545c389ef439ea6
-VITE_BASE44_APP_BASE_URL=https://my-to-do-list-81bfaad7.base44.app
+```bash
+npm install
+cp .env.example .env
 ```
 
-Run the app: `npm run dev`
+## Variables de entorno
 
-**Publish your changes**
+```env
+# Opcional: mapa interactivo con Google Maps
+VITE_GOOGLE_MAPS_API_KEY=
 
-Open [Base44.com](http://Base44.com) and click on Publish.
+# URL del sitio en producción (SEO, Open Graph, sitemap)
+VITE_SITE_URL=https://matchcolombia.co
+```
 
-**Docs & Support**
+## Desarrollo
 
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
+```bash
+npm run dev
+```
 
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+Abre `http://localhost:5173`
+
+**Admin demo:** usuario `admin` / contraseña `admin123` → `/admin`
+
+## Producción
+
+```bash
+npm run build
+npm run start
+```
+
+Sirve la carpeta `dist/` en el puerto `3000` (o `PORT`).
+
+## Estructura
+
+- `src/` — código React (páginas, componentes, API local)
+- `public/` — assets estáticos, `robots.txt`, `sitemap.xml`
+- `src/api/localApi.js` — capa de datos (propiedades, usuarios, visitas, etc.)
+
+## Despliegue
+
+Sube el contenido de `dist/` a cualquier hosting estático (Vercel, Netlify, VPS con nginx, etc.) o ejecuta `npm run start` en un servidor Node.

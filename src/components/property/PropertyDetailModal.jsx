@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Share2, CalendarCheck } from "lucide-react";
 import { toast } from "sonner";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { cn } from "@/lib/utils";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import { isInShortlist } from "@/lib/shortlist";
@@ -30,7 +30,7 @@ export default function PropertyDetailModal({
   const { data: fetchedProperty, isLoading } = useQuery({
     queryKey: ["property", propertyId],
     queryFn: async () => {
-      const list = await base44.entities.Property.filter({ id: propertyId });
+      const list = await api.entities.Property.filter({ id: propertyId });
       return list[0];
     },
     enabled: needsFetch,

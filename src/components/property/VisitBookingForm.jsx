@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Check, MessageCircle, ArrowRight, Receipt } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { BRAND } from "@/lib/brand";
@@ -52,7 +52,7 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
       let createdAccount = false;
 
       if (!getCurrentUserId()) {
-        const result = await base44.auth.registerFromBooking({
+        const result = await api.auth.registerFromBooking({
           name: payload.name,
           phone: payload.phone,
         });
@@ -63,7 +63,7 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
       const userId = getCurrentUserId();
       const portalUrl = `${window.location.origin}/portal/visitas`;
 
-      const inquiry = await base44.entities.Inquiry.create({
+      const inquiry = await api.entities.Inquiry.create({
         property_id: id,
         user_id: userId || undefined,
         name: payload.name,
@@ -78,7 +78,7 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
         status: "contactado",
       });
 
-      await base44.entities.Visit.create({
+      await api.entities.Visit.create({
         property_id: id,
         user_id: userId || undefined,
         user_name: payload.name,
@@ -93,7 +93,7 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
         : `¡Hola ${payload.name}! Recibimos tu ${summary.typeLabel.toLowerCase()} para el ${summary.dayLabel} a las ${summary.slotLabel} (${refCode}). Revisa el estado de tu visita: ${portalUrl}`;
 
       if (userId) {
-        await base44.entities.Message.create({
+        await api.entities.Message.create({
           property_id: id,
           user_id: userId,
           sender_role: "team",

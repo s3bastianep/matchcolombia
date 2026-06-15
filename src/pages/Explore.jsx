@@ -1,7 +1,7 @@
-ï»¿import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from "react";
+import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import PropertyCard from "../components/property/PropertyCard";
 import ExploreOwnerPromoCard from "../components/explore/ExploreOwnerPromoCard";
 import AdvancedFilters from "../components/explore/AdvancedFilters";
@@ -40,15 +40,15 @@ const TYPES_LABEL = {
   apartamento: "Apartamento",
   casa: "Casa",
   estudio: "Estudio",
-  habitacion: "HabitaciÃ³n",
+  habitacion: "Habitación",
 };
 
 const SORT_LABELS = {
   match: "Mejor match",
-  newest: "MÃ¡s recientes",
+  newest: "Más recientes",
   price_asc: "Menor precio",
   price_desc: "Mayor precio",
-  area: "Mayor Ã¡rea",
+  area: "Mayor área",
 };
 
 const QUICK_FILTERS = [
@@ -123,7 +123,7 @@ function ResultsCount({ count, query }) {
       <p className="text-sm text-muted-foreground">
         <span className="font-extrabold text-foreground text-lg tabular-nums">{count}</span>{" "}
         {listingsCountLabel(count)}
-        {query && <> en Â«{query}Â»</>}
+        {query && <> en «{query}»</>}
       </p>
     </div>
   );
@@ -174,7 +174,7 @@ export default function Explore() {
 
   const { data: properties = [], isLoading } = useQuery({
     queryKey: ["properties-all"],
-    queryFn: () => base44.entities.Property.filter({ status: "disponible" }, "-created_date", 100),
+    queryFn: () => api.entities.Property.filter({ status: "disponible" }, "-created_date", 100),
     ...PROPERTY_LIST_QUERY,
   });
 
@@ -241,7 +241,7 @@ export default function Explore() {
     return result;
   }, [properties, initialQ, initialCity, initialType, advancedFilters, activeQuick, sortBy, isMatched, prefs]);
 
-  const cityLabel = initialCity || prefs?.city || "BogotÃ¡";
+  const cityLabel = initialCity || prefs?.city || "Bogotá";
   const advancedCount = countAdvancedFilters(advancedFilters);
   const totalFilterCount = advancedCount + activeQuick.length;
   const resultsTitle =
@@ -266,10 +266,10 @@ export default function Explore() {
       </SelectTrigger>
       <SelectContent>
         {isMatched && <SelectItem value="match">Mejor match</SelectItem>}
-        <SelectItem value="newest">MÃ¡s recientes</SelectItem>
+        <SelectItem value="newest">Más recientes</SelectItem>
         <SelectItem value="price_asc">Menor precio</SelectItem>
         <SelectItem value="price_desc">Mayor precio</SelectItem>
-        <SelectItem value="area">Mayor Ã¡rea</SelectItem>
+        <SelectItem value="area">Mayor área</SelectItem>
       </SelectContent>
     </Select>
   );
@@ -328,7 +328,7 @@ export default function Explore() {
             )}
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
-            MÃ¡s filtros
+            Más filtros
             {advancedCount > 0 && (
               <span className="w-5 h-5 rounded-full bg-brand-violet text-white text-[10px] font-bold flex items-center justify-center">
                 {advancedCount}
@@ -522,7 +522,7 @@ export default function Explore() {
                   )}
                   {advancedFilters.bathrooms && (
                     <ActiveFilterChip
-                      label={advancedFilters.bathrooms === "5" ? "5+ baÃ±os" : `${advancedFilters.bathrooms} baÃ±o${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
+                      label={advancedFilters.bathrooms === "5" ? "5+ baños" : `${advancedFilters.bathrooms} baño${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
                       onRemove={() => updateAdvancedFilters({ ...advancedFilters, bathrooms: "" })}
                     />
                   )}
@@ -619,7 +619,7 @@ export default function Explore() {
             </div>
             <h3 className="font-extrabold text-xl mb-2">Sin resultados por ahora</h3>
             <p className="text-muted-foreground text-sm mb-6 max-w-sm mx-auto leading-relaxed">
-              Prueba ampliando ciudad, zona o ajustando habitaciones, baÃ±os, parqueaderos o estrato.
+              Prueba ampliando ciudad, zona o ajustando habitaciones, baños, parqueaderos o estrato.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
@@ -658,7 +658,7 @@ export default function Explore() {
             >
               <div className="w-10 h-1 bg-border rounded-full mx-auto mb-4" />
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-extrabold text-lg">MÃ¡s filtros</h3>
+                <h3 className="font-extrabold text-lg">Más filtros</h3>
                 <button
                   type="button"
                   onClick={() => setMobileFiltersOpen(false)}

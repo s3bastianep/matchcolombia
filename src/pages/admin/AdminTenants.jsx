@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import StatusBadge from "@/components/panels/StatusBadge";
 import { StatCard } from "@/components/panels/StatusBadge";
 import { DollarSign, FileText, Wrench } from "lucide-react";
@@ -9,13 +9,13 @@ const formatCOP = (v) => new Intl.NumberFormat("es-CO", { style: "currency", cur
 
 export default function AdminTenants() {
   const qc = useQueryClient();
-  const { data: leases = [] } = useQuery({ queryKey: ["admin-leases"], queryFn: () => base44.entities.Lease.filter({}, "-created_date", 100) });
-  const { data: payments = [] } = useQuery({ queryKey: ["admin-payments"], queryFn: () => base44.entities.Payment.filter({}, "-created_date", 100) });
-  const { data: tickets = [] } = useQuery({ queryKey: ["admin-tickets"], queryFn: () => base44.entities.Ticket.filter({}, "-created_date", 100) });
-  const { data: properties = [] } = useQuery({ queryKey: ["admin-properties"], queryFn: () => base44.entities.Property.filter({}, "-created_date", 200) });
+  const { data: leases = [] } = useQuery({ queryKey: ["admin-leases"], queryFn: () => api.entities.Lease.filter({}, "-created_date", 100) });
+  const { data: payments = [] } = useQuery({ queryKey: ["admin-payments"], queryFn: () => api.entities.Payment.filter({}, "-created_date", 100) });
+  const { data: tickets = [] } = useQuery({ queryKey: ["admin-tickets"], queryFn: () => api.entities.Ticket.filter({}, "-created_date", 100) });
+  const { data: properties = [] } = useQuery({ queryKey: ["admin-properties"], queryFn: () => api.entities.Property.filter({}, "-created_date", 200) });
 
   const updateTicket = useMutation({
-    mutationFn: ({ id, status, assigned_to }) => base44.entities.Ticket.update(id, { status, ...(assigned_to ? { assigned_to } : {}) }),
+    mutationFn: ({ id, status, assigned_to }) => api.entities.Ticket.update(id, { status, ...(assigned_to ? { assigned_to } : {}) }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-tickets"] }),
   });
 

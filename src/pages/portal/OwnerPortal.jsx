@@ -1,16 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
 import { StatCard } from "@/components/panels/StatusBadge";
 import { Building2, Users, Wrench, ArrowRight } from "lucide-react";
 
 export default function OwnerPortal() {
   const { user } = useAuth();
-  const { data: properties = [] } = useQuery({ queryKey: ["owner-properties"], queryFn: () => base44.entities.Property.filter({}, "-created_date", 200) });
-  const { data: inquiries = [] } = useQuery({ queryKey: ["admin-inquiries"], queryFn: () => base44.entities.Inquiry.filter({}, "-created_date", 200) });
-  const { data: tickets = [] } = useQuery({ queryKey: ["admin-tickets"], queryFn: () => base44.entities.Ticket.filter({}, "-created_date", 200) });
+  const { data: properties = [] } = useQuery({ queryKey: ["owner-properties"], queryFn: () => api.entities.Property.filter({}, "-created_date", 200) });
+  const { data: inquiries = [] } = useQuery({ queryKey: ["admin-inquiries"], queryFn: () => api.entities.Inquiry.filter({}, "-created_date", 200) });
+  const { data: tickets = [] } = useQuery({ queryKey: ["admin-tickets"], queryFn: () => api.entities.Ticket.filter({}, "-created_date", 200) });
 
   return (
     <div className="space-y-8">

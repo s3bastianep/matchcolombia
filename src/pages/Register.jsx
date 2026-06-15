@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,7 +37,7 @@ export default function Register() {
 
     setLoading(true);
     try {
-      await base44.auth.register({ name, username, email, password });
+      await api.auth.register({ name, username, email, password });
       await checkUserAuth();
       navigate("/", { replace: true });
     } catch (err) {

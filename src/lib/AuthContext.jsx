@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 
 const AuthContext = createContext(null);
 
@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoadingAuth(true);
     setAuthError(null);
     try {
-      const current = await base44.auth.me();
+      const current = await api.auth.me();
       setUser(current);
     } catch {
       setUser(null);
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   }, [checkUserAuth]);
 
   const logout = async () => {
-    await base44.auth.logout();
+    await api.auth.logout();
     setUser(null);
     window.location.href = "/";
   };

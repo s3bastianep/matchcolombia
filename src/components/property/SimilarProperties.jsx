@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import PropertyCard from "./PropertyCard";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 export default function SimilarProperties({ property }) {
   const { data: all = [] } = useQuery({
     queryKey: ["properties-similar"],
-    queryFn: () => base44.entities.Property.filter({ status: "disponible" }, "-created_date", 100),
+    queryFn: () => api.entities.Property.filter({ status: "disponible" }, "-created_date", 100),
   });
 
   const similar = all

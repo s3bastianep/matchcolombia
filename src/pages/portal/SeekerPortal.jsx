@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
 import StatusBadge from "@/components/panels/StatusBadge";
 import { FileText, MessageSquare, Calendar, Heart, ArrowRight } from "lucide-react";
@@ -10,12 +10,12 @@ export default function SeekerPortal() {
   const { user } = useAuth();
   const { data: applications = [] } = useQuery({
     queryKey: ["my-applications", user?.id],
-    queryFn: () => base44.entities.Application.filter({ user_id: user?.id }),
+    queryFn: () => api.entities.Application.filter({ user_id: user?.id }),
     enabled: !!user?.id,
   });
   const { data: visits = [] } = useQuery({
     queryKey: ["my-visits", user?.id],
-    queryFn: () => base44.entities.Visit.filter({ user_id: user?.id }),
+    queryFn: () => api.entities.Visit.filter({ user_id: user?.id }),
     enabled: !!user?.id,
   });
 

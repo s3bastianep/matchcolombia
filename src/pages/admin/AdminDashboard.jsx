@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { StatCard } from "@/components/panels/StatusBadge";
 import { computeDashboardMetrics } from "@/lib/adminMetrics";
 import {
@@ -12,14 +12,14 @@ import {
 const formatCOP = (v) => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v || 0);
 
 export default function AdminDashboard() {
-  const { data: properties = [] } = useQuery({ queryKey: ["admin-properties"], queryFn: () => base44.entities.Property.filter({}, "-created_date", 200) });
-  const { data: inquiries = [] } = useQuery({ queryKey: ["admin-inquiries"], queryFn: () => base44.entities.Inquiry.filter({}, "-created_date", 200) });
-  const { data: visits = [] } = useQuery({ queryKey: ["admin-visits"], queryFn: () => base44.entities.Visit.filter({}, "scheduled_at", 200) });
-  const { data: messages = [] } = useQuery({ queryKey: ["admin-messages"], queryFn: () => base44.entities.Message.filter({}, "-created_date", 200) });
-  const { data: leases = [] } = useQuery({ queryKey: ["admin-leases"], queryFn: () => base44.entities.Lease.filter({}, "-created_date", 100) });
-  const { data: payments = [] } = useQuery({ queryKey: ["admin-payments"], queryFn: () => base44.entities.Payment.filter({}, "-created_date", 100) });
-  const { data: tickets = [] } = useQuery({ queryKey: ["admin-tickets"], queryFn: () => base44.entities.Ticket.filter({}, "-created_date", 100) });
-  const { data: owners = [] } = useQuery({ queryKey: ["admin-owners"], queryFn: () => base44.entities.Owner.filter({}, "-created_date", 100) });
+  const { data: properties = [] } = useQuery({ queryKey: ["admin-properties"], queryFn: () => api.entities.Property.filter({}, "-created_date", 200) });
+  const { data: inquiries = [] } = useQuery({ queryKey: ["admin-inquiries"], queryFn: () => api.entities.Inquiry.filter({}, "-created_date", 200) });
+  const { data: visits = [] } = useQuery({ queryKey: ["admin-visits"], queryFn: () => api.entities.Visit.filter({}, "scheduled_at", 200) });
+  const { data: messages = [] } = useQuery({ queryKey: ["admin-messages"], queryFn: () => api.entities.Message.filter({}, "-created_date", 200) });
+  const { data: leases = [] } = useQuery({ queryKey: ["admin-leases"], queryFn: () => api.entities.Lease.filter({}, "-created_date", 100) });
+  const { data: payments = [] } = useQuery({ queryKey: ["admin-payments"], queryFn: () => api.entities.Payment.filter({}, "-created_date", 100) });
+  const { data: tickets = [] } = useQuery({ queryKey: ["admin-tickets"], queryFn: () => api.entities.Ticket.filter({}, "-created_date", 100) });
+  const { data: owners = [] } = useQuery({ queryKey: ["admin-owners"], queryFn: () => api.entities.Owner.filter({}, "-created_date", 100) });
 
   const m = useMemo(
     () => computeDashboardMetrics({ properties, inquiries, visits, messages, leases, payments, tickets, owners }),

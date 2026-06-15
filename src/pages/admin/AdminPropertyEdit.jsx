@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,11 +15,11 @@ export default function AdminPropertyEdit() {
 
   const { data: property, isLoading } = useQuery({
     queryKey: ["admin-property", id],
-    queryFn: () => base44.entities.Property.get(id),
+    queryFn: () => api.entities.Property.get(id),
   });
   const { data: owners = [] } = useQuery({
     queryKey: ["admin-owners"],
-    queryFn: () => base44.entities.Owner.filter({}, "-created_date", 100),
+    queryFn: () => api.entities.Owner.filter({}, "-created_date", 100),
   });
 
   const [form, setForm] = useState(null);
@@ -31,7 +31,7 @@ export default function AdminPropertyEdit() {
   const save = useMutation({
     mutationFn: (data) => {
       const { id: _id, history, audit_log, created_date, ...patch } = data;
-      return base44.entities.Property.update(id, patch);
+      return api.entities.Property.update(id, patch);
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-properties"] });

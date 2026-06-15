@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { StatCard } from "@/components/panels/StatusBadge";
 import { computeReportMetrics } from "@/lib/adminMetrics";
 import { PROPERTY_WORKFLOW } from "@/lib/adminConstants";
@@ -9,10 +9,10 @@ import { Building2, Users, Percent, DollarSign, AlertTriangle } from "lucide-rea
 const formatCOP = (v) => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v || 0);
 
 export default function AdminReports() {
-  const { data: properties = [] } = useQuery({ queryKey: ["admin-properties"], queryFn: () => base44.entities.Property.filter({}, "-created_date", 200) });
-  const { data: inquiries = [] } = useQuery({ queryKey: ["admin-inquiries"], queryFn: () => base44.entities.Inquiry.filter({}, "-created_date", 200) });
-  const { data: leases = [] } = useQuery({ queryKey: ["admin-leases"], queryFn: () => base44.entities.Lease.filter({}, "-created_date", 100) });
-  const { data: payments = [] } = useQuery({ queryKey: ["admin-payments"], queryFn: () => base44.entities.Payment.filter({}, "-created_date", 100) });
+  const { data: properties = [] } = useQuery({ queryKey: ["admin-properties"], queryFn: () => api.entities.Property.filter({}, "-created_date", 200) });
+  const { data: inquiries = [] } = useQuery({ queryKey: ["admin-inquiries"], queryFn: () => api.entities.Inquiry.filter({}, "-created_date", 200) });
+  const { data: leases = [] } = useQuery({ queryKey: ["admin-leases"], queryFn: () => api.entities.Lease.filter({}, "-created_date", 100) });
+  const { data: payments = [] } = useQuery({ queryKey: ["admin-payments"], queryFn: () => api.entities.Payment.filter({}, "-created_date", 100) });
 
   const stats = useMemo(
     () => computeReportMetrics({ properties, inquiries, leases, payments }),

@@ -43,7 +43,7 @@ function loadProperties() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED_PROPERTIES));
   } catch (err) {
-    console.warn("MatchColombia: no se pudo guardar propiedades iniciales", err);
+    console.warn("LUMORA HOME: no se pudo guardar propiedades iniciales", err);
   }
   return [...SEED_PROPERTIES];
 }
@@ -52,7 +52,7 @@ function saveProperties(properties) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(properties));
   } catch (err) {
-    console.warn("MatchColombia: no se pudo guardar propiedades", err);
+    console.warn("LUMORA HOME: no se pudo guardar propiedades", err);
   }
 }
 
@@ -155,7 +155,7 @@ export function initLocalApi() {
     seedAdminNotificationsIfNeeded();
     localAuth.initLocalAuth();
   } catch (err) {
-    console.warn("MatchColombia: seed del portal falló", err);
+    console.warn("LUMORA HOME: seed del portal falló", err);
   }
 }
 

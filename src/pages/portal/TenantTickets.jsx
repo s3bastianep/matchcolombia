@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
 import StatusBadge from "@/components/panels/StatusBadge";
 import { Input } from "@/components/ui/input";
@@ -14,18 +14,18 @@ export default function TenantTickets() {
 
   const { data: tickets = [] } = useQuery({
     queryKey: ["tenant-tickets", user?.id],
-    queryFn: () => base44.entities.Ticket.filter({ user_id: user?.id }),
+    queryFn: () => api.entities.Ticket.filter({ user_id: user?.id }),
     enabled: !!user?.id,
   });
   const { data: leases = [] } = useQuery({
     queryKey: ["tenant-leases", user?.id],
-    queryFn: () => base44.entities.Lease.filter({ tenant_user_id: user?.id }),
+    queryFn: () => api.entities.Lease.filter({ tenant_user_id: user?.id }),
     enabled: !!user?.id,
   });
 
   const create = useMutation({
     mutationFn: () =>
-      base44.entities.Ticket.create({
+      api.entities.Ticket.create({
         property_id: leases[0]?.property_id,
         lease_id: leases[0]?.id,
         user_id: user.id,

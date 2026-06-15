@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { Button } from "@/components/ui/button";
 import { Heart, ArrowRight, Sparkles } from "lucide-react";
 import PropertyCard from "../components/property/PropertyCard";
@@ -20,7 +20,7 @@ export default function Favorites() {
 
   const { data: allProperties = [] } = useQuery({
     queryKey: ["properties-shortlist"],
-    queryFn: () => base44.entities.Property.filter({ status: "disponible" }, "-created_date", 100),
+    queryFn: () => api.entities.Property.filter({ status: "disponible" }, "-created_date", 100),
   });
 
   const saved = allProperties.filter((p) => ids.includes(p.id));

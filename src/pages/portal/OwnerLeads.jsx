@@ -1,16 +1,16 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import StatusBadge from "@/components/panels/StatusBadge";
 
 export default function OwnerLeads() {
   const { data: inquiries = [] } = useQuery({
     queryKey: ["admin-inquiries"],
-    queryFn: () => base44.entities.Inquiry.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Inquiry.filter({}, "-created_date", 200),
   });
   const { data: properties = [] } = useQuery({
     queryKey: ["owner-properties"],
-    queryFn: () => base44.entities.Property.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Property.filter({}, "-created_date", 200),
   });
 
   const propTitle = (id) => properties.find((p) => p.id === id)?.title || id;

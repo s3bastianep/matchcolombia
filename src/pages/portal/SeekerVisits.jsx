@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
 import StatusBadge from "@/components/panels/StatusBadge";
 import { EmptyState } from "@/components/panels/PipelineBoard";
@@ -12,12 +12,12 @@ export default function SeekerVisits() {
   const qc = useQueryClient();
   const { data: visits = [] } = useQuery({
     queryKey: ["my-visits", user?.id],
-    queryFn: () => base44.entities.Visit.filter({ user_id: user?.id }),
+    queryFn: () => api.entities.Visit.filter({ user_id: user?.id }),
     enabled: !!user?.id,
   });
   const { data: properties = [] } = useQuery({
     queryKey: ["visit-properties"],
-    queryFn: () => base44.entities.Property.filter({}, "-created_date", 200),
+    queryFn: () => api.entities.Property.filter({}, "-created_date", 200),
   });
 
   const fmt = (iso) => new Date(iso).toLocaleString("es-CO", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });

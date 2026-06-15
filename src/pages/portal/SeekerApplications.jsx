@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
 import StatusBadge from "@/components/panels/StatusBadge";
 import { EmptyState } from "@/components/panels/PipelineBoard";
@@ -15,16 +15,16 @@ export default function SeekerApplications() {
   const qc = useQueryClient();
   const { data: applications = [] } = useQuery({
     queryKey: ["my-applications", user?.id],
-    queryFn: () => base44.entities.Application.filter({ user_id: user?.id }),
+    queryFn: () => api.entities.Application.filter({ user_id: user?.id }),
     enabled: !!user?.id,
   });
 
   const uploadDoc = useMutation({
     mutationFn: async ({ appId, file }) => {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await api.integrations.Core.UploadFile({ file });
       const app = applications.find((a) => a.id === appId);
       const docs = [...(app?.documents || []), { type: "documento", name: file.name, url: file_url, uploaded_at: new Date().toISOString() }];
-      return base44.entities.Application.update(appId, { documents: docs, status: "documentos_enviados" });
+      return api.entities.Application.update(appId, { documents: docs, status: "documentos_enviados" });
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["my-applications"] }),
   });

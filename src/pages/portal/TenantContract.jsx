@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
 import StatusBadge from "@/components/panels/StatusBadge";
 
@@ -10,7 +10,7 @@ export default function TenantContract() {
   const { user } = useAuth();
   const { data: leases = [] } = useQuery({
     queryKey: ["tenant-leases", user?.id],
-    queryFn: () => base44.entities.Lease.filter({ tenant_user_id: user?.id }),
+    queryFn: () => api.entities.Lease.filter({ tenant_user_id: user?.id }),
     enabled: !!user?.id,
   });
   const lease = leases[0];
