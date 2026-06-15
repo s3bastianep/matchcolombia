@@ -8,7 +8,7 @@ import { api } from "@/api/apiClient";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { BRAND } from "@/lib/brand";
-import { getCurrentUserId } from "@/lib/localAuth";
+import { getCurrentUserId } from "@/lib/authUser";
 import { pushProcessUpdate } from "@/lib/processNotifications";
 import {
   buildScheduledAt,

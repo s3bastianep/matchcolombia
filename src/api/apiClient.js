@@ -1,3 +1,6 @@
-import { api } from "./localApi";
+import { isSupabaseConfigured } from "@/lib/supabaseClient";
+import { api as localApi } from "./localApi";
+import { api as remoteApi } from "./supabaseApi";
 
-export { api };
+export const api = isSupabaseConfigured() ? remoteApi : localApi;
+export { isSupabaseConfigured };

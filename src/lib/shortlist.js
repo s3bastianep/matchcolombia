@@ -1,4 +1,4 @@
-import { getCurrentUserId } from "./localAuth";
+import { getCurrentUserId } from "./authUser";
 
 const GUEST_KEY = "matchbogota_shortlist";
 

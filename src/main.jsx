@@ -47,14 +47,14 @@ const bootTimer = window.setTimeout(() => {
 
 async function boot() {
   try {
-    const [{ default: App }, { default: ErrorBoundary }, , localApi] = await Promise.all([
+    const [{ default: App }, { default: ErrorBoundary }, , { initApi } ] = await Promise.all([
       import('@/App.jsx'),
       import('@/components/ErrorBoundary'),
       import('@/index.css'),
-      import('@/api/localApi'),
+      import('@/api/initApi'),
     ])
 
-    localApi.initLocalApi()
+    await initApi()
 
     const { clearChunkReloadFlag } = await import('@/lib/lazyWithRetry')
     clearChunkReloadFlag()

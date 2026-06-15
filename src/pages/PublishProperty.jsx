@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
 import { CITIES, getZonesForCity } from "@/lib/colombia";
 import { BEDROOM_OPTIONS, BATHROOM_OPTIONS, PARKING_OPTIONS, ESTRATO_OPTIONS } from "@/lib/propertyFilters";
-import { getCurrentUserId } from "@/lib/localAuth";
+import { getCurrentUserId } from "@/lib/authUser";
 import { pushAdminNotification } from "@/lib/adminNotifications";
 
 const STEPS = [
