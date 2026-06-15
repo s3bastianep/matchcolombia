@@ -27,6 +27,7 @@ import {
   countAdvancedFilters,
   advancedFiltersToUrlParams,
 } from "@/lib/propertyFilters";
+import { shouldInsertOwnerPromo, EXPLORE_SPLIT_LAYOUT } from "@/lib/exploreUtils";
 
 const ExploreMap = lazy(() => import("../components/explore/ExploreMap"));
 
@@ -34,25 +35,19 @@ function MapPaneFallback({ className }) {
   return <div className={cn("shimmer bg-muted/20", className)} aria-hidden />;
 }
 
-const SPLIT_LAYOUT_GRID = "lg:grid-cols-[minmax(280px,380px)_minmax(0,1fr)]";
-
-function shouldInsertOwnerPromo(index) {
-  return index === 1 || (index > 1 && (index - 1) % 10 === 0);
-}
-
 const TYPES_LABEL = {
   apartamento: "Apartamento",
   casa: "Casa",
   estudio: "Estudio",
-  habitacion: "Habitación",
+  habitacion: "Habitaci?n",
 };
 
 const SORT_LABELS = {
   match: "Mejor match",
-  newest: "Más recientes",
+  newest: "M?s recientes",
   price_asc: "Menor precio",
   price_desc: "Mayor precio",
-  area: "Mayor área",
+  area: "Mayor ?rea",
 };
 
 const QUICK_FILTERS = [
@@ -431,7 +426,7 @@ export default function Explore() {
 
       {isLoading ? (
         <>
-          <div className={cn("hidden lg:grid lg:flex-1 lg:min-h-0 min-w-0", SPLIT_LAYOUT_GRID)}>
+          <div className={cn("hidden lg:grid lg:flex-1 lg:min-h-0 min-w-0", EXPLORE_SPLIT_LAYOUT)}>
             <div className="border-r border-[hsl(0,0%,90%)] shimmer min-h-[400px]" />
             <div className="px-6 py-5 grid grid-cols-2 xl:grid-cols-3 gap-3 items-stretch">
               {Array(9).fill(0).map((_, i) => (
@@ -455,7 +450,7 @@ export default function Explore() {
         <>
           <div className={cn(
             "hidden lg:grid lg:flex-1 lg:min-h-0 border-t border-[hsl(0,0%,90%)] min-w-0",
-            viewMode === "list" ? "grid-cols-1" : SPLIT_LAYOUT_GRID
+            viewMode === "list" ? "grid-cols-1" : EXPLORE_SPLIT_LAYOUT
           )}>
             {viewMode === "split" && (
             <div className="flex flex-col border-r border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] min-h-0 min-w-0 overflow-hidden">
