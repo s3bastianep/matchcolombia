@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -8,6 +8,7 @@ import { AuthProvider } from '@/lib/AuthContext';
 import { ROLES } from '@/lib/roles';
 import { PropertyPanelProvider } from '@/lib/PropertyPanelContext';
 import RouteSeo from '@/components/seo/RouteSeo';
+import { lazyWithRetry as lazy } from '@/lib/lazyWithRetry';
 
 import AppLayout from './components/layout/AppLayout';
 import RequireAuth from './components/RequireAuth';

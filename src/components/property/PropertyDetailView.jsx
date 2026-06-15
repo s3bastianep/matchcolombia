@@ -1,7 +1,9 @@
-import React, { useRef, useEffect, lazy, Suspense } from "react";
+import React, { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import PropertyGallery from "./PropertyGallery";
 import VisitBookingForm from "./VisitBookingForm";
+import PropertyLocationMap from "./PropertyLocationMap";
+import SimilarProperties from "./SimilarProperties";
 import { getPropertyImages } from "@/lib/colombiaImages";
 import {
   DirectContactOptions,
@@ -13,9 +15,6 @@ import {
   PersonalSearchSection,
   PropertyDetailHeader,
 } from "./propertyDetailShared";
-
-const PropertyLocationMap = lazy(() => import("./PropertyLocationMap"));
-const SimilarProperties = lazy(() => import("./SimilarProperties"));
 
 function ContactSidebar({ property, id, bookingRef }) {
   return (
@@ -81,9 +80,7 @@ export default function PropertyDetailView({
               </section>
             )}
 
-            <Suspense fallback={<div className="h-52 sm:h-60 shimmer rounded-2xl" />}>
-              <PropertyLocationMap property={property} />
-            </Suspense>
+            <PropertyLocationMap property={property} />
 
             <PersonalSearchSection />
 
@@ -101,11 +98,7 @@ export default function PropertyDetailView({
           </div>
         </div>
 
-        {showSimilar && (
-          <Suspense fallback={<div className="h-40 shimmer rounded-2xl mt-8" />}>
-            <SimilarProperties property={property} />
-          </Suspense>
-        )}
+        {showSimilar && <SimilarProperties property={property} />}
       </div>
       </div>
     </div>

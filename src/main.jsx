@@ -56,6 +56,9 @@ async function boot() {
 
     localApi.initLocalApi()
 
+    const { clearChunkReloadFlag } = await import('@/lib/lazyWithRetry')
+    clearChunkReloadFlag()
+
     window.clearTimeout(bootTimer)
     removeBootLoader()
 

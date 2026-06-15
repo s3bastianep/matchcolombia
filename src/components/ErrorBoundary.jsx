@@ -10,6 +10,18 @@ export default class ErrorBoundary extends React.Component {
     return { error };
   }
 
+  componentDidCatch(error) {
+    const message = error?.message || "";
+    if (
+      (message.includes("Failed to fetch dynamically imported module") ||
+        message.includes("Importing a module script failed")) &&
+      !sessionStorage.getItem("lumora-chunk-reload")
+    ) {
+      sessionStorage.setItem("lumora-chunk-reload", "1");
+      window.location.reload();
+    }
+  }
+
   render() {
     if (this.state.error) {
       return (

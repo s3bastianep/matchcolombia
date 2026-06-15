@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from "react";
+import React, { useState, useMemo, useCallback, useEffect, Suspense } from "react";
+import { lazyWithRetry as lazy } from "@/lib/lazyWithRetry";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { api } from "@/api/apiClient";
@@ -519,7 +520,7 @@ export default function Explore() {
                   )}
                   {advancedFilters.bathrooms && (
                     <ActiveFilterChip
-                      label={advancedFilters.bathrooms === "5" ? "5+ baños" : `${advancedFilters.bathrooms} ba?o${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
+                      label={advancedFilters.bathrooms === "5" ? "5+ ba?os" : `${advancedFilters.bathrooms} ba?o${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
                       onRemove={() => updateAdvancedFilters({ ...advancedFilters, bathrooms: "" })}
                     />
                   )}
@@ -616,7 +617,7 @@ export default function Explore() {
             </div>
             <h3 className="font-extrabold text-xl mb-2">Sin resultados por ahora</h3>
             <p className="text-muted-foreground text-sm mb-6 max-w-sm mx-auto leading-relaxed">
-              Prueba ampliando ciudad, zona o ajustando habitaciones, baños, parqueaderos o estrato.
+              Prueba ampliando ciudad, zona o ajustando habitaciones, ba?os, parqueaderos o estrato.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button

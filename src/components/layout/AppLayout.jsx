@@ -1,11 +1,12 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import WhatsAppFab from "./WhatsAppFab";
 import { cn } from "@/lib/utils";
+import { lazyWithRetry } from "@/lib/lazyWithRetry";
 
-const Footer = lazy(() => import("./Footer"));
-const MatchQuiz = lazy(() => import("../match/MatchQuiz"));
+const Footer = lazyWithRetry(() => import("./Footer"));
+const MatchQuiz = lazyWithRetry(() => import("../match/MatchQuiz"));
 
 export default function AppLayout() {
   const [quizOpen, setQuizOpen] = useState(false);
