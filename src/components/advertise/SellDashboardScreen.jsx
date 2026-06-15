@@ -17,10 +17,10 @@ export default function SellDashboardScreen({ className }) {
     <div className={cn("w-full", className)}>
       <div className="rounded-lg border border-[hsl(0,0%,88%)] bg-[hsl(0,0%,97%)] p-3 sm:p-4 max-w-sm mx-auto lg:max-w-[340px] lg:mx-0">
         <div className="rounded-md bg-white border border-[hsl(0,0%,90%)] px-4 py-5 sm:px-5 sm:py-6 font-[system-ui,-apple-system,BlinkMacSystemFont,sans-serif]">
-          <p className="text-[16px] sm:text-[17px] font-bold text-[hsl(0,0%,8%)] leading-tight">Apartamento Quinta Camacho</p>
-          <p className="text-[14px] text-[hsl(0,0%,42%)] mt-1">Chapinero · Bogotá</p>
+          <p className="text-[16px] sm:text-[17px] font-bold text-[hsl(0,0%,8%)] leading-tight">Carlos Gómez</p>
+          <p className="text-[14px] text-[hsl(0,0%,42%)] mt-1">Apartamento Quinta Camacho</p>
 
-          <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3.5">
+          <div className="mt-5 space-y-3.5">
             <Field label="Visualizaciones" value="543" />
             <Field label="Interesados" value="17" />
             <Field label="Visitas agendadas" value="8" />
