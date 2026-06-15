@@ -9,6 +9,15 @@ import {
   PawPrint,
   Sofa,
   Sparkles,
+  Waves,
+  Dumbbell,
+  Flame,
+  Zap,
+  UtensilsCrossed,
+  Droplets,
+  Layers,
+  PanelTopOpen,
+  Ban,
   Bath,
   Bed,
   Building2,
@@ -34,6 +43,10 @@ const STEP_ICONS = {
   budget: Wallet,
   elevator: ElevatorIcon,
   pets: PawPrint,
+  kitchen: UtensilsCrossed,
+  shower: Droplets,
+  flooring: Layers,
+  balcony: PanelTopOpen,
   extras: SlidersHorizontal,
 };
 
@@ -57,6 +70,30 @@ const PETS_OPTIONS = [
   { value: "no", label: "No tengo mascotas", desc: "Cualquier inmueble me sirve" },
 ];
 
+const KITCHEN_OPTIONS = [
+  { value: "electrica", label: "Cocina eléctrica", icon: Zap },
+  { value: "gas", label: "Cocina a gas", icon: Flame },
+  { value: "", label: "Me da igual", icon: Sparkles },
+];
+
+const SHOWER_OPTIONS = [
+  { value: "electrica", label: "Ducha eléctrica", icon: Zap },
+  { value: "gas", label: "Ducha a gas", icon: Flame },
+  { value: "", label: "Me da igual", icon: Sparkles },
+];
+
+const FLOORING_OPTIONS = [
+  { value: "madera", label: "Piso en madera", icon: Layers },
+  { value: "porcelanato", label: "Piso en porcelanato", icon: LayoutGrid },
+  { value: "", label: "Me da igual", icon: Sparkles },
+];
+
+const BALCONY_OPTIONS = [
+  { value: "si", label: "Con balcón", icon: PanelTopOpen },
+  { value: "no", label: "Sin balcón", icon: Ban },
+  { value: "", label: "Me da igual", icon: Sparkles },
+];
+
 const BUDGETS = [
   { value: 1000000, label: "Hasta $1M" },
   { value: 2000000, label: "Hasta $2M" },
@@ -68,7 +105,28 @@ const BUDGETS = [
 const EXTRAS = [
   { key: "parking", label: "Parqueadero", icon: Car },
   { key: "furnished", label: "Amoblado", icon: Sofa },
+  { key: "pool", label: "Piscina", icon: Waves },
+  { key: "gym", label: "Gimnasio", icon: Dumbbell },
 ];
+
+function PreferenceOptions({ options, selected, onSelect }) {
+  return (
+    <div className="grid grid-cols-1 gap-2">
+      {options.map((opt) => (
+        <QuizOption
+          key={opt.label}
+          selected={selected === opt.value}
+          onClick={() => onSelect(opt.value)}
+          className="flex items-center gap-3"
+        >
+          <IconBubble icon={opt.icon} selected={selected === opt.value} />
+          <span className="font-bold text-sm">{opt.label}</span>
+          <OptionCheck selected={selected === opt.value} />
+        </QuizOption>
+      ))}
+    </div>
+  );
+}
 
 function StepDots({ total, current }) {
   return (
@@ -231,8 +289,14 @@ export default function MatchQuiz({ open, onOpenChange }) {
     maxPrice: 3000000,
     elevator: "",
     pets: "",
+    kitchenType: "",
+    showerType: "",
+    flooringType: "",
+    balcony: "",
     parking: false,
     furnished: false,
+    pool: false,
+    gym: false,
   });
 
   const current = QUIZ_STEPS[step];
@@ -459,8 +523,40 @@ export default function MatchQuiz({ open, onOpenChange }) {
                 </div>
               )}
 
+              {current.id === "kitchen" && (
+                <PreferenceOptions
+                  options={KITCHEN_OPTIONS}
+                  selected={prefs.kitchenType}
+                  onSelect={(kitchenType) => setPrefs({ ...prefs, kitchenType })}
+                />
+              )}
+
+              {current.id === "shower" && (
+                <PreferenceOptions
+                  options={SHOWER_OPTIONS}
+                  selected={prefs.showerType}
+                  onSelect={(showerType) => setPrefs({ ...prefs, showerType })}
+                />
+              )}
+
+              {current.id === "flooring" && (
+                <PreferenceOptions
+                  options={FLOORING_OPTIONS}
+                  selected={prefs.flooringType}
+                  onSelect={(flooringType) => setPrefs({ ...prefs, flooringType })}
+                />
+              )}
+
+              {current.id === "balcony" && (
+                <PreferenceOptions
+                  options={BALCONY_OPTIONS}
+                  selected={prefs.balcony}
+                  onSelect={(balcony) => setPrefs({ ...prefs, balcony })}
+                />
+              )}
+
               {current.id === "extras" && (
-                <div className="grid grid-cols-1 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {EXTRAS.map((e) => (
                     <QuizOption
                       key={e.key}

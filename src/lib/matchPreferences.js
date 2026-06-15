@@ -1,4 +1,11 @@
 import { hasElevator } from "@/lib/propertyFilters";
+import { hasPool, hasGym } from "@/lib/propertyBuildingInfo";
+import {
+  matchesKitchenPref,
+  matchesShowerPref,
+  matchesFlooringPref,
+  matchesBalconyPref,
+} from "@/lib/propertyInteriorInfo";
 
 const PREFS_KEY = "matchcolombia_preferences";
 
@@ -13,6 +20,12 @@ export const defaultPreferences = {
   pets: "",
   parking: false,
   furnished: false,
+  pool: false,
+  gym: false,
+  kitchenType: "",
+  showerType: "",
+  flooringType: "",
+  balcony: "",
 };
 
 export function savePreferences(prefs) {
@@ -97,6 +110,13 @@ export function scoreProperty(property, prefs) {
 
   if (prefs.parking && property.parking) score += 3;
   if (prefs.furnished && property.furnished === "amoblado") score += 3;
+  if (prefs.pool && hasPool(property)) score += 3;
+  if (prefs.gym && hasGym(property)) score += 3;
+
+  if (prefs.kitchenType && matchesKitchenPref(property, prefs.kitchenType)) score += 4;
+  if (prefs.showerType && matchesShowerPref(property, prefs.showerType)) score += 4;
+  if (prefs.flooringType && matchesFlooringPref(property, prefs.flooringType)) score += 4;
+  if (prefs.balcony && matchesBalconyPref(property, prefs.balcony)) score += 4;
 
   return Math.min(100, score);
 }

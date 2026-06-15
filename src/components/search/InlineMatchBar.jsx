@@ -23,20 +23,24 @@ const BUDGETS = [
 ];
 
 const CITY_OPTIONS = [
-  { value: "all", label: "Ambas ciudades" },
+  { value: "all", label: "Todas" },
   ...CITIES.map((c) => ({ value: c.name, label: c.name })),
 ];
 
 const triggerClass =
   "border-0 shadow-none focus:ring-0 p-0 h-7 gap-1.5 font-semibold text-sm text-foreground w-full [&>span]:line-clamp-none [&>svg]:opacity-40";
 
-function MatchField({ label, value, onChange, options, className }) {
+function MatchField({ label, value, onChange, options, className, staticDisplay }) {
   return (
     <div className={cn("px-4 sm:px-5 py-3 min-w-0 w-full", className)}>
       <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80 mb-0.5">{label}</p>
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className={triggerClass}>
-          <SelectValue />
+          {staticDisplay ? (
+            <span className="font-semibold text-sm text-foreground">{staticDisplay}</span>
+          ) : (
+            <SelectValue />
+          )}
         </SelectTrigger>
         <SelectContent>
           {options.map((o) => (
@@ -109,6 +113,7 @@ export default function InlineMatchBar({ variant = "hero" }) {
       value: city || "all",
       onChange: (v) => setCity(v === "all" ? "" : v),
       options: CITY_OPTIONS,
+      staticDisplay: "Ciudad",
     },
     {
       key: "beds",
@@ -135,7 +140,7 @@ export default function InlineMatchBar({ variant = "hero" }) {
 
         <div className="flex flex-col lg:hidden divide-y divide-border/50">
           {fields.map((field) => (
-            <MatchField key={field.key} label={field.label} value={field.value} onChange={field.onChange} options={field.options} />
+            <MatchField key={field.key} label={field.label} value={field.value} onChange={field.onChange} options={field.options} staticDisplay={field.staticDisplay} />
           ))}
           <div className="p-3 pt-2">
             <MatchButton onClick={handleMatch} />
@@ -151,6 +156,7 @@ export default function InlineMatchBar({ variant = "hero" }) {
                 value={field.value}
                 onChange={field.onChange}
                 options={field.options}
+                staticDisplay={field.staticDisplay}
                 className="flex-1 min-w-0 hover:bg-secondary/30 transition-colors rounded-sm"
               />
             ))}

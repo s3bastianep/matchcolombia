@@ -57,7 +57,7 @@ export default function SearchBar({ variant = "hero", className }) {
   const isHero = variant === "hero";
   const icons = [MapPin, Building2, Bed, DollarSign];
   const fields = [
-    { label: "Ciudad", value: city || "all", onChange: (v) => setCity(v === "all" ? "" : v), options: [{ value: "all", label: "Ambas ciudades" }, ...CITIES.map((c) => ({ value: c.name, label: c.name }))] },
+    { label: "Ciudad", value: city || "all", onChange: (v) => setCity(v === "all" ? "" : v), options: [{ value: "all", label: "Todas" }, ...CITIES.map((c) => ({ value: c.name, label: c.name }))], staticDisplay: "Ciudad" },
     { label: "Tipo", value: type, onChange: setType, options: TYPES },
     { label: "Habitaciones", value: beds, onChange: setBeds, options: BEDS },
     { label: "Presupuesto", value: budget, onChange: setBudget, options: BUDGETS },
@@ -78,7 +78,11 @@ export default function SearchBar({ variant = "hero", className }) {
                 <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{field.label}</label>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger className="border-0 p-0 h-auto shadow-none focus:ring-0 font-semibold text-sm">
-                    <SelectValue />
+                    {field.staticDisplay ? (
+                      <span>{field.staticDisplay}</span>
+                    ) : (
+                      <SelectValue />
+                    )}
                   </SelectTrigger>
                   <SelectContent>
                     {field.options.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}

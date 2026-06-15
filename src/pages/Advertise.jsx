@@ -156,10 +156,10 @@ export default function Advertise() {
                 <span className="text-xs font-bold uppercase tracking-widest text-white/60">Portal propietarios</span>
               </div>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-[1.12] tracking-tight">
-                Tu inmueble administrado sin llamadas, correos ni incertidumbre
+                Entrega tu apartamento. Nosotros lo administramos de punta a punta.
               </h1>
               <p className="mt-4 text-white/75 text-sm sm:text-base leading-relaxed max-w-lg">
-                Publica gratis. {BRAND.name} gestiona visitas, candidatos y cobros. Tú recibes tu dinero con tranquilidad y consultas todo desde cualquier dispositivo.
+                Publica gratis y deja en nuestras manos visitas, candidatos, contratos y cobros. Tú recibes tu dinero con tranquilidad y consultas todo desde cualquier dispositivo.
               </p>
               <div className="mt-3">
                 <VerifiedBadge size="sm" />
@@ -192,6 +192,19 @@ export default function Advertise() {
               />
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      <section className="color-bar">
+        <div className="max-w-4xl mx-auto px-4 sm:px-8 py-12 sm:py-16 lg:py-20 text-center text-white">
+          <h2 className="text-2xl sm:text-3xl lg:text-[2.35rem] font-extrabold leading-[1.15] tracking-tight">
+            El ciclo completo de tu arrendamiento.
+            <br className="hidden sm:block" />
+            {" "}Una sola administración.
+          </h2>
+          <p className="mt-5 sm:mt-6 text-sm sm:text-base lg:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
+            Desde que publicamos tu apartamento hasta que el inquilino se queda: nos encargamos de visitas, selección, contratos, cobros y mantenimiento. Mejores candidatos, arriendos más rápidos e inquilinos satisfechos que renuevan. Tú entregas el inmueble; {BRAND.name} hace el resto.
+          </p>
         </div>
       </section>
 
@@ -300,7 +313,7 @@ export default function Advertise() {
           </div>
           <div className="bg-white/5 backdrop-blur-sm border border-white/15 rounded-2xl p-5 sm:p-7">
             <h3 className="font-extrabold text-lg mb-1">Publica gratis</h3>
-            <p className="text-sm text-white/60 mb-5">Bogotá y Barranquilla</p>
+            <p className="text-sm text-white/60 mb-5">Publicación y administración incluidas</p>
             <LeadForm dark />
           </div>
         </div>

@@ -112,6 +112,22 @@ export function hasBuildingDetails(property) {
   );
 }
 
+function hasAmenityKeyword(property, keywords) {
+  const list = [...(property?.amenities || []), ...getBuildingAmenities(property)];
+  return list.some((item) => {
+    const key = normalizeAmenity(item);
+    return keywords.some((kw) => key.includes(kw));
+  });
+}
+
+export function hasPool(property) {
+  return hasAmenityKeyword(property, ["piscina"]);
+}
+
+export function hasGym(property) {
+  return hasAmenityKeyword(property, ["gimnasio", "gym"]);
+}
+
 const INTERIOR_DEFAULTS = {
   apartamento: ["Cocina integral", "Closets empotrados"],
   estudio: ["Cocina integrada", "Escritorio amoblado"],

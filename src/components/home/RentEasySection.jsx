@@ -11,7 +11,7 @@ const features = [
   {
     icon: Building2,
     title: "Listados completos",
-    desc: "Explora inmuebles verificados en Bogotá y Barranquilla. Filtra por zona, precio y habitaciones sin scroll infinito.",
+    desc: "Inventario verificado y filtros claros. Explora por zona, precio y habitaciones sin scroll infinito.",
     tag: "Inventario real",
     accent: "from-brand-magenta to-brand-violet",
     ring: "ring-brand-magenta/20",
@@ -88,7 +88,7 @@ export default function RentEasySection() {
             <span className="text-gradient">tan fácil</span>
           </h2>
           <p className="text-muted-foreground text-base sm:text-lg leading-relaxed mt-4 max-w-2xl mx-auto">
-            Ayudamos a quienes buscan arriendo en Bogotá y Barranquilla a encontrar su hogar con confianza.
+            Hacemos la búsqueda por ti. Encuentra arriendo más rápido, con menos estrés y sin horas perdidas en scroll infinito.
           </p>
         </motion.div>
 

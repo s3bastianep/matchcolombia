@@ -38,7 +38,11 @@ export const QUIZ_STEPS = [
   { id: "budget", title: "¿Cuál es tu presupuesto?", subtitle: "Precio mensual, sin sorpresas" },
   { id: "elevator", title: "¿Necesitas ascensor?", subtitle: "Útil en pisos altos o si buscas comodidad" },
   { id: "pets", title: "¿Tienes mascotas?", subtitle: "Filtramos inmuebles que las acepten si las tienes" },
-  { id: "extras", title: "¿Qué más necesitas?", subtitle: "Parqueadero, amoblado y otros extras" },
+  { id: "kitchen", title: "¿Qué tipo de cocina prefieres?", subtitle: "Eléctrica, a gas o sin preferencia" },
+  { id: "shower", title: "¿Qué tipo de ducha prefieres?", subtitle: "Eléctrica, a gas o sin preferencia" },
+  { id: "flooring", title: "¿Qué tipo de piso prefieres?", subtitle: "Madera, porcelanato o sin preferencia" },
+  { id: "balcony", title: "¿Prefieres balcón?", subtitle: "Con balcón, sin balcón o sin preferencia" },
+  { id: "extras", title: "¿Qué más necesitas?", subtitle: "Parqueadero, piscina, gimnasio y más" },
 ];
 
 export function listingsCountLabel(count) {

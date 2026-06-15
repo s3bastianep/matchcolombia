@@ -85,33 +85,28 @@ function ActiveFilterChip({ label, onRemove }) {
   );
 }
 
-function CityFilterChips({ initialCity, setCityFilter, className }) {
+function CityFilterSelect({ initialCity, setCityFilter, className }) {
   return (
-    <div className={cn("flex items-center gap-1 p-1 rounded-full bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)]", className)}>
-      <button
-        type="button"
-        onClick={() => setCityFilter("")}
+    <Select
+      value={initialCity || "all"}
+      onValueChange={(v) => setCityFilter(v === "all" ? "" : v)}
+    >
+      <SelectTrigger
         className={cn(
-          "h-9 px-3.5 rounded-full text-xs font-bold transition-all shrink-0",
-          !initialCity ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+          "h-10 min-w-[6.5rem] bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)] rounded-full px-3.5 text-xs font-bold gap-1.5 shadow-sm shrink-0",
+          initialCity && "border-brand-violet/30 text-brand-violet",
+          className
         )}
       >
-        Todas
-      </button>
-      {CITIES.map((c) => (
-        <button
-          key={c.id}
-          type="button"
-          onClick={() => setCityFilter(c.name)}
-          className={cn(
-            "h-9 px-3.5 rounded-full text-xs font-bold transition-all shrink-0",
-            initialCity === c.name ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
-          )}
-        >
-          {c.name}
-        </button>
-      ))}
-    </div>
+        <span>Ciudad</span>
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">Todas</SelectItem>
+        {CITIES.map((c) => (
+          <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
 
@@ -319,16 +314,9 @@ export default function Explore() {
             />
           </div>
 
-          <CityFilterChips
+          <CityFilterSelect
             initialCity={initialCity}
             setCityFilter={setCityFilter}
-            className="hidden sm:flex shrink-0"
-          />
-
-          <CityFilterChips
-            initialCity={initialCity}
-            setCityFilter={setCityFilter}
-            className="sm:hidden w-full overflow-x-auto scrollbar-none"
           />
 
           <button

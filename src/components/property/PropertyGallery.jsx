@@ -178,26 +178,43 @@ export default function PropertyGallery({ images, title, immersive = false, vari
         <div className={cn(isModal ? "px-4 sm:px-6 mt-3" : "mt-2.5 px-1")}>
           <div
             className={cn(
-              "flex gap-2.5 overflow-x-auto pb-1 scroll-smooth snap-x snap-mandatory scrollbar-thin",
-              isModal && "py-1"
+              isModal && images.length <= 8
+                ? "max-sm:flex max-sm:overflow-x-auto max-sm:gap-2 max-sm:py-1 max-sm:scroll-smooth max-sm:snap-x max-sm:snap-mandatory sm:grid sm:grid-cols-6 sm:gap-2"
+                : "flex gap-2 overflow-x-auto py-1 scroll-smooth snap-x snap-mandatory scrollbar-thin",
+              isModal && images.length > 8 && "scroll-px-4 sm:scroll-px-6"
             )}
           >
-            {images.map((img, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => go(i)}
-                className={cn(
-                  "shrink-0 snap-start overflow-hidden transition-all rounded-sm",
-                  isModal ? "w-16 h-16 sm:w-[4.25rem] sm:h-[4.25rem]" : "w-20 h-20",
-                  i === idx
-                    ? "ring-2 ring-primary ring-offset-1 ring-offset-background opacity-100"
-                    : "opacity-55 hover:opacity-85"
-                )}
-              >
-                <SmartImage src={img} alt="" className="w-full h-full" imgClassName="object-cover" />
-              </button>
-            ))}
+            {images.map((img, i) => {
+              const selected = i === idx;
+              const fillRow = isModal && images.length <= 8;
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => go(i)}
+                  aria-label={`Ver foto ${i + 1}`}
+                  aria-current={selected ? "true" : undefined}
+                  className={cn(
+                    "relative p-0 bg-muted transition-opacity duration-200 overflow-hidden rounded-none border-2",
+                    fillRow
+                      ? "aspect-square w-full min-w-0 max-sm:w-[4.75rem] max-sm:h-[4.75rem] max-sm:aspect-auto max-sm:shrink-0 max-sm:snap-start"
+                      : "shrink-0 snap-start w-[4.75rem] h-[4.75rem] sm:w-20 sm:h-20",
+                    selected
+                      ? "border-primary opacity-100"
+                      : "border-transparent opacity-60 hover:opacity-90"
+                  )}
+                >
+                  <img
+                    src={img}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    draggable={false}
+                    className="absolute inset-0 block w-full h-full object-cover object-center"
+                  />
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
