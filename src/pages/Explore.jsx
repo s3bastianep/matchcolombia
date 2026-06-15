@@ -1,14 +1,14 @@
 import React, { useState, useMemo, useCallback, useEffect, Suspense } from "react";
 import { lazyWithRetry as lazy } from "@/lib/lazyWithRetry";
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { api } from "@/api/apiClient";
 import PropertyCard from "../components/property/PropertyCard";
 import ExploreOwnerPromoCard from "../components/explore/ExploreOwnerPromoCard";
 import AdvancedFilters from "../components/explore/AdvancedFilters";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
-import { SlidersHorizontal, X, Sparkles, Search, Map, Check, ArrowUpDown, MousePointer2, ShieldCheck, LayoutGrid, Columns2 } from "lucide-react";
+import { SlidersHorizontal, X, Sparkles, Search, Map, Check, ArrowUpDown, MousePointer2, ShieldCheck, LayoutGrid, Columns2, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import VerifiedBadge from "../components/brand/VerifiedBadge";
 import { loadPreferences, scoreProperty } from "@/lib/matchPreferences";
@@ -24,6 +24,12 @@ import {
   listingsCountLabel,
   matchBannerTitle,
   viewListingsLabel,
+  EXPLORE_EMPTY_NO_LISTINGS_TITLE,
+  EXPLORE_EMPTY_NO_LISTINGS_DESC,
+  EXPLORE_EMPTY_FILTERED_TITLE,
+  EXPLORE_EMPTY_FILTERED_DESC,
+  exploreResultsQuerySuffix,
+  bathroomFilterChipLabel,
 } from "@/lib/siteCopy";
 import {
   DEFAULT_ADVANCED_FILTERS,
@@ -115,7 +121,7 @@ function ResultsCount({ count, query }) {
     <p className="text-xs text-muted-foreground mt-1 leading-normal">
       <span className="font-extrabold text-foreground tabular-nums">{count}</span>{" "}
       {listingsCountLabel(count)}
-      {query && <> en ?{query}?</>}
+      {query && exploreResultsQuerySuffix(query)}
     </p>
   );
 }
@@ -516,7 +522,7 @@ export default function Explore() {
                   )}
                   {advancedFilters.bathrooms && (
                     <ActiveFilterChip
-                      label={advancedFilters.bathrooms === "5" ? "5+ ba?os" : `${advancedFilters.bathrooms} ba?o${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
+                      label={bathroomFilterChipLabel(advancedFilters.bathrooms)}
                       onRemove={() => updateAdvancedFilters({ ...advancedFilters, bathrooms: "" })}
                     />
                   )}
@@ -610,25 +616,40 @@ export default function Explore() {
         <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-6 sm:py-8">
           <div className="text-center py-20 sm:py-24 rounded-3xl bg-white border border-border/50 shadow-sm">
             <div className="w-16 h-16 rounded-2xl bg-brand-violet/10 flex items-center justify-center mx-auto mb-5">
-              <Search className="w-8 h-8 text-brand-violet" />
+              {properties.length === 0 ? (
+                <Home className="w-8 h-8 text-brand-violet" />
+              ) : (
+                <Search className="w-8 h-8 text-brand-violet" />
+              )}
             </div>
-            <h3 className="font-extrabold text-xl mb-2">Sin resultados por ahora</h3>
-            <p className="text-muted-foreground text-sm mb-6 max-w-sm mx-auto leading-relaxed">
-              Prueba ampliando ciudad, zona o ajustando habitaciones, ba?os, parqueaderos o estrato.
+            <h3 className="font-extrabold text-xl mb-2">
+              {properties.length === 0 ? EXPLORE_EMPTY_NO_LISTINGS_TITLE : EXPLORE_EMPTY_FILTERED_TITLE}
+            </h3>
+            <p className="text-muted-foreground text-sm mb-6 max-w-md mx-auto leading-relaxed">
+              {properties.length === 0 ? EXPLORE_EMPTY_NO_LISTINGS_DESC : EXPLORE_EMPTY_FILTERED_DESC}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
                 className="gradient-cta text-white font-bold px-6 py-3 rounded-xl shadow-md hover:opacity-95 transition-opacity"
               >
-                Refinar match
+                {properties.length === 0 ? "Configurar match" : "Refinar match"}
               </button>
-              <button
-                onClick={clearAllFilters}
-                className="font-semibold px-6 py-3 rounded-xl border-2 border-border text-foreground hover:bg-secondary transition-colors"
-              >
-                Limpiar filtros
-              </button>
+              {properties.length === 0 ? (
+                <Link
+                  to="/"
+                  className="font-semibold px-6 py-3 rounded-xl border-2 border-border text-foreground hover:bg-secondary transition-colors inline-flex items-center justify-center"
+                >
+                  Volver al inicio
+                </Link>
+              ) : (
+                <button
+                  onClick={clearAllFilters}
+                  className="font-semibold px-6 py-3 rounded-xl border-2 border-border text-foreground hover:bg-secondary transition-colors"
+                >
+                  Limpiar filtros
+                </button>
+              )}
             </div>
           </div>
         </div>

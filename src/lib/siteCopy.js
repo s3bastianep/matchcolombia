@@ -75,3 +75,19 @@ export function matchBannerTitle(cityLabel) {
 export function viewListingsLabel(count) {
   return `Ver ${count} inmueble${count !== 1 ? "s" : ""}`;
 }
+
+export const EXPLORE_EMPTY_NO_LISTINGS_TITLE = "No hay propiedades en este momento";
+export const EXPLORE_EMPTY_NO_LISTINGS_DESC =
+  "Estamos incorporando nuevos inmuebles verificados. Configura tu match inteligente y vuelve a buscar pronto: publicamos opciones nuevas con frecuencia.";
+export const EXPLORE_EMPTY_FILTERED_TITLE = "Sin resultados por ahora";
+export const EXPLORE_EMPTY_FILTERED_DESC =
+  "Prueba ampliando ciudad, zona o ajustando habitaciones, baños, parqueaderos o estrato.";
+
+export function exploreResultsQuerySuffix(query) {
+  return query ? ` para «${query}»` : "";
+}
+
+export function bathroomFilterChipLabel(count) {
+  if (count === "5") return "5+ baños";
+  return `${count} baño${count !== "1" ? "s" : ""}`;
+}
