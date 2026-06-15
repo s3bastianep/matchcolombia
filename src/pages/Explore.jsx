@@ -84,7 +84,7 @@ function CityFilterSelect({ initialCity, setCityFilter, className }) {
     >
       <SelectTrigger
         className={cn(
-          "h-9 min-w-[6.5rem] bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)] rounded-full px-3.5 text-xs font-bold gap-1.5 shadow-sm shrink-0",
+          "h-9 min-w-[6.5rem] bg-white border border-brand-violet/12 rounded-full px-3.5 text-xs font-bold gap-1.5 shadow-sm shrink-0",
           initialCity && "border-brand-violet/30 text-brand-violet",
           className
         )}
@@ -115,7 +115,7 @@ function ResultsCount({ count, query }) {
     <p className="text-xs text-muted-foreground mt-1 leading-normal">
       <span className="font-extrabold text-foreground tabular-nums">{count}</span>{" "}
       {listingsCountLabel(count)}
-      {query && <> en «{query}»</>}
+      {query && <> en ?{query}?</>}
     </p>
   );
 }
@@ -251,7 +251,7 @@ export default function Explore() {
 
   const sortSelect = (
     <Select value={sortBy} onValueChange={setSortBy}>
-      <SelectTrigger className="h-9 min-w-[8.5rem] bg-white border border-[hsl(0,0%,88%)] text-xs font-bold rounded-full gap-1.5 px-3.5 shadow-sm">
+      <SelectTrigger className="h-9 min-w-[8.5rem] bg-white border border-brand-violet/12 text-xs font-bold rounded-full gap-1.5 px-3.5 shadow-sm">
         <ArrowUpDown className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
         <SelectValue placeholder="Ordenar" />
       </SelectTrigger>
@@ -288,20 +288,21 @@ export default function Explore() {
           </motion.div>
         )}
 
-        <div className="py-1.5 flex flex-wrap lg:flex-nowrap items-center gap-2">
-          <div className="relative flex-1 min-w-[180px] lg:max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
-            <input
-              type="search"
-              value={locality}
-              onChange={(e) => setLocality(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && applyLocalitySearch()}
-              onBlur={applyLocalitySearch}
-              placeholder="Buscar por localidad o barrio"
-              aria-label="Buscar por localidad"
-              className="w-full h-9 pl-9 pr-3 rounded-full bg-[hsl(0,0%,97%)] border border-[hsl(0,0%,88%)] text-sm font-medium placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand-violet/20 focus:border-brand-violet/30"
-            />
-          </div>
+        <div className="my-1.5 rounded-2xl border border-brand-violet/12 bg-gradient-to-br from-brand-violet/[0.05] via-[hsl(0,0%,99%)] to-brand-magenta/[0.04] shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(15,23,42,0.04)] px-3 py-2.5 space-y-2">
+          <div className="flex flex-wrap lg:flex-nowrap items-center gap-2">
+            <div className="relative flex-1 min-w-[180px] lg:max-w-xs">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-brand-violet/50 pointer-events-none" />
+              <input
+                type="search"
+                value={locality}
+                onChange={(e) => setLocality(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && applyLocalitySearch()}
+                onBlur={applyLocalitySearch}
+                placeholder="Buscar por localidad o barrio"
+                aria-label="Buscar por localidad"
+                className="w-full h-9 pl-9 pr-3 rounded-full bg-white border border-brand-violet/15 text-sm font-medium placeholder:text-muted-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-violet/20 focus:border-brand-violet/35"
+              />
+            </div>
 
           <CityFilterSelect
             initialCity={initialCity}
@@ -313,10 +314,10 @@ export default function Explore() {
             type="button"
             onClick={() => setMobileFiltersOpen(true)}
             className={cn(
-              "flex items-center gap-1.5 h-9 px-3.5 rounded-full text-xs font-bold border transition-all shrink-0",
+              "flex items-center gap-1.5 h-9 px-3.5 rounded-full text-xs font-bold border transition-all shrink-0 shadow-sm",
               advancedCount > 0
                 ? "border-brand-violet/30 bg-brand-violet/10 text-brand-violet"
-                : "bg-white border-[hsl(0,0%,88%)] text-foreground hover:border-foreground/20"
+                : "bg-white border-brand-violet/12 text-foreground hover:border-brand-violet/25"
             )}
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
@@ -330,7 +331,7 @@ export default function Explore() {
 
           <div className="hidden lg:block shrink-0">{sortSelect}</div>
 
-          <div className="hidden lg:flex items-center gap-1 p-0.5 rounded-full bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)] shrink-0">
+          <div className="hidden lg:flex items-center gap-1 p-0.5 rounded-full bg-white/80 border border-brand-violet/10 shadow-sm shrink-0">
             <button
               type="button"
               onClick={() => setViewMode("split")}
@@ -378,10 +379,10 @@ export default function Explore() {
               Mapa
             </button>
           </div>
-        </div>
+          </div>
 
-        <div className="pb-1.5 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
-          <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Tipo</span>
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pt-0.5 border-t border-brand-violet/8">
+          <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-brand-violet/70">Tipo</span>
           {QUICK_FILTERS.map((f) => {
             const active = activeQuick.includes(f.key);
             return (
@@ -393,10 +394,10 @@ export default function Explore() {
                   )
                 }
                 className={cn(
-                  "shrink-0 h-7 px-3 rounded-full text-[11px] font-semibold border transition-all inline-flex items-center gap-1",
+                  "shrink-0 h-7 px-3 rounded-full text-[11px] font-semibold border transition-all inline-flex items-center gap-1 shadow-sm",
                   active
                     ? "bg-foreground border-foreground text-white shadow-sm"
-                    : "bg-white border-[hsl(0,0%,88%)] text-foreground/80 hover:border-foreground/20"
+                    : "bg-white/90 border-brand-violet/12 text-foreground/80 hover:border-brand-violet/25 hover:bg-white"
                 )}
               >
                 {active && <Check className="w-3 h-3" />}
@@ -412,6 +413,7 @@ export default function Explore() {
               <X className="w-3 h-3" /> Limpiar
             </button>
           )}
+          </div>
         </div>
 
         <div className="pb-1.5 lg:hidden">
