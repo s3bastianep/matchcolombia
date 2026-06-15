@@ -2,52 +2,38 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import PropertyCard from "@/components/property/PropertyCard";
 import SectionHeader from "../ui/SectionHeader";
+import MatchStepVisual from "./MatchStepVisual";
 import { cn } from "@/lib/utils";
 
 const STEPS = [
   {
     num: "01",
-    title: "Dices qué buscas",
+    title: "Haz el cuestionario",
     problem: "Sin perder horas en portales sin filtro.",
-    desc: "Ciudad, presupuesto y habitaciones. MatchColombia filtra por ti.",
+    desc: "Ciudad, presupuesto, habitaciones, baños, mascotas y más. MatchColombia filtra por ti.",
   },
   {
     num: "02",
-    title: "Ves solo inmuebles reales",
+    title: "Encuentra tu match",
     problem: "Sin anuncios dudosos ni precios inventados.",
-    desc: "Cada listado está verificado: fotos, precio y datos revisados.",
+    desc: "Solo ves inmuebles reales que encajan con lo que buscas.",
   },
   {
     num: "03",
-    title: "Nosotros coordinamos",
+    title: "Agenda tu visita",
     problem: "Sin perseguir dueños ni mensajes sueltos.",
-    desc: "Guardas favoritos, agendas visitas y el equipo Match te acompaña.",
+    desc: "Reserva visita presencial o virtual. El equipo Match te acompaña.",
   },
 ];
 
-function CardSkeleton() {
-  return (
-    <div className="rounded-xl border border-border/40 overflow-hidden h-full min-h-[280px]">
-      <div className="aspect-[5/4] shimmer" />
-      <div className="p-3 space-y-2">
-        <div className="h-4 shimmer rounded w-1/2" />
-        <div className="h-3 shimmer rounded w-2/3" />
-      </div>
-    </div>
-  );
-}
-
-export default function MatchSteps({ onStartQuiz, properties = [], isLoading = false }) {
-  const showcase = properties.slice(0, 3);
-
+export default function MatchSteps({ onStartQuiz }) {
   return (
     <section className="section-pad relative overflow-hidden bg-[hsl(0,0%,98%)] border-y border-border/40">
       <div className="relative max-w-6xl mx-auto px-4 sm:px-8">
         <div className="grid lg:grid-cols-[1fr_1.1fr] gap-6 lg:gap-10 items-start mb-10 sm:mb-12">
           <SectionHeader
-            eyebrow="Por qué MatchColombia"
+            eyebrow="Cómo funciona"
             title={
               <>
                 Tu match en <span className="text-gradient">3 pasos</span>
@@ -88,15 +74,7 @@ export default function MatchSteps({ onStartQuiz, properties = [], isLoading = f
               </div>
 
               <div className="mt-auto">
-                {isLoading ? (
-                  <CardSkeleton />
-                ) : showcase[i] ? (
-                  <PropertyCard property={showcase[i]} index={i} variant="grid" showMatch={i === 1} matchScore={92} />
-                ) : (
-                  <div className="rounded-xl border border-dashed border-border/50 bg-white p-6 text-center min-h-[200px] flex items-center justify-center">
-                    <p className="text-sm text-muted-foreground">Inmuebles verificados disponibles pronto</p>
-                  </div>
-                )}
+                <MatchStepVisual stepIndex={i} />
               </div>
             </motion.div>
           ))}
