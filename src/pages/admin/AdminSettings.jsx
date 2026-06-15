@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, MapPin } from "lucide-react";
+import { Plus, Trash2, MapPin, Image, RotateCcw } from "lucide-react";
+import { toast } from "sonner";
+import BrandLogo from "@/components/brand/BrandLogo";
+import { applySiteFavicon, readImageFile } from "@/lib/siteBranding";
 
 export default function AdminSettings() {
   const qc = useQueryClient();
@@ -19,14 +22,25 @@ export default function AdminSettings() {
 
   const [form, setForm] = useState(null);
   const [newPoi, setNewPoi] = useState({ name: "", city: "Bogotá", neighborhood: "", category: "Comercio" });
+  const [logoPreview, setLogoPreview] = useState(null);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
-    if (settings && !form) setForm({ ...settings });
+    if (settings && !form) {
+      setForm({ ...settings });
+      setLogoPreview(settings.site_logo || null);
+    }
   }, [settings, form]);
 
   const saveSettings = useMutation({
     mutationFn: (patch) => base44.entities.AdminSettings.update(patch),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-settings"] }),
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: ["admin-settings"] });
+      if ("site_logo" in (data || {})) {
+        applySiteFavicon(data?.site_logo);
+        toast.success("Logo actualizado en toda la página.");
+      }
+    },
   });
 
   const addPoi = useMutation({
@@ -50,12 +64,88 @@ export default function AdminSettings() {
     setForm((f) => ({ ...f, whatsapp_templates: templates }));
   };
 
+  const handleLogoPick = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    try {
+      const dataUrl = await readImageFile(file);
+      setLogoPreview(dataUrl);
+    } catch (err) {
+      toast.error(err.message || "No se pudo cargar la imagen.");
+    }
+  };
+
+  const saveLogo = () => {
+    if (!logoPreview) {
+      toast.error("Selecciona una imagen primero.");
+      return;
+    }
+    saveSettings.mutate({ site_logo: logoPreview });
+    setForm((f) => ({ ...f, site_logo: logoPreview }));
+  };
+
+  const restoreDefaultLogo = () => {
+    saveSettings.mutate({ site_logo: null });
+    setLogoPreview(null);
+    setForm((f) => ({ ...f, site_logo: null }));
+  };
+
   return (
     <div className="space-y-8 max-w-3xl">
       <div>
         <h2 className="text-xl font-extrabold">Configuración</h2>
-        <p className="text-sm text-muted-foreground">Plantillas WhatsApp, POIs y horarios bloqueados.</p>
+        <p className="text-sm text-muted-foreground">Logo del sitio, plantillas WhatsApp, POIs y horarios bloqueados.</p>
       </div>
+
+      <section className="bg-white rounded-2xl border border-border/40 p-6 space-y-4">
+        <h3 className="font-bold flex items-center gap-2">
+          <Image className="w-4 h-4" />
+          Logo de la página
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          Sube PNG, JPG o SVG (máx. 400 KB). Se verá en el navbar y como favicon.
+        </p>
+
+        <div className="rounded-xl border border-border/40 bg-secondary/40 p-4 flex flex-wrap items-center gap-6">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">Vista previa</p>
+            {logoPreview ? (
+              <img src={logoPreview} alt="Logo personalizado" className="h-10 w-auto max-w-[200px] object-contain" />
+            ) : (
+              <BrandLogo link={false} size="md" />
+            )}
+          </div>
+        </div>
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/png,image/jpeg,image/jpg,image/webp,image/svg+xml"
+          className="hidden"
+          onChange={handleLogoPick}
+        />
+
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" variant="outline" className="font-bold" onClick={() => fileInputRef.current?.click()}>
+            Elegir imagen
+          </Button>
+          <Button
+            type="button"
+            onClick={saveLogo}
+            disabled={saveSettings.isPending || !logoPreview || logoPreview === form.site_logo}
+            className="gradient-cta text-white font-bold"
+          >
+            Guardar logo
+          </Button>
+          {(logoPreview || form.site_logo) && (
+            <Button type="button" variant="ghost" className="font-bold text-muted-foreground" onClick={restoreDefaultLogo}>
+              <RotateCcw className="w-4 h-4 mr-1" />
+              Restaurar predeterminado
+            </Button>
+          )}
+        </div>
+      </section>
 
       <section className="bg-white rounded-2xl border border-border/40 p-6 space-y-4">
         <h3 className="font-bold">Plantillas WhatsApp</h3>

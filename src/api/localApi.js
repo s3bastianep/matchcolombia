@@ -19,6 +19,7 @@ const SETTINGS_KEY = "matchcolombia_admin_settings";
 const PORTAL_SEEDED_KEY = "matchcolombia_portal_seeded_v2";
 
 import { apiDelay } from "../lib/apiDelay";
+import { notifySiteBrandingUpdated } from "../lib/siteBranding";
 
 const delay = apiDelay;
 
@@ -269,6 +270,7 @@ const AdminSettings = {
     await delay(100);
     const current = (await this.get()) || {};
     saveSettings({ ...current, ...patch });
+    if ("site_logo" in patch) notifySiteBrandingUpdated();
     return loadSettings();
   },
 };

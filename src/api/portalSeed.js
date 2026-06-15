@@ -210,6 +210,7 @@ export function getPortalSeedData(propertyIds = []) {
   const settings = {
     whatsapp_templates: DEFAULT_WHATSAPP_TEMPLATES,
     blocked_visit_slots: [],
+    site_logo: null,
     admin_users: [
       { username: "admin", name: "Administrador", role: "super", permissions: ["all"] },
     ],
