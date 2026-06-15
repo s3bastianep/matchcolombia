@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /portal
+Disallow: /inquilino
+Disallow: /propietario
+Disallow: /login
+Disallow: /register
+Disallow: /olvide-contrasena
+Disallow: /forgot-password
+Disallow: /favoritos
+Disallow: /publicar/nuevo
+Disallow: /mi-cuenta
+
+Sitemap: https://matchcolombia.co/sitemap.xml

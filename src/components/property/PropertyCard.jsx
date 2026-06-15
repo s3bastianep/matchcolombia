@@ -81,7 +81,7 @@ function GridSpecItem({ icon, label, title, muted = false }) {
 
 function GridMetaTag({ children }) {
   return (
-    <span className="inline-flex items-center h-6 px-2 rounded-md bg-white text-[10px] font-semibold text-foreground/75 border border-[hsl(0,0%,88%)] whitespace-nowrap">
+    <span className="inline-flex items-center h-6 max-w-full px-2 rounded-md bg-white text-[10px] font-semibold text-foreground/75 border border-[hsl(0,0%,88%)] truncate">
       {children}
     </span>
   );
@@ -104,7 +104,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
   const pricePerSqm = property.area_sqm ? Math.round((property.monthly_rent || 0) / property.area_sqm) : null;
   const totalMonthly = getTotalMonthly(property);
   const furnishedLabel = getFurnishedLabel(property.furnished);
-  const availableFrom = formatAvailableFrom(property.available_from);
+  const availableFrom = formatAvailableFrom(property.available_from, { compact: isGrid });
 
   useEffect(() => {
     const handler = () => setLiked(isInShortlist(property.id));
@@ -123,7 +123,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
       transition={isGrid ? undefined : { delay: index * 0.03, duration: 0.3 }}
       className={cn(
         "min-w-0",
-        isGrid && "h-full",
+        isGrid && "h-full flex-1 flex flex-col",
         !isGrid && "card-hover",
         highlighted && "ring-2 ring-brand-violet ring-offset-2",
         isGrid ? "rounded-xl" : "rounded-[1.35rem]"
@@ -139,7 +139,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
             openDetail();
           }
         }}
-        className={cn("group block cursor-pointer", isGrid && "h-full")}
+        className={cn("group block cursor-pointer", isGrid && "h-full flex-1 flex flex-col min-h-0")}
       >
         <article
           className={cn(
@@ -361,7 +361,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                 </div>
 
                 {(property.floor != null && property.floor !== "") || furnishedLabel || availableFrom ? (
-                  <div className="mt-2 flex flex-wrap items-center gap-1 min-h-6">
+                  <div className="mt-2 h-12 flex flex-wrap content-start gap-1 overflow-hidden">
                     {property.floor != null && property.floor !== "" && (
                       <GridMetaTag>Piso {property.floor}</GridMetaTag>
                     )}
@@ -369,10 +369,10 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                     {availableFrom && <GridMetaTag>Desde {availableFrom}</GridMetaTag>}
                   </div>
                 ) : (
-                  <div className="mt-2 min-h-6" aria-hidden />
+                  <div className="mt-2 h-12 shrink-0" aria-hidden />
                 )}
 
-                <p className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-foreground min-h-[1.125rem] leading-tight">
+                <p className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-foreground h-[18px] leading-tight shrink-0">
                   <MapPin className="w-3.5 h-3.5 shrink-0 text-brand-magenta" strokeWidth={2.25} />
                   <span className="truncate">
                     {property.neighborhood || property.locality || "Zona"}
@@ -387,7 +387,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                     e.stopPropagation();
                     openDetail(true);
                   }}
-                  className="mt-2.5 w-full flex items-center justify-center gap-1.5 gradient-cta text-white text-[11px] font-bold py-2.5 rounded-lg hover:opacity-95 transition-opacity"
+                  className="mt-auto pt-2.5 w-full flex items-center justify-center gap-1.5 gradient-cta text-white text-[11px] font-bold py-2.5 rounded-lg hover:opacity-95 transition-opacity shrink-0"
                 >
                   <CalendarCheck className="w-3.5 h-3.5" />
                   Agendar visita

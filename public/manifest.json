@@ -1,12 +1,14 @@
 {
   "name": "LUMORA HOME",
   "short_name": "Lumora",
-  "description": "Encuentra tu espacio ideal. Arriendos en Colombia.",
+  "description": "Arriendos verificados en Colombia. Apartamentos y casas en Bogotá y Barranquilla con match inteligente.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#8B5CF6",
-  "lang": "es",
+  "lang": "es-CO",
+  "categories": ["business", "lifestyle", "real estate"],
   "icons": [
     {
       "src": "/brand-mark.svg",

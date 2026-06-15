@@ -59,10 +59,21 @@ export default function Footer() {
               {FOOTER_BLURB}
             </p>
             <div className="flex gap-2 mb-8">
-              {[SocialIG, SocialX, SocialTikTok].map((Icon, i) => (
-                <button key={i} className="w-9 h-9 rounded-lg bg-white/6 hover:bg-white/12 border border-white/8 flex items-center justify-center transition-all text-white/40 hover:text-white/80">
+              {[
+                { Icon: SocialIG, href: BRAND.social?.instagram, label: "Instagram" },
+                { Icon: SocialX, href: BRAND.social?.x, label: "X" },
+                { Icon: SocialTikTok, href: BRAND.social?.tiktok, label: "TikTok" },
+              ].map(({ Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="w-9 h-9 rounded-lg bg-white/6 hover:bg-white/12 border border-white/8 flex items-center justify-center transition-all text-white/40 hover:text-white/80"
+                >
                   <Icon />
-                </button>
+                </a>
               ))}
             </div>
             {/* App badge placeholder */}

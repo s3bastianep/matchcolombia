@@ -20,7 +20,7 @@ export default function FeaturedProperties({ properties, isLoading }) {
 
   const scroll = (dir) => {
     const el = document.getElementById("featured-carousel");
-    if (el) el.scrollBy({ left: dir * 340, behavior: "smooth" });
+    if (el) el.scrollBy({ left: dir * 336, behavior: "smooth" });
   };
 
   return (
@@ -65,7 +65,7 @@ export default function FeaturedProperties({ properties, isLoading }) {
         {isLoading ? (
           <div className="flex gap-5 overflow-hidden">
             {Array(4).fill(0).map((_, i) => (
-              <div key={i} className="shrink-0 w-[min(280px,85vw)] sm:w-[300px] rounded-xl overflow-hidden border border-[hsl(0,0%,92%)] bg-white">
+              <div key={i} className="shrink-0 w-[min(300px,88vw)] sm:w-[320px] rounded-xl overflow-hidden border border-[hsl(0,0%,92%)] bg-white">
                 <div className="p-3">
                   <div className="aspect-[5/4] shimmer rounded-lg" />
                 </div>
@@ -84,7 +84,7 @@ export default function FeaturedProperties({ properties, isLoading }) {
             className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-thin scroll-smooth animate-in fade-in duration-300 items-stretch"
           >
             {filtered.map((p, i) => (
-              <div key={p.id} className="snap-start shrink-0 w-[min(280px,85vw)] sm:w-[300px] h-auto">
+              <div key={p.id} className="snap-start shrink-0 w-[min(300px,88vw)] sm:w-[320px] self-stretch flex flex-col">
                 <PropertyCard property={p} index={i} variant="grid" />
               </div>
             ))}

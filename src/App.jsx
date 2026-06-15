@@ -7,6 +7,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider } from '@/lib/AuthContext';
 import { ROLES } from '@/lib/roles';
 import { PropertyPanelProvider } from '@/lib/PropertyPanelContext';
+import RouteSeo from '@/components/seo/RouteSeo';
 
 import AppLayout from './components/layout/AppLayout';
 import RequireAuth from './components/RequireAuth';
@@ -140,6 +141,7 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <PropertyPanelProvider>
+            <RouteSeo />
             <AppRoutes />
           </PropertyPanelProvider>
         </Router>
