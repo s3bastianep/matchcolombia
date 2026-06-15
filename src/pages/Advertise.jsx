@@ -21,6 +21,7 @@ import TraditionalVsMatch from "@/components/advertise/TraditionalVsMatch";
 import AboutFounderSection from "@/components/advertise/AboutFounderSection";
 import OwnerSecuritySection from "@/components/advertise/OwnerSecuritySection";
 import OwnerFaqSection from "@/components/advertise/OwnerFaqSection";
+import { ADVERTISE_HERO_TITLE, ADVERTISE_HERO_SUBTITLE } from "@/lib/siteCopy";
 
 const VERIFIABLE = [
   { label: "Seguimiento digital", desc: "Pagos, contratos y tickets en un solo lugar." },
@@ -156,10 +157,10 @@ export default function Advertise() {
                 <span className="text-xs font-bold uppercase tracking-widest text-white/60">Portal propietarios</span>
               </div>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-[1.12] tracking-tight">
-                Entrega tu apartamento. Nosotros lo administramos de punta a punta.
+                {ADVERTISE_HERO_TITLE}
               </h1>
               <p className="mt-4 text-white/75 text-sm sm:text-base leading-relaxed max-w-lg">
-                Publica gratis y deja en nuestras manos visitas, candidatos, contratos y cobros. Tú recibes tu dinero con tranquilidad y consultas todo desde cualquier dispositivo.
+                {ADVERTISE_HERO_SUBTITLE}
               </p>
               <div className="mt-3">
                 <VerifiedBadge size="sm" />

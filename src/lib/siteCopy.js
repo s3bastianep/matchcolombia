@@ -52,6 +52,12 @@ export const FAVORITES_EMPTY_HINT =
 export const OWNER_PROMO_TAGLINE =
   "Publica gratis. Nos encargamos de interesados y visitas.";
 
+export const ADVERTISE_HERO_TITLE =
+  "Arrienda con tranquilidad. Nosotros administramos tu inmueble de punta a punta.";
+
+export const ADVERTISE_HERO_SUBTITLE =
+  "Publica gratis y delega visitas, candidatos, contratos y cobros en un equipo verificado. Recibe tu dinero con tranquilidad y haz seguimiento desde cualquier dispositivo.";
+
 export const QUIZ_FINISH_CTA = "Ver resultados";
 
 export const QUIZ_STEPS = [
