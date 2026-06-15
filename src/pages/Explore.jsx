@@ -159,6 +159,10 @@ export default function Explore() {
     if (window.innerWidth < 1024) setViewMode("list");
   }, []);
 
+  useEffect(() => {
+    void import("../components/property/PropertyDetailView");
+  }, []);
+
   const applyLocalitySearch = useCallback(() => {
     const next = new URLSearchParams(searchParams);
     if (locality.trim()) next.set("q", locality.trim());

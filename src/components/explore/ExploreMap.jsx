@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Navigation, Layers, X, CalendarCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePropertyPanel } from "@/lib/PropertyPanelContext";
 import InteractiveMap from "@/components/map/InteractiveMap";
 import SmartImage from "@/components/ui/SmartImage";
 import { clusterMarkers } from "@/lib/mapClusters";
@@ -28,7 +28,7 @@ export default function ExploreMap({
   highlightedId,
   onHighlight,
 }) {
-  const navigate = useNavigate();
+  const { openProperty } = usePropertyPanel();
   const [hoveredId, setHoveredId] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [selectedCluster, setSelectedCluster] = useState(null);
@@ -175,15 +175,16 @@ export default function ExploreMap({
                   <span>· {previewProperty.city}</span>
                 </p>
                 <div className="flex gap-2 mt-2.5">
-                  <Link
-                    to={`/propiedad/${previewProperty.id}`}
+                  <button
+                    type="button"
+                    onClick={() => openProperty(previewProperty)}
                     className="flex-1 text-center text-[11px] font-bold py-2 rounded-lg border border-border hover:bg-secondary transition-colors"
                   >
                     Ver detalle
-                  </Link>
+                  </button>
                   <button
                     type="button"
-                    onClick={() => navigate(`/propiedad/${previewProperty.id}?visita=1`)}
+                    onClick={() => openProperty(previewProperty, { focusBooking: true })}
                     className="flex-1 flex items-center justify-center gap-1 gradient-cta text-white text-[11px] font-bold py-2 rounded-lg"
                   >
                     <CalendarCheck className="w-3 h-3" />

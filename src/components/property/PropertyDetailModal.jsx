@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy, Suspense } from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -11,8 +11,8 @@ import FavoriteButton from "@/components/ui/FavoriteButton";
 import { isInShortlist } from "@/lib/shortlist";
 import { useAuth } from "@/lib/AuthContext";
 import { PROPERTY_DETAIL_QUERY } from "@/lib/queryOptions";
-
-const PropertyDetailView = lazy(() => import("./PropertyDetailView"));
+import { lockBodyScroll } from "@/lib/scrollLock";
+import PropertyDetailView from "./PropertyDetailView";
 
 export default function PropertyDetailModal({
   open,
@@ -45,16 +45,16 @@ export default function PropertyDetailModal({
 
   useEffect(() => {
     if (!open) return undefined;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    return lockBodyScroll();
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return undefined;
     const onKey = (e) => {
       if (e.key === "Escape") onClose?.();
     };
     window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
-    };
+    return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
   const scrollToBooking = () => {
@@ -151,22 +151,12 @@ export default function PropertyDetailModal({
                   </div>
                 </div>
               ) : property ? (
-                <Suspense
-                  fallback={
-                    <div className="p-6 space-y-6">
-                      <div className="h-48 sm:h-64 shimmer rounded-2xl" />
-                      <div className="h-6 w-2/3 shimmer rounded-lg" />
-                      <div className="h-4 w-1/3 shimmer rounded-lg" />
-                    </div>
-                  }
-                >
-                  <PropertyDetailView
-                    property={property}
-                    variant="modal"
-                    focusBooking={focusBooking}
-                    showSimilar
-                  />
-                </Suspense>
+                <PropertyDetailView
+                  property={property}
+                  variant="modal"
+                  focusBooking={focusBooking}
+                  showSimilar
+                />
               ) : (
                 <div className="p-12 text-center">
                   <p className="text-lg font-bold text-foreground mb-2">Inmueble no encontrado</p>

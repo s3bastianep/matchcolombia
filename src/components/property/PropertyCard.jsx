@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Heart, Bed, Bath, Maximize, MapPin, Sparkles, Car, PawPrint, Building2, ChevronLeft, ChevronRight, CalendarCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
+import { usePropertyPanel } from "@/lib/PropertyPanelContext";
 import SmartImage from "@/components/ui/SmartImage";
 import { INTERIORS, FALLBACK_IMAGE } from "@/lib/colombiaImages";
 import { isInShortlist, toggleShortlist } from "@/lib/shortlist";
@@ -46,21 +47,6 @@ const typeLabel = {
   comercial: "Comercial",
 };
 
-function ParkingIcon({ muted, className }) {
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center justify-center w-4 h-4 rounded-[4px] text-[9px] font-extrabold leading-none shrink-0",
-        muted ? "bg-foreground/12 text-foreground/40" : "bg-brand-violet text-white",
-        className
-      )}
-      aria-hidden
-    >
-      P
-    </span>
-  );
-}
-
 function FeatureChip({ icon: Icon, children, className }) {
   return (
     <span className={cn("inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold border", className)}>
@@ -70,17 +56,40 @@ function FeatureChip({ icon: Icon, children, className }) {
   );
 }
 
-function GridSpecItem({ icon, label, title }) {
+function GridSpecItem({ icon, label, title, muted = false }) {
   return (
-    <div className="flex items-center justify-center gap-1.5 min-w-0 px-0.5" title={title}>
-      <span className="shrink-0 w-5 flex items-center justify-center text-brand-violet">{icon}</span>
-      <span className="text-xs font-bold text-foreground leading-none truncate">{label}</span>
+    <div className="flex flex-col items-center justify-center gap-1 min-w-0 py-0.5 text-center" title={title}>
+      <span
+        className={cn(
+          "w-5 h-5 flex items-center justify-center shrink-0",
+          muted ? "text-foreground/30" : "text-brand-violet"
+        )}
+      >
+        {icon}
+      </span>
+      <span
+        className={cn(
+          "text-[10px] font-bold leading-tight truncate max-w-full",
+          muted ? "text-muted-foreground" : "text-foreground"
+        )}
+      >
+        {label}
+      </span>
     </div>
+  );
+}
+
+function GridMetaTag({ children }) {
+  return (
+    <span className="inline-flex items-center h-6 px-2 rounded-md bg-white text-[10px] font-semibold text-foreground/75 border border-[hsl(0,0%,88%)] whitespace-nowrap">
+      {children}
+    </span>
   );
 }
 
 export default function PropertyCard({ property, index = 0, matchScore, showMatch, variant = "default", highlighted = false }) {
   const navigate = useNavigate();
+  const { openProperty } = usePropertyPanel();
   const { isAuthenticated } = useAuth();
   const [liked, setLiked] = useState(isInShortlist(property.id));
   const images = property.images?.length ? property.images : [INTERIORS.sala];
@@ -103,11 +112,15 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
     return () => window.removeEventListener("shortlist-updated", handler);
   }, [property.id]);
 
+  const openDetail = (focusBooking = false) => {
+    openProperty(property, { focusBooking });
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={isGrid ? false : { opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.03, duration: 0.3 }}
+      transition={isGrid ? undefined : { delay: index * 0.03, duration: 0.3 }}
       className={cn(
         "min-w-0",
         isGrid && "h-full",
@@ -116,7 +129,18 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
         isGrid ? "rounded-xl" : "rounded-[1.35rem]"
       )}
     >
-      <Link to={`/propiedad/${property.id}`} className={cn("group block", isGrid && "h-full")}>
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => openDetail()}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            openDetail();
+          }
+        }}
+        className={cn("group block cursor-pointer", isGrid && "h-full")}
+      >
         <article
           className={cn(
             "bg-white overflow-hidden transition-all duration-300",
@@ -284,76 +308,76 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
           </div>
           )}
 
-          <div className={cn(isGrid ? "px-3 pt-0 pb-3 flex-1 flex flex-col" : isExplore ? "p-4 sm:p-5" : "p-5")}>
+          <div className={cn(isGrid ? "px-3 pt-2.5 pb-3 flex-1 flex flex-col min-w-0" : isExplore ? "p-4 sm:p-5" : "p-5")}>
             {isGrid && (
               <>
-                <p className="font-extrabold text-base text-foreground leading-tight tracking-tight">
-                  {formatCOP(totalMonthly)}
-                  <span className="text-[11px] font-semibold text-muted-foreground"> / mes</span>
-                </p>
-                <p className="text-[11px] text-muted-foreground mt-0.5 min-h-[1.125rem]">
-                  {property.admin_fee > 0 ? `+ Adm. ${formatCOP(property.admin_fee)}` : "Sin administración"}
-                </p>
+                <div className="space-y-0.5">
+                  <p className="font-extrabold text-base text-foreground leading-none tracking-tight tabular-nums">
+                    {formatCOP(totalMonthly)}
+                    <span className="text-[11px] font-semibold text-muted-foreground"> / mes</span>
+                  </p>
+                  <p className="text-[11px] text-muted-foreground leading-none h-4">
+                    {property.admin_fee > 0 ? `+ Adm. ${formatCOP(property.admin_fee)}` : "\u00A0"}
+                  </p>
+                </div>
 
-                <div className="mt-2.5 rounded-lg border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,97%)] px-2 py-2.5 min-h-[4.75rem]">
-                  <div className="grid grid-cols-3 gap-y-3">
-                    {property.area_sqm && (
-                      <GridSpecItem
-                        icon={<Maximize className="w-4 h-4" strokeWidth={2.25} />}
-                        label={`${property.area_sqm} m²`}
-                        title="Área"
-                      />
-                    )}
+                <div className="mt-2.5 rounded-lg border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,97%)] px-1 py-2">
+                  <div className="grid grid-cols-3 gap-y-2">
+                    <GridSpecItem
+                      icon={<Maximize className="w-4 h-4" strokeWidth={2.25} />}
+                      label={property.area_sqm ? `${property.area_sqm} m²` : "— m²"}
+                      title="Área"
+                      muted={!property.area_sqm}
+                    />
                     <GridSpecItem
                       icon={<Bed className="w-4 h-4" strokeWidth={2.25} />}
                       label={`${property.bedrooms} hab.`}
                       title="Habitaciones"
                     />
                     <GridSpecItem
-                      icon={<Bath className="w-4 h-4 text-brand-magenta" strokeWidth={2.25} />}
+                      icon={<Bath className="w-4 h-4" strokeWidth={2.25} />}
                       label={`${property.bathrooms} baño${property.bathrooms !== 1 ? "s" : ""}`}
                       title="Baños"
                     />
                     <GridSpecItem
-                      icon={<ParkingIcon muted={parkingSpots <= 0} />}
+                      icon={<Car className="w-4 h-4" strokeWidth={2.25} />}
                       label={parkingSpots > 0 ? `${parkingSpots} parq.` : "Sin parq."}
                       title="Parqueadero"
+                      muted={parkingSpots <= 0}
                     />
                     <GridSpecItem
                       icon={<ElevatorIcon muted={!elevator} className="w-4 h-4" />}
                       label={elevator ? "Ascensor" : "Sin asc."}
                       title="Ascensor"
+                      muted={!elevator}
                     />
                     <GridSpecItem
-                      icon={<PawPrint className="w-4 h-4 text-brand-magenta" strokeWidth={2.25} />}
+                      icon={<PawPrint className="w-4 h-4" strokeWidth={2.25} />}
                       label={property.pets_allowed ? "Mascotas" : "Sin masc."}
                       title="Mascotas"
+                      muted={!property.pets_allowed}
                     />
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-1.5 mt-2 min-h-[2.75rem] content-start">
-                  {property.floor != null && property.floor !== "" && (
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
-                      Piso {property.floor}
-                    </span>
-                  )}
-                  {furnishedLabel && (
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
-                      {furnishedLabel}
-                    </span>
-                  )}
-                  {availableFrom && (
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-foreground/80 border border-[hsl(0,0%,88%)] shadow-sm">
-                      Desde {availableFrom}
-                    </span>
-                  )}
-                </div>
+                {(property.floor != null && property.floor !== "") || furnishedLabel || availableFrom ? (
+                  <div className="mt-2 flex flex-wrap items-center gap-1 min-h-6">
+                    {property.floor != null && property.floor !== "" && (
+                      <GridMetaTag>Piso {property.floor}</GridMetaTag>
+                    )}
+                    {furnishedLabel && <GridMetaTag>{furnishedLabel}</GridMetaTag>}
+                    {availableFrom && <GridMetaTag>Desde {availableFrom}</GridMetaTag>}
+                  </div>
+                ) : (
+                  <div className="mt-2 min-h-6" aria-hidden />
+                )}
 
-                <p className="text-sm font-bold text-foreground mt-2 min-h-[1.375rem] line-clamp-1 flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 shrink-0 text-brand-magenta" strokeWidth={2.25} />
-                  {property.neighborhood || property.locality || "Zona"}
-                  {property.city ? ` · ${property.city}` : ""}
+                <p className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-foreground min-h-[1.125rem] leading-tight">
+                  <MapPin className="w-3.5 h-3.5 shrink-0 text-brand-magenta" strokeWidth={2.25} />
+                  <span className="truncate">
+                    {property.neighborhood || property.locality || "Zona"}
+                    {property.city ? ` · ${property.city}` : ""}
+                  </span>
                 </p>
 
                 <button
@@ -361,9 +385,9 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    navigate(`/propiedad/${property.id}?visita=1`);
+                    openDetail(true);
                   }}
-                  className="mt-auto pt-2.5 w-full flex items-center justify-center gap-1.5 gradient-cta text-white text-[11px] font-bold py-2 rounded-lg hover:opacity-95 transition-opacity"
+                  className="mt-2.5 w-full flex items-center justify-center gap-1.5 gradient-cta text-white text-[11px] font-bold py-2.5 rounded-lg hover:opacity-95 transition-opacity"
                 >
                   <CalendarCheck className="w-3.5 h-3.5" />
                   Agendar visita
@@ -434,7 +458,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
             </div>
           </div>
         </article>
-      </Link>
+      </div>
     </motion.div>
   );
 }
