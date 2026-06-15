@@ -204,7 +204,7 @@ export default function Advertise() {
             {" "}Una sola administración.
           </h2>
           <p className="mt-5 sm:mt-6 text-sm sm:text-base lg:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
-            Desde que publicamos tu apartamento hasta que el inquilino se queda: nos encargamos de visitas, selección, contratos, cobros y mantenimiento. Mejores candidatos, arriendos más rápidos e inquilinos satisfechos que renuevan. Tú entregas el inmueble; {BRAND.name} hace el resto.
+            Desde que publicamos tu inmueble hasta que el inquilino se queda: nos encargamos de visitas, selección, contratos, cobros y mantenimiento. Mejores candidatos, arriendos más rápidos e inquilinos satisfechos que renuevan. Tú publicas; {BRAND.name} administra el resto.
           </p>
         </div>
       </section>
