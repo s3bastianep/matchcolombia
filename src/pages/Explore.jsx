@@ -17,6 +17,10 @@ import { usePropertyPanel } from "@/lib/PropertyPanelContext";
 import { PROPERTY_LIST_QUERY } from "@/lib/queryOptions";
 import {
   EXPLORE_TRUST_BANNER,
+  EXPLORE_MORE_FILTERS,
+  EXPLORE_DEFAULT_CITY,
+  EXPLORE_TYPE_LABELS,
+  EXPLORE_SORT_LABELS,
   listingsCountLabel,
   matchBannerTitle,
   viewListingsLabel,
@@ -36,20 +40,9 @@ function MapPaneFallback({ className }) {
   return <div className={cn("shimmer bg-muted/20", className)} aria-hidden />;
 }
 
-const TYPES_LABEL = {
-  apartamento: "Apartamento",
-  casa: "Casa",
-  estudio: "Estudio",
-  habitacion: "Habitaci?n",
-};
+const TYPES_LABEL = EXPLORE_TYPE_LABELS;
 
-const SORT_LABELS = {
-  match: "Mejor match",
-  newest: "M?s recientes",
-  price_asc: "Menor precio",
-  price_desc: "Mayor precio",
-  area: "Mayor ?rea",
-};
+const SORT_LABELS = EXPLORE_SORT_LABELS;
 
 const QUICK_FILTERS = [
   { key: "apartamento", label: "Apartamento", color: "border-brand-magenta/30 text-brand-magenta bg-brand-magenta/10" },
@@ -122,7 +115,7 @@ function ResultsCount({ count, query }) {
     <p className="text-xs text-muted-foreground mt-1 leading-normal">
       <span className="font-extrabold text-foreground tabular-nums">{count}</span>{" "}
       {listingsCountLabel(count)}
-      {query && <> en ?{query}?</>}
+      {query && <> en «{query}»</>}
     </p>
   );
 }
@@ -239,7 +232,7 @@ export default function Explore() {
     return result;
   }, [properties, initialQ, initialCity, initialType, advancedFilters, activeQuick, sortBy, isMatched, prefs]);
 
-  const cityLabel = initialCity || prefs?.city || "Bogot?";
+  const cityLabel = initialCity || prefs?.city || EXPLORE_DEFAULT_CITY;
   const advancedCount = countAdvancedFilters(advancedFilters);
   const totalFilterCount = advancedCount + activeQuick.length;
   const resultsTitle =
@@ -264,10 +257,10 @@ export default function Explore() {
       </SelectTrigger>
       <SelectContent>
         {isMatched && <SelectItem value="match">Mejor match</SelectItem>}
-        <SelectItem value="newest">M?s recientes</SelectItem>
-        <SelectItem value="price_asc">Menor precio</SelectItem>
-        <SelectItem value="price_desc">Mayor precio</SelectItem>
-        <SelectItem value="area">Mayor ?rea</SelectItem>
+        <SelectItem value="newest">{EXPLORE_SORT_LABELS.newest}</SelectItem>
+        <SelectItem value="price_asc">{EXPLORE_SORT_LABELS.price_asc}</SelectItem>
+        <SelectItem value="price_desc">{EXPLORE_SORT_LABELS.price_desc}</SelectItem>
+        <SelectItem value="area">{EXPLORE_SORT_LABELS.area}</SelectItem>
       </SelectContent>
     </Select>
   );
@@ -327,7 +320,7 @@ export default function Explore() {
             )}
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
-            M?s filtros
+            {EXPLORE_MORE_FILTERS}
             {advancedCount > 0 && (
               <span className="w-5 h-5 rounded-full bg-brand-violet text-white text-[10px] font-bold flex items-center justify-center">
                 {advancedCount}
@@ -521,7 +514,7 @@ export default function Explore() {
                   )}
                   {advancedFilters.bathrooms && (
                     <ActiveFilterChip
-                      label={advancedFilters.bathrooms === "5" ? "5+ baÃ±os" : `${advancedFilters.bathrooms} baÃ±o${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
+                      label={advancedFilters.bathrooms === "5" ? "5+ ba?os" : `${advancedFilters.bathrooms} ba?o${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
                       onRemove={() => updateAdvancedFilters({ ...advancedFilters, bathrooms: "" })}
                     />
                   )}
@@ -619,7 +612,7 @@ export default function Explore() {
             </div>
             <h3 className="font-extrabold text-xl mb-2">Sin resultados por ahora</h3>
             <p className="text-muted-foreground text-sm mb-6 max-w-sm mx-auto leading-relaxed">
-              Prueba ampliando ciudad, zona o ajustando habitaciones, baÃ±os, parqueaderos o estrato.
+              Prueba ampliando ciudad, zona o ajustando habitaciones, ba?os, parqueaderos o estrato.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
@@ -658,7 +651,7 @@ export default function Explore() {
             >
               <div className="w-10 h-1 bg-border rounded-full mx-auto mb-4" />
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-extrabold text-lg">M?s filtros</h3>
+                <h3 className="font-extrabold text-lg">{EXPLORE_MORE_FILTERS}</h3>
                 <button
                   type="button"
                   onClick={() => setMobileFiltersOpen(false)}

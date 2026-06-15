@@ -18,6 +18,25 @@ export const FEATURED_SUBTITLE =
 export const EXPLORE_TRUST_BANNER =
   "Listados revisados por nuestro equipo antes de publicar.";
 
+export const EXPLORE_MORE_FILTERS = "Más filtros";
+
+export const EXPLORE_DEFAULT_CITY = "Bogotá";
+
+export const EXPLORE_TYPE_LABELS = {
+  apartamento: "Apartamento",
+  casa: "Casa",
+  estudio: "Estudio",
+  habitacion: "Habitación",
+};
+
+export const EXPLORE_SORT_LABELS = {
+  match: "Mejor match",
+  newest: "Más recientes",
+  price_asc: "Menor precio",
+  price_desc: "Mayor precio",
+  area: "Mayor área",
+};
+
 export const FOOTER_BLURB =
   "Arriendos en Bogotá y Barranquilla con listados revisados y match inteligente.";
 
