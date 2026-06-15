@@ -23,6 +23,12 @@ import { notifySiteBrandingUpdated } from "../lib/siteBranding";
 
 const delay = apiDelay;
 
+function notifyPropertiesUpdated() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("properties-updated"));
+  }
+}
+
 function loadProperties() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -95,6 +101,14 @@ function sortList(list, sortField) {
   const sorted = [...list];
   if (sortField === "-created_date") {
     sorted.sort((a, b) => new Date(b.created_date || 0) - new Date(a.created_date || 0));
+  } else if (sortField === "-updated_date") {
+    sorted.sort((a, b) => new Date(b.updated_date || b.created_date || 0) - new Date(a.updated_date || a.created_date || 0));
+  } else if (sortField === "-listed_date") {
+    sorted.sort((a, b) => {
+      const listed = (item) =>
+        new Date(item.published_at || item.reviewed_at || item.updated_date || item.created_date || 0).getTime();
+      return listed(b) - listed(a);
+    });
   }
   return sorted;
 }
@@ -161,24 +175,28 @@ const Property = {
     const properties = loadProperties();
     const id = generateId("prop");
     const publication_status = data.publication_status || "borrador";
+    const isPublished = publication_status === "publicada";
+    const now = new Date().toISOString();
     const property = {
       ...data,
       id,
       reference_code: data.reference_code || makeRefCode(id),
       publication_status,
       status: data.status || workflowToPublicStatus(publication_status),
-      created_date: new Date().toISOString(),
-      updated_date: new Date().toISOString(),
+      created_date: now,
+      updated_date: now,
+      published_at: isPublished ? (data.published_at || now) : data.published_at || null,
+      reviewed_at: isPublished ? (data.reviewed_at || now) : data.reviewed_at || null,
       images: data.images || [],
       image_meta: data.image_meta || [],
       videos: data.videos || [],
       history: [],
-      audit_log: [{ action: "created", at: new Date().toISOString(), by: data.created_by || "admin" }],
-      reviewed_at: data.reviewed_at || null,
+      audit_log: [{ action: "created", at: now, by: data.created_by || "admin" }],
       owner_user_id: data.owner_user_id || null,
     };
     properties.unshift(property);
     saveProperties(properties);
+    notifyPropertiesUpdated();
     return property;
   },
 
@@ -213,6 +231,8 @@ const Property = {
     });
     const publication_status = patch.publication_status ?? current.publication_status;
     const syncedStatus = patch.publication_status ? workflowToPublicStatus(publication_status) : patch.status;
+    const now = new Date().toISOString();
+    const becamePublished = publication_status === "publicada" && current.publication_status !== "publicada";
     properties[idx] = {
       ...current,
       ...patch,
@@ -220,15 +240,21 @@ const Property = {
       status: syncedStatus ?? patch.status ?? current.status,
       history,
       audit_log: audit_log.slice(-80),
-      updated_date: new Date().toISOString(),
+      updated_date: now,
+      published_at: becamePublished ? now : (patch.published_at ?? current.published_at ?? null),
+      reviewed_at: becamePublished && !current.reviewed_at
+        ? now
+        : (patch.reviewed_at ?? current.reviewed_at ?? null),
     };
     saveProperties(properties);
+    notifyPropertiesUpdated();
     return properties[idx];
   },
 
   async delete(id) {
     await delay(80);
     saveProperties(loadProperties().filter((p) => p.id !== id));
+    notifyPropertiesUpdated();
     return { ok: true };
   },
 };
