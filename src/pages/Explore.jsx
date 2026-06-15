@@ -118,13 +118,11 @@ function syncFiltersToUrl(params, advancedFilters, extra = {}) {
 
 function ResultsCount({ count, query }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1.5">
-      <p className="text-sm text-muted-foreground">
-        <span className="font-extrabold text-foreground text-lg tabular-nums">{count}</span>{" "}
-        {listingsCountLabel(count)}
-        {query && <> en ?{query}?</>}
-      </p>
-    </div>
+    <p className="text-xs text-muted-foreground mt-0.5">
+      <span className="font-extrabold text-foreground tabular-nums">{count}</span>{" "}
+      {listingsCountLabel(count)}
+      {query && <> en «{query}»</>}
+    </p>
   );
 }
 
@@ -275,30 +273,30 @@ export default function Explore() {
 
   return (
     <div className="h-full min-h-0 bg-white flex flex-col">
-      <div className="bg-white border-b border-[hsl(0,0%,90%)] sticky top-[58px] z-30 shrink-0">
+      <div className="bg-white border-b border-[hsl(0,0%,90%)] sticky top-[56px] z-30 shrink-0">
         {isMatched && prefs && (
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
+            initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mx-4 lg:mx-6 mt-3 p-3 rounded-xl bg-gradient-to-r from-brand-violet/8 to-brand-magenta/6 border border-brand-violet/15 flex items-center gap-3"
+            className="mx-3 lg:mx-4 mt-2 px-3 py-2 rounded-lg bg-gradient-to-r from-brand-violet/8 to-brand-magenta/6 border border-brand-violet/15 flex items-center gap-2.5"
           >
-            <Sparkles className="w-4 h-4 text-brand-violet shrink-0" />
+            <Sparkles className="w-3.5 h-3.5 text-brand-violet shrink-0" />
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold text-foreground truncate">{matchBannerTitle(cityLabel)}</p>
-              <VerifiedBadge size="xs" className="mt-1.5" />
+              <p className="text-[11px] font-bold text-foreground truncate">{matchBannerTitle(cityLabel)}</p>
             </div>
+            <VerifiedBadge size="xs" className="shrink-0" />
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
-              className="ml-auto text-[11px] font-bold text-brand-violet hover:underline shrink-0"
+              className="text-[10px] font-bold text-brand-violet hover:underline shrink-0"
             >
               Editar
             </button>
           </motion.div>
         )}
 
-        <div className="px-4 lg:px-6 py-3 flex flex-wrap items-center gap-2.5">
-          <div className="relative flex-1 min-w-0 basis-full sm:basis-auto sm:min-w-[200px] max-w-xl">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+        <div className="px-3 lg:px-4 py-2 flex flex-wrap lg:flex-nowrap items-center gap-2">
+          <div className="relative flex-1 min-w-[180px] lg:max-w-xs">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
             <input
               type="search"
               value={locality}
@@ -307,20 +305,21 @@ export default function Explore() {
               onBlur={applyLocalitySearch}
               placeholder="Buscar por localidad o barrio"
               aria-label="Buscar por localidad"
-              className="w-full h-11 pl-11 pr-4 rounded-full bg-[hsl(0,0%,97%)] border border-[hsl(0,0%,88%)] text-sm font-medium placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand-violet/20 focus:border-brand-violet/30"
+              className="w-full h-9 pl-9 pr-3 rounded-full bg-[hsl(0,0%,97%)] border border-[hsl(0,0%,88%)] text-sm font-medium placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand-violet/20 focus:border-brand-violet/30"
             />
           </div>
 
           <CityFilterSelect
             initialCity={initialCity}
             setCityFilter={setCityFilter}
+            className="w-full sm:w-auto lg:w-[148px]"
           />
 
           <button
             type="button"
             onClick={() => setMobileFiltersOpen(true)}
             className={cn(
-              "flex items-center gap-1.5 h-10 px-4 rounded-full text-xs font-bold border transition-all shrink-0",
+              "flex items-center gap-1.5 h-9 px-3.5 rounded-full text-xs font-bold border transition-all shrink-0",
               advancedCount > 0
                 ? "border-brand-violet/30 bg-brand-violet/10 text-brand-violet"
                 : "bg-white border-[hsl(0,0%,88%)] text-foreground hover:border-foreground/20"
@@ -337,13 +336,13 @@ export default function Explore() {
 
           <div className="hidden lg:block shrink-0">{sortSelect}</div>
 
-          <div className="hidden lg:flex items-center gap-1 p-1 rounded-full bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)] shrink-0">
+          <div className="hidden lg:flex items-center gap-1 p-0.5 rounded-full bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)] shrink-0">
             <button
               type="button"
               onClick={() => setViewMode("split")}
               title="Lista + mapa"
               className={cn(
-                "h-8 px-2.5 rounded-full transition-all flex items-center gap-1",
+                "h-7 px-2 rounded-full transition-all flex items-center",
                 viewMode === "split" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
               )}
             >
@@ -354,12 +353,19 @@ export default function Explore() {
               onClick={() => setViewMode("list")}
               title="Solo lista"
               className={cn(
-                "h-8 px-2.5 rounded-full transition-all flex items-center gap-1",
+                "h-7 px-2 rounded-full transition-all flex items-center",
                 viewMode === "list" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
               )}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
             </button>
+          </div>
+
+          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[hsl(var(--brand-verified-bg))] border border-[hsl(var(--brand-verified-border))] shrink-0 ml-auto max-w-[240px]">
+            <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-[hsl(var(--brand-verified))]" strokeWidth={2.25} />
+            <p className="text-[10px] font-semibold text-[hsl(var(--brand-verified-fg))] truncate">
+              {EXPLORE_TRUST_BANNER}
+            </p>
           </div>
 
           <div className="lg:hidden flex items-center gap-2 shrink-0 ml-auto">
@@ -368,7 +374,7 @@ export default function Explore() {
               type="button"
               onClick={() => setViewMode((m) => (m === "map" ? "list" : "map"))}
               className={cn(
-                "flex items-center gap-1.5 h-10 px-3.5 rounded-full text-xs font-bold border transition-all",
+                "flex items-center gap-1.5 h-9 px-3 rounded-full text-xs font-bold border transition-all",
                 viewMode === "map"
                   ? "border-brand-violet/30 bg-brand-violet/10 text-brand-violet"
                   : "bg-white border-[hsl(0,0%,88%)] text-foreground"
@@ -380,17 +386,8 @@ export default function Explore() {
           </div>
         </div>
 
-        <div className="px-4 lg:px-6 pb-2">
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[hsl(var(--brand-verified-bg))] border border-[hsl(var(--brand-verified-border))]">
-            <ShieldCheck className="w-4 h-4 shrink-0 text-[hsl(var(--brand-verified))]" strokeWidth={2.25} />
-            <p className="text-[11px] sm:text-xs font-semibold text-[hsl(var(--brand-verified-fg))] leading-snug">
-              {EXPLORE_TRUST_BANNER}
-            </p>
-          </div>
-        </div>
-
-        <div className="px-4 lg:px-6 pb-3 flex items-center gap-2 overflow-x-auto scrollbar-none">
-          <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-muted-foreground mr-0.5">Tipo</span>
+        <div className="px-3 lg:px-4 pb-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+          <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Tipo</span>
           {QUICK_FILTERS.map((f) => {
             const active = activeQuick.includes(f.key);
             return (
@@ -402,7 +399,7 @@ export default function Explore() {
                   )
                 }
                 className={cn(
-                  "shrink-0 h-8 px-3.5 rounded-full text-[11px] font-semibold border transition-all inline-flex items-center gap-1.5",
+                  "shrink-0 h-7 px-3 rounded-full text-[11px] font-semibold border transition-all inline-flex items-center gap-1",
                   active
                     ? "bg-foreground border-foreground text-white shadow-sm"
                     : "bg-white border-[hsl(0,0%,88%)] text-foreground/80 hover:border-foreground/20"
@@ -421,6 +418,15 @@ export default function Explore() {
               <X className="w-3 h-3" /> Limpiar
             </button>
           )}
+        </div>
+
+        <div className="px-3 pb-2 lg:hidden">
+          <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[hsl(var(--brand-verified-bg))] border border-[hsl(var(--brand-verified-border))]">
+            <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-[hsl(var(--brand-verified))]" strokeWidth={2.25} />
+            <p className="text-[10px] font-semibold text-[hsl(var(--brand-verified-fg))] leading-snug">
+              {EXPLORE_TRUST_BANNER}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -454,15 +460,6 @@ export default function Explore() {
           )}>
             {viewMode === "split" && (
             <div className="flex flex-col border-r border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] min-h-0 min-w-0 overflow-hidden">
-              <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-[hsl(0,0%,90%)] shrink-0 bg-white">
-                <div className="min-w-0">
-                  <p className="text-xs font-extrabold text-foreground truncate">{cityLabel}</p>
-                  <p className="text-[10px] text-muted-foreground">{filtered.length} en el mapa</p>
-                </div>
-                <p className="text-[10px] text-muted-foreground text-right leading-tight max-w-[9rem] hidden xl:block">
-                  Toca un precio para ver el inmueble
-                </p>
-              </div>
               <div className="flex-1 min-h-0">
                 <Suspense fallback={<MapPaneFallback className="h-full" />}>
                   <ExploreMap
@@ -478,18 +475,18 @@ export default function Explore() {
             </div>
             )}
 
-            <div className="overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] px-6 py-5 min-w-0">
-              <div className="flex flex-wrap items-start justify-between gap-3 mb-1">
-                <div>
-                  <h1 className="text-xl font-extrabold tracking-tight text-foreground">
+            <div className="overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] px-4 py-3 min-w-0">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div className="min-w-0">
+                  <h1 className="text-base lg:text-lg font-extrabold tracking-tight text-foreground leading-tight">
                     {resultsTitle}
                   </h1>
                   <ResultsCount count={filtered.length} query={initialQ} />
                 </div>
                 {viewMode === "split" && (
-                  <p className="hidden xl:flex items-center gap-1.5 text-[11px] text-muted-foreground bg-white border border-[hsl(0,0%,90%)] rounded-full px-3 py-1.5 shrink-0">
+                  <p className="hidden xl:flex items-center gap-1.5 text-[10px] text-muted-foreground shrink-0">
                     <MousePointer2 className="w-3 h-3" />
-                    Pasa el cursor en el mapa para ubicar
+                    Toca un precio en el mapa
                   </p>
                 )}
               </div>
@@ -553,10 +550,10 @@ export default function Explore() {
               )}
 
               <div className={cn(
-                "grid items-stretch gap-x-3 gap-y-4 mt-5 min-w-0",
+                "grid items-stretch gap-x-3 gap-y-3 min-w-0",
                 viewMode === "list"
-                  ? "grid-cols-2 sm:grid-cols-3 xl:grid-cols-4"
-                  : "grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+                  ? "grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 mt-4"
+                  : "grid-cols-2 xl:grid-cols-3 mt-2"
               )}>
                 {filtered.flatMap((property, i) => {
                   const items = [
