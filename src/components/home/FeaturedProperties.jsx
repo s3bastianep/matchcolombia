@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import PropertyCard from "../property/PropertyCard";
-import VerifiedBadge from "../brand/VerifiedBadge";
 import SectionHeader from "../ui/SectionHeader";
-import { VERIFIED_LISTINGS } from "@/lib/homeCopy";
+import { FEATURED_SUBTITLE } from "@/lib/siteCopy";
 import { cn } from "@/lib/utils";
 
 const TABS = [
@@ -28,14 +27,11 @@ export default function FeaturedProperties({ properties, isLoading }) {
     <section id="featured" className="section-pad bg-background overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
-          <div className="flex flex-col gap-2">
-            <SectionHeader
-              eyebrow="Nuevas publicaciones"
-              title="Inmuebles verificados"
-              subtitle={VERIFIED_LISTINGS}
-            />
-            <VerifiedBadge size="sm" className="w-fit" />
-          </div>
+          <SectionHeader
+            eyebrow="Nuevas publicaciones"
+            title="Más inmuebles disponibles"
+            subtitle={FEATURED_SUBTITLE}
+          />
 
           <div className="flex items-center gap-3">
             <div className="flex flex-wrap gap-1.5 p-1 rounded-full bg-white border border-border/50 w-full sm:w-auto">

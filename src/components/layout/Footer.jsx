@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Mail, Phone } from "lucide-react";
 import { BRAND } from "@/lib/brand";
+import { FOOTER_BLURB } from "@/lib/siteCopy";
 
 const SocialX = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -22,19 +23,17 @@ const SocialTikTok = () => (
 const footerLinks = {
   Plataforma: [
     { to: "/explorar", label: "Buscar arriendos" },
-    { to: "/anunciar", label: "Anunciar inmueble" },
-    { to: "/publicar", label: "Publicar gratis" },
+    { to: "/explorar?intent=compra", label: "Buscar compra" },
     { to: "/favoritos", label: "Mis guardados" },
+  ],
+  Propietarios: [
+    { to: "/anunciar", label: "Anunciar (arriendo)" },
+    { to: "/publicar", label: "Vender inmueble" },
+    { to: "/publicar/nuevo", label: "Registrar inmueble" },
   ],
   Ciudades: [
     { to: "/explorar?city=Bogotá", label: "Bogotá" },
     { to: "/explorar?city=Barranquilla", label: "Barranquilla" },
-  ],
-  Empresa: [
-    { to: "#", label: "Acerca de" },
-    { to: "#", label: "Blog" },
-    { to: "#", label: "Prensa" },
-    { to: "#", label: "Trabaja con nosotros" },
   ],
 };
 
@@ -57,7 +56,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-white/40 text-sm leading-relaxed max-w-[260px] mb-7">
-              La forma más fácil de encontrar arriendos en Bogotá y Barranquilla. Match perfecto, sin comisiones.
+              {FOOTER_BLURB}
             </p>
             <div className="flex gap-2 mb-8">
               {[SocialIG, SocialX, SocialTikTok].map((Icon, i) => (
@@ -137,9 +136,9 @@ export default function Footer() {
             © {new Date().getFullYear()} {BRAND.name} · Colombia
           </p>
           <div className="flex items-center gap-5">
-            {["Términos de uso", "Privacidad", "Cookies"].map((l) => (
-              <a key={l} href="#" className="text-white/20 hover:text-white/45 text-xs transition-colors">{l}</a>
-            ))}
+            <a href={`mailto:${BRAND.email}?subject=Consulta%20legal`} className="text-white/20 hover:text-white/45 text-xs transition-colors">
+              Contacto legal
+            </a>
           </div>
         </div>
       </div>

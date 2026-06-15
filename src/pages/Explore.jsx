@@ -15,6 +15,12 @@ import { CITIES } from "@/lib/colombia";
 import { usePropertyPanel } from "@/lib/PropertyPanelContext";
 import { PROPERTY_LIST_QUERY } from "@/lib/queryOptions";
 import {
+  EXPLORE_TRUST_BANNER,
+  listingsCountLabel,
+  matchBannerTitle,
+  viewListingsLabel,
+} from "@/lib/siteCopy";
+import {
   DEFAULT_ADVANCED_FILTERS,
   parseAdvancedFiltersFromUrl,
   applyAdvancedFilters,
@@ -123,7 +129,7 @@ function ResultsCount({ count, query }) {
     <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1.5">
       <p className="text-sm text-muted-foreground">
         <span className="font-extrabold text-foreground text-lg tabular-nums">{count}</span>{" "}
-        {count === 1 ? "inmueble verificado" : "inmuebles verificados"}
+        {listingsCountLabel(count)}
         {query && <> en «{query}»</>}
       </p>
     </div>
@@ -282,7 +288,7 @@ export default function Explore() {
           >
             <Sparkles className="w-4 h-4 text-brand-violet shrink-0" />
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold text-foreground truncate">Inmuebles verificados en {cityLabel}</p>
+              <p className="text-xs font-bold text-foreground truncate">{matchBannerTitle(cityLabel)}</p>
               <VerifiedBadge size="xs" className="mt-1.5" />
             </div>
             <button
@@ -389,7 +395,7 @@ export default function Explore() {
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[hsl(var(--brand-verified-bg))] border border-[hsl(var(--brand-verified-border))]">
             <ShieldCheck className="w-4 h-4 shrink-0 text-[hsl(var(--brand-verified))]" strokeWidth={2.25} />
             <p className="text-[11px] sm:text-xs font-semibold text-[hsl(var(--brand-verified-fg))] leading-snug">
-              Cada inmueble está verificado por MatchColombia. Arrienda con tranquilidad.
+              {EXPLORE_TRUST_BANNER}
             </p>
           </div>
         </div>
@@ -675,7 +681,7 @@ export default function Explore() {
                 onClick={() => setMobileFiltersOpen(false)}
                 className="w-full mt-4 gradient-cta text-white font-bold py-3.5 rounded-xl"
               >
-                Ver {filtered.length} inmueble{filtered.length !== 1 ? "s" : ""} verificado{filtered.length !== 1 ? "s" : ""}
+                {viewListingsLabel(filtered.length)}
               </button>
             </motion.div>
           </div>

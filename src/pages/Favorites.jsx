@@ -7,6 +7,7 @@ import { Heart, ArrowRight, Sparkles } from "lucide-react";
 import PropertyCard from "../components/property/PropertyCard";
 import CompareStrip from "../components/favorites/CompareStrip";
 import { getShortlist } from "@/lib/shortlist";
+import { FAVORITES_EMPTY_HINT } from "@/lib/siteCopy";
 
 export default function Favorites() {
   const [ids, setIds] = useState(getShortlist());
@@ -54,7 +55,7 @@ export default function Favorites() {
             <Heart className="w-14 h-14 text-brand-violet/30 mb-4" />
             <h2 className="font-extrabold text-xl mb-2">Tu Short List está vacía</h2>
             <p className="text-muted-foreground text-sm max-w-sm mb-6">
-              Usa el match inteligente para ver inmuebles 100% verificados, o guarda cualquier opción con el corazón.
+              {FAVORITES_EMPTY_HINT}
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))} className="rounded-xl gap-2 font-bold gradient-cta border-0">

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Home, Plus, MapPin, Check, Sparkles, ShieldCheck, Gift } from "lucide-react";
+import { Home, Plus, MapPin, Check, Sparkles, Headphones, Gift } from "lucide-react";
+import { OWNER_PROMO_TAGLINE } from "@/lib/siteCopy";
 
 function PromoBenefit({ icon: Icon, label }) {
   return (
@@ -15,9 +16,9 @@ export default function ExploreOwnerPromoCard() {
   return (
     <div className="min-w-0 h-full rounded-xl">
       <Link
-        to="/publicar"
+        to="/anunciar"
         className="group block h-full min-w-0"
-        aria-label="Publicar mi propiedad en MatchColombia"
+        aria-label="Anunciar mi inmueble en MatchColombia"
       >
         <article className="h-full flex flex-col bg-white rounded-xl border border-[hsl(0,0%,92%)] ring-1 ring-brand-magenta/20 overflow-hidden transition-all group-hover:border-brand-violet/30 group-hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
           <div className="px-3 pt-3 pb-2 shrink-0">
@@ -53,13 +54,13 @@ export default function ExploreOwnerPromoCard() {
               ¿Quieres publicar tu propiedad?
             </h3>
             <p className="text-[11px] text-muted-foreground mt-0.5 min-h-[1.125rem]">
-              Miles de arrendatarios verificados te esperan.
+              {OWNER_PROMO_TAGLINE}
             </p>
 
             <div className="mt-2.5 rounded-lg border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,97%)] px-2 py-2.5 min-h-[4.75rem]">
               <div className="grid grid-cols-3 gap-y-3 h-full items-center">
                 <PromoBenefit icon={Gift} label="Publicar gratis" />
-                <PromoBenefit icon={ShieldCheck} label="Verificados" />
+                <PromoBenefit icon={Headphones} label="Gestión incluida" />
                 <PromoBenefit icon={Sparkles} label="Listo rápido" />
               </div>
             </div>
@@ -81,7 +82,7 @@ export default function ExploreOwnerPromoCard() {
             </p>
 
             <span className="mt-auto pt-2.5 w-full flex items-center justify-center gradient-cta text-white text-[11px] font-bold py-2 rounded-lg group-hover:opacity-95 transition-opacity">
-              Publicar mi propiedad
+              Anunciar mi inmueble
             </span>
           </div>
         </article>

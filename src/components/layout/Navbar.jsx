@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getUserRole, PANEL_HOME, ROLE_LABELS, ROLES } from "@/lib/roles";
-import { LayoutDashboard, User, Menu, X, Heart, LogOut, LogIn, UserPlus } from "lucide-react";
+import { LayoutDashboard, Menu, X, Heart, LogOut, LogIn, UserPlus, Building2, TrendingUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -157,11 +157,18 @@ export default function Navbar() {
                           <Heart className="w-4 h-4" /> Mis guardados
                         </Link>
                         <Link
+                          to="/anunciar"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold hover:bg-secondary transition-colors"
+                        >
+                          <Building2 className="w-4 h-4" /> Anunciar inmueble
+                        </Link>
+                        <Link
                           to="/publicar"
                           onClick={() => setUserMenuOpen(false)}
                           className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold hover:bg-secondary transition-colors"
                         >
-                          <User className="w-4 h-4" /> Publicar inmueble
+                          <TrendingUp className="w-4 h-4" /> Vender inmueble
                         </Link>
                         <button
                           type="button"

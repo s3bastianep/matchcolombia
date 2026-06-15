@@ -17,7 +17,8 @@ export default function Home() {
   });
 
   const stepProperties = properties.slice(0, 3);
-  const featuredProperties = properties.length > 3 ? properties.slice(3) : properties;
+  const featuredProperties = properties.slice(3);
+  const hasFeaturedListings = isLoading || featuredProperties.length > 0;
 
   return (
     <div className="w-full overflow-x-hidden">
@@ -26,8 +27,11 @@ export default function Home() {
         onStartQuiz={startQuiz}
         properties={stepProperties}
         isLoading={isLoading}
+        hasMoreListings={hasFeaturedListings}
       />
-      <FeaturedProperties properties={featuredProperties} isLoading={isLoading} />
+      {hasFeaturedListings && (
+        <FeaturedProperties properties={featuredProperties} isLoading={isLoading} />
+      )}
       <OwnerCTA />
     </div>
   );

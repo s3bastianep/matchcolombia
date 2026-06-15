@@ -6,16 +6,8 @@ import { ArrowRight, ArrowLeft, Check, Car, PawPrint, Sofa, Sparkles } from "luc
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { savePreferences, buildExploreUrl } from "@/lib/matchPreferences";
 import { CITIES, getZonesForCity } from "@/lib/colombia";
+import { QUIZ_FINISH_CTA, QUIZ_STEPS, TRUST_TAGLINE } from "@/lib/siteCopy";
 import { cn } from "@/lib/utils";
-
-const STEPS = [
-  { id: "city", title: "¿En qué ciudad?", subtitle: "Solo inmuebles verificados en Bogotá y Barranquilla" },
-  { id: "zone", title: "¿En qué zona?", subtitle: "Opcional. Solo opciones revisadas por nuestro equipo" },
-  { id: "type", title: "¿Qué tipo de inmueble?", subtitle: "Apartamento, casa, estudio… todos verificados" },
-  { id: "beds", title: "¿Cuántas habitaciones?", subtitle: "Para afinar tu match inteligente" },
-  { id: "budget", title: "¿Cuál es tu presupuesto?", subtitle: "Precio real, sin sorpresas ni cargos ocultos" },
-  { id: "extras", title: "¿Qué más necesitas?", subtitle: "Último paso. Te mostramos solo lo que encaja" },
-];
 
 const TYPES = [
   { value: "apartamento", label: "Apartamento", color: "border-brand-magenta/40 bg-brand-magenta/8" },
@@ -64,8 +56,8 @@ export default function MatchQuiz({ open, onOpenChange }) {
     furnished: false,
   });
 
-  const current = STEPS[step];
-  const progress = ((step + 1) / STEPS.length) * 100;
+  const current = QUIZ_STEPS[step];
+  const progress = ((step + 1) / QUIZ_STEPS.length) * 100;
   const zones = prefs.city ? getZonesForCity(prefs.city) : [];
 
   const finish = () => {
@@ -75,7 +67,7 @@ export default function MatchQuiz({ open, onOpenChange }) {
     navigate(buildExploreUrl(prefs));
   };
 
-  const next = () => (step < STEPS.length - 1 ? setStep(step + 1) : finish());
+  const next = () => (step < QUIZ_STEPS.length - 1 ? setStep(step + 1) : finish());
   const back = () => step > 0 && setStep(step - 1);
 
   return (
@@ -92,11 +84,11 @@ export default function MatchQuiz({ open, onOpenChange }) {
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                Match inteligente · Paso {step + 1}/{STEPS.length}
+                Match inteligente · Paso {step + 1}/{QUIZ_STEPS.length}
               </p>
               <div className="mt-1.5 flex flex-wrap items-center gap-2">
                 <VerifiedBadge size="sm" />
-                <span className="text-[11px] text-muted-foreground">Sin estafas, sin sustos.</span>
+                <span className="text-[11px] text-muted-foreground">{TRUST_TAGLINE}</span>
               </div>
             </div>
           </div>
@@ -221,7 +213,7 @@ export default function MatchQuiz({ open, onOpenChange }) {
               onClick={next}
               className="flex items-center gap-2 gradient-cta btn-glow text-white font-bold px-6 py-3 rounded-xl hover:opacity-95 transition-opacity"
             >
-              {step === STEPS.length - 1 ? "Ver inmuebles verificados" : "Siguiente"}
+              {step === QUIZ_STEPS.length - 1 ? QUIZ_FINISH_CTA : "Siguiente"}
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
