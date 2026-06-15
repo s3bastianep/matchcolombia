@@ -5,7 +5,10 @@ import SmartImage from "@/components/ui/SmartImage";
 import { ROOM_LABELS } from "@/lib/colombiaImages";
 import { cn } from "@/lib/utils";
 
-export default function PropertyGallery({ images, title, immersive = false }) {
+export default function PropertyGallery({ images, title, immersive = false, variant }) {
+  const mode = variant || (immersive ? "immersive" : "default");
+  const isModal = mode === "modal";
+  const isImmersive = mode === "immersive";
   const [idx, setIdx] = useState(0);
   const [lightbox, setLightbox] = useState(false);
   const [gridView, setGridView] = useState(false);
@@ -41,7 +44,7 @@ export default function PropertyGallery({ images, title, immersive = false }) {
     exit: (d) => ({ opacity: 0, scale: d > 0 ? 0.97 : 1.03 }),
   };
 
-  if (immersive && images.length >= 2) {
+  if (isImmersive && images.length >= 2) {
     const [main, ...rest] = images;
     const side = rest.slice(0, 4);
 
@@ -139,8 +142,15 @@ export default function PropertyGallery({ images, title, immersive = false }) {
 
   return (
     <>
-      <div className="relative rounded-3xl overflow-hidden">
-        <div className="relative w-full cursor-zoom-in" style={{ height: "clamp(340px, 55vw, 600px)" }} onClick={() => setLightbox(true)}>
+      <div className={cn(isModal ? "relative w-full" : "relative rounded-3xl overflow-hidden")}>
+        <div
+          className={cn(
+            "relative w-full cursor-zoom-in overflow-hidden",
+            isModal ? "h-[clamp(220px,42vh,420px)]" : ""
+          )}
+          style={isModal ? undefined : { height: "clamp(340px, 55vw, 600px)" }}
+          onClick={() => setLightbox(true)}
+        >
           <AnimatePresence custom={direction} mode="wait">
             <motion.div key={idx} custom={direction} variants={variants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.35 }} className="absolute inset-0">
               <SmartImage src={images[idx]} alt={title} className="absolute inset-0" />
@@ -162,16 +172,36 @@ export default function PropertyGallery({ images, title, immersive = false }) {
             {images.length} fotos
           </button>
         </div>
-        {images.length > 1 && (
-          <div className="flex gap-2 mt-2 overflow-x-auto pb-1">
+      </div>
+
+      {images.length > 1 && (
+        <div className={cn(isModal ? "px-4 sm:px-6 mt-3" : "mt-2.5 px-1")}>
+          <div
+            className={cn(
+              "flex gap-2.5 overflow-x-auto pb-1 scroll-smooth snap-x snap-mandatory scrollbar-thin",
+              isModal && "py-1"
+            )}
+          >
             {images.map((img, i) => (
-              <button key={i} type="button" onClick={() => go(i)} className={cn("shrink-0 w-20 h-16 rounded-xl overflow-hidden transition-all", i === idx ? "ring-2 ring-primary ring-offset-2" : "opacity-60 hover:opacity-90")}>
-                <SmartImage src={img} alt="" className="w-full h-full" />
+              <button
+                key={i}
+                type="button"
+                onClick={() => go(i)}
+                className={cn(
+                  "shrink-0 snap-start rounded-xl overflow-hidden transition-all",
+                  isModal ? "w-[4.75rem] h-[3.5rem] sm:w-20 sm:h-[3.75rem]" : "w-20 h-16",
+                  i === idx
+                    ? "ring-2 ring-primary ring-offset-2 ring-offset-background opacity-100"
+                    : "opacity-55 hover:opacity-85"
+                )}
+              >
+                <SmartImage src={img} alt="" className="w-full h-full" imgClassName="object-cover" />
               </button>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
       <Lightbox images={images} title={title} idx={idx} setIdx={go} lightbox={lightbox} setLightbox={setLightbox} gridView={gridView} setGridView={setGridView} prev={prev} next={next} direction={direction} variants={variants} />
     </>
   );

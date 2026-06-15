@@ -56,7 +56,7 @@ export default function PropertyDetailView({
       <motion.div
         initial={isModal ? false : { opacity: 0, y: 12 }}
         animate={isModal ? false : { opacity: 1, y: 0 }}
-        className={isModal ? "mt-5" : "mt-8"}
+        className={isModal ? "mt-4" : "mt-8"}
       >
         <PropertyDetailHeader property={property} />
       </motion.div>
