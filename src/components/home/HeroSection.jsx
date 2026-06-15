@@ -64,7 +64,7 @@ export default function HeroSection({ onStartQuiz }) {
           </h1>
 
           <p className="text-muted-foreground text-sm sm:text-base mb-3 max-w-md leading-relaxed">
-            Match inteligente con inmuebles revisados por nuestro equipo.
+            Inmuebles verificados y recomendaciones inteligentes para encontrar el lugar ideal.
           </p>
           <VerifiedBadge size="sm" className="mb-7" />
 
