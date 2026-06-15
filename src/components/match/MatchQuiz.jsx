@@ -15,6 +15,8 @@ import {
   MapPin,
   Wallet,
   SlidersHorizontal,
+  Home,
+  LayoutGrid,
 } from "lucide-react";
 import ElevatorIcon from "@/components/icons/ElevatorIcon";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -36,10 +38,9 @@ const STEP_ICONS = {
 };
 
 const TYPES = [
-  { value: "apartamento", label: "Apartamento", emoji: "🏢" },
-  { value: "casa", label: "Casa", emoji: "🏠" },
-  { value: "estudio", label: "Estudio", emoji: "🛋️" },
-  { value: "habitacion", label: "Habitación", emoji: "🚪" },
+  { value: "apartamento", label: "Apartamento", desc: "Edificio o conjunto cerrado", icon: Building2 },
+  { value: "casa", label: "Casa", desc: "Independiente o en conjunto", icon: Home },
+  { value: "estudio", label: "Estudio", desc: "Espacio compacto integrado", icon: LayoutGrid },
 ];
 
 const BEDS = ["1", "2", "3", "4", "5"];
@@ -82,6 +83,41 @@ function StepDots({ total, current }) {
         />
       ))}
     </div>
+  );
+}
+
+function TypeOptionCard({ type, selected, onClick }) {
+  const Icon = type.icon;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex flex-col items-center gap-3 p-5 rounded-2xl border-2 transition-all text-center",
+        selected
+          ? "border-brand-violet bg-white shadow-md ring-1 ring-brand-violet/15"
+          : "border-border/50 bg-white hover:border-brand-violet/25 hover:shadow-sm"
+      )}
+    >
+      <div
+        className={cn(
+          "w-14 h-14 rounded-2xl flex items-center justify-center transition-colors",
+          selected ? "gradient-cta text-white shadow-sm" : "bg-[hsl(265,40%,96%)] text-brand-violet"
+        )}
+      >
+        <Icon className="w-7 h-7" strokeWidth={1.75} />
+      </div>
+      <div>
+        <p className="font-extrabold text-sm text-foreground">{type.label}</p>
+        <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">{type.desc}</p>
+      </div>
+      {selected && (
+        <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-brand-violet">
+          <Check className="w-3 h-3" strokeWidth={3} />
+          Seleccionado
+        </span>
+      )}
+    </button>
   );
 }
 
@@ -260,17 +296,14 @@ export default function MatchQuiz({ open, onOpenChange }) {
               )}
 
               {current.id === "type" && (
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {TYPES.map((t) => (
-                    <QuizOption
+                    <TypeOptionCard
                       key={t.value}
+                      type={t}
                       selected={prefs.type === t.value}
                       onClick={() => setPrefs({ ...prefs, type: t.value })}
-                      className="flex flex-col items-center text-center gap-2 py-4"
-                    >
-                      <span className="text-2xl">{t.emoji}</span>
-                      <span className="font-bold text-sm">{t.label}</span>
-                    </QuizOption>
+                    />
                   ))}
                 </div>
               )}

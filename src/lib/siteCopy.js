@@ -29,7 +29,7 @@ export const QUIZ_FINISH_CTA = "Ver resultados";
 export const QUIZ_STEPS = [
   { id: "city", title: "¿En qué ciudad?", subtitle: "Bogotá, Barranquilla o ambas" },
   { id: "zone", title: "¿En qué zona?", subtitle: "Opcional. Afina por barrio o zona" },
-  { id: "type", title: "¿Qué tipo de inmueble?", subtitle: "Apartamento, casa, estudio o habitación" },
+  { id: "type", title: "¿Qué tipo de inmueble?", subtitle: "Apartamento, casa o estudio" },
   { id: "beds", title: "¿Cuántas habitaciones?", subtitle: "Para afinar tu match inteligente" },
   { id: "baths", title: "¿Cuántos baños?", subtitle: "Elige el mínimo que necesitas" },
   { id: "budget", title: "¿Cuál es tu presupuesto?", subtitle: "Precio mensual, sin sorpresas" },
