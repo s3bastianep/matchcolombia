@@ -6,6 +6,7 @@ import StatusBadge from "@/components/panels/StatusBadge";
 import { EmptyState } from "@/components/panels/PipelineBoard";
 import { Upload } from "lucide-react";
 import { Link } from "react-router-dom";
+import { BRAND } from "@/lib/brand";
 
 const STEPS = ["interesado", "documentos_enviados", "en_revision", "aprobado"];
 
@@ -60,7 +61,7 @@ export default function SeekerApplications() {
             <p className="text-xs text-muted-foreground mb-4">
               {app.status === "interesado" && "Envía tus documentos para continuar."}
               {app.status === "documentos_enviados" && "Estamos revisando tu información."}
-              {app.status === "en_revision" && "En revisión por el equipo MatchColombia."}
+              {app.status === "en_revision" && `En revisión por el equipo ${BRAND.name}.`}
               {app.status === "aprobado" && "¡Aprobado! Te contactaremos para firmar."}
             </p>
             {app.documents?.length > 0 && (

@@ -1,6 +1,7 @@
 import React from "react";
 import { ShieldCheck, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BRAND } from "@/lib/brand";
 
 /**
  * Badge exclusivo mint/turquesa — solo para confianza / verificado.
@@ -12,7 +13,7 @@ export default function VerifiedBadge({ score, className, size = "sm", showToolt
 
   return (
     <span
-      title={showTooltip ? "Propietario verificado por MatchColombia. Inmueble revisado por nuestro equipo" : undefined}
+      title={showTooltip ? `Propietario verificado por ${BRAND.name}. Inmueble revisado por nuestro equipo` : undefined}
       className={cn(
         "badge-verified",
         size === "xs" && "text-[9px] px-2 py-0.5 gap-0.5",

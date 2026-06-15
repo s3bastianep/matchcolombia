@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Home, Plus, MapPin, Check, Sparkles, Headphones, Gift } from "lucide-react";
+import { BRAND } from "@/lib/brand";
 import { OWNER_PROMO_TAGLINE } from "@/lib/siteCopy";
 
 function PromoBenefit({ icon: Icon, label }) {
@@ -18,7 +19,7 @@ export default function ExploreOwnerPromoCard() {
       <Link
         to="/anunciar"
         className="group block h-full min-w-0"
-        aria-label="Anunciar mi inmueble en MatchColombia"
+        aria-label={`Anunciar mi inmueble en ${BRAND.name}`}
       >
         <article className="h-full flex flex-col bg-white rounded-xl border border-[hsl(0,0%,92%)] ring-1 ring-brand-magenta/20 overflow-hidden transition-all group-hover:border-brand-violet/30 group-hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
           <div className="px-3 pt-3 pb-2 shrink-0">
@@ -78,7 +79,7 @@ export default function ExploreOwnerPromoCard() {
 
             <p className="text-sm font-bold text-foreground mt-2 min-h-[1.375rem] line-clamp-1 flex items-center gap-1.5">
               <MapPin className="w-4 h-4 shrink-0 text-brand-magenta" strokeWidth={2.25} />
-              MatchColombia · Propietarios
+              {BRAND.name} · Propietarios
             </p>
 
             <span className="mt-auto pt-2.5 w-full flex items-center justify-center gradient-cta text-white text-[11px] font-bold py-2 rounded-lg group-hover:opacity-95 transition-opacity">

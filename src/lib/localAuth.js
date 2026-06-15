@@ -1,5 +1,6 @@
 import { ROLES } from "./roles";
 import { apiDelay } from "./apiDelay";
+import { BRAND } from "./brand";
 
 const USERS_KEY = "matchcolombia_users";
 const SESSION_KEY = "matchcolombia_session";
@@ -63,7 +64,7 @@ async function seedDemoUsers() {
   if (localStorage.getItem(DEMO_USERS_SEEDED)) return;
   const users = loadUsers();
   const demos = [
-    { id: "user-admin-demo", name: "Admin MatchColombia", username: "admin", email: "admin@matchcolombia.co", password: "admin123", role: ROLES.ADMIN },
+    { id: "user-admin-demo", name: `Admin ${BRAND.name}`, username: "admin", email: "admin@matchcolombia.co", password: "admin123", role: ROLES.ADMIN },
     { id: "user-seeker-demo", name: "Laura Buscadora", username: "buscador", email: "buscador@demo.co", password: "demo123", role: ROLES.SEEKER },
     { id: "user-tenant-demo", name: "Ana Inquilina", username: "inquilino", email: "inquilino@demo.co", password: "demo123", role: ROLES.TENANT },
     { id: "user-owner-demo", name: "Pedro Propietario", username: "propietario", email: "propietario@demo.co", password: "demo123", role: ROLES.OWNER },

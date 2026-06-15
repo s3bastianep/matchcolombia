@@ -1,3 +1,5 @@
+import { BRAND } from "@/lib/brand";
+
 const BUILDING_AMENITY_MATCHERS = [
   "gimnasio",
   "piscina",
@@ -95,7 +97,7 @@ export function getBuildingYearInfo(property) {
   if (ageKey && BUILDING_AGE_LABELS[ageKey]) {
     return {
       label: BUILDING_AGE_LABELS[ageKey],
-      detail: ageKey === "nuevo" ? "Entrega reciente" : ageKey === "reformado" ? "Renovación en los últimos años" : "Antigüedad verificada por MatchColombia",
+      detail: ageKey === "nuevo" ? "Entrega reciente" : ageKey === "reformado" ? "Renovación en los últimos años" : `Antigüedad verificada por ${BRAND.name}`,
     };
   }
 

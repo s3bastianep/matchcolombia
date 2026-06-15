@@ -9,9 +9,11 @@ import {
   Wrench,
   LineChart,
 } from "lucide-react";
+import { BRAND } from "@/lib/brand";
+
 const STEPS = [
   { icon: Camera, title: "Fotografía profesional", desc: "Imágenes que destacan tu inmueble." },
-  { icon: Megaphone, title: "Publicación", desc: "Listado verificado en MatchColombia." },
+  { icon: Megaphone, title: "Publicación", desc: `Listado verificado en ${BRAND.name}.` },
   { icon: Users, title: "Gestión de visitas", desc: "Coordinamos horarios y confirmaciones." },
   { icon: Search, title: "Estudio de arrendatario", desc: "Evaluación documental del candidato." },
   { icon: FilePenLine, title: "Firma digital", desc: "Contrato sin papeles ni correos." },

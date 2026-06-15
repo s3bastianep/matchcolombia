@@ -4,6 +4,7 @@ import {
 } from "lucide-react";
 import PanelLayout from "@/components/panels/PanelLayout";
 import { useAdminBadges } from "@/lib/useAdminBadges";
+import { BRAND } from "@/lib/brand";
 
 export default function AdminLayout() {
   const badges = useAdminBadges();
@@ -21,5 +22,5 @@ export default function AdminLayout() {
     { to: "/admin/notificaciones", label: "Notificaciones", icon: Bell, badge: badges.notifications },
   ];
 
-  return <PanelLayout title="Admin" subtitle="MatchColombia" navItems={nav} accent="purple" />;
+  return <PanelLayout title="Admin" subtitle={BRAND.name} navItems={nav} accent="purple" />;
 }

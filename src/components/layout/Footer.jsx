@@ -48,10 +48,10 @@ export default function Footer() {
           <div className="col-span-2">
             <Link to="/" className="flex items-center gap-2.5 mb-5">
               <div className="w-10 h-10 gradient-cta rounded-2xl flex items-center justify-center shrink-0 shadow-lg font-extrabold text-white">
-                M
+                L
               </div>
               <div>
-                <span className="font-extrabold text-xl text-white block leading-tight">MatchColombia</span>
+                <span className="font-extrabold text-xl text-white block leading-tight">{BRAND.name}</span>
                 <p className="text-white/35 text-[10px] font-semibold">{BRAND.tagline}</p>
               </div>
             </Link>

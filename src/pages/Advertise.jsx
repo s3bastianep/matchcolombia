@@ -128,7 +128,7 @@ function LeadForm({ dark = false }) {
         Publicar con {BRAND.name}
       </button>
       <a
-        href={`https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent("Hola, quiero publicar mi inmueble con MatchColombia")}`}
+        href={`https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(`Hola, quiero publicar mi inmueble con ${BRAND.name}`)}`}
         target="_blank"
         rel="noopener noreferrer"
         className={cn(
@@ -249,7 +249,7 @@ export default function Advertise() {
         <div className="max-w-6xl mx-auto px-4 sm:px-8">
           <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-start">
             <OwnerSectionTitle
-              title="Administración MatchColombia"
+              title={`Administración ${BRAND.name}`}
               subtitle="Todo lo que necesitas para arrendar sin estrés, en un solo servicio."
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">

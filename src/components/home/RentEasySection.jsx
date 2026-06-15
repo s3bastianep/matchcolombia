@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Building2, Sparkles, ArrowRight, MapPin } from "lucide-react";
+import { BRAND } from "@/lib/brand";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
 import { INTERIORS } from "@/lib/colombiaImages";
 import { cn } from "@/lib/utils";
@@ -81,7 +82,7 @@ export default function RentEasySection() {
           viewport={{ once: true }}
           className="text-center max-w-3xl mx-auto mb-12 sm:mb-16"
         >
-          <p className="text-eyebrow mb-3">Por qué MatchColombia</p>
+          <p className="text-eyebrow mb-3">Por qué {BRAND.name}</p>
           <h2 className="text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold text-foreground leading-[1.12] tracking-tight">
             Arrendar nunca fue{" "}
             <span className="text-gradient">tan fácil</span>

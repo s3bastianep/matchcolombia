@@ -12,7 +12,7 @@ const VALUE_PILLARS = [
 
 const FAQ_ITEMS = [
   {
-    q: "¿Por qué arrendar con MatchColombia y no por mi cuenta?",
+    q: `¿Por qué arrendar con ${BRAND.name} y no por mi cuenta?`,
     tag: "Propuesta de valor",
     a: `${BRAND.name} no es solo un portal de anuncios. Es administración completa: filtramos interesados, coordinamos visitas, evaluamos candidatos y te damos seguimiento digital sin que expongas tu número.`,
     points: [
@@ -64,7 +64,7 @@ const FAQ_ITEMS = [
   {
     q: "¿Qué significa gestión exclusiva?",
     tag: "Un solo equipo",
-    a: "Significa que MatchColombia es tu único intermediario en el proceso. Centralizamos consultas, visitas, aplicaciones y seguimiento para que no tengas que repartir información entre varios canales.",
+    a: `Significa que ${BRAND.name} es tu único intermediario en el proceso. Centralizamos consultas, visitas, aplicaciones y seguimiento para que no tengas que repartir información entre varios canales.`,
     points: [
       "Un flujo claro de principio a fin",
       "Contratos digitales y cobro de cánones centralizado",

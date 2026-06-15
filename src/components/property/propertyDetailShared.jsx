@@ -281,7 +281,7 @@ export function PersonalSearchSection() {
     },
     {
       icon: MessageCircle,
-      text: "MatchColombia te propone inmuebles que encajan contigo y coordina todo el proceso.",
+      text: `${BRAND.name} te propone inmuebles que encajan contigo y coordina todo el proceso.`,
     },
   ];
 
@@ -328,7 +328,7 @@ export function PersonalSearchSection() {
 export function ProcessStepperCard() {
   return (
     <div className="detail-card-soft p-5">
-      <p className="text-sm font-bold text-foreground">Tu proceso con MatchColombia</p>
+      <p className="text-sm font-bold text-foreground">Tu proceso con {BRAND.name}</p>
       <p className="text-xs text-foreground/70 mt-1 leading-relaxed">
         Todo gestionado. Tú no coordinas nada, nosotros sí.
       </p>
@@ -354,7 +354,7 @@ export function ExpertCredibility({ property }) {
     <div className="flex items-start gap-3 p-4 rounded-xl bg-secondary/25 mb-5">
       <Shield className="detail-icon mt-0.5" strokeWidth={2} />
       <div>
-        <p className="text-sm font-semibold text-foreground">Revisado por MatchColombia</p>
+        <p className="text-sm font-semibold text-foreground">Revisado por {BRAND.name}</p>
         <p className="detail-body mt-0.5">
           {visitLabel && <>Nuestro equipo visitó este inmueble el {visitLabel}. </>}
           {property.photos_by_team && "Fotos tomadas por nuestro equipo, no del anunciante."}

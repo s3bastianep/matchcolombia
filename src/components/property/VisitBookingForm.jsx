@@ -89,7 +89,7 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
 
       const summary = formatVisitSummary(payload.visitDate, payload.visitSlot, payload.visitType);
       const teamMsg = createdAccount
-        ? `¡Hola ${payload.name}! Tu visita quedó agendada: ${summary.typeLabel.toLowerCase()} el ${summary.dayLabel} a las ${summary.slotLabel} (${refCode}). Ya tienes cuenta en MatchColombia. Revisa el estado aquí: ${portalUrl}`
+        ? `¡Hola ${payload.name}! Tu visita quedó agendada: ${summary.typeLabel.toLowerCase()} el ${summary.dayLabel} a las ${summary.slotLabel} (${refCode}). Ya tienes cuenta en ${BRAND.name}. Revisa el estado aquí: ${portalUrl}`
         : `¡Hola ${payload.name}! Recibimos tu ${summary.typeLabel.toLowerCase()} para el ${summary.dayLabel} a las ${summary.slotLabel} (${refCode}). Revisa el estado de tu visita: ${portalUrl}`;
 
       if (userId) {

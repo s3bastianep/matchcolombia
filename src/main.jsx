@@ -18,7 +18,7 @@ function showBootstrapError(error) {
     <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;font-family:system-ui,sans-serif;background:#fafafa">
       <div style="max-width:420px;width:100%;background:#fff;border-radius:24px;border:1px solid #e5e7eb;padding:32px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.08)">
         <p style="font-size:2rem;margin:0 0 12px">⚠️</p>
-        <h1 style="font-weight:800;font-size:1.25rem;margin:0 0 8px">No se pudo cargar MatchColombia</h1>
+        <h1 style="font-weight:800;font-size:1.25rem;margin:0 0 8px">No se pudo cargar LUMORA HOME</h1>
         <p style="color:#6b7280;font-size:.875rem;margin:0 0 16px">Prueba recargar o limpiar los datos locales del navegador.</p>
         <p style="font-size:.75rem;text-align:left;background:#f3f4f6;border-radius:12px;padding:12px;margin:0 0 16px;word-break:break-all;color:#dc2626">${message}</p>
         <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">

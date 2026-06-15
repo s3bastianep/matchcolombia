@@ -5,6 +5,7 @@ import { ArrowRight, ShieldCheck } from "lucide-react";
 import SectionHeader from "../ui/SectionHeader";
 import MatchStepVisual from "./MatchStepVisual";
 import VerifiedBadge from "../brand/VerifiedBadge";
+import { BRAND } from "@/lib/brand";
 import { MATCH_STEPS_VERIFIED, TRUST_TAGLINE } from "@/lib/siteCopy";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +14,7 @@ const STEPS = [
     num: "01",
     title: "Haz el cuestionario",
     problem: "Sin perder horas en portales sin filtro.",
-    desc: "Ciudad, presupuesto, habitaciones, baños, mascotas y más. MatchColombia filtra por ti.",
+    desc: `Ciudad, presupuesto, habitaciones, baños, mascotas y más. ${BRAND.name} filtra por ti.`,
   },
   {
     num: "02",
@@ -64,7 +65,7 @@ export default function MatchSteps({ onStartQuiz }) {
               {MATCH_STEPS_VERIFIED}
             </p>
             <p className="text-xs text-[hsl(var(--brand-verified-fg))]/80 mt-1 leading-relaxed">
-              Fotos, precio y datos revisados por el equipo MatchColombia antes de que veas el anuncio.
+              Fotos, precio y datos revisados por el equipo {BRAND.name} antes de que veas el anuncio.
             </p>
           </div>
           <ShieldCheck className="hidden sm:block w-8 h-8 text-[hsl(var(--brand-verified))] shrink-0 ml-auto opacity-80" strokeWidth={1.75} />

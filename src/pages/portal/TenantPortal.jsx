@@ -1,5 +1,6 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { BRAND } from "@/lib/brand";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 import { StatCard } from "@/components/panels/StatusBadge";
@@ -59,7 +60,7 @@ export default function TenantPortal() {
           { to: "/inquilino/contrato", label: "Ver contrato", icon: FileText },
           { to: "/inquilino/pagos", label: "Estado de cuenta", icon: CreditCard },
           { to: "/inquilino/tickets", label: "Soporte", icon: Wrench },
-          { to: "/portal/mensajes", label: "Chat con MatchColombia", icon: MessageSquare },
+          { to: "/portal/mensajes", label: `Chat con ${BRAND.name}`, icon: MessageSquare },
         ].map((item) => (
           <Link key={item.to} to={item.to} className="bg-white rounded-2xl border border-border/40 p-5 hover:shadow-md transition-all flex items-center gap-3">
             <item.icon className="w-5 h-5 text-brand-violet" />

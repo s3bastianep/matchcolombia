@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import PropertyCard from "../property/PropertyCard";
+import { BRAND } from "@/lib/brand";
 import VerifiedBadge from "../brand/VerifiedBadge";
 import SectionHeader from "../ui/SectionHeader";
 import { cn } from "@/lib/utils";
@@ -30,7 +31,7 @@ export default function FeaturedProperties({ properties, isLoading }) {
             <SectionHeader
               eyebrow="Nuevas publicaciones"
               title="Inmuebles verificados"
-              subtitle="100% verificados por MatchColombia. Sin estafas, sin sustos."
+              subtitle={`Inmuebles revisados por ${BRAND.name}. Sin estafas, sin sustos.`}
             />
             <VerifiedBadge size="sm" className="w-fit" />
           </div>

@@ -3,7 +3,7 @@ import { MessageCircle } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 
 export default function WhatsAppFab() {
-  const href = `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent("Hola, tengo una consulta sobre un inmueble en MatchColombia")}`;
+  const href = `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(`Hola, tengo una consulta sobre un inmueble en ${BRAND.name}`)}`;
 
   return (
     <a

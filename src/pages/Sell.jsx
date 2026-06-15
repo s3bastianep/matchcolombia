@@ -58,7 +58,7 @@ const OWNER_VIEWS = [
 
 const SERVICE_INCLUDES = [
   "Fotografías profesionales",
-  "Publicación en MatchColombia",
+  `Publicación en ${BRAND.name}`,
   "Gestión de interesados",
   "Coordinación de visitas",
   "Seguimiento de compradores",
@@ -75,7 +75,7 @@ const WITHOUT_US = [
 ];
 
 const WITH_US = [
-  "MatchColombia filtra y responde por ti",
+  `${BRAND.name} filtra y responde por ti`,
   "Solo te avisamos cuando hay alguien real",
   "Visitas agendadas y confirmadas",
   "Seguimiento claro hasta cerrar la venta",
@@ -83,7 +83,7 @@ const WITH_US = [
 
 const FAQ = [
   {
-    q: "¿Por qué vender con MatchColombia y no por mi cuenta?",
+    q: `¿Por qué vender con ${BRAND.name} y no por mi cuenta?`,
     a: "Porque verificamos tu inmueble, lo exponemos a compradores reales y gestionamos todo el contacto. Tú te enfocas en decidir; nosotros en filtrar y coordinar.",
   },
   {

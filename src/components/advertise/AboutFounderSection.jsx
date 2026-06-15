@@ -10,7 +10,7 @@ export default function AboutFounderSection() {
             <div className="aspect-[4/5] rounded-2xl overflow-hidden border border-border/40 shadow-lg bg-muted">
               <img
                 src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=600&h=750&fit=crop"
-                alt="Fundador de MatchColombia"
+                alt={`Fundador de ${BRAND.name}`}
                 className="w-full h-full object-cover object-top"
                 loading="lazy"
               />
