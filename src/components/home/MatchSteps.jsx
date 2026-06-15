@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import PropertyCard from "@/components/property/PropertyCard";
 import SectionHeader from "../ui/SectionHeader";
-import { TRUST_TAGLINE, VERIFIED_LISTINGS } from "@/lib/siteCopy";
 import { cn } from "@/lib/utils";
 
 const STEPS = [
@@ -18,7 +17,7 @@ const STEPS = [
     num: "02",
     title: "Ves solo inmuebles reales",
     problem: "Sin anuncios dudosos ni precios inventados.",
-    desc: "Revisamos fotos, precio y datos antes de que veas el anuncio.",
+    desc: "Cada listado está verificado: fotos, precio y datos revisados.",
   },
   {
     num: "03",
@@ -40,24 +39,21 @@ function CardSkeleton() {
   );
 }
 
-export default function MatchSteps({
-  onStartQuiz,
-  properties = [],
-  isLoading = false,
-  hasMoreListings = true,
-}) {
+export default function MatchSteps({ onStartQuiz, properties = [], isLoading = false }) {
+  const showcase = properties.slice(0, 3);
+
   return (
     <section className="section-pad relative overflow-hidden bg-[hsl(0,0%,98%)] border-y border-border/40">
       <div className="relative max-w-6xl mx-auto px-4 sm:px-8">
         <div className="grid lg:grid-cols-[1fr_1.1fr] gap-6 lg:gap-10 items-start mb-10 sm:mb-12">
           <SectionHeader
-            eyebrow="Cómo funciona"
+            eyebrow="Por qué MatchColombia"
             title={
               <>
                 Tu match en <span className="text-gradient">3 pasos</span>
               </>
             }
-            subtitle={TRUST_TAGLINE}
+            subtitle="Menos tiempo buscando. Más confianza al arrendar."
           />
           <div className="border-l-4 border-brand-magenta pl-4 sm:pl-5 py-1">
             <p className="text-[11px] font-bold uppercase tracking-wider text-brand-magenta mb-2">
@@ -67,7 +63,7 @@ export default function MatchSteps({
               Buscar arriendo suele ser perder tiempo: anuncios falsos, precios que no cuadran y nadie que coordine visitas.
             </p>
             <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-              {VERIFIED_LISTINGS}
+              MatchColombia verifica cada inmueble y te acompaña de la búsqueda a la visita.
             </p>
           </div>
         </div>
@@ -94,11 +90,11 @@ export default function MatchSteps({
               <div className="mt-auto">
                 {isLoading ? (
                   <CardSkeleton />
-                ) : properties[i] ? (
-                  <PropertyCard property={properties[i]} index={i} variant="grid" />
+                ) : showcase[i] ? (
+                  <PropertyCard property={showcase[i]} index={i} variant="grid" showMatch={i === 1} matchScore={92} />
                 ) : (
                   <div className="rounded-xl border border-dashed border-border/50 bg-white p-6 text-center min-h-[200px] flex items-center justify-center">
-                    <p className="text-sm text-muted-foreground">Inmuebles disponibles pronto</p>
+                    <p className="text-sm text-muted-foreground">Inmuebles verificados disponibles pronto</p>
                   </div>
                 )}
               </div>
@@ -120,27 +116,15 @@ export default function MatchSteps({
             Empezar match inteligente
             <ArrowRight className="w-4 h-4" />
           </button>
-          {hasMoreListings ? (
-            <a
-              href="#featured"
-              className={cn(
-                "w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-bold",
-                "text-foreground border-2 border-border/60 bg-white hover:bg-secondary/60 transition-colors"
-              )}
-            >
-              Ver más inmuebles
-            </a>
-          ) : (
-            <Link
-              to="/explorar"
-              className={cn(
-                "w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-bold",
-                "text-foreground border-2 border-border/60 bg-white hover:bg-secondary/60 transition-colors"
-              )}
-            >
-              Ver todos los arriendos
-            </Link>
-          )}
+          <Link
+            to="/explorar"
+            className={cn(
+              "w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-bold",
+              "text-foreground border-2 border-border/60 bg-white hover:bg-secondary/60 transition-colors"
+            )}
+          >
+            Ver tarjetas de inmuebles
+          </Link>
         </motion.div>
       </div>
     </section>
