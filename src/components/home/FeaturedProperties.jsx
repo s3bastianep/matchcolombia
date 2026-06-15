@@ -65,9 +65,15 @@ export default function FeaturedProperties({ properties, isLoading }) {
         {isLoading ? (
           <div className="flex gap-5 overflow-hidden">
             {Array(4).fill(0).map((_, i) => (
-              <div key={i} className="shrink-0 w-[min(320px,85vw)] rounded-3xl overflow-hidden border border-border/40">
-                <div className="aspect-[4/3] shimmer" />
-                <div className="p-5 space-y-2"><div className="h-5 shimmer rounded w-1/3" /><div className="h-4 shimmer rounded w-2/3" /></div>
+              <div key={i} className="shrink-0 w-[min(280px,85vw)] sm:w-[300px] rounded-xl overflow-hidden border border-[hsl(0,0%,92%)] bg-white">
+                <div className="p-3">
+                  <div className="aspect-[5/4] shimmer rounded-lg" />
+                </div>
+                <div className="px-3 pb-3 space-y-2">
+                  <div className="h-5 shimmer rounded w-1/2" />
+                  <div className="h-16 shimmer rounded-lg w-full" />
+                  <div className="h-4 shimmer rounded w-2/3" />
+                </div>
               </div>
             ))}
           </div>
@@ -75,11 +81,11 @@ export default function FeaturedProperties({ properties, isLoading }) {
           <div
             key={tab}
             id="featured-carousel"
-            className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-thin scroll-smooth animate-in fade-in duration-300"
+            className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-thin scroll-smooth animate-in fade-in duration-300 items-stretch"
           >
             {filtered.map((p, i) => (
-              <div key={p.id} className="snap-start shrink-0 w-[min(320px,85vw)] sm:w-[340px]">
-                <PropertyCard property={p} index={i} />
+              <div key={p.id} className="snap-start shrink-0 w-[min(280px,85vw)] sm:w-[300px] h-auto">
+                <PropertyCard property={p} index={i} variant="grid" />
               </div>
             ))}
           </div>

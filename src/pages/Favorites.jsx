@@ -46,7 +46,7 @@ export default function Favorites() {
             <CompareStrip properties={saved} />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
               {saved.map((p, i) => (
-                <PropertyCard key={p.id} property={p} index={i} />
+                <PropertyCard key={p.id} property={p} index={i} variant="grid" />
               ))}
             </div>
           </>

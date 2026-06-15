@@ -71,7 +71,7 @@ export default function MatchSteps({ onStartQuiz }) {
           <ShieldCheck className="hidden sm:block w-8 h-8 text-[hsl(var(--brand-verified))] shrink-0 ml-auto opacity-80" strokeWidth={1.75} />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-5 items-stretch">
           {STEPS.map((step, i) => (
             <motion.div
               key={step.num}
@@ -79,9 +79,9 @@ export default function MatchSteps({ onStartQuiz }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="flex flex-col"
+              className="flex flex-col h-full"
             >
-              <div className="mb-4">
+              <div className="mb-4 min-h-[128px] sm:min-h-[140px]">
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-brand-violet">
                   Paso {step.num}
                 </span>
@@ -93,7 +93,7 @@ export default function MatchSteps({ onStartQuiz }) {
                 )}
               </div>
 
-              <div className="mt-auto">
+              <div className="mt-auto w-full">
                 <MatchStepVisual stepIndex={i} />
               </div>
             </motion.div>
