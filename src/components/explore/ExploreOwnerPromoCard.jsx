@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Home, Plus, MapPin, Check, Sparkles, ShieldCheck, BadgePercent } from "lucide-react";
+import { Home, Plus, MapPin, Check, Sparkles, ShieldCheck, Gift } from "lucide-react";
 
 function PromoBenefit({ icon: Icon, label }) {
   return (
@@ -58,9 +58,9 @@ export default function ExploreOwnerPromoCard() {
 
             <div className="mt-2.5 rounded-lg border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,97%)] px-2 py-2.5 min-h-[4.75rem]">
               <div className="grid grid-cols-3 gap-y-3 h-full items-center">
-                <PromoBenefit icon={BadgePercent} label="0% publicar" />
+                <PromoBenefit icon={Gift} label="Publicar gratis" />
                 <PromoBenefit icon={ShieldCheck} label="Verificados" />
-                <PromoBenefit icon={Sparkles} label="Rápido" />
+                <PromoBenefit icon={Sparkles} label="Listo rápido" />
               </div>
             </div>
 

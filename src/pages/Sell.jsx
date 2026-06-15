@@ -1,16 +1,12 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
   Check,
   ChevronDown,
   ChevronRight,
-  Phone,
-  Mail,
-  User,
   TrendingUp,
-  MapPin,
   X,
   Smartphone,
   Eye,
@@ -27,7 +23,6 @@ import VerifiedBadge from "@/components/brand/VerifiedBadge";
 import SellDashboardScreen from "@/components/advertise/SellDashboardScreen";
 import SellHeroForm from "@/components/advertise/SellHeroForm";
 import SaleProgressTracker from "@/components/advertise/SaleProgressTracker";
-import { CITIES } from "@/lib/colombia";
 
 const SALE_VISIBILITY = [
   { icon: BarChart3, title: "Personas que vieron el inmueble" },
@@ -148,77 +143,6 @@ function FaqItem({ q, a }) {
       </button>
       {open && <p className="pb-4 text-sm text-white/70 leading-relaxed">{a}</p>}
     </div>
-  );
-}
-
-function LeadForm({ dark = false }) {
-  const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", email: "", phone: "", neighborhood: "", city: "Bogotá" });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const params = new URLSearchParams();
-    if (form.name) params.set("name", form.name);
-    if (form.email) params.set("email", form.email);
-    if (form.phone) params.set("phone", form.phone);
-    if (form.neighborhood) params.set("neighborhood", form.neighborhood);
-    if (form.city) params.set("city", form.city);
-    params.set("operation", "venta");
-    navigate(`/publicar/nuevo${params.toString() ? `?${params}` : ""}`);
-  };
-
-  const inputClass = cn(
-    "w-full pl-10 pr-4 py-3 rounded-xl border text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-magenta/30",
-    dark ? "bg-white/10 border-white/20 text-white placeholder:text-white/40" : "bg-white border-border/50"
-  );
-  const labelClass = cn("text-[10px] font-bold uppercase tracking-wider mb-1.5 block", dark ? "text-white/60" : "text-muted-foreground");
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid sm:grid-cols-2 gap-4">
-        <div>
-          <label className={labelClass}>Nombre</label>
-          <div className="relative">
-            <User className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-brand-violet")} />
-            <input type="text" required value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className={inputClass} placeholder="Tu nombre" />
-          </div>
-        </div>
-        <div>
-          <label className={labelClass}>Correo</label>
-          <div className="relative">
-            <Mail className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-brand-magenta")} />
-            <input type="email" required value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} className={inputClass} placeholder="tu@email.com" />
-          </div>
-        </div>
-      </div>
-      <div className="grid sm:grid-cols-2 gap-4">
-        <div>
-          <label className={labelClass}>Barrio</label>
-          <div className="relative">
-            <MapPin className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-brand-violet")} />
-            <input type="text" value={form.neighborhood} onChange={(e) => setForm((f) => ({ ...f, neighborhood: e.target.value }))} className={inputClass} placeholder="Ej: Chapinero" />
-          </div>
-        </div>
-        <div>
-          <label className={labelClass}>Ciudad</label>
-          <select value={form.city} onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))} className={cn(inputClass, "pl-4")}>
-            {CITIES.map((c) => (
-              <option key={c.id} value={c.name}>{c.name}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <div>
-        <label className={labelClass}>Celular</label>
-        <div className="relative">
-          <Phone className={cn("absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4", dark ? "text-white/50" : "text-brand-magenta")} />
-          <input type="tel" required value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} className={inputClass} placeholder="+57 300 000 0000" />
-        </div>
-      </div>
-      <button type="submit" className="w-full gradient-cta text-white font-bold py-4 rounded-xl hover:opacity-95 transition-opacity shadow-lg">
-        Vender con {BRAND.name}
-      </button>
-    </form>
   );
 }
 
@@ -458,34 +382,6 @@ export default function Sell() {
             {FAQ.map((item) => (
               <FaqItem key={item.q} q={item.q} a={item.a} />
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="vender-form" className="py-16 sm:py-20 bg-background">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
-          <div>
-            <SectionEyebrow>Empieza hoy</SectionEyebrow>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Cuéntanos sobre tu inmueble
-            </h2>
-            <p className="mt-4 text-muted-foreground leading-relaxed">
-              Completa el formulario y nuestro equipo te guía en el siguiente paso. Sin compromiso.
-            </p>
-            <ul className="mt-8 space-y-3">
-              {SERVICE_INCLUDES.slice(0, 4).map((text) => (
-                <li key={text} className="flex items-center gap-3 text-sm font-semibold">
-                  <Check className="w-4 h-4 text-brand-violet shrink-0" strokeWidth={2.5} />
-                  {text}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-border/50 ring-1 ring-brand-violet/10">
-            <div className="h-1 w-16 rounded-full gradient-cta mb-6" />
-            <h3 className="font-extrabold text-lg mb-1">Registra tu propiedad</h3>
-            <p className="text-sm text-muted-foreground mb-6">Bogotá y Barranquilla · Gratis</p>
-            <LeadForm />
           </div>
         </div>
       </section>
