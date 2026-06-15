@@ -522,6 +522,12 @@ export default function Explore() {
                       onRemove={() => updateAdvancedFilters({ ...advancedFilters, elevator: "" })}
                     />
                   )}
+                  {advancedFilters.pets === "si" && (
+                    <ActiveFilterChip
+                      label="Mascotas permitidas"
+                      onRemove={() => updateAdvancedFilters({ ...advancedFilters, pets: "" })}
+                    />
+                  )}
                   {advancedFilters.floor && (
                     <ActiveFilterChip
                       label={advancedFilters.floor === "10" ? "Piso 10+" : `Piso ${advancedFilters.floor}`}

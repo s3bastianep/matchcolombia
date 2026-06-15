@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
-import { ArrowRight, ArrowLeft, Check, Car, PawPrint, Sofa, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowLeft, Check, Car, PawPrint, Sofa, Sparkles, Bath } from "lucide-react";
+import ElevatorIcon from "@/components/icons/ElevatorIcon";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { savePreferences, buildExploreUrl } from "@/lib/matchPreferences";
 import { CITIES, getZonesForCity } from "@/lib/colombia";
@@ -16,6 +17,16 @@ const TYPES = [
   { value: "habitacion", label: "Habitación", color: "border-brand-magenta/35 bg-brand-magenta/8" },
 ];
 const BEDS = ["1", "2", "3", "4", "5"];
+const BATHS = ["1", "2", "3", "4", "5"];
+const ELEVATOR_OPTIONS = [
+  { value: "si", label: "Sí, lo necesito", icon: ElevatorIcon },
+  { value: "no", label: "No lo necesito", icon: ElevatorIcon },
+  { value: "", label: "Me da igual", icon: null },
+];
+const PETS_OPTIONS = [
+  { value: "si", label: "Sí, tengo mascotas", desc: "Solo inmuebles que las acepten", icon: PawPrint },
+  { value: "no", label: "No tengo mascotas", desc: "Cualquier inmueble me sirve", icon: PawPrint },
+];
 const BUDGETS = [
   { value: 1000000, label: "Hasta $1M" },
   { value: 2000000, label: "Hasta $2M" },
@@ -50,9 +61,11 @@ export default function MatchQuiz({ open, onOpenChange }) {
     zone: "",
     type: "apartamento",
     beds: "2",
+    bathrooms: "all",
     maxPrice: 3000000,
+    elevator: "",
+    pets: "",
     parking: false,
-    pets: false,
     furnished: false,
   });
 
@@ -165,6 +178,34 @@ export default function MatchQuiz({ open, onOpenChange }) {
                 </div>
               )}
 
+              {current.id === "baths" && (
+                <div className="space-y-3">
+                  <OptionButton
+                    selected={prefs.bathrooms === "all"}
+                    onClick={() => setPrefs({ ...prefs, bathrooms: "all" })}
+                    className="w-full text-center"
+                  >
+                    Cualquiera
+                  </OptionButton>
+                  <div className="flex flex-wrap gap-2">
+                    {BATHS.map((b) => (
+                      <button
+                        key={b}
+                        type="button"
+                        onClick={() => setPrefs({ ...prefs, bathrooms: b })}
+                        className={cn(
+                          "min-w-[3rem] px-5 py-3 rounded-full border-2 text-sm font-bold transition-all inline-flex items-center justify-center gap-1.5",
+                          prefs.bathrooms === b ? "border-foreground bg-foreground text-white" : "border-border/80 bg-white hover:border-foreground/25"
+                        )}
+                      >
+                        <Bath className="w-3.5 h-3.5" />
+                        {b === "5" ? "5+" : b}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {current.id === "budget" && (
                 <div className="grid grid-cols-1 gap-2">
                   {BUDGETS.map((b) => (
@@ -175,11 +216,49 @@ export default function MatchQuiz({ open, onOpenChange }) {
                 </div>
               )}
 
+              {current.id === "elevator" && (
+                <div className="grid grid-cols-1 gap-2">
+                  {ELEVATOR_OPTIONS.map((opt) => (
+                    <OptionButton
+                      key={opt.label}
+                      selected={prefs.elevator === opt.value}
+                      onClick={() => setPrefs({ ...prefs, elevator: opt.value })}
+                      className="flex items-center gap-3"
+                    >
+                      {opt.icon && <opt.icon className="w-4 h-4 text-brand-violet" />}
+                      {opt.label}
+                      {prefs.elevator === opt.value && <Check className="w-4 h-4 ml-auto" />}
+                    </OptionButton>
+                  ))}
+                </div>
+              )}
+
+              {current.id === "pets" && (
+                <div className="grid grid-cols-1 gap-2">
+                  {PETS_OPTIONS.map((opt) => (
+                    <OptionButton
+                      key={opt.value}
+                      selected={prefs.pets === opt.value}
+                      onClick={() => setPrefs({ ...prefs, pets: opt.value })}
+                      className="flex flex-col items-start gap-0.5"
+                    >
+                      <span className="flex items-center gap-3 w-full">
+                        <opt.icon className="w-4 h-4 shrink-0" />
+                        <span className="font-bold">{opt.label}</span>
+                        {prefs.pets === opt.value && <Check className="w-4 h-4 ml-auto" />}
+                      </span>
+                      <span className={cn("text-xs pl-7", prefs.pets === opt.value ? "text-white/80" : "text-muted-foreground")}>
+                        {opt.desc}
+                      </span>
+                    </OptionButton>
+                  ))}
+                </div>
+              )}
+
               {current.id === "extras" && (
                 <div className="grid grid-cols-1 gap-2">
                   {[
                     { key: "parking", label: "Parqueadero", icon: Car },
-                    { key: "pets", label: "Mascotas permitidas", icon: PawPrint },
                     { key: "furnished", label: "Amoblado", icon: Sofa },
                   ].map((e) => (
                     <OptionButton

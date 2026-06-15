@@ -9,6 +9,7 @@ export const DEFAULT_ADVANCED_FILTERS = {
   buildingAge: "",
   elevator: "",
   floor: "",
+  pets: "",
 };
 
 export const BEDROOM_OPTIONS = ["1", "2", "3", "4", "5"];
@@ -57,6 +58,7 @@ export function parseAdvancedFiltersFromUrl(params) {
     buildingAge: params.get("age") || "",
     elevator: params.get("elevator") || "",
     floor: params.get("floor") || "",
+    pets: params.get("pets") || "",
   };
 }
 
@@ -108,6 +110,7 @@ export function applyAdvancedFilters(properties, filters) {
     if (filters.estrato && !matchEstratoFilter(filters.estrato, p)) return false;
     if (filters.elevator === "si" && !hasElevator(p)) return false;
     if (filters.elevator === "no" && hasElevator(p)) return false;
+    if (filters.pets === "si" && !p.pets_allowed) return false;
     const total = getTotalMonthly(p);
     if (filters.priceMin && total < parseInt(filters.priceMin, 10)) return false;
     if (filters.priceMax && total > parseInt(filters.priceMax, 10)) return false;
@@ -132,6 +135,7 @@ export function advancedFiltersToUrlParams(filters, currentParams) {
   setOrDelete("age", filters.buildingAge);
   setOrDelete("elevator", filters.elevator);
   setOrDelete("floor", filters.floor);
+  setOrDelete("pets", filters.pets);
   if (filters.listingType === "venta") next.set("intent", "compra");
   else if (filters.listingType === "arriendo") next.delete("intent");
   else next.delete("intent");

@@ -31,8 +31,11 @@ export const QUIZ_STEPS = [
   { id: "zone", title: "¿En qué zona?", subtitle: "Opcional. Afina por barrio o zona" },
   { id: "type", title: "¿Qué tipo de inmueble?", subtitle: "Apartamento, casa, estudio o habitación" },
   { id: "beds", title: "¿Cuántas habitaciones?", subtitle: "Para afinar tu match inteligente" },
+  { id: "baths", title: "¿Cuántos baños?", subtitle: "Elige el mínimo que necesitas" },
   { id: "budget", title: "¿Cuál es tu presupuesto?", subtitle: "Precio mensual, sin sorpresas" },
-  { id: "extras", title: "¿Qué más necesitas?", subtitle: "Último paso. Te mostramos solo lo que encaja" },
+  { id: "elevator", title: "¿Necesitas ascensor?", subtitle: "Útil en pisos altos o si buscas comodidad" },
+  { id: "pets", title: "¿Tienes mascotas?", subtitle: "Filtramos inmuebles que las acepten si las tienes" },
+  { id: "extras", title: "¿Qué más necesitas?", subtitle: "Parqueadero, amoblado y otros extras" },
 ];
 
 export function listingsCountLabel(count) {
