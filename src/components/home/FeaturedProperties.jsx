@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import PropertyCard from "../property/PropertyCard";
 import VerifiedBadge from "../brand/VerifiedBadge";
@@ -72,22 +71,17 @@ export default function FeaturedProperties({ properties, isLoading }) {
             ))}
           </div>
         ) : (
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={tab}
-              id="featured-carousel"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-thin scroll-smooth"
-            >
-              {filtered.map((p, i) => (
-                <div key={p.id} className="snap-start shrink-0 w-[min(320px,85vw)] sm:w-[340px]">
-                  <PropertyCard property={p} index={i} />
-                </div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
+          <div
+            key={tab}
+            id="featured-carousel"
+            className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-thin scroll-smooth animate-in fade-in duration-300"
+          >
+            {filtered.map((p, i) => (
+              <div key={p.id} className="snap-start shrink-0 w-[min(320px,85vw)] sm:w-[340px]">
+                <PropertyCard property={p} index={i} />
+              </div>
+            ))}
+          </div>
         )}
 
         {!isLoading && filtered.length === 0 && (

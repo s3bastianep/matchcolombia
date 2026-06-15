@@ -1,10 +1,10 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
-import Footer from "./Footer";
 import WhatsAppFab from "./WhatsAppFab";
 import { cn } from "@/lib/utils";
 
+const Footer = lazy(() => import("./Footer"));
 const MatchQuiz = lazy(() => import("../match/MatchQuiz"));
 
 export default function AppLayout() {
@@ -24,7 +24,11 @@ export default function AppLayout() {
       <main className={cn("w-full overflow-x-hidden", isExplore ? "flex-1 min-h-0 overflow-hidden" : "flex-1")}>
         <Outlet />
       </main>
-      {!isExplore && <Footer />}
+      {!isExplore && (
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
+      )}
       <WhatsAppFab />
       {quizOpen && (
         <Suspense fallback={null}>

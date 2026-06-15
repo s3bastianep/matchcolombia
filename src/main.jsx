@@ -47,11 +47,14 @@ const bootTimer = window.setTimeout(() => {
 
 async function boot() {
   try {
-    const [{ default: App }, { default: ErrorBoundary }] = await Promise.all([
+    const [{ default: App }, { default: ErrorBoundary }, , localApi] = await Promise.all([
       import('@/App.jsx'),
       import('@/components/ErrorBoundary'),
       import('@/index.css'),
+      import('@/api/localApi'),
     ])
+
+    localApi.initLocalApi()
 
     window.clearTimeout(bootTimer)
     removeBootLoader()
