@@ -1,7 +1,7 @@
 import React, { useId } from "react";
 import { cn } from "@/lib/utils";
 
-/** Casa + L en un solo trazo — monoline, sin caja */
+/** Casa + L en un solo trazo — estilo monoline */
 export default function BrandMark({ className, variant = "color" }) {
   const gradientId = useId().replace(/:/g, "");
   const onDark = variant === "onDark";
@@ -25,9 +25,9 @@ export default function BrandMark({ className, variant = "color" }) {
       )}
 
       <path
-        d="M8 29H26V18L20 7.5L8 14.5V29"
+        d="M8 28H26V20M24 17L20 7.5L8 14.5V28"
         stroke={stroke}
-        strokeWidth="3"
+        strokeWidth="2.75"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
