@@ -119,7 +119,7 @@ function syncFiltersToUrl(params, advancedFilters, extra = {}) {
 
 function ResultsCount({ count, query }) {
   return (
-    <p className="text-xs text-muted-foreground mt-0.5">
+    <p className="text-xs text-muted-foreground mt-1 leading-normal">
       <span className="font-extrabold text-foreground tabular-nums">{count}</span>{" "}
       {listingsCountLabel(count)}
       {query && <> en ?{query}?</>}
@@ -477,25 +477,26 @@ export default function Explore() {
             </div>
             )}
 
-            <div className="overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] min-w-0 pb-20">
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <div className="min-w-0">
-                  <h1 className="text-base lg:text-lg font-extrabold tracking-tight text-foreground leading-tight">
-                    {resultsTitle}
-                  </h1>
-                  <ResultsCount count={filtered.length} query={initialQ} />
+            <div className="overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] min-w-0 min-h-0 pt-1 pb-20">
+              <div className="sticky top-0 z-10 bg-[hsl(0,0%,99%)] pt-2 pb-3 mb-1">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <h1 className="text-base lg:text-lg font-extrabold tracking-tight text-foreground leading-snug">
+                      {resultsTitle}
+                    </h1>
+                    <ResultsCount count={filtered.length} query={initialQ} />
+                  </div>
+                  {viewMode === "split" && (
+                    <p className="hidden xl:flex items-center gap-1.5 text-[10px] text-muted-foreground shrink-0">
+                      <MousePointer2 className="w-3 h-3" />
+                      Toca un precio en el mapa
+                    </p>
+                  )}
                 </div>
-                {viewMode === "split" && (
-                  <p className="hidden xl:flex items-center gap-1.5 text-[10px] text-muted-foreground shrink-0">
-                    <MousePointer2 className="w-3 h-3" />
-                    Toca un precio en el mapa
-                  </p>
-                )}
-              </div>
 
-              {totalFilterCount > 0 && (
-                <div className="mt-3 flex flex-wrap items-center gap-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Activos</span>
+                {totalFilterCount > 0 && (
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Activos</span>
                   {initialType && (
                     <ActiveFilterChip
                       label={TYPES_LABEL[initialType] || initialType}
@@ -520,7 +521,7 @@ export default function Explore() {
                   )}
                   {advancedFilters.bathrooms && (
                     <ActiveFilterChip
-                      label={advancedFilters.bathrooms === "5" ? "5+ ba?os" : `${advancedFilters.bathrooms} ba?o${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
+                      label={advancedFilters.bathrooms === "5" ? "5+ baños" : `${advancedFilters.bathrooms} baño${advancedFilters.bathrooms !== "1" ? "s" : ""}`}
                       onRemove={() => updateAdvancedFilters({ ...advancedFilters, bathrooms: "" })}
                     />
                   )}
@@ -548,14 +549,15 @@ export default function Explore() {
                       onRemove={() => updateAdvancedFilters({ ...advancedFilters, floor: "" })}
                     />
                   )}
-                </div>
-              )}
+                  </div>
+                )}
+              </div>
 
               <div className={cn(
-                "grid items-stretch gap-x-3 gap-y-4 min-w-0",
+                "grid items-stretch gap-x-3 gap-y-4 min-w-0 pt-1",
                 viewMode === "list"
-                  ? "grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 mt-4"
-                  : "grid-cols-2 xl:grid-cols-3 mt-2"
+                  ? "grid-cols-2 sm:grid-cols-3 xl:grid-cols-4"
+                  : "grid-cols-2 xl:grid-cols-3"
               )}>
                 {filtered.flatMap((property, i) => {
                   const items = [
@@ -617,7 +619,7 @@ export default function Explore() {
             </div>
             <h3 className="font-extrabold text-xl mb-2">Sin resultados por ahora</h3>
             <p className="text-muted-foreground text-sm mb-6 max-w-sm mx-auto leading-relaxed">
-              Prueba ampliando ciudad, zona o ajustando habitaciones, ba?os, parqueaderos o estrato.
+              Prueba ampliando ciudad, zona o ajustando habitaciones, baños, parqueaderos o estrato.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button

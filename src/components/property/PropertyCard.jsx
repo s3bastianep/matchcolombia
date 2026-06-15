@@ -125,7 +125,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
         "min-w-0",
         isGrid && "h-full flex-1 flex flex-col",
         !isGrid && "card-hover",
-        highlighted && "ring-2 ring-brand-violet ring-offset-2",
+        highlighted && (isGrid ? "rounded-xl" : "ring-2 ring-brand-violet ring-offset-2"),
         isGrid ? "rounded-xl" : "rounded-[1.35rem]"
       )}
     >
@@ -145,7 +145,10 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
           className={cn(
             "bg-white overflow-hidden transition-all duration-300",
             isGrid
-              ? "h-full flex flex-col rounded-xl border border-[hsl(0,0%,92%)] group-hover:border-brand-violet/25 group-hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]"
+              ? cn(
+                  "h-full flex flex-col rounded-xl border border-[hsl(0,0%,92%)] group-hover:border-brand-violet/25 group-hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]",
+                  highlighted && "border-2 border-brand-violet shadow-[0_4px_16px_rgba(124,58,237,0.15)]"
+                )
               : "rounded-[1.35rem]",
             !isGrid && isExplore
               ? "border border-[hsl(0,0%,92%)] shadow-[0_4px_24px_rgba(15,23,42,0.05)] group-hover:shadow-[0_12px_36px_rgba(15,23,42,0.09)] group-hover:-translate-y-0.5"
