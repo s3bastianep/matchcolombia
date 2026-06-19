@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import PropertyDetailModal from "@/components/property/PropertyDetailModal";
-
+import { hapticLight } from "@/lib/haptics";
 const PropertyPanelContext = createContext(null);
 
 export function PropertyPanelProvider({ children }) {
@@ -28,8 +28,8 @@ export function PropertyPanelProvider({ children }) {
 
   const openProperty = useCallback((prop, options = {}) => {
     if (!prop) return;
-    const { focusBooking: focus = false, fromUrl = false } = options;
-    setProperty(prop);
+    hapticLight();
+    const { focusBooking: focus = false, fromUrl = false } = options;    setProperty(prop);
     setFocusBooking(focus);
     if (!fromUrl) syncExploreUrl(prop, focus, "set");
   }, [syncExploreUrl]);

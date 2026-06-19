@@ -1,4 +1,4 @@
-import { PROPERTY_GALLERIES, GALLERY_SETS } from "../lib/colombiaImages";
+import { PROPERTY_GALLERIES, GALLERY_SETS } from "../lib/colombiaImages.js";
 
 
 

@@ -10,7 +10,7 @@
 
     <link rel="apple-touch-icon" href="/brand-mark.svg" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
     <meta name="description" content="LUMORA HOME conecta arrendatarios y propietarios en Colombia. Apartamentos y casas verificados en Bogotá y Barranquilla, match inteligente y gestión completa del arriendo." />
 
@@ -66,6 +66,8 @@
 
     <link rel="manifest" href="/manifest.json" />
 
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="Descripción del sitio para asistentes IA" />
+
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
 
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
@@ -120,13 +122,58 @@
 
   <body>
 
-    <div id="root"></div>
-
-    <div id="boot-loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;color:#6b7280;background:#fff;z-index:9999">
-
-      <p>Cargando LUMORA HOME…</p>
-
+    <div id="root">
+      <main id="static-site-fallback" lang="es-CO">
+        <header>
+          <h1>LUMORA HOME — Arriendos verificados en Colombia</h1>
+          <p>
+            Plataforma para arrendar y comprar apartamentos y casas verificados en Bogotá y Barranquilla.
+            Match inteligente, listados revisados y visitas coordinadas.
+          </p>
+        </header>
+        <nav aria-label="Navegación principal">
+          <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/explorar">Explorar inmuebles</a></li>
+            <li><a href="/anunciar">Publicar inmueble</a></li>
+            <li><a href="/vender">Vender inmueble</a></li>
+            <li><a href="/login">Iniciar sesión</a></li>
+          </ul>
+        </nav>
+        <section aria-labelledby="static-about">
+          <h2 id="static-about">Qué ofrece LUMORA HOME</h2>
+          <ul>
+            <li>Inmuebles verificados con fotos y datos revisados por el equipo</li>
+            <li>Match inteligente según presupuesto, zona y preferencias</li>
+            <li>Exploración por mapa y filtros en Bogotá y Barranquilla</li>
+            <li>Agenda de visitas y gestión para propietarios e inquilinos</li>
+          </ul>
+        </section>
+        <section aria-labelledby="static-cities">
+          <h2 id="static-cities">Ciudades disponibles</h2>
+          <p>Apartamentos y casas en arriendo y venta en Bogotá y Barranquilla, Colombia.</p>
+        </section>
+        <p>
+          <a href="/explorar">Ver inmuebles disponibles</a>
+        </p>
+      </main>
     </div>
+
+    <noscript>
+      <div style="max-width:640px;margin:2rem auto;padding:0 1.5rem;font-family:system-ui,sans-serif;line-height:1.6">
+        <h1>LUMORA HOME</h1>
+        <p>Arriendos verificados en Bogotá y Barranquilla. Activa JavaScript para usar la aplicación completa.</p>
+        <p><a href="/explorar">Explorar inmuebles</a> · <a href="/anunciar">Publicar inmueble</a></p>
+      </div>
+    </noscript>
+
+    <div id="boot-loader" aria-hidden="true" hidden style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-gradient(165deg,#faf5ff 0%,#fff 45%,#fdf2f8 100%);z-index:9999">
+      <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#E91E7A,#8B5CF6);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 32px rgba(139,92,246,.28);margin-bottom:20px">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></svg>
+      </div>
+      <div style="margin-top:8px;width:32px;height:32px;border:3px solid rgba(139,92,246,.2);border-top-color:#8B5CF6;border-radius:50%;animation:boot-spin .75s linear infinite"></div>
+    </div>
+    <style>@keyframes boot-spin{to{transform:rotate(360deg)}}</style>
 
     <script type="module" src="/src/main.jsx"></script>
 

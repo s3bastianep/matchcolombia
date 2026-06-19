@@ -29,7 +29,7 @@ function CollagePhoto({ src, alt, className, priority = false }) {
 
 function HeroCollage() {
   return (
-      <div className="relative w-full flex items-center justify-center px-4 sm:px-8 py-8 sm:py-10 lg:py-12 min-h-[240px] sm:min-h-[300px] lg:min-h-[360px]">
+    <div className="relative w-full flex items-center justify-center px-4 sm:px-8 py-8 sm:py-10 lg:py-12 min-h-[240px] sm:min-h-[300px] lg:min-h-[360px]">
       <div className="absolute inset-0 bg-gradient-to-br from-brand-violet/8 via-white to-brand-magenta/6 pointer-events-none" />
       <div className="absolute top-[10%] right-[10%] w-64 h-64 rounded-full gradient-cta opacity-[0.14] blur-3xl pointer-events-none animate-pulse" />
 
@@ -48,6 +48,24 @@ function HeroCollage() {
   );
 }
 
+function HeroMobileImage() {
+  return (
+    <div className="lg:hidden relative mx-4 mb-2 rounded-3xl overflow-hidden aspect-[16/10] shadow-lg shadow-brand-violet/10 border border-border/40">
+      <img
+        src={PEOPLE.collageMain}
+        alt="Apartamento verificado en Bogotá"
+        className="absolute inset-0 w-full h-full object-cover"
+        loading="eager"
+        fetchPriority="high"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+      <div className="absolute bottom-3 left-3 right-3">
+        <VerifiedBadge size="sm" />
+      </div>
+    </div>
+  );
+}
+
 export default function HeroSection({ onStartQuiz }) {
   const navigate = useNavigate();
 
@@ -55,26 +73,28 @@ export default function HeroSection({ onStartQuiz }) {
     <section className="relative overflow-hidden bg-white">
       <div className="absolute inset-0 gradient-hero opacity-40 pointer-events-none" />
 
+      <HeroMobileImage />
+
       <div className="relative grid grid-cols-1 lg:grid-cols-2 items-center max-w-7xl mx-auto">
-        <div className="flex flex-col justify-center px-4 sm:px-8 lg:px-12 py-8 sm:py-12 lg:py-16 order-1">
-          <h1 className="font-extrabold leading-[1.05] mb-3 tracking-tight text-[clamp(2rem,6vw,3.25rem)]">
+        <div className="flex flex-col justify-center px-4 sm:px-8 lg:px-12 py-6 sm:py-12 lg:py-16 order-1">
+          <h1 className="font-extrabold leading-[1.08] mb-3 tracking-tight text-[clamp(1.85rem,7vw,3.25rem)]">
             Arrienda fácil.
             <br />
             <span className="text-gradient">Sin scroll infinito.</span>
           </h1>
 
-          <p className="text-muted-foreground text-sm sm:text-base mb-3 max-w-md leading-relaxed">
+          <p className="text-muted-foreground text-sm sm:text-base mb-4 max-w-md leading-relaxed">
             {HERO_SUBTITLE}
           </p>
-          <VerifiedBadge size="sm" className="mb-7" />
+          <VerifiedBadge size="sm" className="mb-5 hidden lg:inline-flex" />
 
           <InlineMatchBar variant="hero" />
 
-          <div className="flex flex-wrap items-center gap-3 mt-5">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 mt-5">
             <button
               type="button"
               onClick={onStartQuiz}
-              className="inline-flex items-center justify-center gap-2 gradient-cta btn-glow text-white font-bold px-6 py-3 rounded-full hover:opacity-95 transition-opacity text-sm"
+              className="inline-flex items-center justify-center gap-2 gradient-cta btn-glow text-white font-bold px-6 py-3.5 rounded-2xl sm:rounded-full hover:opacity-95 transition-opacity text-sm w-full sm:w-auto"
             >
               Match inteligente
               <ArrowRight className="w-4 h-4" />
@@ -82,18 +102,20 @@ export default function HeroSection({ onStartQuiz }) {
             <button
               type="button"
               onClick={() => navigate("/explorar")}
-              className="text-sm font-bold text-brand-violet hover:underline"
+              className="inline-flex items-center justify-center text-sm font-bold text-brand-violet border-2 border-brand-violet/20 bg-brand-violet/5 px-6 py-3.5 rounded-2xl sm:rounded-full sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:hover:underline w-full sm:w-auto"
             >
               Ver todos los arriendos
             </button>
-            <span className="hidden sm:inline text-border">|</span>
-            <Link to="/publicar" className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              to="/publicar"
+              className="hidden sm:inline text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
+            >
               Publicar inmueble
             </Link>
           </div>
         </div>
 
-        <div className="order-2">
+        <div className="order-2 hidden lg:block">
           <HeroCollage />
         </div>
       </div>

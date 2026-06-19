@@ -1,0 +1,39 @@
+# LUMORA HOME
+
+> Plataforma de arriendos y compra de inmuebles verificados en Colombia (Bogotá y Barranquilla).
+
+## Descripción
+
+LUMORA HOME conecta arrendatarios y propietarios. Ofrece listados verificados, match inteligente según preferencias del usuario, exploración con mapa y filtros, y coordinación de visitas.
+
+## Páginas públicas principales
+
+- `/` — Inicio: búsqueda rápida, match inteligente, inmuebles recientes
+- `/explorar` — Catálogo de inmuebles con filtros, mapa y ordenamiento
+- `/anunciar` — Información para propietarios que quieren publicar
+- `/vender` — Información para vender inmueble
+- `/login` — Inicio de sesión
+- `/register` — Registro de usuario
+
+## Funcionalidades clave
+
+- Inmuebles verificados (apartamentos, casas, estudios) en Bogotá y Barranquilla
+- Match inteligente: quiz de preferencias (presupuesto, zona, habitaciones)
+- `/propiedad/{id}` — Ficha pública de un inmueble (URL canónica para SEO e IAs)
+- Favoritos / guardados (requiere cuenta)
+- App móvil nativa (Capacitor) con navegación inferior
+
+## Tecnología
+
+- Frontend: React 18 + Vite + Tailwind CSS
+- Backend: Supabase (cuando está configurado) o API local en desarrollo
+- App móvil: Capacitor (Android/iOS)
+
+## Contacto y sitio
+
+- URL: https://matchcolombia.co
+- Idioma: español (Colombia)
+
+## Nota para crawlers
+
+El HTML inicial incluye contenido estático en `#root` antes de que React cargue. Las meta etiquetas Open Graph y JSON-LD en `<head>` describen el sitio. Para rutas dinámicas (p. ej. detalle de inmueble), el contenido se renderiza en el cliente.

@@ -1,8 +1,12 @@
-import { BRAND } from "@/lib/brand";
-import { CITIES, ZONES_BY_CITY } from "@/lib/colombia";
+import { BRAND } from "./brand.js";
+import { CITIES, ZONES_BY_CITY } from "./colombia.js";
 
 /** URL canónica del sitio — configurar VITE_SITE_URL en producción */
-export const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://matchcolombia.co").replace(/\/$/, "");
+export const SITE_URL = (
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_SITE_URL) ||
+  (typeof process !== "undefined" && process.env?.VITE_SITE_URL) ||
+  "https://matchcolombia.co"
+).replace(/\/$/, "");
 
 /** Imagen OG en JPG (1200×630) — mejor compatibilidad que SVG en redes sociales */
 export const DEFAULT_OG_IMAGE =
@@ -204,7 +208,7 @@ export function getPropertySeo(property) {
     description,
     image: propertyImage(property),
     imageAlt: `${property.title} — ${typeLabel} en ${city}`,
-    url: absoluteUrl(`/explorar?inmueble=${property.id}`),
+    url: absoluteUrl(`/propiedad/${property.id}`),
     keywords: `${typeLabel} arriendo ${city}, inmueble ${property.locality || city}, ${BRAND.name}`,
     geoPlacename: geo?.placename || SEO_DEFAULTS.geoPlacename,
     geoPosition: geo?.position || SEO_DEFAULTS.geoPosition,
@@ -216,7 +220,7 @@ export function getPropertySeo(property) {
         { name: "Inicio", url: "/" },
         { name: "Arriendos", url: "/explorar" },
         { name: city, url: `/explorar?city=${encodeURIComponent(city)}` },
-        { name: property.title, url: `/explorar?inmueble=${property.id}` },
+        { name: property.title, url: `/propiedad/${property.id}` },
       ]),
     ],
   };
@@ -292,7 +296,6 @@ export function resolveRouteSeo(pathname, searchParams = new URLSearchParams()) 
       title: buildTitle("Inmueble"),
       description: SEO_DEFAULTS.description,
       url: pathname,
-      noindex: true,
     };
   }
 
@@ -439,7 +442,7 @@ export function realEstateListingSchema(property) {
     "@type": "RealEstateListing",
     name: property.title,
     description: property.description || `${property.title} en ${property.city}`,
-    url: absoluteUrl(`/explorar?inmueble=${property.id}`),
+    url: absoluteUrl(`/propiedad/${property.id}`),
     image: property.images?.length ? property.images : [SEO_DEFAULTS.ogImage],
     datePosted: property.created_date || property.updated_date,
     offers: price

@@ -5,9 +5,22 @@ function isBooting() {
   return !!document.getElementById('boot-loader')
 }
 
-function removeBootLoader() {
-  document.getElementById('boot-loader')?.remove()
+function showBootLoader() {
+  const loader = document.getElementById('boot-loader')
+  if (loader) {
+    loader.hidden = false
+    loader.style.display = 'flex'
+  }
 }
+
+function removeBootLoader() {
+  const loader = document.getElementById('boot-loader')
+  if (loader) {
+    loader.remove()
+  }
+}
+
+showBootLoader()
 
 function showBootstrapError(error) {
   removeBootLoader()
@@ -56,9 +69,6 @@ async function boot() {
 
     await initApi()
 
-    const { clearChunkReloadFlag } = await import('@/lib/lazyWithRetry')
-    clearChunkReloadFlag()
-
     window.clearTimeout(bootTimer)
     removeBootLoader()
 
@@ -67,6 +77,9 @@ async function boot() {
         <App />
       </ErrorBoundary>
     )
+
+    import('@/lib/capacitorNative').then(({ initCapacitorNative }) => initCapacitorNative())
+    import('@/lib/lazyWithRetry').then(({ clearChunkReloadFlag }) => clearChunkReloadFlag())
   } catch (error) {
     window.clearTimeout(bootTimer)
     showBootstrapError(error)

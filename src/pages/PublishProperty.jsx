@@ -17,6 +17,7 @@ import { BRAND } from "@/lib/brand";
 import { CITIES, getZonesForCity } from "@/lib/colombia";
 import { BEDROOM_OPTIONS, BATHROOM_OPTIONS, PARKING_OPTIONS, ESTRATO_OPTIONS } from "@/lib/propertyFilters";
 import { getCurrentUserId } from "@/lib/authUser";
+import { MobileFormProgress } from "@/components/layout/mobileAppUtils";
 import { pushAdminNotification } from "@/lib/adminNotifications";
 
 const STEPS = [
@@ -220,8 +221,10 @@ export default function PublishProperty() {
   const progress = ((step + 1) / STEPS.length) * 100;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="bg-white border-b border-border/50">
+    <div className="min-h-screen bg-background pb-mobile-nav lg:pb-0">
+      <MobileFormProgress step={step} total={STEPS.length} labels={STEPS.map((s) => s.label)} />
+
+      <div className="hidden lg:block bg-white border-b border-border/50">
         <div className="max-w-3xl mx-auto px-5 sm:px-8 py-8 sm:py-10">
           <Link to="/publicar" className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground mb-4 transition-colors">
             <ArrowLeft className="w-3.5 h-3.5" />
@@ -272,7 +275,12 @@ export default function PublishProperty() {
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-5 sm:px-8 py-8 sm:py-10">
+      <div className="lg:hidden px-4 pt-4 pb-2">
+        <h1 className="text-xl font-extrabold">Publicar inmueble</h1>
+        <p className="text-sm text-muted-foreground mt-1">Completa los pasos para enviar a revisión</p>
+      </div>
+
+      <div className="max-w-3xl mx-auto px-4 sm:px-8 py-4 sm:py-10">
         <AnimatePresence mode="wait">
           <motion.div key={step} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={{ duration: 0.2 }}>
             {step === 0 && (
@@ -499,11 +507,11 @@ export default function PublishProperty() {
           </motion.div>
         </AnimatePresence>
 
-        <div className="flex items-center justify-between mt-8">
+        <div className="flex items-center justify-between mt-6 lg:mt-8 gap-3">
           <button
             type="button"
-            onClick={() => (step > 0 ? setStep(step - 1) : navigate("/publicar"))}
-            className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground transition-colors"
+            onClick={() => (step > 0 ? setStep(step - 1) : navigate("/anunciar"))}
+            className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground transition-colors touch-target"
           >
             <ArrowLeft className="w-4 h-4" />
             {step === 0 ? "Cancelar" : "Atrás"}
@@ -512,7 +520,7 @@ export default function PublishProperty() {
             type="button"
             onClick={next}
             disabled={createProperty.isPending}
-            className="flex items-center gap-2 gradient-cta btn-glow text-white font-bold px-8 py-3.5 rounded-xl hover:opacity-95 transition-opacity disabled:opacity-60"
+            className="flex items-center gap-2 gradient-cta btn-glow text-white font-bold px-6 sm:px-8 py-3.5 rounded-2xl hover:opacity-95 transition-opacity disabled:opacity-60"
           >
             {step === STEPS.length - 1
               ? (createProperty.isPending ? "Publicando..." : "Publicar inmueble")

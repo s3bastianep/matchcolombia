@@ -41,7 +41,7 @@ export function SpecTile({ icon: Icon, label, value, tone = "pink" }) {
   );
 }
 
-export function PropertyEssentialsSection({ property }) {
+export function PropertyEssentialsSection({ property, compact = false }) {
   const parkingSpots = getParkingSpots(property);
 
   const specs = [
@@ -64,6 +64,25 @@ export function PropertyEssentialsSection({ property }) {
   ].filter(Boolean);
 
   if (!specs.length) return null;
+
+  if (compact) {
+    return (
+      <section>
+        <div className="grid grid-cols-3 gap-2">
+          {specs.map((s) => (
+            <div
+              key={s.label}
+              className="flex flex-col items-center justify-center rounded-xl border border-border/50 bg-secondary/30 py-3 px-1 text-center min-h-[72px]"
+            >
+              <s.icon className="w-4 h-4 text-foreground/40 mb-1.5" strokeWidth={ICON_STROKE} />
+              <p className="text-sm font-bold leading-none text-foreground tabular-nums">{s.value}</p>
+              <p className="text-[10px] font-medium text-muted-foreground mt-1 leading-tight">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="detail-section">
@@ -103,11 +122,37 @@ export function PropertyReferenceBadge({ property, className }) {
   );
 }
 
-export function PropertyDetailHeader({ property }) {
+export function PropertyDetailHeader({ property, compact = false }) {
   const images = getPropertyImages(property);
   const type = typeLabel[property.property_type] || property.property_type;
   const furnished = furnishedLabels[property.furnished];
   const isAvailable = !property.status || property.status === "disponible";
+  const total = getTotalMonthly(property);
+
+  if (compact) {
+    const meta = [type, furnished, isAvailable && "Disponible"].filter(Boolean).join(" · ");
+
+    return (
+      <div className="px-4 pt-3 pb-4">
+        <div className="flex items-center gap-2 mb-2">
+          <VerifiedBadge size="xs" />
+          {meta && (
+            <span className="text-xs font-medium text-muted-foreground truncate">{meta}</span>
+          )}
+        </div>
+        <h1 className="text-xl font-bold leading-snug tracking-tight text-foreground">{property.title}</h1>
+        <p className="flex items-center gap-1.5 text-sm text-muted-foreground mt-2">
+          <MapPin className="w-3.5 h-3.5 shrink-0 text-foreground/40" strokeWidth={2} />
+          <span className="truncate">{property.neighborhood} · {property.city}</span>
+        </p>
+        <p className="text-2xl font-extrabold leading-none tabular-nums text-foreground mt-4">
+          {formatCOP(total || property.monthly_rent)}
+          <span className="text-base font-medium text-muted-foreground ml-1">/mes</span>
+        </p>
+        <PropertyReferenceBadge property={property} className="mt-3 !text-[11px] !py-1.5" />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -199,7 +244,7 @@ export function BrandCallout() {
 
 export function CharacteristicChip({ label }) {
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[hsl(0,0%,96%)] border border-[hsl(0,0%,90%)] text-sm font-medium text-foreground/85">
+    <span className="characteristics-chip">
       <Check className="w-3.5 h-3.5 text-brand-violet shrink-0" strokeWidth={2.5} />
       {label}
     </span>
@@ -211,15 +256,15 @@ function CharacteristicPanel({ icon: Icon, title, items, defaultOpen = true }) {
   if (!items?.length) return null;
 
   return (
-    <div className="rounded-xl border border-[hsl(0,0%,90%)] bg-white overflow-hidden">
+    <div className="characteristics-panel">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-secondary/20 transition-colors"
+        className="characteristics-panel-header"
         aria-expanded={open}
       >
         <Icon className="w-4 h-4 text-foreground/55 shrink-0" strokeWidth={2} />
-        <span className="flex-1 text-sm font-semibold text-foreground">{title}</span>
+        <span className="flex-1 text-sm font-bold text-foreground">{title}</span>
         <ChevronUp className={cn("w-4 h-4 text-foreground/45 shrink-0 transition-transform duration-200", !open && "rotate-180")} strokeWidth={2} />
       </button>
       {open && (
@@ -240,8 +285,8 @@ export function PropertyCharacteristicsSection({ property }) {
   const exterior = getExteriorCharacteristics(property);
 
   return (
-    <section className="detail-section">
-      <h2 className="detail-section-title">Características del inmueble</h2>
+    <section className="space-y-4">
+      <h2 className="text-base font-bold tracking-tight text-foreground lg:text-lg lg:font-extrabold">Características del inmueble</h2>
       <div className="space-y-3">
         <CharacteristicPanel icon={DoorOpen} title="Interiores" items={interior} />
         <CharacteristicPanel icon={Trees} title="Zonas comunes y exteriores" items={exterior} />

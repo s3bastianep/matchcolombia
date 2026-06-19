@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X, Grid3X3, Maximize2, Camera } from "lucide-react";
 import SmartImage from "@/components/ui/SmartImage";
@@ -13,6 +13,7 @@ export default function PropertyGallery({ images, title, immersive = false, vari
   const [lightbox, setLightbox] = useState(false);
   const [gridView, setGridView] = useState(false);
   const [direction, setDirection] = useState(1);
+  const touchStartX = useRef(null);
 
   const go = useCallback((next) => {
     setDirection(next > idx ? 1 : -1);
@@ -43,6 +44,61 @@ export default function PropertyGallery({ images, title, immersive = false, vari
     center: { opacity: 1, scale: 1 },
     exit: (d) => ({ opacity: 0, scale: d > 0 ? 0.97 : 1.03 }),
   };
+
+  if (isModal) {
+    return (
+      <>
+        <div
+          className="relative w-full h-[min(56vh,460px)] min-h-[300px] overflow-hidden bg-muted touch-pan-y"
+          onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+          onTouchEnd={(e) => {
+            if (touchStartX.current == null) return;
+            const diff = e.changedTouches[0].clientX - touchStartX.current;
+            if (diff > 55) prev();
+            else if (diff < -55) next();
+            touchStartX.current = null;
+          }}
+        >
+          <AnimatePresence custom={direction} mode="wait">
+            <motion.div
+              key={idx}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0"
+              onClick={() => setLightbox(true)}
+            >
+              <SmartImage src={images[idx]} alt={title} className="absolute inset-0" />
+            </motion.div>
+          </AnimatePresence>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/25 pointer-events-none" />
+          {images.length > 1 && (
+            <>
+              <button type="button" onClick={(e) => { e.stopPropagation(); prev(); }} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 shadow-lg items-center justify-center z-10 hidden sm:flex">
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button type="button" onClick={(e) => { e.stopPropagation(); next(); }} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 shadow-lg items-center justify-center z-10 hidden sm:flex">
+                <ChevronRight className="w-5 h-5" />
+              </button>
+              <div className="absolute bottom-16 left-0 right-0 flex justify-center gap-1.5 z-10 pointer-events-none">
+                {images.slice(0, 8).map((_, i) => (
+                  <span key={i} className={cn("h-1.5 rounded-full transition-all", i === idx ? "w-5 bg-white" : "w-1.5 bg-white/50")} />
+                ))}
+              </div>
+            </>
+          )}
+          <button type="button" onClick={(e) => { e.stopPropagation(); setLightbox(true); }} className="absolute bottom-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md text-white text-xs font-bold z-10">
+            <Camera className="w-3.5 h-3.5" />
+            {idx + 1}/{images.length}
+          </button>
+        </div>
+        <Lightbox images={images} title={title} idx={idx} setIdx={go} lightbox={lightbox} setLightbox={setLightbox} gridView={gridView} setGridView={setGridView} prev={prev} next={next} direction={direction} variants={variants} />
+      </>
+    );
+  }
 
   if (isImmersive && images.length >= 2) {
     const [main, ...rest] = images;

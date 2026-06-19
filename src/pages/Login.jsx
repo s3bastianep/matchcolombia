@@ -52,6 +52,10 @@ export default function Login() {
         </div>
       )}
 
+      <div className="lg:hidden mb-4 p-3 rounded-xl bg-brand-violet/5 border border-brand-violet/15 text-xs text-muted-foreground">
+        <span className="font-bold text-brand-violet">Demo:</span> admin / admin123
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="username" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">

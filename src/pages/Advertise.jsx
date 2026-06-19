@@ -22,6 +22,7 @@ import AboutFounderSection from "@/components/advertise/AboutFounderSection";
 import OwnerSecuritySection from "@/components/advertise/OwnerSecuritySection";
 import OwnerFaqSection from "@/components/advertise/OwnerFaqSection";
 import { ADVERTISE_HERO_TITLE, ADVERTISE_HERO_SUBTITLE } from "@/lib/siteCopy";
+import AdvertiseMobile from "./mobile/AdvertiseMobile";
 
 const VERIFIABLE = [
   { label: "Seguimiento digital", desc: "Pagos, contratos y tickets en un solo lugar." },
@@ -145,7 +146,11 @@ function LeadForm({ dark = false }) {
 
 export default function Advertise() {
   return (
-    <div className="w-full overflow-x-hidden bg-background">
+    <>
+      <div className="lg:hidden">
+        <AdvertiseMobile />
+      </div>
+      <div className="hidden lg:block w-full overflow-x-hidden bg-background">
       <OwnerBreadcrumb />
 
       <section className="bg-brand-dark text-white">
@@ -320,5 +325,6 @@ export default function Advertise() {
         </div>
       </section>
     </div>
+    </>
   );
 }

@@ -40,7 +40,12 @@ import {
 } from "@/lib/propertyFilters";
 import { shouldInsertOwnerPromo, EXPLORE_SPLIT_LAYOUT, EXPLORE_GUTTER, EXPLORE_CONTENT_PAD } from "@/lib/exploreUtils";
 
-const ExploreMap = lazy(() => import("../components/explore/ExploreMap"));
+import ExploreMap from "../components/explore/ExploreMap";
+import ExploreAppBar from "../components/explore/ExploreAppBar";
+import ExploreFiltersDrawer from "../components/explore/ExploreFiltersDrawer";
+import PropertyAppCard from "../components/property/PropertyAppCard";
+import PullToRefresh from "../components/mobile/PullToRefresh";
+import AppEmptyState from "../components/mobile/AppEmptyState";
 
 function MapPaneFallback({ className }) {
   return <div className={cn("shimmer bg-muted/20", className)} aria-hidden />;
@@ -60,12 +65,12 @@ const QUICK_FILTERS = [
 
 function ExploreSkeleton() {
   return (
-    <div className="overflow-hidden rounded-xl border border-[hsl(0,0%,92%)] p-3 h-full flex flex-col">
-      <div className="w-full aspect-[5/4] rounded-lg shimmer shrink-0" />
-      <div className="pt-3 space-y-2 flex-1 flex flex-col">
-        <div className="h-4 w-2/3 rounded shimmer" />
-        <div className="h-3 w-1/2 rounded shimmer" />
-        <div className="h-8 w-full rounded-lg shimmer mt-auto" />
+    <div className="native-card overflow-hidden">
+      <div className="w-full aspect-[4/3] shimmer" />
+      <div className="p-3.5 space-y-2">
+        <div className="h-4 w-1/2 rounded shimmer" />
+        <div className="h-3 w-2/3 rounded shimmer" />
+        <div className="h-3 w-1/3 rounded shimmer" />
       </div>
     </div>
   );
@@ -169,7 +174,7 @@ export default function Explore() {
     [searchParams]
   );
 
-  const { data: properties = [], isLoading } = useQuery({
+  const { data: properties = [], isLoading, refetch } = useQuery({
     queryKey: ["properties-all"],
     queryFn: () => api.entities.Property.filter({ status: "disponible" }, "-created_date", 100),
     ...PROPERTY_LIST_QUERY,
@@ -248,6 +253,10 @@ export default function Explore() {
 
   const removeQuickFilter = (key) => setActiveQuick((prev) => prev.filter((k) => k !== key));
 
+  const toggleQuickFilter = useCallback((key) => {
+    setActiveQuick((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
+  }, []);
+
   const setCityFilter = useCallback((city) => {
     const next = new URLSearchParams(searchParams);
     if (city) next.set("city", city);
@@ -273,7 +282,21 @@ export default function Explore() {
 
   return (
     <div className="h-full min-h-0 bg-white flex flex-col">
-      <div className={cn("bg-white border-b border-[hsl(0,0%,90%)] sticky top-[58px] z-30 shrink-0", EXPLORE_GUTTER)}>
+      <ExploreAppBar
+        locality={locality}
+        onLocalityChange={setLocality}
+        onSearch={applyLocalitySearch}
+        initialCity={initialCity}
+        onCityChange={setCityFilter}
+        onOpenFilters={() => setMobileFiltersOpen(true)}
+        filterCount={totalFilterCount}
+        viewMode={viewMode}
+        onToggleView={() => setViewMode((m) => (m === "map" ? "list" : "map"))}
+        activeQuick={activeQuick}
+        onToggleQuick={toggleQuickFilter}
+      />
+
+      <div className={cn("hidden lg:block bg-white border-b border-[hsl(0,0%,90%)] sticky top-[58px] z-30 shrink-0", EXPLORE_GUTTER)}>
         {isMatched && prefs && (
           <motion.div
             initial={{ opacity: 0, y: -6 }}
@@ -449,10 +472,18 @@ export default function Explore() {
           </div>
         </>
       ) : filtered.length > 0 && viewMode === "map" ? (
-        <div className={cn("lg:hidden flex-1 min-h-0 p-4 pb-6", EXPLORE_GUTTER)}>
-          <Suspense fallback={<MapPaneFallback className="h-full rounded-xl" />}>
-            <ExploreMap properties={filtered} activeCity={initialCity || undefined} pane className="h-full rounded-xl border border-[hsl(0,0%,90%)]" />
+        <div className="lg:hidden flex-1 min-h-0 relative pb-mobile-nav">
+          <Suspense fallback={<MapPaneFallback className="h-full" />}>
+            <ExploreMap properties={filtered} activeCity={initialCity || undefined} pane className="h-full border-0" />
           </Suspense>
+          <button
+            type="button"
+            onClick={() => setViewMode("list")}
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[5] flex items-center gap-2 px-5 py-3 rounded-full bg-foreground text-white text-sm font-bold shadow-xl active:scale-[0.98] transition-transform"
+          >
+            <LayoutList className="w-4 h-4" />
+            Ver {filtered.length} inmuebles
+          </button>
         </div>
       ) : filtered.length > 0 ? (
         <>
@@ -587,21 +618,49 @@ export default function Explore() {
             </div>
           </div>
 
-          <div className={cn("lg:hidden flex-1 min-h-0 overflow-y-auto pb-24 space-y-4", EXPLORE_GUTTER, "py-4", viewMode === "map" && "hidden")}>
-            <div>
-              <h1 className="text-lg font-extrabold tracking-tight leading-snug">{resultsTitle}</h1>
-              <ResultsCount count={filtered.length} query={initialQ} />
+          <PullToRefresh
+            onRefresh={() => refetch()}
+            className={cn("lg:hidden flex-1 min-h-0 pb-mobile-nav native-scroll-y", viewMode === "map" && "hidden")}
+          >
+            {isMatched && prefs && (
+              <div className="mx-4 mt-3 mb-1 px-3 py-2.5 rounded-2xl bg-brand-violet/8 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-brand-violet shrink-0" />
+                <p className="text-xs font-semibold text-foreground flex-1 truncate">{matchBannerTitle(cityLabel)}</p>
+                <button
+                  type="button"
+                  onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
+                  className="text-xs font-bold text-brand-violet shrink-0"
+                >
+                  Editar
+                </button>
+              </div>
+            )}
+            <div className="px-4 pt-3 pb-2 flex items-center justify-between gap-3">
+              <p className="text-sm text-muted-foreground">
+                <span className="font-extrabold text-foreground tabular-nums">{filtered.length}</span>{" "}
+                {listingsCountLabel(filtered.length)}
+              </p>
+              <div className="shrink-0">{sortSelect}</div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
+            {totalFilterCount > 0 && (
+              <div className="flex flex-wrap gap-1.5 px-4 pb-2">
+                {activeQuick.map((key) => {
+                  const label = QUICK_FILTERS.find((f) => f.key === key)?.label;
+                  return label ? (
+                    <ActiveFilterChip key={key} label={label} onRemove={() => removeQuickFilter(key)} />
+                  ) : null;
+                })}
+              </div>
+            )}
+            <div className="px-4 pb-4 grid grid-cols-1 gap-4">
               {filtered.flatMap((property, i) => {
                 const items = [
-                  <PropertyCard
+                  <PropertyAppCard
                     key={property.id}
                     property={property}
                     index={i}
                     matchScore={property.matchScore}
                     showMatch={isMatched}
-                    variant="grid"
                   />,
                 ];
                 if (shouldInsertOwnerPromo(i)) {
@@ -610,11 +669,39 @@ export default function Explore() {
                 return items;
               })}
             </div>
-          </div>
+          </PullToRefresh>
         </>
       ) : (
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-6 sm:py-8">
-          <div className="text-center py-20 sm:py-24 rounded-3xl bg-white border border-border/50 shadow-sm">
+        <>
+          <div className="lg:hidden flex-1 min-h-0 pb-mobile-nav">
+            <AppEmptyState
+              icon={properties.length === 0 ? Home : Search}
+              title={properties.length === 0 ? EXPLORE_EMPTY_NO_LISTINGS_TITLE : EXPLORE_EMPTY_FILTERED_TITLE}
+              description={properties.length === 0 ? EXPLORE_EMPTY_NO_LISTINGS_DESC : EXPLORE_EMPTY_FILTERED_DESC}
+              action={
+                <button
+                  type="button"
+                  onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
+                  className="app-btn-primary w-full py-3.5 text-sm"
+                >
+                  {properties.length === 0 ? "Configurar match" : "Refinar match"}
+                </button>
+              }
+              secondaryAction={
+                properties.length === 0 ? (
+                  <Link to="/" className="app-btn-secondary w-full py-3.5 text-sm text-center">
+                    Volver al inicio
+                  </Link>
+                ) : (
+                  <button type="button" onClick={clearAllFilters} className="app-btn-secondary w-full py-3.5 text-sm">
+                    Limpiar filtros
+                  </button>
+                )
+              }
+            />
+          </div>
+          <div className="hidden lg:block max-w-[1440px] mx-auto px-5 sm:px-8 py-6 sm:py-8">
+            <div className="text-center py-20 sm:py-24 rounded-3xl bg-white border border-border/50 shadow-sm">
             <div className="w-16 h-16 rounded-2xl bg-brand-violet/10 flex items-center justify-center mx-auto mb-5">
               {properties.length === 0 ? (
                 <Home className="w-8 h-8 text-brand-violet" />
@@ -651,54 +738,19 @@ export default function Explore() {
                 </button>
               )}
             </div>
+            </div>
           </div>
-        </div>
+        </>
       )}
 
-      <AnimatePresence>
-        {mobileFiltersOpen && (
-          <div className="fixed inset-0 z-50 flex items-end lg:items-center lg:justify-center">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-              onClick={() => setMobileFiltersOpen(false)}
-            />
-            <motion.div
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
-              transition={{ type: "spring", damping: 28, stiffness: 320 }}
-              className="relative w-full lg:max-w-md bg-[hsl(0,0%,96%)] rounded-t-3xl lg:rounded-2xl p-5 pb-safe max-h-[88dvh] overflow-y-auto"
-            >
-              <div className="w-10 h-1 bg-border rounded-full mx-auto mb-4" />
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-extrabold text-lg">{EXPLORE_MORE_FILTERS}</h3>
-                <button
-                  type="button"
-                  onClick={() => setMobileFiltersOpen(false)}
-                  className="touch-target rounded-xl hover:bg-white"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-              <AdvancedFilters
-                filters={advancedFilters}
-                onChange={updateAdvancedFilters}
-                onClear={clearAdvancedFilters}
-              />
-              <button
-                type="button"
-                onClick={() => setMobileFiltersOpen(false)}
-                className="w-full mt-4 gradient-cta text-white font-bold py-3.5 rounded-xl"
-              >
-                {viewListingsLabel(filtered.length)}
-              </button>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      <ExploreFiltersDrawer
+        open={mobileFiltersOpen}
+        onOpenChange={setMobileFiltersOpen}
+        filters={advancedFilters}
+        onChange={updateAdvancedFilters}
+        onClear={clearAdvancedFilters}
+        resultCount={filtered.length}
+      />
     </div>
   );
 }

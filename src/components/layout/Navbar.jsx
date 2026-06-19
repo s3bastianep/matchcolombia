@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { getUserRole, PANEL_HOME, ROLE_LABELS, ROLES } from "@/lib/roles";
-import { LayoutDashboard, Menu, X, Heart, LogOut, LogIn, UserPlus, Building2, TrendingUp } from "lucide-react";
+import { getUserRole, PANEL_HOME, ROLE_LABELS } from "@/lib/roles";
+import { LayoutDashboard, Heart, LogOut, LogIn, UserPlus, Building2, TrendingUp, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -75,15 +75,13 @@ function isNavLinkActive(link, pathname, search) {
   return intent !== "compra";
 }
 
-export default function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+export default function Navbar({ onAccountClick = () => {} }) {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const location = useLocation();
   const { user, isAuthenticated, logout, isLoadingAuth } = useAuth();
 
   const handleLogout = async () => {
     setUserMenuOpen(false);
-    setMobileOpen(false);
     await logout();
   };
 
@@ -91,7 +89,7 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border/50">
       <div className="color-bar h-[2px] w-full" />
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
-        <div className="flex items-center justify-between h-[56px]">
+        <div className="flex items-center justify-between h-14 lg:h-[56px]">
           <BrandLogo size="sm" />
 
           <div className="hidden lg:flex items-center gap-3">
@@ -110,13 +108,14 @@ export default function Navbar() {
             />
           </div>
 
-          <div className="flex items-center gap-2">
-            <Link to="/favoritos" className="p-2 rounded-full hover:bg-secondary transition-colors">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Link to="/favoritos" className="hidden sm:flex p-2 rounded-full hover:bg-secondary transition-colors">
               <Heart className="w-5 h-5 text-foreground/45" />
             </Link>
 
             {!isLoadingAuth && isAuthenticated && user ? (
-              <div className="relative hidden sm:block">
+              <>
+                <div className="relative hidden sm:block">
                 <button
                   type="button"
                   onClick={() => setUserMenuOpen((v) => !v)}
@@ -182,7 +181,19 @@ export default function Navbar() {
                   )}
                 </AnimatePresence>
               </div>
+                <button
+                  type="button"
+                  onClick={onAccountClick}
+                  className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full border border-border/60 bg-secondary/50"
+                  aria-label="Mi cuenta"
+                >
+                  <div className="w-8 h-8 rounded-full gradient-cta flex items-center justify-center text-white text-xs font-extrabold">
+                    {user.name?.[0]?.toUpperCase() || user.username?.[0]?.toUpperCase() || "U"}
+                  </div>
+                </button>
+              </>
             ) : !isLoadingAuth ? (
+              <>
               <div className="hidden sm:flex items-center gap-2">
                 <Link
                   to="/login"
@@ -198,6 +209,15 @@ export default function Navbar() {
                   Registrarse
                 </Link>
               </div>
+                <button
+                  type="button"
+                  onClick={onAccountClick}
+                  className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full border border-border/60 hover:bg-secondary transition-colors"
+                  aria-label="Iniciar sesión"
+                >
+                  <User className="w-5 h-5 text-foreground/60" />
+                </button>
+              </>
             ) : null}
 
             <button
@@ -206,100 +226,9 @@ export default function Navbar() {
             >
               Match inteligente
             </button>
-
-            <button className="lg:hidden p-2 rounded-full hover:bg-secondary" onClick={() => setMobileOpen(!mobileOpen)}>
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
           </div>
         </div>
       </div>
-
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden border-t border-border/50 bg-white overflow-hidden"
-          >
-            <div className="px-4 py-3 space-y-3">
-              <div className="flex items-center gap-2">
-                <div className="flex flex-1 gap-0.5 p-0.5 rounded-lg bg-secondary/70">
-                  {seekerLinks.map((link) => (
-                    <Link
-                      key={link.label}
-                      to={link.to}
-                      onClick={() => setMobileOpen(false)}
-                      className={cn(
-                        "flex-1 text-center px-2 py-2 text-xs rounded-md transition-colors",
-                        navLinkClass(link.theme, isNavLinkActive(link, location.pathname, location.search))
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-
-                <div className="w-px h-4 bg-border/80 shrink-0" aria-hidden />
-
-                <div className="flex flex-1 gap-0.5 p-0.5 rounded-lg bg-secondary/70">
-                  {ownerLinks.map((link) => (
-                    <Link
-                      key={link.label}
-                      to={link.to}
-                      onClick={() => setMobileOpen(false)}
-                      className={cn(
-                        "flex-1 text-center px-2 py-2 text-xs rounded-md transition-colors",
-                        navLinkClass(link.theme, isNavLinkActive(link, location.pathname, location.search))
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {isAuthenticated && user ? (
-                <>
-                  <div className="px-3 py-3 text-xs text-muted-foreground border-t border-border/40 mt-2">
-                    Sesión: <span className="font-bold text-foreground">@{user.username}</span>
-                  </div>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-2 px-3 py-3 text-sm font-semibold text-destructive hover:bg-destructive/5 rounded-xl"
-                  >
-                    <LogOut className="w-4 h-4" /> Cerrar sesión
-                  </button>
-                </>
-              ) : (
-                <div className="flex flex-col gap-2 pt-2 border-t border-border/40 mt-2">
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-border font-bold text-sm"
-                  >
-                    <LogIn className="w-4 h-4" /> Entrar
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex items-center justify-center gap-2 gradient-cta text-white font-bold py-3 rounded-xl"
-                  >
-                    <UserPlus className="w-4 h-4" /> Registrarse
-                  </Link>
-                </div>
-              )}
-
-              <button
-                onClick={() => { setMobileOpen(false); window.dispatchEvent(new CustomEvent("open-match-quiz")); }}
-                className="w-full mt-2 gradient-cta text-white font-bold py-3 rounded-full"
-              >
-                Match inteligente
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </nav>
   );
 }

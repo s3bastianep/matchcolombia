@@ -20,7 +20,7 @@ const TenantLayout = lazy(() => import('./layouts/TenantLayout'));
 const OwnerLayout = lazy(() => import('./layouts/OwnerLayout'));
 const Home = lazy(() => import('./pages/Home'));
 const Explore = lazy(() => import('./pages/Explore'));
-const PropertyRedirect = lazy(() => import('./pages/PropertyRedirect'));
+const PropertyLanding = lazy(() => import('./pages/PropertyLanding'));
 const PublishProperty = lazy(() => import('./pages/PublishProperty'));
 const Sell = lazy(() => import('./pages/Sell'));
 const Advertise = lazy(() => import('./pages/Advertise'));
@@ -28,6 +28,7 @@ const Favorites = lazy(() => import('./pages/Favorites'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const AppMobilePreview = lazy(() => import('./pages/AppMobilePreview'));
 
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const AdminProperties = lazy(() => import('./pages/admin/AdminProperties'));
@@ -69,6 +70,7 @@ function AppRoutes() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
+        <Route path="/vista-previa-app" element={<AppMobilePreview />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/olvide-contrasena" element={<ForgotPassword />} />
@@ -79,7 +81,7 @@ function AppRoutes() {
           <Route path="/explorar" element={<Explore />} />
           <Route path="/anunciar" element={<Advertise />} />
           <Route path="/publicar" element={<Sell />} />
-          <Route path="/propiedad/:id" element={<PropertyRedirect />} />
+          <Route path="/propiedad/:id" element={<PropertyLanding />} />
           <Route element={<RequireAuth />}>
             <Route path="/publicar/nuevo" element={<PublishProperty />} />
             <Route path="/favoritos" element={<Favorites />} />

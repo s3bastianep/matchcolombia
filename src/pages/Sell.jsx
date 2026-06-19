@@ -199,9 +199,15 @@ function SellComparison() {
   );
 }
 
+import SellMobile from "./mobile/SellMobile";
+
 export default function Sell() {
   return (
-    <div className="w-full overflow-x-hidden bg-background">
+    <>
+      <div className="lg:hidden">
+        <SellMobile />
+      </div>
+      <div className="hidden lg:block w-full overflow-x-hidden bg-background">
       <div className="color-bar">
         <div className="max-w-6xl mx-auto px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
           <nav className="flex items-center gap-1.5 text-xs font-semibold text-white/80">
@@ -386,5 +392,6 @@ export default function Sell() {
         </div>
       </section>
     </div>
+    </>
   );
 }

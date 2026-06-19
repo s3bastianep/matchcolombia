@@ -24,7 +24,7 @@ import { useAuth } from "@/lib/AuthContext";
 const formatCOP = (v) =>
   v ? new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v) : "$0";
 
-export default function VisitBookingForm({ property, propertyId, propertyTitle, onConfirmed }) {
+export default function VisitBookingForm({ property, propertyId, propertyTitle, onConfirmed, variant = "default" }) {
   const id = propertyId || property?.id;
   const title = propertyTitle || property?.title;
   const refCode = property ? getPropertyReferenceCode(property) : null;
@@ -198,7 +198,10 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white/90 rounded-2xl detail-card-soft p-5 sm:p-6 space-y-1"
+      className={cn(
+        "space-y-1",
+        variant === "mobile" ? "native-card-flat p-4" : "bg-white/90 rounded-2xl detail-card-soft p-5 sm:p-6"
+      )}
     >
       <VisitScheduler
         visitType={visitType}
@@ -291,6 +294,7 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
         disabled={sendBooking.isPending}
         className={cn(
           "mt-6 w-full h-12 rounded-xl gradient-cta text-white font-bold text-sm",
+          variant === "mobile" && "rounded-2xl h-14",
           "shadow-md shadow-brand-magenta/25 hover:opacity-95 hover:shadow-lg hover:shadow-brand-magenta/30",
           "transition-all duration-200 ease-out disabled:opacity-70",
           "flex items-center justify-center gap-2"
