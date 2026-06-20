@@ -37,9 +37,6 @@ export const EXPLORE_SORT_LABELS = {
   area: "Mayor área",
 };
 
-export const FOOTER_BLURB =
-  "Arriendos en Bogotá y Barranquilla con listados revisados y match inteligente.";
-
 export const NAV_LABEL_RENT = "Arrendar";
 
 export const FAVORITES_BADGE = "Guardados";

@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Mail, Phone } from "lucide-react";
 import { BRAND } from "@/lib/brand";
-import { FOOTER_BLURB } from "@/lib/siteCopy";
 
 const SocialX = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -55,9 +54,6 @@ export default function Footer() {
                 <p className="text-white/35 text-[10px] font-semibold">{BRAND.tagline}</p>
               </div>
             </Link>
-            <p className="text-white/40 text-sm leading-relaxed max-w-[260px] mb-7">
-              {FOOTER_BLURB}
-            </p>
             <div className="flex gap-2 mb-8">
               {[
                 { Icon: SocialIG, href: BRAND.social?.instagram, label: "Instagram" },

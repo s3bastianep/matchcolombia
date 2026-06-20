@@ -13,43 +13,58 @@ const seekerLinks = [
 ];
 
 const ownerLinks = [
-  { to: "/publicar", label: "Vender", publish: true, theme: "vender" },
-  { to: "/anunciar", label: "Anunciar", advertise: true, theme: "anunciar" },
+  { to: "/publicar", label: "Vender", publish: true, theme: "vender", variant: "outline" },
+  { to: "/anunciar", label: "Anunciar", advertise: true, theme: "anunciar", variant: "cta" },
 ];
 
 const NAV_THEMES = {
   compra: {
-    idle: "text-brand-violet hover:text-brand-violet/80",
-    active: "bg-brand-violet/10 text-brand-violet font-semibold",
+    idle: "text-brand-violet hover:bg-brand-violet/8",
+    active: "bg-brand-violet text-white shadow-sm",
   },
   rentar: {
-    idle: "text-brand-magenta hover:text-brand-magenta/80",
-    active: "bg-brand-magenta/10 text-brand-magenta font-semibold",
+    idle: "text-brand-magenta hover:bg-brand-magenta/8",
+    active: "bg-brand-magenta text-white shadow-sm",
   },
   vender: {
-    idle: "text-brand-magenta hover:text-brand-magenta/80",
-    active: "bg-brand-magenta/10 text-brand-magenta font-semibold",
+    idle: "text-brand-magenta border-brand-magenta/35 hover:bg-brand-magenta/8 hover:border-brand-magenta/50",
+    active: "bg-brand-magenta/12 text-brand-magenta border-brand-magenta/50",
   },
   anunciar: {
-    idle: "text-brand-violet hover:text-brand-violet/80",
-    active: "bg-brand-violet/10 text-brand-violet font-semibold",
+    idle: "",
+    active: "",
   },
 };
 
-function navLinkClass(theme, active) {
+function navLinkClass(theme, active, variant = "pill") {
+  if (variant === "cta") {
+    return cn(
+      "inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold text-white",
+      "gradient-cta shadow-md shadow-brand-violet/25 hover:opacity-95 transition-opacity"
+    );
+  }
+  if (variant === "outline") {
+    const t = NAV_THEMES[theme];
+    return cn(
+      "inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold border-2 transition-colors whitespace-nowrap",
+      active ? t.active : t.idle
+    );
+  }
   const t = NAV_THEMES[theme];
   return cn(
-    "block px-2.5 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap",
+    "block px-3.5 py-1.5 text-sm font-bold rounded-lg transition-all whitespace-nowrap",
     active ? t.active : t.idle
   );
 }
 
 function NavLink({ link, pathname, search }) {
   const active = isNavLinkActive(link, pathname, search);
+  const variant = link.variant || "pill";
 
   return (
     <Link to={link.to}>
-      <span className={navLinkClass(link.theme, active)}>
+      <span className={navLinkClass(link.theme, active, variant)}>
+        {link.advertise && <Building2 className="w-4 h-4 shrink-0" strokeWidth={2.25} />}
         {link.label}
       </span>
     </Link>
@@ -58,7 +73,7 @@ function NavLink({ link, pathname, search }) {
 
 function NavGroup({ links, pathname, search }) {
   return (
-    <div className="flex items-center gap-0.5 p-0.5 rounded-lg bg-secondary/70">
+    <div className="flex items-center gap-0.5 p-1 rounded-xl bg-white border border-border/70 shadow-sm">
       {links.map((link) => (
         <NavLink key={link.label} link={link} pathname={pathname} search={search} />
       ))}
@@ -92,20 +107,25 @@ export default function Navbar({ onAccountClick = () => {} }) {
         <div className="flex items-center justify-between h-14 lg:h-[56px]">
           <BrandLogo size="sm" />
 
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-2.5">
             <NavGroup
               links={seekerLinks}
               pathname={location.pathname}
               search={location.search}
             />
 
-            <div className="w-px h-4 bg-border/80" aria-hidden />
+            <div className="w-px h-6 bg-border" aria-hidden />
 
-            <NavGroup
-              links={ownerLinks}
-              pathname={location.pathname}
-              search={location.search}
-            />
+            <div className="flex items-center gap-2">
+              {ownerLinks.map((link) => (
+                <NavLink
+                  key={link.label}
+                  link={link}
+                  pathname={location.pathname}
+                  search={location.search}
+                />
+              ))}
+            </div>
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-2">
@@ -222,7 +242,7 @@ export default function Navbar({ onAccountClick = () => {} }) {
 
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
-              className="hidden md:block gradient-cta text-white text-sm font-bold px-5 py-2.5 rounded-full hover:opacity-95 transition-opacity shadow-md shadow-brand-violet/20"
+              className="hidden md:block text-sm font-bold px-4 py-2.5 rounded-full border-2 border-brand-violet/35 text-brand-violet hover:bg-brand-violet/8 transition-colors"
             >
               Match inteligente
             </button>
