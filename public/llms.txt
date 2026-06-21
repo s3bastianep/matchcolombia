@@ -1,6 +1,6 @@
 # LUMORA HOME
 
-> Plataforma de arriendos y compra de inmuebles verificados en Colombia (Bogotá y Barranquilla).
+> Plataforma de arriendos y compra de inmuebles verificados en Bogotá, Colombia.
 
 ## Descripción
 
@@ -17,7 +17,7 @@ LUMORA HOME conecta arrendatarios y propietarios. Ofrece listados verificados, m
 
 ## Funcionalidades clave
 
-- Inmuebles verificados (apartamentos, casas, estudios) en Bogotá y Barranquilla
+- Inmuebles verificados (apartamentos, casas, estudios) en Bogotá
 - Match inteligente: quiz de preferencias (presupuesto, zona, habitaciones)
 - `/propiedad/{id}` — Ficha pública de un inmueble (URL canónica para SEO e IAs)
 - Favoritos / guardados (requiere cuenta)

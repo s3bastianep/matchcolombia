@@ -1,7 +1,7 @@
 {
   "name": "LUMORA HOME",
   "short_name": "Lumora",
-  "description": "Arriendos verificados en Colombia. Apartamentos y casas en Bogotá y Barranquilla con match inteligente.",
+  "description": "Arriendos verificados en Bogotá. Apartamentos y casas con match inteligente.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

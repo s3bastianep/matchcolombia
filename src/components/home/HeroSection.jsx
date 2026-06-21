@@ -1,8 +1,6 @@
 import React from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import InlineMatchBar from "../search/InlineMatchBar";
-import VerifiedBadge from "../brand/VerifiedBadge";
+import { Link } from "react-router-dom";
+import { ArrowRight, Search, Building2, ShieldCheck, Sparkles } from "lucide-react";
 import { PEOPLE } from "@/lib/colombiaImages";
 import { HERO_SUBTITLE } from "@/lib/siteCopy";
 import { cn } from "@/lib/utils";
@@ -30,8 +28,7 @@ function CollagePhoto({ src, alt, className, priority = false }) {
 function HeroCollage() {
   return (
     <div className="relative w-full flex items-center justify-center px-4 sm:px-8 py-8 sm:py-10 lg:py-12 min-h-[240px] sm:min-h-[300px] lg:min-h-[360px]">
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-violet/8 via-white to-brand-magenta/6 pointer-events-none" />
-      <div className="absolute top-[10%] right-[10%] w-64 h-64 rounded-full gradient-cta opacity-[0.14] blur-3xl pointer-events-none animate-pulse" />
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-violet/6 via-white to-brand-magenta/4 pointer-events-none" />
 
       <div className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[420px] aspect-square mx-auto">
         <div className="hero-collage-main absolute inset-[6%] z-10">
@@ -48,71 +45,118 @@ function HeroCollage() {
   );
 }
 
-function HeroMobileImage() {
+function HeroPathLink({ to, icon: Icon, title, cta, variant = "renter" }) {
+  const isOwner = variant === "owner";
+
   return (
-    <div className="lg:hidden relative mx-4 mb-2 rounded-3xl overflow-hidden aspect-[16/10] shadow-lg shadow-brand-violet/10 border border-border/40">
-      <img
-        src={PEOPLE.collageMain}
-        alt="Apartamento verificado en Bogotá"
-        className="absolute inset-0 w-full h-full object-cover"
-        loading="eager"
-        fetchPriority="high"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
-      <div className="absolute bottom-3 left-3 right-3">
-        <VerifiedBadge size="sm" />
+    <Link
+      to={to}
+      className={cn(
+        "group flex items-center gap-3 rounded-xl px-4 py-3.5 transition-all duration-200",
+        isOwner
+          ? "gradient-cta text-white shadow-md shadow-brand-violet/20 hover:opacity-95"
+          : "border-2 border-brand-violet/35 bg-white shadow-md shadow-brand-violet/10 hover:border-brand-violet/50 hover:shadow-lg hover:shadow-brand-violet/12"
+      )}
+    >
+      <span
+        className={cn(
+          "inline-flex w-9 h-9 rounded-lg items-center justify-center shrink-0",
+          isOwner ? "bg-white/15" : "bg-brand-violet/10 text-brand-violet ring-1 ring-brand-violet/20"
+        )}
+      >
+        <Icon className="w-4 h-4" strokeWidth={2.25} />
+      </span>
+      <span className={cn("font-bold text-sm flex-1 min-w-0", !isOwner && "text-foreground")}>
+        {title}
+      </span>
+      <span
+        className={cn(
+          "inline-flex items-center gap-1 text-xs font-bold shrink-0",
+          isOwner ? "text-white/90" : "text-brand-violet"
+        )}
+      >
+        {cta}
+        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+      </span>
+    </Link>
+  );
+}
+
+function HeroMatchBlock({ onStartQuiz }) {
+  return (
+    <div className="rounded-2xl overflow-hidden border border-brand-violet/15 bg-white shadow-lg shadow-brand-violet/8 mb-5">
+      <div className="color-bar h-[3px] w-full" />
+      <div className="p-5 sm:p-6">
+        <div className="flex items-start gap-3.5 mb-5">
+          <span className="inline-flex w-11 h-11 rounded-xl gradient-cta items-center justify-center shrink-0 shadow-md shadow-brand-magenta/25">
+            <Sparkles className="w-5 h-5 text-white" strokeWidth={2.25} />
+          </span>
+          <div className="min-w-0 pt-0.5">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-brand-violet mb-1">
+              Lo nuestro
+            </p>
+            <h2 className="font-extrabold text-lg sm:text-xl leading-tight text-foreground">
+              Match inteligente
+            </h2>
+            <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
+              Responde el cuestionario y te mostramos inmuebles verificados que encajan contigo.
+            </p>
+          </div>
+        </div>
+
+        {onStartQuiz && (
+          <button
+            type="button"
+            onClick={onStartQuiz}
+            className="w-full h-12 sm:h-[52px] rounded-xl gradient-cta btn-glow text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 hover:opacity-95 transition-opacity"
+          >
+            <Sparkles className="w-4 h-4 shrink-0" strokeWidth={2.25} />
+            Iniciar match inteligente
+          </button>
+        )}
+
+        <Link
+          to="/explorar"
+          className="mt-3 block text-center text-xs sm:text-sm font-semibold text-muted-foreground hover:text-brand-violet transition-colors"
+        >
+          o explorar todos los arriendos
+        </Link>
       </div>
     </div>
   );
 }
 
 export default function HeroSection({ onStartQuiz }) {
-  const navigate = useNavigate();
-
   return (
     <section className="relative overflow-hidden bg-white">
-      <div className="absolute inset-0 gradient-hero opacity-40 pointer-events-none" />
-
-      <HeroMobileImage />
+      <div className="absolute inset-0 gradient-hero opacity-30 pointer-events-none" />
 
       <div className="relative grid grid-cols-1 lg:grid-cols-2 items-center max-w-7xl mx-auto">
-        <div className="flex flex-col justify-center px-4 sm:px-8 lg:px-12 py-6 sm:py-12 lg:py-16 order-1">
-          <h1 className="font-extrabold leading-[1.08] mb-3 tracking-tight text-[clamp(1.85rem,7vw,3.25rem)]">
-            Arrienda fácil.
+        <div className="flex flex-col justify-center px-4 sm:px-8 lg:px-12 py-8 sm:py-10 lg:py-12 order-1">
+          <p className="text-xs font-bold uppercase tracking-widest text-brand-violet mb-3">
+            Arriendos verificados · Bogotá
+          </p>
+          <h1 className="font-extrabold leading-[1.08] mb-3 tracking-tight text-[clamp(1.85rem,5vw,3rem)]">
+            Encuentra tu inmueble.
             <br />
-            <span className="text-gradient">Sin scroll infinito.</span>
+            <span className="text-gradient">O arriéndalo sin estrés.</span>
           </h1>
 
-          <p className="text-muted-foreground text-sm sm:text-base mb-4 max-w-md leading-relaxed">
+          <p className="text-muted-foreground text-sm sm:text-base mb-6 max-w-md leading-relaxed">
             {HERO_SUBTITLE}
           </p>
-          <VerifiedBadge size="sm" className="mb-5 hidden lg:inline-flex" />
 
-          <InlineMatchBar variant="hero" />
+          <HeroMatchBlock onStartQuiz={onStartQuiz} />
 
-          <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 mt-5">
-            <button
-              type="button"
-              onClick={onStartQuiz}
-              className="inline-flex items-center justify-center gap-2 gradient-cta btn-glow text-white font-bold px-6 py-3.5 rounded-2xl sm:rounded-full hover:opacity-95 transition-opacity text-sm w-full sm:w-auto"
-            >
-              Match inteligente
-              <ArrowRight className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/explorar")}
-              className="inline-flex items-center justify-center text-sm font-bold text-brand-violet border-2 border-brand-violet/20 bg-brand-violet/5 px-6 py-3.5 rounded-2xl sm:rounded-full sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:hover:underline w-full sm:w-auto"
-            >
-              Ver todos los arriendos
-            </button>
-            <Link
-              to="/publicar"
-              className="hidden sm:inline text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Publicar inmueble
-            </Link>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <HeroPathLink to="/explorar" icon={Search} variant="renter" title="Busco inmueble" cta="Explorar" />
+            <HeroPathLink to="/anunciar" icon={Building2} variant="owner" title="Tengo inmueble" cta="Anunciar" />
           </div>
+
+          <p className="mt-5 flex items-center gap-2 text-xs text-muted-foreground">
+            <ShieldCheck className="w-3.5 h-3.5 text-brand-verified shrink-0" strokeWidth={2.25} />
+            Verificados · Contrato digital · Equipo en Bogotá
+          </p>
         </div>
 
         <div className="order-2 hidden lg:block">

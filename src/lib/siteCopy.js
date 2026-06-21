@@ -13,7 +13,7 @@ export const TRUST_TAGLINE =
   "Menos tiempo buscando. Más confianza al arrendar.";
 
 export const FEATURED_SUBTITLE =
-  "Filtra por tipo y descubre más opciones en Bogotá y Barranquilla.";
+  "Filtra por tipo y descubre más opciones en Bogotá.";
 
 export const EXPLORE_TRUST_BANNER =
   "Listados revisados por nuestro equipo antes de publicar.";
@@ -58,7 +58,7 @@ export const ADVERTISE_HERO_SUBTITLE =
 export const QUIZ_FINISH_CTA = "Ver resultados";
 
 export const QUIZ_STEPS = [
-  { id: "city", title: "¿En qué ciudad?", subtitle: "Bogotá, Barranquilla o ambas" },
+  { id: "city", title: "¿En qué zona de Bogotá?", subtitle: "Elige toda la ciudad o un barrio" },
   { id: "zone", title: "¿En qué zona?", subtitle: "Opcional. Afina por barrio o zona" },
   { id: "type", title: "¿Qué tipo de inmueble?", subtitle: "Apartamento, casa o estudio" },
   { id: "beds", title: "¿Cuántas habitaciones?", subtitle: "Para afinar tu match inteligente" },

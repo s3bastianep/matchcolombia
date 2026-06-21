@@ -100,7 +100,7 @@ const FAQ = [
   },
   {
     q: "¿En qué ciudades operan?",
-    a: "Bogotá y Barranquilla.",
+    a: "Bogotá.",
   },
 ];
 
@@ -244,7 +244,7 @@ export default function Sell() {
                 {[
                   "Listado verificado con sello de confianza",
                   "Cero contacto directo con interesados",
-                  "Equipo real en Bogotá y Barranquilla",
+                  "Equipo real en Bogotá",
                 ].map((text) => (
                   <li key={text} className="flex items-center gap-2.5 text-sm font-semibold text-white/90">
                     <Check className="w-3.5 h-3.5 text-brand-magenta shrink-0" strokeWidth={3} />
@@ -362,7 +362,7 @@ export default function Sell() {
         <div className="max-w-6xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
           <div>
             <p className="text-white font-extrabold text-xl sm:text-2xl">¿Listo para vender con respaldo real?</p>
-            <p className="text-white/80 text-sm mt-2">Publica gratis · Bogotá y Barranquilla</p>
+            <p className="text-white/80 text-sm mt-2">Publica gratis · Bogotá</p>
           </div>
           <a href="#vender-form-top" className="inline-flex items-center gap-2 bg-white text-brand-dark font-bold px-8 py-3.5 rounded-xl hover:bg-white/90 transition-colors shrink-0">
             Vender mi inmueble

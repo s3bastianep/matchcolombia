@@ -364,15 +364,17 @@ export default function MatchQuiz({ open, onOpenChange }) {
 
               {current.id === "city" && (
                 <div className="grid grid-cols-2 gap-2.5">
-                  <QuizOption
-                    selected={!prefs.city}
-                    onClick={() => setPrefs({ ...prefs, city: "", zone: "" })}
-                    className="col-span-2 flex items-center gap-3"
-                  >
-                    <IconBubble icon={MapPin} selected={!prefs.city} />
-                    <span className="font-bold text-sm">Ambas ciudades</span>
-                    <OptionCheck selected={!prefs.city} />
-                  </QuizOption>
+                  {CITIES.length > 1 && (
+                    <QuizOption
+                      selected={!prefs.city}
+                      onClick={() => setPrefs({ ...prefs, city: "", zone: "" })}
+                      className="col-span-2 flex items-center gap-3"
+                    >
+                      <IconBubble icon={MapPin} selected={!prefs.city} />
+                      <span className="font-bold text-sm">Toda la ciudad</span>
+                      <OptionCheck selected={!prefs.city} />
+                    </QuizOption>
+                  )}
                   {CITIES.map((c) => (
                     <QuizOption
                       key={c.id}

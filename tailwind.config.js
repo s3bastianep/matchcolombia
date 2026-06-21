@@ -14,8 +14,16 @@ module.exports = {
   			foreground: 'hsl(var(--foreground))',
   			brand: {
   				violet: 'hsl(var(--brand-violet))',
+  				'violet-hover': 'hsl(var(--brand-violet-hover))',
+  				light: 'hsl(var(--brand-light))',
+  				glow: 'hsl(var(--brand-glow))',
   				magenta: 'hsl(var(--brand-magenta))',
+  				coral: 'hsl(var(--brand-coral))',
   				dark: 'hsl(var(--brand-dark))',
+  				warm: 'hsl(var(--brand-warm))',
+  				amber: 'hsl(var(--brand-amber))',
+  				'amber-bg': 'hsl(var(--brand-amber-bg))',
+  				'amber-fg': 'hsl(var(--brand-amber-fg))',
   				verified: 'hsl(var(--brand-verified))',
   				'verified-bg': 'hsl(var(--brand-verified-bg))',
   				'verified-fg': 'hsl(var(--brand-verified-fg))',
@@ -77,7 +85,7 @@ module.exports = {
 			mono: ['var(--font-mono)']
 		},
 		dropShadow: {
-			glow: '0 0 20px hsl(14 90% 52% / 0.4)',
+			glow: '0 0 20px hsl(var(--brand-magenta) / 0.35)',
 		},
   		keyframes: {
   			'accordion-down': {

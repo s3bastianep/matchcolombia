@@ -153,7 +153,7 @@ function GoogleEmbedMap({ markers, center, zoom, className, onMarkerClick, onMar
     <div className={cn("relative overflow-hidden", className)}>
       {markerVariant !== "houm" && <MapBadge />}
       <iframe
-        title="Mapa de Bogotá y Barranquilla"
+        title="Mapa de Bogotá"
         src={embedSrc}
         className="absolute inset-0 w-full h-full border-0 pointer-events-none"
         loading="lazy"

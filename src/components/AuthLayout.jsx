@@ -7,10 +7,11 @@ export default function AuthLayout({ title, subtitle, footer, children }) {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-[100dvh] native-screen flex flex-col">
-      <div className="color-bar h-[2px] w-full" />
+    <div className="min-h-[100dvh] native-screen flex flex-col relative overflow-hidden">
+      <div className="absolute inset-0 gradient-hero opacity-45 pointer-events-none" />
+      <div className="color-bar h-[3px] w-full relative z-10" />
 
-      <div className="lg:hidden flex items-center h-11 px-2 native-header">
+      <div className="lg:hidden flex items-center h-11 px-2 native-header relative z-10">
         <button
           type="button"
           onClick={() => navigate(-1)}
@@ -22,7 +23,7 @@ export default function AuthLayout({ title, subtitle, footer, children }) {
         <span className="flex-1 text-center text-sm font-extrabold pr-10">{title}</span>
       </div>
 
-      <div className="flex-1 flex items-center justify-center px-4 py-8 sm:py-14">
+      <div className="flex-1 flex items-center justify-center px-4 py-8 sm:py-14 relative z-10">
         <div className="w-full max-w-md">
           <div className="hidden lg:flex justify-center mb-8">
             <BrandLogo size="md" />

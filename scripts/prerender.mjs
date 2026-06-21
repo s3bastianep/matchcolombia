@@ -180,7 +180,7 @@ function homeBody() {
       <main id="static-site-fallback" lang="es-CO">
         <header>
           <h1>LUMORA HOME — Arriendos verificados en Colombia</h1>
-          <p>Inmuebles verificados en Bogotá y Barranquilla. Match inteligente, visitas coordinadas y gestión para propietarios.</p>
+          <p>Inmuebles verificados en Bogotá. Match inteligente, visitas coordinadas y gestión para propietarios.</p>
         </header>
         ${navBlock()}
         <section>
@@ -204,7 +204,7 @@ function exploreBody(properties) {
       <main id="static-site-fallback" lang="es-CO">
         <header>
           <h1>Explorar inmuebles verificados</h1>
-          <p>Apartamentos y casas en arriendo y venta en Bogotá y Barranquilla.</p>
+          <p>Apartamentos y casas en arriendo y venta en Bogotá.</p>
         </header>
         ${navBlock()}
         <section>
@@ -308,7 +308,7 @@ async function main() {
       pathname: "/anunciar",
       body: marketingBody({
         h1: "Anuncia tu inmueble — Administración completa",
-        intro: "Publica gratis en Bogotá y Barranquilla. LUMORA HOME gestiona visitas, candidatos, contratos y cobros.",
+        intro: "Publica gratis en Bogotá. LUMORA HOME gestiona visitas, candidatos, contratos y cobros.",
         ctaHref: "/publicar/nuevo",
         ctaLabel: "Registrar inmueble",
       }),
@@ -318,7 +318,7 @@ async function main() {
       pathname: "/publicar",
       body: marketingBody({
         h1: "Vende tu inmueble sin perseguir compradores",
-        intro: "Publicación gratis, compradores verificados y visitas coordinadas en Bogotá y Barranquilla.",
+        intro: "Publicación gratis, compradores verificados y visitas coordinadas en Bogotá.",
         ctaHref: "/publicar/nuevo",
         ctaLabel: "Vender mi inmueble",
       }),

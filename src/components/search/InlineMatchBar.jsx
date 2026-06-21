@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { savePreferences, buildExploreUrl } from "@/lib/matchPreferences";
-import { CITIES } from "@/lib/colombia";
+import { EXPLORE_DEFAULT_CITY } from "@/lib/siteCopy";
 import { cn } from "@/lib/utils";
 
 const BEDS = [
@@ -22,17 +22,12 @@ const BUDGETS = [
   { value: "5000000", label: "Hasta $5M", max: 5000000 },
 ];
 
-const CITY_OPTIONS = [
-  { value: "all", label: "Todas" },
-  ...CITIES.map((c) => ({ value: c.name, label: c.name })),
-];
-
 const triggerClass =
   "border-0 shadow-none focus:ring-0 p-0 h-7 gap-1.5 font-semibold text-sm text-foreground w-full [&>span]:line-clamp-none [&>svg]:opacity-40";
 
-function MatchField({ label, value, onChange, options, className, staticDisplay }) {
+function MatchField({ label, value, onChange, options, className, staticDisplay, compact = false }) {
   return (
-    <div className={cn("px-4 sm:px-5 py-3 min-w-0 w-full", className)}>
+    <div className={cn(compact ? "px-3 py-2.5 min-w-0 w-full" : "px-4 sm:px-5 py-3 min-w-0 w-full", className)}>
       <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80 mb-0.5">{label}</p>
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className={triggerClass}>
@@ -63,8 +58,8 @@ function MatchButton({ onClick, compact = false, className }) {
           className
         )}
       >
-        <Search className="w-4 h-4 shrink-0" strokeWidth={2.5} />
-        Match
+        <Sparkles className="w-4 h-4 shrink-0" strokeWidth={2.5} />
+        Match inteligente
       </button>
     );
   }
@@ -78,22 +73,21 @@ function MatchButton({ onClick, compact = false, className }) {
         className
       )}
     >
-      <Search className="w-4 h-4 shrink-0" strokeWidth={2.5} />
+      <Sparkles className="w-4 h-4 shrink-0" strokeWidth={2.5} />
       <span>Match inteligente</span>
     </button>
   );
 }
 
-export default function InlineMatchBar({ variant = "hero" }) {
+export default function InlineMatchBar({ variant = "hero", embedded = false }) {
   const navigate = useNavigate();
-  const [city, setCity] = useState("");
   const [beds, setBeds] = useState("all");
   const [budget, setBudget] = useState("all");
 
   const handleMatch = () => {
     const budgetOpt = BUDGETS.find((b) => b.value === budget);
     const prefs = {
-      city,
+      city: EXPLORE_DEFAULT_CITY,
       zone: "",
       type: "apartamento",
       beds,
@@ -107,14 +101,6 @@ export default function InlineMatchBar({ variant = "hero" }) {
   };
 
   const fields = [
-    {
-      key: "city",
-      label: "Ciudad",
-      value: city || "all",
-      onChange: (v) => setCity(v === "all" ? "" : v),
-      options: CITY_OPTIONS,
-      staticDisplay: "Ciudad",
-    },
     {
       key: "beds",
       label: "Habitaciones",
@@ -131,23 +117,41 @@ export default function InlineMatchBar({ variant = "hero" }) {
     },
   ];
 
-  const barShell = "w-full max-w-full rounded-[1.25rem] bg-white/95 backdrop-blur-sm border border-border/60 shadow-[0_8px_30px_-8px_rgba(0,0,0,0.12)] overflow-hidden";
+  const barShell = cn(
+    "w-full max-w-full overflow-hidden",
+    embedded
+      ? "rounded-xl bg-white border border-border/45 shadow-sm"
+      : "rounded-[1.25rem] bg-white/95 backdrop-blur-sm border border-border/60 shadow-[0_8px_30px_-8px_rgba(0,0,0,0.12)]"
+  );
 
   if (variant === "hero") {
     return (
       <div className={barShell}>
-        <div className="color-bar h-[2px] w-full opacity-90" />
+        {!embedded && (
+          <>
+            <div className="color-bar h-[2px] w-full opacity-90" />
+            <div className="flex items-center justify-between gap-2 px-4 py-2.5 border-b border-border/40 bg-secondary/25">
+              <p className="text-sm font-bold text-foreground flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-brand-violet shrink-0" strokeWidth={2.25} />
+                Match inteligente
+              </p>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-brand-violet bg-brand-violet/10 px-2 py-1 rounded-full">
+                Bogotá
+              </span>
+            </div>
+          </>
+        )}
 
         <div className="flex flex-col lg:hidden divide-y divide-border/50">
           {fields.map((field) => (
-            <MatchField key={field.key} label={field.label} value={field.value} onChange={field.onChange} options={field.options} staticDisplay={field.staticDisplay} />
+            <MatchField key={field.key} label={field.label} value={field.value} onChange={field.onChange} options={field.options} staticDisplay={field.staticDisplay} compact={embedded} />
           ))}
-          <div className="p-3 pt-2">
+          <div className={cn(embedded ? "p-2.5 pt-2" : "p-3 pt-2")}>
             <MatchButton onClick={handleMatch} />
           </div>
         </div>
 
-        <div className="hidden lg:flex lg:items-center lg:gap-1 lg:pr-2.5 lg:py-2">
+        <div className={cn("hidden lg:flex lg:items-center lg:gap-1", embedded ? "lg:py-1.5 lg:pr-2" : "lg:pr-2.5 lg:py-2")}>
           <div className="flex flex-1 min-w-0 divide-x divide-border/50">
             {fields.map((field) => (
               <MatchField
@@ -157,6 +161,7 @@ export default function InlineMatchBar({ variant = "hero" }) {
                 onChange={field.onChange}
                 options={field.options}
                 staticDisplay={field.staticDisplay}
+                compact={embedded}
                 className="flex-1 min-w-0 hover:bg-secondary/30 transition-colors rounded-sm"
               />
             ))}

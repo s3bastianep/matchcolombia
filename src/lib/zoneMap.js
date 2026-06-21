@@ -12,15 +12,6 @@ export const ZONE_COORDS = {
     Fontibón: { top: 35, left: 12 },
     default: { top: 40, left: 45 },
   },
-  Barranquilla: {
-    "El Prado": { top: 35, left: 48 },
-    Riomar: { top: 28, left: 62 },
-    "Villa Country": { top: 55, left: 38 },
-    "Alto Prado": { top: 22, left: 52 },
-    Buenavista: { top: 48, left: 55 },
-    Boston: { top: 42, left: 42 },
-    default: { top: 40, left: 50 },
-  },
 };
 
 /** Coordenadas reales (centro aproximado de cada zona) */
@@ -37,27 +28,15 @@ export const ZONE_LAT_LNG = {
     Fontibón: { lat: 4.669, lng: -74.145 },
     default: { lat: 4.711, lng: -74.0721 },
   },
-  Barranquilla: {
-    "El Prado": { lat: 10.989, lng: -74.788 },
-    Riomar: { lat: 11.018, lng: -74.85 },
-    "Villa Country": { lat: 11.01, lng: -74.82 },
-    "Alto Prado": { lat: 11.005, lng: -74.805 },
-    Buenavista: { lat: 10.975, lng: -74.81 },
-    Boston: { lat: 10.968, lng: -74.778 },
-    default: { lat: 10.9639, lng: -74.7964 },
-  },
 };
 
 export const CITY_CENTERS = {
   Bogotá: { lat: 4.711, lng: -74.0721, zoom: 11 },
-  Barranquilla: { lat: 10.9639, lng: -74.7964, zoom: 12 },
-  all: { lat: 5.5, lng: -74.45, zoom: 7 },
 };
 
 /** Límites aproximados para posicionar pins sobre el embed de Google */
 export const CITY_BOUNDS = {
   Bogotá: { north: 4.84, south: 4.47, west: -74.24, east: -73.98 },
-  Barranquilla: { north: 11.06, south: 10.87, west: -74.9, east: -74.7 },
 };
 
 export function getVisibleBounds(center, zoom = 11) {
@@ -83,7 +62,6 @@ export function latLngToPercent(lat, lng, bounds) {
 
 export function getBoundsForMap(center, zoom, city) {
   if (city === "Bogotá") return CITY_BOUNDS.Bogotá;
-  if (city === "Barranquilla") return CITY_BOUNDS.Barranquilla;
   return getVisibleBounds(center, zoom);
 }
 
@@ -148,11 +126,9 @@ export function getPropertyPin(property, index = 0) {
 }
 
 export function getCityLabel(city) {
-  return city === "Barranquilla" ? "Barranquilla" : "Bogotá";
+  return city || "Bogotá";
 }
 
 export function getMapCenter(city) {
-  if (city === "Barranquilla") return CITY_CENTERS.Barranquilla;
-  if (city === "Bogotá") return CITY_CENTERS.Bogotá;
-  return CITY_CENTERS.all;
+  return CITY_CENTERS.Bogotá;
 }

@@ -33,7 +33,7 @@ export default function ExploreMap({
   const [selectedId, setSelectedId] = useState(null);
   const [selectedCluster, setSelectedCluster] = useState(null);
 
-  const cityLabel = activeCity || (properties[0] ? getCityLabel(properties[0].city) : "Bogotá y Barranquilla");
+  const cityLabel = activeCity || (properties[0] ? getCityLabel(properties[0].city) : "Bogotá");
   const mapCenter = getMapCenter(activeCity || properties[0]?.city);
 
   const rawMarkers = useMemo(

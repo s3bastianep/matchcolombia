@@ -325,7 +325,7 @@ export function getPortalSeedData(propertyIds = []) {
   const pois = [
     { id: "poi-1", city: "Bogotá", neighborhood: "Chapinero", name: "Parque 93", category: "Parque", created_date: now.toISOString() },
     { id: "poi-2", city: "Bogotá", neighborhood: "Chapinero", name: "Centro Andino", category: "Comercio", created_date: now.toISOString() },
-    { id: "poi-3", city: "Barranquilla", neighborhood: "Riomar", name: "Buenavista", category: "Comercio", created_date: now.toISOString() },
+    { id: "poi-3", city: "Bogotá", neighborhood: "Usaquén", name: "Centro comercial", category: "Comercio", created_date: now.toISOString() },
   ];
 
   const settings = {

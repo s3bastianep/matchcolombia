@@ -11,7 +11,7 @@ const SLIDES = [
   {
     icon: Search,
     title: "Explora inmuebles verificados",
-    description: "Apartamentos y casas revisados en Bogotá y Barranquilla, con fotos reales y precios claros.",
+    description: "Apartamentos y casas revisados en Bogotá, con fotos reales y precios claros.",
     tone: "text-brand-violet",
     bg: "bg-brand-violet/10",
   },

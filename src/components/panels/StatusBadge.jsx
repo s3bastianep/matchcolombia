@@ -2,7 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 const A = "bg-amber-500/12 text-amber-800 border-amber-500/25";
-const G = "bg-emerald-500/12 text-emerald-700 border-emerald-500/25";
+const G = "bg-brand-verified-bg text-brand-verified-fg border-brand-verified-border";
 const V = "bg-brand-violet/10 text-brand-violet border-brand-violet/25";
 const M = "bg-brand-magenta/10 text-brand-magenta border-brand-magenta/25";
 const N = "bg-foreground/10 text-foreground border-foreground/20";
@@ -80,8 +80,8 @@ export default function StatusBadge({ status, className }) {
 }
 
 export function StatCard({ label, value, hint, icon: Icon, tone = "violet" }) {
-  const iconBg = tone === "amber" ? "bg-amber-500/12" : tone === "emerald" ? "bg-emerald-500/12" : "bg-brand-violet/10";
-  const iconColor = tone === "amber" ? "text-amber-600" : tone === "emerald" ? "text-emerald-600" : "text-brand-violet";
+  const iconBg = tone === "amber" ? "bg-brand-amber-bg" : tone === "emerald" ? "bg-brand-verified-bg" : "bg-brand-violet/10";
+  const iconColor = tone === "amber" ? "text-brand-amber" : tone === "emerald" ? "text-brand-verified" : "text-brand-violet";
   return (
     <div className="bg-white rounded-2xl border border-border/40 p-5 shadow-sm">
       <div className="flex items-start justify-between gap-3">

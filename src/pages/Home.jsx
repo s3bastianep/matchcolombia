@@ -15,6 +15,8 @@ const MatchSteps = lazy(() => import("../components/home/MatchSteps"));
 
 const FeaturedProperties = lazy(() => import("../components/home/FeaturedProperties"));
 
+const OwnerCTA = lazy(() => import("../components/home/OwnerCTA"));
+
 
 
 const startQuiz = () => window.dispatchEvent(new CustomEvent("open-match-quiz"));
@@ -90,6 +92,16 @@ export default function Home() {
 
           )}
 
+        </DeferredMount>
+
+        <DeferredMount
+          rootMargin="200px 0px"
+          minHeight="320px"
+          fallback={<HomeSectionSkeleton minHeight="320px" />}
+        >
+          <Suspense fallback={<HomeSectionSkeleton minHeight="320px" />}>
+            <OwnerCTA />
+          </Suspense>
         </DeferredMount>
 
       </div>

@@ -238,7 +238,7 @@ export default function PublishProperty() {
             Publica tu inmueble en <span className="text-gradient">minutos</span>
           </h1>
           <p className="text-sm text-muted-foreground mt-2">
-            Nosotros gestionamos las consultas · Visible en Bogotá y Barranquilla
+            Nosotros gestionamos las consultas · Visible en Bogotá
           </p>
 
           <div className="mt-8 flex items-center gap-2">

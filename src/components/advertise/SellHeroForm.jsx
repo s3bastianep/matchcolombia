@@ -41,7 +41,7 @@ export default function SellHeroForm({ className, dark = true }) {
         Publica tu inmueble gratis
       </h3>
       <p className={cn("text-xs mb-4", dark ? "text-white/60" : "text-muted-foreground")}>
-        Bogotá y Barranquilla
+        Bogotá
       </p>
       <div className="space-y-3">
         <div>

@@ -17,7 +17,7 @@ const FAQ_ITEMS = [
     a: `${BRAND.name} no es solo un portal de anuncios. Es administración completa: filtramos interesados, coordinamos visitas, evaluamos candidatos y te damos seguimiento digital sin que expongas tu número.`,
     points: [
       "Publicación premium con fotos y verificación documental",
-      "Equipo real en Bogotá y Barranquilla, no un bot",
+      "Equipo real en Bogotá, no un bot",
       "Panel con pagos, contratos, tickets y estado del inmueble",
     ],
   },
@@ -34,7 +34,7 @@ const FAQ_ITEMS = [
   {
     q: "¿Cuánto cuesta publicar y qué incluye?",
     tag: "Gratis para empezar",
-    a: "Publicar tu inmueble es gratis en Bogotá y Barranquilla. La administración incluye publicación premium, gestión de visitas, estudio de arrendatarios, contratos digitales, cobro de cánones y mantenimiento.",
+    a: "Publicar tu inmueble es gratis en Bogotá. La administración incluye publicación premium, gestión de visitas, estudio de arrendatarios, contratos digitales, cobro de cánones y mantenimiento.",
     points: [
       "Sin costo de publicación inicial",
       "Honorarios de gestión te los explicamos con transparencia",
@@ -74,10 +74,9 @@ const FAQ_ITEMS = [
   {
     q: "¿En qué ciudades operan?",
     tag: "Cobertura",
-    a: "Hoy operamos en Bogotá y Barranquilla, con cobertura en las principales zonas de arriendo. Si tu inmueble está en otra ciudad, contáctanos y te orientamos sobre disponibilidad.",
+    a: "Hoy operamos en Bogotá, con cobertura en las principales zonas de arriendo. Si tu inmueble está en otra ciudad, contáctanos y te orientamos sobre disponibilidad.",
     points: [
-      "Bogotá: Chapinero, Usaquén, Suba, Cedritos y más",
-      "Barranquilla: Riomar, Alto Prado, Villa Carolina y más",
+      "Chapinero, Usaquén, Suba, Teusaquillo, Kennedy y más",
       "Expansión a nuevas ciudades en camino",
     ],
   },

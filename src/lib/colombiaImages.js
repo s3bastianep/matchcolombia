@@ -109,7 +109,6 @@ export const INTERIORS = {
 
 export const CITIES_IMG = {
   bogota: pexels(439391, 900, 600),
-  barranquilla: pexels(1571460, 900, 600),
   skyline: pexels(2062432, 1400, 900),
   hero: pexels(439391, 1920, 1080),
 };

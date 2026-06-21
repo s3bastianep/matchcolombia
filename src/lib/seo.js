@@ -18,7 +18,6 @@ export const OG_IMAGE_HEIGHT = 630;
 /** Coordenadas para SEO local / GEO */
 export const CITY_GEO = {
   Bogotá: { position: "4.7110;-74.0721", placename: "Bogotá, Colombia", latitude: 4.711, longitude: -74.0721 },
-  Barranquilla: { position: "10.9685;-74.7813", placename: "Barranquilla, Colombia", latitude: 10.9685, longitude: -74.7813 },
 };
 
 export const SEO_DEFAULTS = {
@@ -28,13 +27,13 @@ export const SEO_DEFAULTS = {
   region: "CO",
   geoPlacename: "Colombia",
   geoPosition: "4.7110;-74.0721",
-  title: `${BRAND.name} | Arriendos verificados en Colombia`,
+  title: `${BRAND.name} | Arriendos verificados en Bogotá`,
   description:
-    `${BRAND.name} conecta arrendatarios y propietarios en Colombia. Apartamentos y casas verificados en Bogotá y Barranquilla, match inteligente, visitas coordinadas y gestión completa del arriendo.`,
+    `${BRAND.name} conecta arrendatarios y propietarios en Bogotá. Apartamentos y casas verificados, match inteligente, visitas coordinadas y gestión completa del arriendo.`,
   keywords:
-    "arriendo apartamentos Bogotá, arriendo Barranquilla, inmuebles verificados Colombia, arriendo casas, administración de arriendos, LUMORA HOME, match inteligente inmuebles",
+    "arriendo apartamentos Bogotá, inmuebles verificados Bogotá, arriendo casas Bogotá, administración de arriendos, LUMORA HOME, match inteligente inmuebles",
   ogImage: DEFAULT_OG_IMAGE,
-  ogImageAlt: `${BRAND.name} — inmuebles verificados en Bogotá y Barranquilla`,
+  ogImageAlt: `${BRAND.name} — inmuebles verificados en Bogotá`,
   twitterHandle: "@lumorahome",
 };
 
@@ -73,11 +72,11 @@ export const OWNER_FAQ_SCHEMA = [
   },
   {
     q: "¿Cuánto cuesta publicar y qué incluye?",
-    a: "Publicar es gratis en Bogotá y Barranquilla. La administración incluye publicación premium, visitas, estudio de arrendatarios, contratos digitales y cobro de cánones.",
+    a: "Publicar es gratis en Bogotá. La administración incluye publicación premium, visitas, estudio de arrendatarios, contratos digitales y cobro de cánones.",
   },
   {
     q: "¿En qué ciudades operan?",
-    a: "Operamos en Bogotá y Barranquilla, con cobertura en las principales zonas de arriendo.",
+    a: "Operamos en Bogotá, con cobertura en las principales zonas de arriendo.",
   },
 ];
 
@@ -92,7 +91,7 @@ export const SELL_FAQ_SCHEMA = [
   },
   {
     q: "¿En qué ciudades operan?",
-    a: "Bogotá y Barranquilla.",
+    a: "Bogotá.",
   },
 ];
 
@@ -237,7 +236,7 @@ const ROUTE_SEO = {
   "/explorar": (searchParams) => getExploreSeo(searchParams),
   "/anunciar": {
     title: buildTitle("Anuncia tu inmueble — Administración completa de arriendos"),
-    description: `Publica gratis tu apartamento o casa en Bogotá y Barranquilla. ${BRAND.name} gestiona visitas, candidatos, contratos, cobros y mantenimiento sin exponer tu teléfono.`,
+    description: `Publica gratis tu apartamento o casa en Bogotá. ${BRAND.name} gestiona visitas, candidatos, contratos, cobros y mantenimiento sin exponer tu teléfono.`,
     url: "/anunciar",
     keywords: "administración de arriendos, publicar apartamento, arrendar propiedad Bogotá, propietarios LUMORA HOME",
     jsonLd: () => [
@@ -251,9 +250,9 @@ const ROUTE_SEO = {
   },
   "/publicar": {
     title: buildTitle("Vende tu inmueble sin perseguir compradores"),
-    description: `Vende tu apartamento o casa en Bogotá y Barranquilla con ${BRAND.name}. Publicación gratis, compradores verificados, visitas coordinadas y seguimiento hasta cerrar la venta.`,
+    description: `Vende tu apartamento o casa en Bogotá con ${BRAND.name}. Publicación gratis, compradores verificados, visitas coordinadas y seguimiento hasta cerrar la venta.`,
     url: "/publicar",
-    keywords: "venta inmuebles Bogotá, vender apartamento Barranquilla, venta casas Colombia, LUMORA HOME",
+    keywords: "venta inmuebles Bogotá, vender apartamento Bogotá, venta casas Bogotá, LUMORA HOME",
     jsonLd: () => [
       organizationSchema(),
       breadcrumbSchema([
@@ -304,7 +303,7 @@ export function resolveRouteSeo(pathname, searchParams = new URLSearchParams()) 
     if (!isKnownRoute(pathname)) {
       return {
         title: buildTitle("Página no encontrada"),
-        description: `La página que buscas no existe en ${BRAND.name}. Explora inmuebles verificados en Bogotá y Barranquilla.`,
+        description: `La página que buscas no existe en ${BRAND.name}. Explora inmuebles verificados en Bogotá.`,
         url: pathname,
         noindex: true,
       };

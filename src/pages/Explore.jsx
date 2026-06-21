@@ -425,7 +425,7 @@ export default function Explore() {
                 className={cn(
                   "shrink-0 h-7 px-3 rounded-full text-[11px] font-semibold border transition-all inline-flex items-center gap-1 shadow-sm",
                   active
-                    ? "bg-foreground border-foreground text-white shadow-sm"
+                    ? "chip-brand-active shadow-sm"
                     : "bg-white/90 border-brand-violet/12 text-foreground/80 hover:border-brand-violet/25 hover:bg-white"
                 )}
               >

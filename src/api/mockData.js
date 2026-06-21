@@ -346,9 +346,9 @@ export const SEED_PROPERTIES = [
 
     id: "prop-10",
 
-    title: "Apartamento en El Prado, Barranquilla",
+    title: "Apartamento en Teusaquillo, Bogotá",
 
-    description: "Apartamento en El Prado, zona residencial de Barranquilla. Amplio, luminoso, 3 habitaciones con buena ventilación.",
+    description: "Apartamento en Teusaquillo, zona residencial de Bogotá. Amplio, luminoso, 3 habitaciones con buena ventilación.",
 
     property_type: "apartamento",
 
@@ -356,7 +356,7 @@ export const SEED_PROPERTIES = [
 
     building_age: "usado",
 
-    city: "Barranquilla",
+    city: "Bogotá",
 
     monthly_rent: 2400000,
 
@@ -364,11 +364,11 @@ export const SEED_PROPERTIES = [
 
     admin_fee: 280000,
 
-    neighborhood: "El Prado",
+    neighborhood: "Teusaquillo",
 
-    locality: "El Prado",
+    locality: "Teusaquillo",
 
-    address: "Calle 85 # 50-30",
+    address: "Carrera 13 # 52-30",
 
     bedrooms: 3,
 
@@ -412,9 +412,9 @@ export const SEED_PROPERTIES = [
 
     id: "prop-11",
 
-    title: "Apartamento en Riomar, Barranquilla",
+    title: "Apartamento en Usaquén, Bogotá",
 
-    description: "Apartamento cerca al malecón en Riomar. Brisa marina, 2 habitaciones, zona tranquila y bien conectada.",
+    description: "Apartamento en Usaquén, zona tranquila y bien conectada. 2 habitaciones, buena luz natural y acceso a comercio.",
 
     property_type: "apartamento",
 
@@ -422,7 +422,7 @@ export const SEED_PROPERTIES = [
 
     building_age: "reformado",
 
-    city: "Barranquilla",
+    city: "Bogotá",
 
     monthly_rent: 2100000,
 
@@ -430,11 +430,11 @@ export const SEED_PROPERTIES = [
 
     admin_fee: 260000,
 
-    neighborhood: "Riomar",
+    neighborhood: "Usaquén",
 
-    locality: "Riomar",
+    locality: "Usaquén",
 
-    address: "Calle 84 # 54-20",
+    address: "Calle 119 # 7-20",
 
     bedrooms: 2,
 
@@ -478,9 +478,9 @@ export const SEED_PROPERTIES = [
 
     id: "prop-12",
 
-    title: "Casa en Villa Country, Barranquilla",
+    title: "Casa en Suba, Bogotá",
 
-    description: "Casa en conjunto cerrado en Villa Country. Patio, 3 habitaciones, ideal para familias. Ambiente residencial premium.",
+    description: "Casa en conjunto cerrado en Suba. Patio, 3 habitaciones, ideal para familias. Ambiente residencial tranquilo.",
 
     property_type: "casa",
 
@@ -488,7 +488,7 @@ export const SEED_PROPERTIES = [
 
     building_age: "nuevo",
 
-    city: "Barranquilla",
+    city: "Bogotá",
 
     monthly_rent: 3800000,
 
@@ -496,11 +496,11 @@ export const SEED_PROPERTIES = [
 
     admin_fee: 0,
 
-    neighborhood: "Villa Country",
+    neighborhood: "Suba",
 
-    locality: "Villa Country",
+    locality: "Suba",
 
-    address: "Calle 98 # 72-10",
+    address: "Calle 145 # 91-10",
 
     bedrooms: 3,
 

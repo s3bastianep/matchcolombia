@@ -7,7 +7,7 @@ const perks = [
   "Publicación gratuita",
   "Gestión de visitas e interesados",
   "Seguimiento digital del inmueble",
-  "Equipo en Bogotá y Barranquilla",
+  "Equipo en Bogotá",
 ];
 
 export default function OwnerCTA() {

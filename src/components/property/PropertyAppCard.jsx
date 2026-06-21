@@ -123,7 +123,7 @@ function CardBody({ property, liked, toggleLike, showMatch, matchScore, compact 
     <div className={cn("flex flex-col", compact ? "flex-1 min-w-0 py-0.5" : "p-3.5 pt-3")}>
       <div className={cn("flex items-start justify-between gap-2", compact && "relative")}>
         <div className="min-w-0 flex-1">
-          <p className="font-extrabold text-[15px] leading-none tabular-nums tracking-tight text-foreground">
+          <p className="price-trust text-[15px] leading-none">
             {formatCOP(property.monthly_rent)}
             {!compact && <span className="text-[11px] font-medium text-muted-foreground ml-0.5">/mes</span>}
           </p>

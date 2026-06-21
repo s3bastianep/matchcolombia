@@ -69,7 +69,7 @@ const features = [
 
 export default function RentEasySection() {
   return (
-    <section className="relative overflow-hidden bg-background border-b border-border/40 py-16 sm:py-20 lg:py-24">
+    <section className="relative overflow-hidden bg-background border-b border-border/40 section-pad-after-hero">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-20 left-1/3 w-[420px] h-[420px] rounded-full bg-brand-violet/6 blur-3xl" />
         <div className="absolute bottom-0 right-1/4 w-[360px] h-[360px] rounded-full bg-brand-magenta/6 blur-3xl" />

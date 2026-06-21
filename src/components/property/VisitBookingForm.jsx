@@ -156,9 +156,9 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 320, damping: 22 }}
-          className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4"
+          className="w-16 h-16 rounded-full bg-brand-verified-bg flex items-center justify-center mx-auto mb-4"
         >
-          <Check className="w-8 h-8 text-emerald-600" strokeWidth={2.5} />
+          <Check className="w-8 h-8 text-brand-verified" strokeWidth={2.5} />
         </motion.div>
         <h3 className="text-lg font-bold text-foreground mb-1">¡Listo!</h3>
         <p className="text-sm text-foreground/80 mb-1">

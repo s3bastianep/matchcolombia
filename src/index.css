@@ -5,38 +5,35 @@
 
 @layer base {
   :root {
-    /* Fondos claros y aireados */
-    --background: 240 33% 98%;
+    /* LUMORA — marca magenta/violeta + mint confianza + neutros cálidos */
+    --background: 40 33% 98%;
     --foreground: 265 25% 12%;
     --card: 0 0% 100%;
     --card-foreground: 265 25% 12%;
     --popover: 0 0% 100%;
     --popover-foreground: 265 25% 12%;
 
-    /* Magenta → CTAs y acción */
     --primary: 340 82% 52%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 28% 95%;
+    --secondary: 40 28% 95%;
     --secondary-foreground: 265 18% 28%;
-    --muted: 240 22% 94%;
-    --muted-foreground: 240 10% 44%;
+    --muted: 40 22% 94%;
+    --muted-foreground: 265 10% 42%;
 
-    /* Violeta → acentos de marca (no CTAs) */
     --accent: 265 75% 58%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 18% 90%;
-    --input: 240 18% 92%;
+    --border: 40 18% 90%;
+    --input: 40 18% 92%;
     --ring: 340 82% 52%;
 
-    /* Charts: solo variaciones marca (sin arcoíris) */
     --chart-1: 340 82% 52%;
     --chart-2: 265 75% 58%;
-    --chart-3: 340 70% 62%;
-    --chart-4: 265 60% 65%;
+    --chart-3: 168 56% 40%;
+    --chart-4: 340 70% 62%;
     --chart-5: 240 15% 55%;
 
     --radius: 1rem;
@@ -45,15 +42,21 @@
     --font-display: 'Plus Jakarta Sans', sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-    /* Paleta de marca — 3 colores con propósito */
     --brand-violet: 265 75% 58%;
+    --brand-violet-hover: 265 75% 50%;
     --brand-magenta: 340 82% 52%;
+    --brand-coral: 340 82% 52%;
     --brand-dark: 265 35% 22%;
-    /* Mint/turquesa — EXCLUSIVO badge verificado */
+    --nav-dark: 265 35% 22%;
+    /* Mint — exclusivo señales de confianza */
     --brand-verified: 168 58% 38%;
     --brand-verified-bg: 168 55% 92%;
     --brand-verified-fg: 168 62% 22%;
     --brand-verified-border: 168 45% 72%;
+    --brand-warm: 40 45% 96%;
+    --brand-amber: 38 92% 50%;
+    --brand-amber-bg: 38 90% 94%;
+    --brand-amber-fg: 32 80% 28%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 265 20% 26%;
@@ -144,18 +147,47 @@
 }
 
 @layer utilities {
-  /* Fondos suaves — solo violeta + magenta */
   .gradient-hero {
     background:
-      radial-gradient(ellipse 80% 60% at 10% 20%, hsl(var(--brand-magenta) / 0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 70% 50% at 90% 10%, hsl(var(--brand-violet) / 0.12) 0%, transparent 55%),
-      radial-gradient(ellipse 55% 45% at 75% 85%, hsl(var(--brand-violet) / 0.08) 0%, transparent 50%),
-      linear-gradient(160deg, hsl(240 33% 98%) 0%, hsl(265 40% 97%) 55%, hsl(340 45% 97%) 100%);
+      radial-gradient(ellipse 80% 60% at 10% 20%, hsl(var(--brand-magenta) / 0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 90% 10%, hsl(var(--brand-violet) / 0.1) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 72% 88%, hsl(var(--brand-verified) / 0.06) 0%, transparent 48%),
+      linear-gradient(160deg, hsl(40 33% 98%) 0%, hsl(265 40% 97%) 55%, hsl(340 45% 97%) 100%);
   }
 
-  /* CTAs: magenta → violeta (logo) */
+  .surface-warm {
+    background: hsl(var(--brand-warm));
+  }
+
+  .chip-brand-active {
+    @apply gradient-cta text-white border-transparent shadow-sm;
+  }
+
+  .badge-pending {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.375rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    background: hsl(var(--brand-amber-bg));
+    color: hsl(var(--brand-amber-fg));
+    border: 1px solid hsl(var(--brand-amber) / 0.35);
+  }
+
+  /* CTAs — gradiente marca original */
+  .btn-primary,
   .gradient-cta {
     background: linear-gradient(135deg, hsl(var(--brand-magenta)) 0%, hsl(var(--brand-violet)) 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px hsl(var(--brand-magenta) / 0.28);
+    transition: box-shadow 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+  }
+  .btn-primary:hover,
+  .gradient-cta:hover {
+    filter: brightness(1.03);
+    box-shadow: 0 6px 22px hsl(var(--brand-violet) / 0.32);
   }
 
   .hero-overlay {
@@ -164,7 +196,6 @@
       linear-gradient(to bottom, hsl(0 0% 0% / 0.25) 0%, hsl(0 0% 0% / 0.55) 100%);
   }
 
-  /* Texto destacado — identidad violeta/magenta */
   .text-gradient {
     background: linear-gradient(135deg, hsl(var(--brand-magenta)), hsl(var(--brand-violet)));
     -webkit-background-clip: text;
@@ -184,6 +215,10 @@
     background-color: hsl(var(--brand-dark));
   }
 
+  .bg-nav-dark {
+    background-color: hsl(var(--nav-dark));
+  }
+
   .text-eyebrow {
     @apply text-xs font-bold uppercase tracking-widest text-brand-violet;
   }
@@ -192,12 +227,28 @@
     @apply bg-secondary/40;
   }
 
-  /* Barra superior — solo 2 colores marca */
   .color-bar {
     background: linear-gradient(90deg, hsl(var(--brand-magenta)), hsl(var(--brand-violet)));
+    height: 3px;
   }
 
-  /* ✓ Verificado — único uso del mint/turquesa */
+  /* Confianza — paneles y tipografía sobria para dinero/datos */
+  .trust-panel {
+    @apply rounded-2xl border bg-white/90 backdrop-blur-sm;
+    border-color: hsl(var(--brand-verified-border) / 0.65);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--brand-verified-bg) / 0.55) 0%,
+      hsl(0 0% 100% / 0.95) 100%
+    );
+  }
+
+  .price-trust {
+    @apply font-extrabold tabular-nums text-foreground tracking-tight;
+  }
+
+  /* Trust — mint jade (verificado, garantía, escrow) */
+  .badge-trust,
   .badge-verified {
     display: inline-flex;
     align-items: center;
@@ -219,8 +270,22 @@
     padding: 0.4rem 0.65rem;
     gap: 0.35rem;
     border-radius: 0.5rem;
-    box-shadow: 0 2px 10px hsl(var(--brand-verified) / 0.22);
+    box-shadow:
+      0 0 0 1px hsl(var(--brand-verified-border)),
+      0 4px 16px hsl(var(--brand-verified) / 0.18);
     cursor: help;
+  }
+
+  .trust-glow {
+    box-shadow: 0 0 24px hsl(var(--brand-verified) / 0.12);
+  }
+
+  .text-brand-verified {
+    color: hsl(var(--brand-verified));
+  }
+
+  .bg-brand-verified-soft {
+    background: hsl(var(--brand-verified-bg));
   }
 
   .glass-light {
@@ -239,7 +304,16 @@
     @apply bg-white rounded-3xl border border-border/50 shadow-sm;
   }
   .section-pad {
-    @apply py-16 sm:py-20 lg:py-24;
+    @apply py-12 sm:py-14 lg:py-16;
+  }
+  .section-pad-after-hero {
+    @apply pt-8 sm:pt-10 lg:pt-12 pb-12 sm:pb-14 lg:pb-16;
+  }
+  .section-pad-tight-top {
+    @apply pt-8 sm:pt-10 lg:pt-12;
+  }
+  .section-pad-tight-bottom {
+    @apply pb-8 sm:pb-10 lg:pb-12;
   }
   .fade-edges {
     mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
@@ -254,7 +328,7 @@
     @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider;
   }
   .philosophy-bg {
-    background: hsl(240 30% 97%);
+    background: hsl(var(--brand-warm));
   }
   .philosophy-card {
     background: hsl(0 0% 100%);
@@ -500,7 +574,10 @@
 
   @media (max-width: 1023px) {
     .section-pad {
-      @apply py-12 sm:py-16;
+      @apply py-10 sm:py-12;
+    }
+    .section-pad-after-hero {
+      @apply pt-6 sm:pt-8 pb-10 sm:pb-12;
     }
   }
 }

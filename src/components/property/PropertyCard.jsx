@@ -315,7 +315,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
             {isGrid && (
               <>
                 <div className="space-y-0.5">
-                  <p className="font-extrabold text-base text-foreground leading-none tracking-tight tabular-nums">
+                  <p className="price-trust text-base leading-none">
                     {formatCOP(totalMonthly)}
                     <span className="text-[11px] font-semibold text-muted-foreground"> / mes</span>
                   </p>

@@ -30,16 +30,17 @@ const footerLinks = {
     { to: "/publicar", label: "Vender inmueble" },
     { to: "/publicar/nuevo", label: "Registrar inmueble" },
   ],
-  Ciudades: [
-    { to: "/explorar?city=Bogotá", label: "Bogotá" },
-    { to: "/explorar?city=Barranquilla", label: "Barranquilla" },
+  Zonas: [
+    { to: "/explorar?city=Bogotá&q=Chapinero", label: "Chapinero" },
+    { to: "/explorar?city=Bogotá&q=Usaquén", label: "Usaquén" },
+    { to: "/explorar?city=Bogotá&q=Suba", label: "Suba" },
   ],
 };
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0f0e17]">
-      <div className="color-bar h-1 w-full" />
+    <footer className="bg-brand-dark">
+      <div className="color-bar w-full" />
       {/* Main */}
       <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-16 pb-12">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-10">
