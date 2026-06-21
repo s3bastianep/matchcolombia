@@ -7,7 +7,7 @@ export default function HomeSectionSkeleton({ className, minHeight = "320px" }) 
       style={{ minHeight }}
       aria-hidden
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-8 space-y-4">
+      <div className="site-container space-y-4">
         <div className="h-4 w-28 shimmer rounded-full" />
         <div className="h-10 w-2/3 max-w-md shimmer rounded-2xl" />
         <div className="h-4 w-full max-w-lg shimmer rounded-lg" />

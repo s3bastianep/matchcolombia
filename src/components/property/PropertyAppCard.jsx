@@ -109,7 +109,7 @@ export default function PropertyAppCard({ property, matchScore, showMatch, layou
         {showMatch && matchScore > 0 && (
           <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-black/55 backdrop-blur-sm text-[10px] font-bold text-white">
             <Sparkles className="w-3 h-3" />
-            {matchScore}% match
+            {matchScore}% encaje
           </span>
         )}
       </div>

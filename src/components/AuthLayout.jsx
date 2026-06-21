@@ -26,11 +26,11 @@ export default function AuthLayout({ title, subtitle, footer, children }) {
       <div className="flex-1 flex items-center justify-center px-4 py-8 sm:py-14 relative z-10">
         <div className="w-full max-w-md">
           <div className="hidden lg:flex justify-center mb-8">
-            <BrandLogo size="md" />
+            <BrandLogo size="xl" layout="lockup" />
           </div>
 
           <div className="lg:hidden flex justify-center mb-6">
-            <BrandLogo size="sm" />
+            <BrandLogo size="md" layout="lockup" />
           </div>
 
           <div className="hidden lg:block text-center mb-8">

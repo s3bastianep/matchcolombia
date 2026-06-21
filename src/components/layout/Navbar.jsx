@@ -9,7 +9,6 @@ import {
   TrendingUp,
   User,
   ChevronDown,
-  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -22,96 +21,86 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const searchItems = [
-  { to: "/explorar", label: "Arrendar inmueble", intent: "arriendo" },
-  { to: "/explorar?intent=compra", label: "Comprar inmueble", intent: "compra" },
+const navLinks = [
+  { to: "/explorar", label: "Arrendar", intent: "arriendo" },
+  { to: "/explorar?intent=compra", label: "Comprar", intent: "compra" },
 ];
 
-const toolItems = (onMatchClick) => [
-  { to: "/favoritos", label: "Mis favoritos" },
-  { label: "Match inteligente", onClick: onMatchClick },
+const advertiseItems = [
+  { to: "/anunciar", label: "Renta", rent: true },
+  { to: "/publicar", label: "Venta", sale: true },
 ];
 
-const ownerItems = [
-  { to: "/anunciar", label: "Anunciar inmueble", advertise: true },
-  { to: "/publicar", label: "Vender propiedad", publish: true },
-  { to: "/portal", label: "Portal propietario" },
-];
-
-function isItemActive(item, pathname, search) {
-  if (item.advertise) return pathname === "/anunciar";
-  if (item.publish) return pathname.startsWith("/publicar");
-  if (item.to === "/portal") return pathname.startsWith("/portal");
-  if (item.to === "/favoritos") return pathname === "/favoritos";
-  if (!item.to?.startsWith("/explorar")) return false;
+function isNavLinkActive(item, pathname, search) {
   if (pathname !== "/explorar") return false;
   const intent = new URLSearchParams(search).get("intent");
   if (item.intent === "compra") return intent === "compra";
   return intent !== "compra";
 }
 
-function isGroupActive(items, pathname, search) {
-  return items.some((item) => isItemActive(item, pathname, search));
+function isAdvertiseItemActive(item, pathname) {
+  if (item.rent) return pathname === "/anunciar";
+  if (item.sale) return pathname.startsWith("/publicar");
+  return false;
 }
 
-function NavMenu({ label, items, pathname, search }) {
-  const active = isGroupActive(items, pathname, search);
+function isAdvertiseActive(pathname) {
+  return pathname === "/anunciar" || pathname.startsWith("/publicar");
+}
+
+function AnunciarNavMenu({ pathname }) {
+  const active = isAdvertiseActive(pathname);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "inline-flex items-center gap-1.5 outline-none transition-colors",
-          "text-[15px] font-medium text-foreground/85 hover:text-foreground",
+          "inline-flex items-center gap-1 py-2 outline-none transition-colors",
+          "text-[15px] font-semibold leading-none text-foreground/85 hover:text-foreground",
           "data-[state=open]:text-foreground",
-          active && "text-foreground font-semibold"
+          active && "text-foreground"
         )}
       >
-        {label}
-        <ChevronDown className="w-4 h-4 text-foreground/45" strokeWidth={2} />
+        Anunciar
+        <ChevronDown className="size-4 text-foreground/45" strokeWidth={2} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" sideOffset={10} className="w-56 rounded-xl p-1.5 shadow-lg border-border/70">
-        {items.map((item) =>
-          item.onClick ? (
-            <DropdownMenuItem
-              key={item.label}
-              onSelect={() => item.onClick()}
-              className="rounded-lg px-3 py-2.5 text-sm font-medium cursor-pointer"
+      <DropdownMenuContent align="start" sideOffset={10} className="w-44 rounded-xl p-1.5 shadow-lg border-border/70">
+        {advertiseItems.map((item) => (
+          <DropdownMenuItem key={item.label} asChild>
+            <Link
+              to={item.to}
+              className={cn(
+                "rounded-lg px-3 py-2.5 text-sm font-semibold cursor-pointer",
+                isAdvertiseItemActive(item, pathname) && "bg-secondary"
+              )}
             >
-              <Sparkles className="w-4 h-4 text-brand-violet" strokeWidth={2} />
               {item.label}
-            </DropdownMenuItem>
-          ) : (
-            <DropdownMenuItem key={item.label} asChild>
-              <Link
-                to={item.to}
-                className={cn(
-                  "rounded-lg px-3 py-2.5 text-sm font-medium cursor-pointer",
-                  isItemActive(item, pathname, search) && "bg-secondary font-semibold"
-                )}
-              >
-                {item.label}
-              </Link>
-            </DropdownMenuItem>
-          )
-        )}
+            </Link>
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
 function UserMenu({ user, onLogout }) {
+  const initial = (user.username?.[0] || user.name?.[0] || "U").toUpperCase();
+
   return (
-    <DropdownMenu>
+    <div className="flex items-center">
+      <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "inline-flex items-center gap-1.5 outline-none transition-colors",
-          "text-[15px] font-medium text-foreground/85 hover:text-foreground",
-          "data-[state=open]:text-foreground"
+          "group inline-flex h-9 items-center gap-2.5 rounded-lg px-1 pr-2 outline-none transition-opacity hover:opacity-90",
+          "text-sm font-bold leading-none text-foreground",
+          "data-[state=open]:opacity-90 [&_svg]:block"
         )}
       >
-        {user.username}
-        <ChevronDown className="w-4 h-4 text-foreground/45" strokeWidth={2} />
+        <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-full gradient-cta text-[11px] font-extrabold text-white shadow-sm">
+          {initial}
+        </span>
+        <span className="max-w-[7rem] truncate">{user.username}</span>
+        <ChevronDown className="size-4 shrink-0 text-foreground/45" strokeWidth={2} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" sideOffset={10} className="w-56 rounded-xl p-1.5 shadow-lg border-border/70">
         <div className="px-3 py-2.5 border-b border-border/50 mb-1">
@@ -157,7 +146,8 @@ function UserMenu({ user, onLogout }) {
           Cerrar sesión
         </DropdownMenuItem>
       </DropdownMenuContent>
-    </DropdownMenu>
+      </DropdownMenu>
+    </div>
   );
 }
 
@@ -165,62 +155,49 @@ export default function Navbar({ onAccountClick = () => {} }) {
   const location = useLocation();
   const { user, isAuthenticated, logout, isLoadingAuth } = useAuth();
 
-  const openMatch = () => window.dispatchEvent(new CustomEvent("open-match-quiz"));
-
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border/50">
       <div className="color-bar w-full h-[2px]" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-16 gap-8 lg:gap-10">
-          <BrandLogo size="sm" />
+      <div className="site-container">
+        <div className="flex items-center h-16">
+          <BrandLogo size="nav" layout="lockup" className="flex items-center shrink-0" />
 
-          <div className="hidden lg:flex items-center gap-8 xl:gap-10">
-            <NavMenu
-              label="Buscar inmuebles"
-              items={searchItems}
-              pathname={location.pathname}
-              search={location.search}
-            />
-            <NavMenu
-              label="Herramientas"
-              items={toolItems(openMatch)}
-              pathname={location.pathname}
-              search={location.search}
-            />
-            <NavMenu
-              label="Para propietarios"
-              items={ownerItems}
-              pathname={location.pathname}
-              search={location.search}
-            />
-          </div>
-
-          <div className="flex items-center gap-3 sm:gap-5 ml-auto">
-            <Link
-              to="/favoritos"
-              className="hidden sm:flex items-center justify-center text-foreground/70 hover:text-foreground transition-colors"
-              aria-label="Mis favoritos"
-            >
-              <Heart className="w-[22px] h-[22px]" strokeWidth={1.75} />
-            </Link>
+          <div className="flex items-center gap-4 sm:gap-5 ml-auto translate-y-1">
+            <div className="hidden lg:flex items-center gap-4 sm:gap-5">
+              {navLinks.map((item) => {
+                const active = isNavLinkActive(item, location.pathname, location.search);
+                return (
+                  <Link
+                    key={item.label}
+                    to={item.to}
+                    className={cn(
+                      "inline-flex items-center py-2 text-[15px] font-semibold leading-none transition-colors",
+                      active
+                        ? "text-foreground"
+                        : "text-foreground/85 hover:text-foreground"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+              <AnunciarNavMenu pathname={location.pathname} />
+            </div>
 
             {!isLoadingAuth && isAuthenticated && user ? (
-              <div className="hidden sm:block">
+              <div className="hidden sm:flex items-center ml-4 lg:ml-6 pl-4 lg:pl-6 border-l border-border/50">
                 <UserMenu user={user} onLogout={logout} />
               </div>
             ) : !isLoadingAuth ? (
-              <div className="hidden sm:flex items-center gap-5">
+              <div className="hidden sm:flex items-center ml-4 lg:ml-6 pl-4 lg:pl-6 border-l border-border/50">
                 <Link
                   to="/login"
-                  className="text-[15px] font-medium text-foreground hover:text-foreground/70 transition-colors"
+                  className="group inline-flex h-9 items-center gap-2.5 rounded-lg px-1 pr-2 text-sm font-bold leading-none transition-opacity hover:opacity-90 [&_svg]:block"
                 >
-                  Entrar
-                </Link>
-                <Link
-                  to="/register"
-                  className="gradient-cta btn-glow inline-flex items-center justify-center px-5 py-2.5 rounded-md text-[15px] font-semibold"
-                >
-                  Registrarse
+                  <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-full gradient-cta shadow-sm">
+                    <User className="size-3.5 text-white" strokeWidth={2.25} />
+                  </span>
+                  <span className="text-gradient">Entrar</span>
                 </Link>
               </div>
             ) : null}

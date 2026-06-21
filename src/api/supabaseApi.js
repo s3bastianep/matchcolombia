@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 import { validateVisitBooking } from "@/lib/visitSlots";
 import { seedAdminNotificationsIfNeeded } from "@/lib/adminNotifications";
-import { notifySiteBrandingUpdated } from "@/lib/siteBranding";
+import { notifySiteBrandingUpdated, setSiteLogo } from "@/lib/siteBranding";
 import { getPortalSeedData } from "./portalSeed";
 import { createSupabaseStore, getSingletonRecord, upsertSingletonRecord } from "./entityRepository";
 import {
@@ -127,7 +127,14 @@ const AdminSettings = {
     const current = (await this.get()) || {};
     const next = { ...current, ...patch };
     const row = await upsertSingletonRecord(supabase, "admin_settings", "site", next);
-    if ("site_logo" in patch) notifySiteBrandingUpdated();
+    if ("site_logo" in patch) {
+      try {
+        setSiteLogo(patch.site_logo || null);
+      } catch {
+        /* cache local opcional */
+      }
+      notifySiteBrandingUpdated();
+    }
     return row;
   },
 };
@@ -151,7 +158,7 @@ export async function initSupabaseApi() {
   try {
     seedAdminNotificationsIfNeeded();
   } catch (err) {
-    console.warn("LUMORA HOME: notificaciones admin", err);
+    console.warn("HABIBAR: notificaciones admin", err);
   }
 }
 

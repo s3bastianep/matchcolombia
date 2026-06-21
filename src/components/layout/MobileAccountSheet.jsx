@@ -86,7 +86,7 @@ export default function MobileAccountSheet({ open, onOpenChange, onMatchClick })
                 className="w-full flex items-center gap-3 rounded-2xl px-4 py-3.5 font-semibold hover:bg-secondary transition-colors text-left"
               >
                 <Sparkles className="w-5 h-5 text-brand-violet" />
-                Match inteligente
+                Cuestionario Habibar
               </button>
               <button
                 type="button"

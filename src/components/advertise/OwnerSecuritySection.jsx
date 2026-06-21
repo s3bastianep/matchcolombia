@@ -30,7 +30,7 @@ const FEARS = ["Morosos", "Daños", "Fraudes"];
 export default function OwnerSecuritySection() {
   return (
     <section className="py-10 sm:py-14 bg-[hsl(0,0%,98%)] border-y border-border/40">
-      <div className="max-w-6xl mx-auto px-4 sm:px-8">
+      <div className="site-container">
         <div className="grid lg:grid-cols-[1fr_1.15fr] gap-8 lg:gap-12 items-start">
           <div className="border-l-4 border-brand-magenta pl-4 sm:pl-5">
             <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider text-brand-magenta mb-2">

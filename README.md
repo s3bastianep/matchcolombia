@@ -1,4 +1,4 @@
-# LUMORA HOME
+# HABIBAR
 
 Plataforma web de arriendos verificados en Colombia. React + Vite, datos en `localStorage` para desarrollo y demo.
 
@@ -21,7 +21,7 @@ cp .env.example .env
 VITE_GOOGLE_MAPS_API_KEY=
 
 # URL del sitio en producción (SEO, Open Graph, sitemap)
-VITE_SITE_URL=https://matchcolombia.co
+VITE_SITE_URL=https://habibar.com
 ```
 
 ## Desarrollo

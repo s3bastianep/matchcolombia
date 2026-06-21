@@ -1,13 +1,16 @@
 /** Copy unificado para todo el sitio */
 
 export const HERO_SUBTITLE =
-  "Inmuebles verificados y recomendaciones inteligentes para encontrar el lugar ideal.";
+  "Inmuebles verificados para habitar Bogotá. Encuentra el lugar ideal con nuestro cuestionario.";
 
 export const VERIFIED_LISTINGS =
   "Inmuebles revisados antes de publicar. Fotos y datos verificados por nuestro equipo.";
 
-export const MATCH_STEPS_VERIFIED =
+export const HABIBAR_STEPS_VERIFIED =
   "Todos los anuncios son verificados por nuestro equipo antes de publicarse.";
+
+/** @deprecated use HABIBAR_STEPS_VERIFIED */
+export const MATCH_STEPS_VERIFIED = HABIBAR_STEPS_VERIFIED;
 
 export const TRUST_TAGLINE =
   "Menos tiempo buscando. Más confianza al arrendar.";
@@ -30,7 +33,7 @@ export const EXPLORE_TYPE_LABELS = {
 };
 
 export const EXPLORE_SORT_LABELS = {
-  match: "Mejor match",
+  match: "Recomendados",
   newest: "Más recientes",
   price_asc: "Menor precio",
   price_desc: "Mayor precio",
@@ -44,7 +47,7 @@ export const FAVORITES_BADGE = "Guardados";
 export const FAVORITES_EMPTY_TITLE = "Aún no tienes inmuebles guardados";
 
 export const FAVORITES_EMPTY_HINT =
-  "Usa el match inteligente para encontrar opciones que encajen, o guarda cualquier inmueble con el corazón.";
+  "Usa el cuestionario Habibar para encontrar opciones que encajen, o guarda cualquier inmueble con el corazón.";
 
 export const OWNER_PROMO_TAGLINE =
   "Publica gratis. Nos encargamos de interesados y visitas.";
@@ -59,9 +62,9 @@ export const QUIZ_FINISH_CTA = "Ver resultados";
 
 export const QUIZ_STEPS = [
   { id: "city", title: "¿En qué zona de Bogotá?", subtitle: "Elige toda la ciudad o un barrio" },
-  { id: "zone", title: "¿En qué zona?", subtitle: "Opcional. Afina por barrio o zona" },
+  { id: "zone", title: "¿Qué barrio prefieres?", subtitle: "Opcional. Afina por localidad o zona" },
   { id: "type", title: "¿Qué tipo de inmueble?", subtitle: "Apartamento, casa o estudio" },
-  { id: "beds", title: "¿Cuántas habitaciones?", subtitle: "Para afinar tu match inteligente" },
+  { id: "beds", title: "¿Cuántas habitaciones?", subtitle: "Para afinar tu búsqueda" },
   { id: "baths", title: "¿Cuántos baños?", subtitle: "Elige el mínimo que necesitas" },
   { id: "budget", title: "¿Cuál es tu presupuesto?", subtitle: "Precio mensual, sin sorpresas" },
   { id: "elevator", title: "¿Necesitas ascensor?", subtitle: "Útil en pisos altos o si buscas comodidad" },
@@ -77,8 +80,13 @@ export function listingsCountLabel(count) {
   return count === 1 ? "inmueble disponible" : "inmuebles disponibles";
 }
 
-export function matchBannerTitle(cityLabel) {
+export function habibarBannerTitle(cityLabel) {
   return `Opciones que encajan en ${cityLabel}`;
+}
+
+/** @deprecated use habibarBannerTitle */
+export function matchBannerTitle(cityLabel) {
+  return habibarBannerTitle(cityLabel);
 }
 
 export function viewListingsLabel(count) {
@@ -87,7 +95,7 @@ export function viewListingsLabel(count) {
 
 export const EXPLORE_EMPTY_NO_LISTINGS_TITLE = "No hay inmuebles en este momento";
 export const EXPLORE_EMPTY_NO_LISTINGS_DESC =
-  "Estamos incorporando nuevos inmuebles verificados. Configura tu match inteligente y vuelve a buscar pronto: publicamos opciones nuevas con frecuencia.";
+  "Estamos incorporando nuevos inmuebles verificados. Completa el cuestionario Habibar y vuelve a buscar pronto: publicamos opciones nuevas con frecuencia.";
 export const EXPLORE_EMPTY_FILTERED_TITLE = "Sin resultados por ahora";
 export const EXPLORE_EMPTY_FILTERED_DESC =
   "Prueba ampliando ciudad, zona o ajustando habitaciones, baños, parqueaderos o estrato.";

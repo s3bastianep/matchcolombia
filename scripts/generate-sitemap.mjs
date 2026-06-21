@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { CITIES, ZONES_BY_CITY } from "../src/lib/colombia.js";
 
-const SITE_URL = (process.env.VITE_SITE_URL || "https://matchcolombia.co").replace(/\/$/, "");
+const SITE_URL = (process.env.VITE_SITE_URL || "https://habibar.com").replace(/\/$/, "");
 const now = new Date().toISOString().slice(0, 10);
 
 function getUrls() {

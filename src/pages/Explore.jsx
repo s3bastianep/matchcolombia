@@ -271,7 +271,7 @@ export default function Explore() {
         <SelectValue placeholder="Ordenar" />
       </SelectTrigger>
       <SelectContent>
-        {isMatched && <SelectItem value="match">Mejor match</SelectItem>}
+        {isMatched && <SelectItem value="match">Recomendados</SelectItem>}
         <SelectItem value="newest">{EXPLORE_SORT_LABELS.newest}</SelectItem>
         <SelectItem value="price_asc">{EXPLORE_SORT_LABELS.price_asc}</SelectItem>
         <SelectItem value="price_desc">{EXPLORE_SORT_LABELS.price_desc}</SelectItem>
@@ -309,7 +309,7 @@ export default function Explore() {
             </div>
             <VerifiedBadge size="xs" className="shrink-0" />
             <button
-              onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
+              onClick={() => window.dispatchEvent(new CustomEvent("open-habibar-quiz"))}
               className="text-[10px] font-bold text-brand-violet hover:underline shrink-0"
             >
               Editar
@@ -628,7 +628,7 @@ export default function Explore() {
                 <p className="text-xs font-semibold text-foreground flex-1 truncate">{matchBannerTitle(cityLabel)}</p>
                 <button
                   type="button"
-                  onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
+                  onClick={() => window.dispatchEvent(new CustomEvent("open-habibar-quiz"))}
                   className="text-xs font-bold text-brand-violet shrink-0"
                 >
                   Editar
@@ -681,10 +681,10 @@ export default function Explore() {
               action={
                 <button
                   type="button"
-                  onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
+                  onClick={() => window.dispatchEvent(new CustomEvent("open-habibar-quiz"))}
                   className="app-btn-primary w-full py-3.5 text-sm"
                 >
-                  {properties.length === 0 ? "Configurar match" : "Refinar match"}
+                  {properties.length === 0 ? "Configurar cuestionario" : "Refinar cuestionario"}
                 </button>
               }
               secondaryAction={
@@ -717,10 +717,10 @@ export default function Explore() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
-                onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
+                onClick={() => window.dispatchEvent(new CustomEvent("open-habibar-quiz"))}
                 className="gradient-cta text-white font-bold px-6 py-3 rounded-xl shadow-md hover:opacity-95 transition-opacity"
               >
-                {properties.length === 0 ? "Configurar match" : "Refinar match"}
+                {properties.length === 0 ? "Configurar cuestionario" : "Refinar cuestionario"}
               </button>
               {properties.length === 0 ? (
                 <Link

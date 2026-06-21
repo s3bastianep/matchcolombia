@@ -36,8 +36,8 @@ export default function AppLayout() {
 
   useEffect(() => {
     const handler = () => setQuizOpen(true);
-    window.addEventListener("open-match-quiz", handler);
-    return () => window.removeEventListener("open-match-quiz", handler);
+    window.addEventListener("open-habibar-quiz", handler);
+    return () => window.removeEventListener("open-habibar-quiz", handler);
   }, []);
 
   useEffect(() => {

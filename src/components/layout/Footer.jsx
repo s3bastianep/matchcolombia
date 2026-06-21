@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Mail, Phone } from "lucide-react";
 import { BRAND } from "@/lib/brand";
+import BrandLogo from "@/components/brand/BrandLogo";
 
 const SocialX = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -42,19 +43,14 @@ export default function Footer() {
     <footer className="bg-brand-dark">
       <div className="color-bar w-full" />
       {/* Main */}
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-16 pb-12">
+      <div className="site-container pt-16 pb-12">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-10">
           {/* Brand */}
           <div className="col-span-2">
-            <Link to="/" className="flex items-center gap-2.5 mb-5">
-              <div className="w-10 h-10 gradient-cta rounded-2xl flex items-center justify-center shrink-0 shadow-lg font-extrabold text-white">
-                L
-              </div>
-              <div>
-                <span className="font-extrabold text-xl text-white block leading-tight">{BRAND.name}</span>
-                <p className="text-white/35 text-[10px] font-semibold">{BRAND.tagline}</p>
-              </div>
-            </Link>
+            <div className="mb-5">
+              <BrandLogo size="lg" layout="lockup" variant="onDark" className="mb-3" />
+              <p className="text-white/35 text-[10px] font-semibold pl-0.5">{BRAND.tagline}</p>
+            </div>
             <div className="flex gap-2 mb-8">
               {[
                 { Icon: SocialIG, href: BRAND.social?.instagram, label: "Instagram" },
@@ -118,7 +114,7 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-3.5 h-3.5 text-primary/70 mt-0.5 shrink-0" />
-                <span className="text-white/45 text-sm leading-tight">Colombia</span>
+                <span className="text-white/45 text-sm leading-tight">Bogotá, Colombia</span>
               </li>
               <li>
                 <a href={`mailto:${BRAND.email}`} className="flex items-center gap-2 text-white/45 hover:text-white text-sm transition-colors">
@@ -139,9 +135,9 @@ export default function Footer() {
 
       {/* Divider + bottom bar */}
       <div className="border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="site-container py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-white/20 text-xs">
-            © {new Date().getFullYear()} {BRAND.name} · Colombia
+            © {new Date().getFullYear()} {BRAND.name} · Bogotá, Colombia
           </p>
           <div className="flex items-center gap-5">
             <a href={`mailto:${BRAND.email}?subject=Consulta%20legal`} className="text-white/20 hover:text-white/45 text-xs transition-colors">

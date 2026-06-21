@@ -1,4 +1,4 @@
-const NOTIF_KEY = "matchcolombia_unread_updates";
+const NOTIF_KEY = "habibar_unread_updates";
 
 function load() {
   try {

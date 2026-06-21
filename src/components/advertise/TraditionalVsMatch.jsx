@@ -13,7 +13,7 @@ const ROWS = [
 export default function TraditionalVsMatch() {
   return (
     <section className="py-10 sm:py-14 bg-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-8">
+      <div className="site-container">
         <div className="border-l-4 border-brand-magenta pl-4 sm:pl-5 mb-8">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight">
             Inmobiliaria tradicional vs {BRAND.name}

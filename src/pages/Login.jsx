@@ -41,7 +41,7 @@ export default function Login() {
         <>
           ¿No tienes cuenta?{" "}
           <Link to="/register" className="font-bold text-brand-violet hover:underline">
-            Regístrate gratis
+            Crea tu cuenta
           </Link>
         </>
       }

@@ -14,11 +14,11 @@ const STEPS = [
     num: "01",
     title: "Haz el cuestionario",
     problem: "Sin perder horas en portales sin filtro.",
-    desc: `Ciudad, presupuesto, habitaciones, baños, mascotas y más. ${BRAND.name} filtra por ti.`,
+    desc: "Ciudad, presupuesto, habitaciones, baños, mascotas y más. Habibar filtra por ti.",
   },
   {
     num: "02",
-    title: "Encuentra tu match",
+    title: "Encuentra opciones",
     problem: "Sin anuncios dudosos ni precios inventados.",
     desc: "Solo ves inmuebles verificados por nuestro equipo que encajan con lo que buscas.",
     verified: true,
@@ -34,13 +34,13 @@ const STEPS = [
 export default function MatchSteps({ onStartQuiz }) {
   return (
     <section className="section-pad section-pad-tight-bottom relative overflow-hidden surface-warm border-y border-border/40">
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-8">
+      <div className="relative site-container">
         <div className="grid lg:grid-cols-[1fr_1.1fr] gap-6 lg:gap-8 items-start mb-8 sm:mb-10">
           <SectionHeader
             eyebrow="Cómo funciona"
             title={
               <>
-                Tu match en <span className="text-gradient">3 pasos</span>
+                Tu hogar en <span className="text-gradient">3 pasos</span>
               </>
             }
             subtitle={TRUST_TAGLINE}
@@ -111,7 +111,7 @@ export default function MatchSteps({ onStartQuiz }) {
             onClick={onStartQuiz}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 gradient-cta text-white font-bold px-8 py-3.5 rounded-full hover:opacity-95 transition-opacity"
           >
-            Empezar match inteligente
+            Empezar cuestionario
             <ArrowRight className="w-4 h-4" />
           </button>
           <Link

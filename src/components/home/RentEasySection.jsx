@@ -29,8 +29,8 @@ const features = [
   {
     icon: Sparkles,
     title: "Recursos útiles",
-    desc: "Match inteligente, filtros avanzados, mapa interactivo y herramientas para decidir mejor en Colombia.",
-    tag: "Match + mapa",
+    desc: "Cuestionario Habibar, filtros avanzados, mapa interactivo y herramientas para decidir mejor en Colombia.",
+    tag: "Cuestionario + mapa",
     accent: "from-brand-violet to-brand-magenta",
     ring: "ring-brand-violet/20",
     image: INTERIORS.sala2,
@@ -52,7 +52,7 @@ const features = [
   },
   {
     icon: Sparkles,
-    title: "Tranquilidad de espíritu",
+    title: "Tranquilidad total",
     desc: "Anuncios verificados y un equipo real que gestiona consultas y visitas. Arrienda con confianza.",
     tag: "Gestión completa",
     accent: "from-brand-magenta to-brand-violet",
@@ -61,7 +61,7 @@ const features = [
     preview: (
       <div className="flex flex-wrap gap-1.5 text-[10px] font-bold text-foreground/80">
         <VerifiedBadge size="xs" />
-        <span className="px-2.5 py-1 rounded-lg bg-white/95 border border-border/40 shadow-sm">Equipo Match</span>
+        <span className="px-2.5 py-1 rounded-lg bg-white/95 border border-border/40 shadow-sm">Equipo Habibar</span>
       </div>
     ),
   },
@@ -75,7 +75,7 @@ export default function RentEasySection() {
         <div className="absolute bottom-0 right-1/4 w-[360px] h-[360px] rounded-full bg-brand-magenta/6 blur-3xl" />
       </div>
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-8">
+      <div className="relative site-container">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}

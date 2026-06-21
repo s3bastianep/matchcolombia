@@ -1,6 +1,6 @@
 import { lazy } from "react";
 
-const CHUNK_RELOAD_KEY = "lumora-chunk-reload";
+const CHUNK_RELOAD_KEY = "habibar-chunk-reload";
 
 function isChunkLoadError(error) {
   const message = error?.message || String(error || "");

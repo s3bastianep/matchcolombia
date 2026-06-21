@@ -7,7 +7,7 @@ import {
   matchesBalconyPref,
 } from "@/lib/propertyInteriorInfo";
 
-const PREFS_KEY = "matchcolombia_preferences";
+const PREFS_KEY = "habibar_preferences";
 
 export const defaultPreferences = {
   city: "",

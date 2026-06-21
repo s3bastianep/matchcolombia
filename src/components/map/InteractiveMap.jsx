@@ -181,7 +181,7 @@ function GoogleEmbedMap({ markers, center, zoom, className, onMarkerClick, onMar
 /** Google Maps JS API — requiere VITE_GOOGLE_MAPS_API_KEY */
 function GoogleMapView({ markers, center, zoom, className, onMarkerClick, onMarkerEnter, onMarkerLeave, activeMarkerId, markerVariant }) {
   const { isLoaded, loadError } = useJsApiLoader({
-    id: "matchcolombia-google-map",
+    id: "habibar-google-map",
     googleMapsApiKey: GOOGLE_KEY,
   });
 

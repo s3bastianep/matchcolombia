@@ -41,7 +41,7 @@ function QuizVisual() {
       <div className="w-full max-w-[248px] space-y-3">
         <div className="flex items-center gap-2 px-1">
           <Sparkles className="w-4 h-4 text-brand-violet shrink-0" />
-          <p className="text-[11px] font-extrabold text-foreground">Match inteligente</p>
+          <p className="text-[11px] font-extrabold text-foreground">Cuestionario Habibar</p>
         </div>
         <div className="grid grid-cols-2 gap-2">
           <FilterChip icon={MapPin} label="Ciudad" value="Tu zona" />
@@ -79,7 +79,7 @@ function MatchVisual() {
             </div>
             <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between gap-2">
               <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/95 text-[10px] font-extrabold text-brand-violet">
-                94% match
+                94% encaje
               </span>
               <span className="text-[10px] font-bold text-white/95">$2.8M / mes</span>
             </div>

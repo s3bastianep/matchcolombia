@@ -59,7 +59,7 @@ function MatchButton({ onClick, compact = false, className }) {
         )}
       >
         <Sparkles className="w-4 h-4 shrink-0" strokeWidth={2.5} />
-        Match inteligente
+        Cuestionario Habibar
       </button>
     );
   }
@@ -74,7 +74,7 @@ function MatchButton({ onClick, compact = false, className }) {
       )}
     >
       <Sparkles className="w-4 h-4 shrink-0" strokeWidth={2.5} />
-      <span>Match inteligente</span>
+      <span>Cuestionario Habibar</span>
     </button>
   );
 }
@@ -133,7 +133,7 @@ export default function InlineMatchBar({ variant = "hero", embedded = false }) {
             <div className="flex items-center justify-between gap-2 px-4 py-2.5 border-b border-border/40 bg-secondary/25">
               <p className="text-sm font-bold text-foreground flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-brand-violet shrink-0" strokeWidth={2.25} />
-                Match inteligente
+                Cuestionario Habibar
               </p>
               <span className="text-[10px] font-bold uppercase tracking-wider text-brand-violet bg-brand-violet/10 px-2 py-1 rounded-full">
                 Bogotá

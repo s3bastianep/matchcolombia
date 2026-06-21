@@ -71,6 +71,7 @@ function AppRoutes() {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/vista-previa-app" element={<AppMobilePreview />} />
+        <Route path="/vender" element={<Navigate to="/publicar" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/olvide-contrasena" element={<ForgotPassword />} />

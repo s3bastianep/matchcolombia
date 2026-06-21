@@ -334,7 +334,7 @@ export default function MatchQuiz({ open, onOpenChange }) {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                  Match inteligente
+                  Cuestionario Habibar
                 </p>
                 <p className="text-xs font-semibold text-foreground/70 mt-0.5">
                   Paso {step + 1} de {QUIZ_STEPS.length}

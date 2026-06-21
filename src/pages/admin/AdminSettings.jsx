@@ -23,23 +23,29 @@ export default function AdminSettings() {
   const [form, setForm] = useState(null);
   const [newPoi, setNewPoi] = useState({ name: "", city: "Bogotá", neighborhood: "", category: "Comercio" });
   const [logoPreview, setLogoPreview] = useState(null);
+  const [logoDirty, setLogoDirty] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (settings && !form) {
       setForm({ ...settings });
       setLogoPreview(settings.site_logo || null);
+      setLogoDirty(false);
     }
   }, [settings, form]);
 
   const saveSettings = useMutation({
     mutationFn: (patch) => api.entities.AdminSettings.update(patch),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       qc.invalidateQueries({ queryKey: ["admin-settings"] });
-      if ("site_logo" in (data || {})) {
+      if ("site_logo" in variables) {
         applySiteFavicon(data?.site_logo);
+        setLogoDirty(false);
         toast.success("Logo actualizado en toda la página.");
       }
+    },
+    onError: (err) => {
+      toast.error(err.message || "No se pudo guardar. Intenta con una imagen más pequeña.");
     },
   });
 
@@ -71,6 +77,7 @@ export default function AdminSettings() {
     try {
       const dataUrl = await readImageFile(file);
       setLogoPreview(dataUrl);
+      setLogoDirty(true);
     } catch (err) {
       toast.error(err.message || "No se pudo cargar la imagen.");
     }
@@ -88,6 +95,7 @@ export default function AdminSettings() {
   const restoreDefaultLogo = () => {
     saveSettings.mutate({ site_logo: null });
     setLogoPreview(null);
+    setLogoDirty(false);
     setForm((f) => ({ ...f, site_logo: null }));
   };
 
@@ -113,7 +121,7 @@ export default function AdminSettings() {
             {logoPreview ? (
               <img src={logoPreview} alt="Logo personalizado" className="h-10 w-auto max-w-[200px] object-contain" />
             ) : (
-              <BrandLogo link={false} size="md" />
+              <BrandLogo link={false} size="md" layout="lockup" />
             )}
           </div>
         </div>
@@ -133,7 +141,7 @@ export default function AdminSettings() {
           <Button
             type="button"
             onClick={saveLogo}
-            disabled={saveSettings.isPending || !logoPreview || logoPreview === form.site_logo}
+            disabled={saveSettings.isPending || !logoPreview || !logoDirty}
             className="gradient-cta text-white font-bold"
           >
             Guardar logo

@@ -5,7 +5,7 @@ import BrandLogo from "@/components/brand/BrandLogo";
 import { cn } from "@/lib/utils";
 import { hapticLight } from "@/lib/haptics";
 
-const STORAGE_KEY = "lumora_onboarding_done";
+const STORAGE_KEY = "habibar_onboarding_done";
 
 const SLIDES = [
   {
@@ -17,7 +17,7 @@ const SLIDES = [
   },
   {
     icon: Sparkles,
-    title: "Match inteligente",
+    title: "Cuestionario Habibar",
     description: "Cuéntanos qué buscas y te mostramos los inmuebles que mejor encajan contigo.",
     tone: "text-brand-magenta",
     bg: "bg-brand-magenta/10",
@@ -67,7 +67,7 @@ export default function AppOnboarding({ onComplete }) {
   return (
     <div className="fixed inset-0 z-[300] bg-white flex flex-col pt-safe pb-safe">
       <div className="flex items-center justify-between px-5 h-12">
-        <BrandLogo size="sm" />
+        <BrandLogo size="lg" layout="lockup" />
         <button type="button" onClick={finish} className="text-sm font-semibold text-muted-foreground px-2 py-1">
           Omitir
         </button>

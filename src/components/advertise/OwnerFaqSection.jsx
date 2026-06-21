@@ -141,7 +141,7 @@ function FaqAccordion({ items }) {
 export default function OwnerFaqSection({ publishLink = "/publicar/nuevo" }) {
   return (
     <section className="py-10 sm:py-14 lg:py-16 bg-[hsl(0,0%,98%)] border-t border-border/40">
-      <div className="max-w-6xl mx-auto px-4 sm:px-8">
+      <div className="site-container">
         <div className="grid lg:grid-cols-[0.95fr_1.15fr] gap-8 lg:gap-12 items-start">
           <div className="space-y-6">
             <div className="border-l-4 border-brand-magenta pl-4 sm:pl-5">

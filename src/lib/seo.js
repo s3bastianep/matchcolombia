@@ -5,12 +5,11 @@ import { CITIES, ZONES_BY_CITY } from "./colombia.js";
 export const SITE_URL = (
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_SITE_URL) ||
   (typeof process !== "undefined" && process.env?.VITE_SITE_URL) ||
-  "https://matchcolombia.co"
+  "https://habibar.com"
 ).replace(/\/$/, "");
 
-/** Imagen OG en JPG (1200×630) — mejor compatibilidad que SVG en redes sociales */
-export const DEFAULT_OG_IMAGE =
-  "https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop";
+/** Imagen OG propia — 1200×630 en dominio habibar.com */
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-habibar.jpg`;
 
 export const OG_IMAGE_WIDTH = 1200;
 export const OG_IMAGE_HEIGHT = 630;
@@ -25,16 +24,16 @@ export const SEO_DEFAULTS = {
   locale: "es_CO",
   language: "es",
   region: "CO",
-  geoPlacename: "Colombia",
+  geoPlacename: "Bogotá, Colombia",
   geoPosition: "4.7110;-74.0721",
   title: `${BRAND.name} | Arriendos verificados en Bogotá`,
   description:
-    `${BRAND.name} conecta arrendatarios y propietarios en Bogotá. Apartamentos y casas verificados, match inteligente, visitas coordinadas y gestión completa del arriendo.`,
+    `${BRAND.name} conecta arrendatarios y propietarios en Bogotá. Apartamentos y casas verificados, cuestionario personalizado, visitas coordinadas y gestión completa del arriendo.`,
   keywords:
-    "arriendo apartamentos Bogotá, inmuebles verificados Bogotá, arriendo casas Bogotá, administración de arriendos, LUMORA HOME, match inteligente inmuebles",
+    "arriendo apartamentos Bogotá, inmuebles verificados Bogotá, arriendo casas Bogotá, administración de arriendos, Habibar, arriendo Bogotá",
   ogImage: DEFAULT_OG_IMAGE,
   ogImageAlt: `${BRAND.name} — inmuebles verificados en Bogotá`,
-  twitterHandle: "@lumorahome",
+  twitterHandle: "@habibar",
 };
 
 const NOINDEX_PREFIXES = [
@@ -165,7 +164,7 @@ export function getExploreSeo(searchParams) {
 
   const description = isSale
     ? `Encuentra inmuebles en venta en ${city} con ${BRAND.name}. Listados verificados, fotos reales y acompañamiento en todo el proceso de compra.`
-    : `Arrienda ${typeLabel ? `${typeLabel.toLowerCase()}s` : "apartamentos y casas"} en ${city} con listados verificados. Match inteligente, visitas presenciales o virtuales y sin scroll infinito.`;
+    : `Arrienda ${typeLabel ? `${typeLabel.toLowerCase()}s` : "apartamentos y casas"} en ${city} con listados verificados. Cuestionario Habibar, visitas presenciales o virtuales y sin scroll infinito.`;
 
   const geo = cityGeoMeta(city);
 
@@ -227,7 +226,7 @@ export function getPropertySeo(property) {
 
 const ROUTE_SEO = {
   "/": {
-    title: buildTitle("Arrienda fácil. Inmuebles verificados en Colombia"),
+    title: buildTitle("Arriendos verificados en Bogotá"),
     description: SEO_DEFAULTS.description,
     url: "/",
     keywords: SEO_DEFAULTS.keywords,
@@ -238,7 +237,7 @@ const ROUTE_SEO = {
     title: buildTitle("Anuncia tu inmueble — Administración completa de arriendos"),
     description: `Publica gratis tu apartamento o casa en Bogotá. ${BRAND.name} gestiona visitas, candidatos, contratos, cobros y mantenimiento sin exponer tu teléfono.`,
     url: "/anunciar",
-    keywords: "administración de arriendos, publicar apartamento, arrendar propiedad Bogotá, propietarios LUMORA HOME",
+    keywords: "administración de arriendos, publicar apartamento, arrendar propiedad Bogotá, propietarios Habibar",
     jsonLd: () => [
       organizationSchema(),
       breadcrumbSchema([
@@ -252,7 +251,7 @@ const ROUTE_SEO = {
     title: buildTitle("Vende tu inmueble sin perseguir compradores"),
     description: `Vende tu apartamento o casa en Bogotá con ${BRAND.name}. Publicación gratis, compradores verificados, visitas coordinadas y seguimiento hasta cerrar la venta.`,
     url: "/publicar",
-    keywords: "venta inmuebles Bogotá, vender apartamento Bogotá, venta casas Bogotá, LUMORA HOME",
+    keywords: "venta inmuebles Bogotá, vender apartamento Bogotá, venta casas Bogotá, Habibar",
     jsonLd: () => [
       organizationSchema(),
       breadcrumbSchema([
@@ -264,7 +263,7 @@ const ROUTE_SEO = {
   },
   "/favoritos": {
     title: buildTitle("Mis inmuebles guardados"),
-    description: "Tu lista personal de inmuebles guardados en LUMORA HOME.",
+    description: `Tu lista personal de inmuebles guardados en ${BRAND.name}.`,
     url: "/favoritos",
     noindex: true,
   },
@@ -332,7 +331,7 @@ export function organizationSchema() {
     name: BRAND.name,
     alternateName: BRAND.short,
     url: SITE_URL,
-    logo: absoluteUrl("/brand-mark.svg"),
+    logo: absoluteUrl("/habibar-wordmark.png?v=3"),
     description: SEO_DEFAULTS.description,
     email: BRAND.email,
     telephone: BRAND.phone,
@@ -342,10 +341,10 @@ export function organizationSchema() {
       containedInPlace: { "@type": "Country", name: "Colombia" },
     })),
     knowsAbout: [
-      "Arriendo de apartamentos en Colombia",
-      "Administración de propiedades",
-      "Venta de inmuebles",
-      "Match inteligente de inmuebles",
+      "Arriendo de apartamentos en Bogotá",
+      "Venta de inmuebles en Bogotá",
+      "Administración de propiedades en Bogotá",
+      "Cuestionario personalizado de inmuebles",
       "Visitas presenciales y virtuales",
     ],
     address: {
@@ -353,6 +352,11 @@ export function organizationSchema() {
       addressCountry: "CO",
       addressLocality: "Bogotá",
       addressRegion: "Cundinamarca",
+    },
+    serviceArea: {
+      "@type": "City",
+      name: "Bogotá",
+      containedInPlace: { "@type": "AdministrativeArea", name: "Cundinamarca" },
     },
     geo: {
       "@type": "GeoCoordinates",

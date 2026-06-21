@@ -1,27 +1,33 @@
-# LUMORA HOME
+# HABIBAR
 
 > Plataforma de arriendos y compra de inmuebles verificados en Bogotá, Colombia.
 
 ## Descripción
 
-LUMORA HOME conecta arrendatarios y propietarios. Ofrece listados verificados, match inteligente según preferencias del usuario, exploración con mapa y filtros, y coordinación de visitas.
+HABIBAR conecta arrendatarios y propietarios en Bogotá. Ofrece listados verificados, cuestionario Habibar según preferencias del usuario, exploración con mapa y filtros, y coordinación de visitas.
 
 ## Páginas públicas principales
 
-- `/` — Inicio: búsqueda rápida, match inteligente, inmuebles recientes
-- `/explorar` — Catálogo de inmuebles con filtros, mapa y ordenamiento
-- `/anunciar` — Información para propietarios que quieren publicar
-- `/vender` — Información para vender inmueble
+- `/` — Inicio: búsqueda rápida, cuestionario Habibar, inmuebles recientes
+- `/explorar` — Catálogo de inmuebles con filtros, mapa y ordenamiento (Bogotá)
+- `/anunciar` — Publicar inmueble en arriendo (propietarios)
+- `/publicar` — Vender inmueble en Bogotá
 - `/login` — Inicio de sesión
 - `/register` — Registro de usuario
 
 ## Funcionalidades clave
 
 - Inmuebles verificados (apartamentos, casas, estudios) en Bogotá
-- Match inteligente: quiz de preferencias (presupuesto, zona, habitaciones)
+- Cuestionario Habibar: quiz de preferencias (presupuesto, zona, habitaciones)
 - `/propiedad/{id}` — Ficha pública de un inmueble (URL canónica para SEO e IAs)
 - Favoritos / guardados (requiere cuenta)
 - App móvil nativa (Capacitor) con navegación inferior
+
+## SEO local (Bogotá)
+
+- Ciudad principal: Bogotá, Cundinamarca, Colombia
+- Coordenadas: 4.7110, -74.0721
+- Zonas: Chapinero, Usaquén, Suba, Zona Rosa, Parque 93, entre otras
 
 ## Tecnología
 
@@ -31,9 +37,9 @@ LUMORA HOME conecta arrendatarios y propietarios. Ofrece listados verificados, m
 
 ## Contacto y sitio
 
-- URL: https://matchcolombia.co
-- Idioma: español (Colombia)
+- URL: https://habibar.com
+- Idioma: español (Colombia, es-CO)
 
 ## Nota para crawlers
 
-El HTML inicial incluye contenido estático en `#root` antes de que React cargue. Las meta etiquetas Open Graph y JSON-LD en `<head>` describen el sitio. Para rutas dinámicas (p. ej. detalle de inmueble), el contenido se renderiza en el cliente.
+El HTML inicial incluye contenido estático en `#root` antes de que React cargue. Las meta etiquetas Open Graph y JSON-LD en `<head>` describen el sitio. Para rutas dinámicas (p. ej. detalle de inmueble), el contenido se renderiza en el cliente; en producción hay prerender para las rutas principales.

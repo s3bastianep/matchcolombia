@@ -50,11 +50,11 @@ export default function Favorites() {
             action={
               <button
                 type="button"
-                onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
+                onClick={() => window.dispatchEvent(new CustomEvent("open-habibar-quiz"))}
                 className="app-btn-primary w-full flex items-center justify-center gap-2 py-3.5 text-sm"
               >
                 <Sparkles className="w-4 h-4" />
-                Match inteligente
+                Cuestionario Habibar
               </button>
             }
             secondaryAction={
@@ -98,11 +98,11 @@ export default function Favorites() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   type="button"
-                  onClick={() => window.dispatchEvent(new CustomEvent("open-match-quiz"))}
+                  onClick={() => window.dispatchEvent(new CustomEvent("open-habibar-quiz"))}
                   className="rounded-xl gap-2 font-bold gradient-cta text-white px-6 py-3 flex items-center justify-center"
                 >
                   <Sparkles className="w-4 h-4" />
-                  Match inteligente
+                  Cuestionario Habibar
                 </button>
                 <Link to="/explorar" className="rounded-xl gap-2 font-semibold border-2 px-6 py-3 flex items-center justify-center">
                   Explorar <ArrowRight className="w-4 h-4" />

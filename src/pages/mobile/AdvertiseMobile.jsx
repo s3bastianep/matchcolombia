@@ -12,7 +12,7 @@ const BENEFITS = [
 ];
 
 export default function AdvertiseMobile() {
-  const waHref = `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent("Hola, quiero publicar mi inmueble en LUMORA HOME")}`;
+  const waHref = `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent("Hola, quiero publicar mi inmueble en HABIBAR")}`;
 
   return (
     <div className="native-screen">

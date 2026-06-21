@@ -56,7 +56,7 @@ export default function MobileQuickActions({ onMatchClick }) {
           className="col-span-2 flex items-center justify-center gap-2 rounded-2xl gradient-cta text-white font-bold py-3.5 shadow-md shadow-brand-magenta/25 active:scale-[0.99] transition-transform"
         >
           <Sparkles className="w-4 h-4" />
-          Match inteligente — encuentra tu inmueble ideal
+          Cuestionario Habibar — encuentra tu inmueble ideal
         </button>
       </div>
     </section>

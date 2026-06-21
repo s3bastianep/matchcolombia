@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    /* LUMORA — marca magenta/violeta + mint confianza + neutros cálidos */
+    /* HABIBAR — marca magenta/violeta + mint confianza + neutros cálidos */
     --background: 40 33% 98%;
     --foreground: 265 25% 12%;
     --card: 0 0% 100%;
@@ -92,6 +92,12 @@
   }
   h1, h2, h3 {
     @apply font-display;
+  }
+}
+
+@layer components {
+  .site-container {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
 

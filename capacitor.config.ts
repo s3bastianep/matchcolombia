@@ -1,26 +1,26 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: "co.matchcolombia.lumora",
-  appName: "LUMORA HOME",
+  appId: "com.habibar.app",
+  appName: "HABIBAR",
   webDir: "dist",
   server: {
     androidScheme: "https",
   },
   android: {
     allowMixedContent: false,
-    backgroundColor: "#FAFAFC",
+    backgroundColor: "#FFFFFF",
   },
   ios: {
     contentInset: "automatic",
-    backgroundColor: "#FAFAFC",
+    backgroundColor: "#FFFFFF",
     scrollEnabled: true,
   },
   plugins: {
     SplashScreen: {
       launchShowDuration: 1500,
       launchAutoHide: true,
-      backgroundColor: "#8B5CF6",
+      backgroundColor: "#FFFFFF",
       androidSplashResourceName: "splash",
       androidScaleType: "CENTER_CROP",
       showSpinner: false,

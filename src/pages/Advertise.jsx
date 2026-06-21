@@ -46,7 +46,7 @@ const ADMIN_INCLUDES = [
 function OwnerBreadcrumb() {
   return (
     <div className="color-bar">
-      <div className="max-w-6xl mx-auto px-4 sm:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
+      <div className="site-container py-2.5 flex flex-wrap items-center justify-between gap-3">
         <nav className="flex items-center gap-1.5 text-xs font-semibold text-white/80">
           <Link to="/" className="hover:text-white transition-colors">Inicio</Link>
           <ChevronRight className="w-3 h-3 text-white/40" />
@@ -154,7 +154,7 @@ export default function Advertise() {
       <OwnerBreadcrumb />
 
       <section className="bg-brand-dark text-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-8 sm:py-10 lg:py-12">
+        <div className="site-container py-8 sm:py-10 lg:py-12">
           <div className="grid lg:grid-cols-[1fr_0.9fr] gap-8 lg:gap-10 items-center">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
               <div className="flex items-center gap-2 mb-4">
@@ -202,20 +202,22 @@ export default function Advertise() {
       </section>
 
       <section className="color-bar">
-        <div className="max-w-4xl mx-auto px-4 sm:px-8 py-12 sm:py-16 lg:py-20 text-center text-white">
-          <h2 className="text-2xl sm:text-3xl lg:text-[2.35rem] font-extrabold leading-[1.15] tracking-tight">
-            El ciclo completo de tu arrendamiento.
-            <br className="hidden sm:block" />
-            {" "}Una sola administración.
-          </h2>
-          <p className="mt-5 sm:mt-6 text-sm sm:text-base lg:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
-            Desde que publicamos tu inmueble hasta que el inquilino se queda: nos encargamos de visitas, selección, contratos, cobros y mantenimiento. Mejores candidatos, arriendos más rápidos e inquilinos satisfechos que renuevan. Tú publicas; {BRAND.name} administra el resto.
-          </p>
+        <div className="site-container py-12 sm:py-16 lg:py-20 text-center text-white">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl lg:text-[2.35rem] font-extrabold leading-[1.15] tracking-tight">
+              El ciclo completo de tu arrendamiento.
+              <br className="hidden sm:block" />
+              {" "}Una sola administración.
+            </h2>
+            <p className="mt-5 sm:mt-6 text-sm sm:text-base lg:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
+              Desde que publicamos tu inmueble hasta que el inquilino se queda: nos encargamos de visitas, selección, contratos, cobros y mantenimiento. Mejores candidatos, arriendos más rápidos e inquilinos satisfechos que renuevan. Tú publicas; {BRAND.name} administra el resto.
+            </p>
+          </div>
         </div>
       </section>
 
       <section id="panel-real" className="py-10 sm:py-14 lg:py-16 bg-white border-b border-border/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+        <div className="site-container">
           <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-center">
             <OwnerSectionTitle
               badge="Tranquilidad, no tecnología"
@@ -230,7 +232,7 @@ export default function Advertise() {
       <AdminFlowSection />
 
       <section className="color-bar">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-6 sm:py-8 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="site-container py-6 sm:py-8 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {VERIFIABLE.map(({ label, desc }, i) => (
             <motion.div
               key={label}
@@ -252,7 +254,7 @@ export default function Advertise() {
       <OwnerSecuritySection />
 
       <section className="py-10 sm:py-14 bg-white border-b border-border/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+        <div className="site-container">
           <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-center">
             <OwnerSectionTitle
               badge="También para el inquilino"
@@ -265,7 +267,7 @@ export default function Advertise() {
       </section>
 
       <section className="py-10 sm:py-14">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+        <div className="site-container">
           <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-start">
             <OwnerSectionTitle
               title={`Administración ${BRAND.name}`}
@@ -297,7 +299,7 @@ export default function Advertise() {
       <OwnerFaqSection />
 
       <section id="publicar-form" className="bg-brand-dark text-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-10 sm:py-14 lg:py-16 grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+        <div className="site-container py-10 sm:py-14 lg:py-16 grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           <div>
             <OwnerSectionTitle
               light
@@ -319,7 +321,7 @@ export default function Advertise() {
           </div>
           <div className="bg-white/5 backdrop-blur-sm border border-white/15 rounded-2xl p-5 sm:p-7">
             <h3 className="font-extrabold text-lg mb-1">Publica gratis</h3>
-            <p className="text-sm text-white/60 mb-5">Publicación y administración incluidas</p>
+            <p className="text-sm text-white/60 mb-5">Publicación gratuita · honorarios transparentes</p>
             <LeadForm dark />
           </div>
         </div>

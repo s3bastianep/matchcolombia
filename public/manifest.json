@@ -1,7 +1,7 @@
 {
-  "name": "LUMORA HOME",
-  "short_name": "Lumora",
-  "description": "Arriendos verificados en Bogotá. Apartamentos y casas con match inteligente.",
+  "name": "HABIBAR",
+  "short_name": "Habibar",
+  "description": "Arriendos verificados en Bogotá. Apartamentos y casas con cuestionario Habibar.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -11,10 +11,22 @@
   "categories": ["business", "lifestyle", "real estate"],
   "icons": [
     {
-      "src": "/brand-mark.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "/habibar-icon-192.png?v=4",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/habibar-icon.png?v=4",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/habibar-icon.png?v=4",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="habibar-mark-grad" x1="10" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7C3AED"/>
+      <stop offset="0.45" stop-color="#A855F7"/>
+      <stop offset="1" stop-color="#EC4899"/>
+    </linearGradient>
+  </defs>
+  <path
+    fill="url(#habibar-mark-grad)"
+    fill-rule="evenodd"
+    d="M12 8h10v18.2L34.8 8H46v48H36V37.8L21.2 56H12V8Zm14 34.5V27.3L36 42.5V42.5h0V8h10v48H26V42.5Z"
+  />
+  <path
+    fill="url(#habibar-mark-grad)"
+    d="M22 38h8v8h-8v-8Z"
+  />
+</svg>

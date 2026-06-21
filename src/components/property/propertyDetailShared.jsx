@@ -313,7 +313,7 @@ export function AmenityChips({ items }) {
 }
 
 export function PersonalSearchSection() {
-  const openQuiz = () => window.dispatchEvent(new CustomEvent("open-match-quiz"));
+  const openQuiz = () => window.dispatchEvent(new CustomEvent("open-habibar-quiz"));
 
   const steps = [
     {

@@ -33,7 +33,7 @@ export default function AppMobilePreview() {
               <Smartphone className="w-3.5 h-3.5" />
               Vista previa Android
             </div>
-            <h1 className="text-2xl font-extrabold tracking-tight">LUMORA HOME App</h1>
+            <h1 className="text-2xl font-extrabold tracking-tight">HABIBAR App</h1>
             <p className="text-sm text-white/55 mt-1 max-w-lg">
               Navega como en el teléfono. Barra inferior, gestos y pantallas reales antes de publicar.
             </p>

@@ -1,4 +1,4 @@
-const KEY = "matchcolombia_admin_notifications";
+const KEY = "habibar_admin_notifications";
 
 function load() {
   try {
@@ -44,7 +44,7 @@ export function markAllAdminNotificationsRead() {
   save(load().map((n) => ({ ...n, read: true })));
 }
 
-const SEEDED_KEY = "matchcolombia_admin_notif_seeded";
+const SEEDED_KEY = "habibar_admin_notif_seeded";
 
 export function seedAdminNotificationsIfNeeded() {
   if (localStorage.getItem(SEEDED_KEY)) return;

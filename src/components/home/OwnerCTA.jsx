@@ -22,7 +22,8 @@ export default function OwnerCTA() {
         }}
       />
 
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-8 text-center">
+      <div className="relative site-container">
+        <div className="max-w-4xl mx-auto text-center">
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <p className="text-white/70 text-xs font-bold uppercase tracking-widest mb-3">Propietarios</p>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-white leading-tight mb-4">
@@ -57,6 +58,7 @@ export default function OwnerCTA() {
             </Link>
           </div>
         </motion.div>
+        </div>
       </div>
     </section>
   );

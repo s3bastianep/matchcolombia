@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Search, Building2, ShieldCheck, Sparkles } from "lucide-react";
 import { PEOPLE } from "@/lib/colombiaImages";
 import { HERO_SUBTITLE } from "@/lib/siteCopy";
+import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 
 function CollagePhoto({ src, alt, className, priority = false }) {
@@ -27,7 +28,7 @@ function CollagePhoto({ src, alt, className, priority = false }) {
 
 function HeroCollage() {
   return (
-    <div className="relative w-full flex items-center justify-center px-4 sm:px-8 py-8 sm:py-10 lg:py-12 min-h-[240px] sm:min-h-[300px] lg:min-h-[360px]">
+    <div className="relative w-full flex items-center justify-center py-8 sm:py-10 lg:py-12 min-h-[240px] sm:min-h-[300px] lg:min-h-[360px]">
       <div className="absolute inset-0 bg-gradient-to-br from-brand-violet/6 via-white to-brand-magenta/4 pointer-events-none" />
 
       <div className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[420px] aspect-square mx-auto">
@@ -93,10 +94,10 @@ function HeroMatchBlock({ onStartQuiz }) {
           </span>
           <div className="min-w-0 pt-0.5">
             <p className="text-[10px] font-bold uppercase tracking-wider text-brand-violet mb-1">
-              Lo nuestro
+              HABIBAR
             </p>
             <h2 className="font-extrabold text-lg sm:text-xl leading-tight text-foreground">
-              Match inteligente
+              {BRAND.quizLabel}
             </h2>
             <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
               Responde el cuestionario y te mostramos inmuebles verificados que encajan contigo.
@@ -111,7 +112,7 @@ function HeroMatchBlock({ onStartQuiz }) {
             className="w-full h-12 sm:h-[52px] rounded-xl gradient-cta btn-glow text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 hover:opacity-95 transition-opacity"
           >
             <Sparkles className="w-4 h-4 shrink-0" strokeWidth={2.25} />
-            Iniciar match inteligente
+            Iniciar cuestionario
           </button>
         )}
 
@@ -131,8 +132,9 @@ export default function HeroSection({ onStartQuiz }) {
     <section className="relative overflow-hidden bg-white">
       <div className="absolute inset-0 gradient-hero opacity-30 pointer-events-none" />
 
-      <div className="relative grid grid-cols-1 lg:grid-cols-2 items-center max-w-7xl mx-auto">
-        <div className="flex flex-col justify-center px-4 sm:px-8 lg:px-12 py-8 sm:py-10 lg:py-12 order-1">
+      <div className="relative site-container">
+        <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
+        <div className="flex flex-col justify-center py-8 sm:py-10 lg:py-12 order-1">
           <p className="text-xs font-bold uppercase tracking-widest text-brand-violet mb-3">
             Arriendos verificados · Bogotá
           </p>
@@ -161,6 +163,7 @@ export default function HeroSection({ onStartQuiz }) {
 
         <div className="order-2 hidden lg:block">
           <HeroCollage />
+        </div>
         </div>
       </div>
     </section>

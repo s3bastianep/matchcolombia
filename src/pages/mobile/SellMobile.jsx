@@ -12,7 +12,7 @@ const PERKS = [
 ];
 
 export default function SellMobile() {
-  const waHref = `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent("Hola, quiero vender mi inmueble con LUMORA HOME")}`;
+  const waHref = `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent("Hola, quiero vender mi inmueble con HABIBAR")}`;
 
   return (
     <div className="native-screen">

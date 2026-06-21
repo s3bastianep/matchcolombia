@@ -12,4 +12,4 @@ Disallow: /favoritos
 Disallow: /publicar/nuevo
 Disallow: /mi-cuenta
 
-Sitemap: https://matchcolombia.co/sitemap.xml
+Sitemap: https://habibar.com/sitemap.xml

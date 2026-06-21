@@ -149,11 +149,11 @@ function FaqItem({ q, a }) {
 function SellComparison() {
   return (
     <section id="comparacion" className="py-10 sm:py-14 bg-white border-b border-border/40">
-      <div className="max-w-6xl mx-auto px-4 sm:px-8">
+      <div className="site-container">
         <SectionTitle
           badge="La pregunta clave"
           title={`Vender solo vs vender con ${BRAND.name}`}
-          subtitle="¿Por qué dejarles vender tu inmueble? Porque nosotros filtramos, coordinamos y te mantenemos informado sin exponer tu teléfono."
+          subtitle="¿Por qué vender con HABIBAR? Filtramos compradores, coordinamos visitas y te mantenemos informado sin exponer tu teléfono."
           className="mb-8"
         />
         <div className="grid md:grid-cols-2 gap-5 sm:gap-6">
@@ -209,7 +209,7 @@ export default function Sell() {
       </div>
       <div className="hidden lg:block w-full overflow-x-hidden bg-background">
       <div className="color-bar">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="site-container py-3 flex flex-wrap items-center justify-between gap-3">
           <nav className="flex items-center gap-1.5 text-xs font-semibold text-white/80">
             <Link to="/" className="hover:text-white transition-colors">Inicio</Link>
             <ChevronRight className="w-3 h-3 text-white/40" />
@@ -227,7 +227,7 @@ export default function Sell() {
           <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-brand-magenta/15 blur-3xl" />
           <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-brand-violet/10 blur-3xl" />
         </div>
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-8 py-8 sm:py-10 lg:py-12">
+        <div className="relative site-container py-8 sm:py-10 lg:py-12">
           <div className="grid lg:grid-cols-[1fr_0.85fr] gap-8 lg:gap-10 items-start">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
               <SectionEyebrow light>Por qué vender con nosotros</SectionEyebrow>
@@ -278,7 +278,7 @@ export default function Sell() {
       <SellComparison />
 
       <section id="venta-visible" className="py-10 sm:py-14 lg:py-16 bg-white border-b border-border/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+        <div className="site-container">
           <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-start mb-8 sm:mb-10">
             <SectionTitle
               badge="Tu venta, no un panel genérico"
@@ -301,7 +301,7 @@ export default function Sell() {
       </section>
 
       <section className="py-10 sm:py-14 bg-[hsl(0,0%,98%)] border-b border-border/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+        <div className="site-container">
           <SectionTitle
             title="Lo que ves como propietario"
             subtitle="Tranquilidad para vender: menos llamadas, más visibilidad y acompañamiento hasta el cierre."
@@ -329,7 +329,7 @@ export default function Sell() {
       </section>
 
       <section className="py-10 sm:py-14">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
+        <div className="site-container">
           <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-start">
             <SectionTitle
               title="¿Qué incluye nuestro servicio?"
@@ -359,7 +359,7 @@ export default function Sell() {
       <SaleProgressTracker />
 
       <section className="color-bar py-10 sm:py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+        <div className="site-container flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
           <div>
             <p className="text-white font-extrabold text-xl sm:text-2xl">¿Listo para vender con respaldo real?</p>
             <p className="text-white/80 text-sm mt-2">Publica gratis · Bogotá</p>
@@ -372,7 +372,7 @@ export default function Sell() {
       </section>
 
       <section className="py-16 sm:py-20 bg-brand-dark text-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 grid lg:grid-cols-[1fr_1.2fr] gap-10 items-start">
+        <div className="site-container grid lg:grid-cols-[1fr_1.2fr] gap-10 items-start">
           <div>
             <SectionEyebrow light>Preguntas frecuentes</SectionEyebrow>
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">¿Aún tienes dudas?</h2>

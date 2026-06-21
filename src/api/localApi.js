@@ -6,21 +6,21 @@ import { validateVisitBooking } from "../lib/visitSlots";
 import { seedAdminNotificationsIfNeeded } from "../lib/adminNotifications";
 import * as localAuth from "../lib/localAuth";
 
-const STORAGE_KEY = "matchcolombia_properties_v11";
-const INQUIRIES_KEY = "matchcolombia_inquiries";
-const VISITS_KEY = "matchcolombia_visits";
-const MESSAGES_KEY = "matchcolombia_messages";
-const APPLICATIONS_KEY = "matchcolombia_applications";
-const LEASES_KEY = "matchcolombia_leases";
-const PAYMENTS_KEY = "matchcolombia_payments";
-const TICKETS_KEY = "matchcolombia_tickets";
-const OWNERS_KEY = "matchcolombia_owners";
-const POIS_KEY = "matchcolombia_pois";
-const SETTINGS_KEY = "matchcolombia_admin_settings";
-const PORTAL_SEEDED_KEY = "matchcolombia_portal_seeded_v3";
+const STORAGE_KEY = "habibar_properties_v11";
+const INQUIRIES_KEY = "habibar_inquiries";
+const VISITS_KEY = "habibar_visits";
+const MESSAGES_KEY = "habibar_messages";
+const APPLICATIONS_KEY = "habibar_applications";
+const LEASES_KEY = "habibar_leases";
+const PAYMENTS_KEY = "habibar_payments";
+const TICKETS_KEY = "habibar_tickets";
+const OWNERS_KEY = "habibar_owners";
+const POIS_KEY = "habibar_pois";
+const SETTINGS_KEY = "habibar_admin_settings";
+const PORTAL_SEEDED_KEY = "habibar_portal_seeded_v3";
 
 import { apiDelay } from "../lib/apiDelay";
-import { notifySiteBrandingUpdated } from "../lib/siteBranding";
+import { setSiteLogo } from "../lib/siteBranding";
 
 const delay = apiDelay;
 
@@ -44,7 +44,7 @@ function loadProperties() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED_PROPERTIES));
   } catch (err) {
-    console.warn("LUMORA HOME: no se pudo guardar propiedades iniciales", err);
+    console.warn("HABIBAR: no se pudo guardar propiedades iniciales", err);
   }
   return [...SEED_PROPERTIES];
 }
@@ -53,7 +53,7 @@ function saveProperties(properties) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(properties));
   } catch (err) {
-    console.warn("LUMORA HOME: no se pudo guardar propiedades", err);
+    console.warn("HABIBAR: no se pudo guardar propiedades", err);
   }
 }
 
@@ -98,7 +98,14 @@ function loadSettings() {
 }
 
 function saveSettings(data) {
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...data, updated_at: new Date().toISOString() }));
+  try {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...data, updated_at: new Date().toISOString() }));
+  } catch (err) {
+    if (err?.name === "QuotaExceededError") {
+      throw new Error("No hay espacio en el navegador para guardar la configuración.");
+    }
+    throw err;
+  }
 }
 
 function matchesFilter(item, criteria) {
@@ -168,11 +175,11 @@ function seedPortalIfNeeded() {
       return;
     }
 
-    if (localStorage.getItem("matchcolombia_portal_seeded_v2") && !localStorage.getItem("matchcolombia_portal_finance_migrated")) {
+    if (localStorage.getItem("habibar_portal_seeded_v2") && !localStorage.getItem("habibar_portal_finance_migrated")) {
       localStorage.setItem(LEASES_KEY, JSON.stringify(seed.leases));
       localStorage.setItem(PAYMENTS_KEY, JSON.stringify(seed.payments));
       localStorage.setItem(TICKETS_KEY, JSON.stringify(seed.tickets));
-      localStorage.setItem("matchcolombia_portal_finance_migrated", "1");
+      localStorage.setItem("habibar_portal_finance_migrated", "1");
       patchOwnerPropertyFinancials();
     } else {
       patchOwnerPropertyFinancials();
@@ -199,7 +206,7 @@ export function initLocalApi() {
     seedAdminNotificationsIfNeeded();
     localAuth.initLocalAuth();
   } catch (err) {
-    console.warn("LUMORA HOME: seed del portal falló", err);
+    console.warn("HABIBAR: seed del portal falló", err);
   }
 }
 
@@ -350,16 +357,38 @@ const POI = createStore(POIS_KEY, []);
 const AdminSettings = {
   async get() {
     await delay(50);
-    return loadSettings() || getPortalSeedData([]).settings;
+    const base = loadSettings() || getPortalSeedData([]).settings;
+    const logo = getSiteBrandingLogo();
+    return { ...base, site_logo: logo };
   },
   async update(patch) {
     await delay(100);
     const current = (await this.get()) || {};
-    saveSettings({ ...current, ...patch });
-    if ("site_logo" in patch) notifySiteBrandingUpdated();
-    return loadSettings();
+    let savedLogo = current.site_logo || null;
+
+    if ("site_logo" in patch) {
+      setSiteLogo(patch.site_logo || null);
+      savedLogo = patch.site_logo || null;
+    }
+
+    const { site_logo: _ignored, ...safePatch } = patch;
+    saveSettings({
+      ...current,
+      ...safePatch,
+      has_custom_logo: Boolean(savedLogo),
+    });
+
+    return { ...loadSettings(), site_logo: savedLogo, has_custom_logo: Boolean(savedLogo) };
   },
 };
+
+function getSiteBrandingLogo() {
+  try {
+    return localStorage.getItem("habibar_site_logo");
+  } catch {
+    return null;
+  }
+}
 
 const Core = {
   async UploadFile({ file }) {

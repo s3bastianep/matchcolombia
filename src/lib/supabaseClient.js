@@ -20,5 +20,5 @@ export const supabase = isSupabaseConfigured()
 /** Email interno para login por nombre de usuario con Supabase Auth */
 export function authEmailForUsername(username) {
   const normalized = username.trim().toLowerCase().replace(/[^a-z0-9._-]/g, "");
-  return `${normalized}@auth.lumorahome.app`;
+  return `${normalized}@auth.habibar.app`;
 }

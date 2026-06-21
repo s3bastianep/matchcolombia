@@ -75,7 +75,7 @@ const STEPS = [
 export default function AdminFlowSection() {
   return (
     <section className="py-10 sm:py-14 bg-[hsl(0,0%,98%)] border-y border-border/40">
-      <div className="max-w-6xl mx-auto px-4 sm:px-8">
+      <div className="site-container">
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
           <p className="text-[11px] font-bold uppercase tracking-widest text-brand-magenta mb-2">
             Beneficios para ti

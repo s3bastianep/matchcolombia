@@ -39,14 +39,14 @@ if (!url || !serviceKey) {
 const admin = createClient(url, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
 
 const DEMO_USERS = [
-  { username: "admin", password: "admin123", name: "Admin LUMORA HOME", role: "admin", email: "admin@lumorahome.co" },
+  { username: "admin", password: "admin123", name: "Admin HABIBAR", role: "admin", email: "admin@habibar.co" },
   { username: "buscador", password: "demo123", name: "Laura Buscadora", role: "seeker", email: "buscador@demo.co" },
   { username: "inquilino", password: "demo123", name: "Ana Inquilina", role: "tenant", email: "inquilino@demo.co" },
   { username: "propietario", password: "demo123", name: "Pedro Propietario", role: "owner", email: "propietario@demo.co" },
 ];
 
 function authEmail(username) {
-  return `${username.trim().toLowerCase()}@auth.lumorahome.app`;
+  return `${username.trim().toLowerCase()}@auth.habibar.app`;
 }
 
 async function upsertRecord(entityType, record) {

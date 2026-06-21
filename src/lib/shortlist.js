@@ -4,7 +4,7 @@ const GUEST_KEY = "matchbogota_shortlist";
 
 function getShortlistKey() {
   const userId = getCurrentUserId();
-  return userId ? `matchcolombia_shortlist_${userId}` : GUEST_KEY;
+  return userId ? `habibar_shortlist_${userId}` : GUEST_KEY;
 }
 
 export function getShortlist() {

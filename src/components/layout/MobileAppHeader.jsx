@@ -23,8 +23,8 @@ export default function MobileAppHeader() {
   if (isHome) {
     return (
       <header className="lg:hidden sticky top-0 z-40 native-header">
-        <div className="flex items-center justify-center h-12 px-4 pt-safe">
-          <BrandLogo size="sm" />
+        <div className="flex items-center justify-center h-12 px-5 pt-safe">
+          <BrandLogo size="sm" layout="lockup" />
         </div>
       </header>
     );
@@ -45,7 +45,7 @@ export default function MobileAppHeader() {
         ) : (
           <div className="w-10" />
         )}
-        <h1 className="flex-1 text-center text-base font-extrabold truncate pr-10">{title || "LUMORA HOME"}</h1>
+        <h1 className="flex-1 text-center text-base font-extrabold truncate pr-10">{title || "HABIBAR"}</h1>
       </div>
     </header>
   );

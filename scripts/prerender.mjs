@@ -28,7 +28,7 @@ function loadEnvFile() {
 
 loadEnvFile();
 
-const SITE = (process.env.VITE_SITE_URL || "https://matchcolombia.co").replace(/\/$/, "");
+const SITE = (process.env.VITE_SITE_URL || "https://habibar.com").replace(/\/$/, "");
 
 const {
   resolveRouteSeo,
@@ -179,8 +179,8 @@ function homeBody() {
   return `
       <main id="static-site-fallback" lang="es-CO">
         <header>
-          <h1>LUMORA HOME — Arriendos verificados en Colombia</h1>
-          <p>Inmuebles verificados en Bogotá. Match inteligente, visitas coordinadas y gestión para propietarios.</p>
+          <h1>HABIBAR — Arriendos verificados en Colombia</h1>
+          <p>Inmuebles verificados en Bogotá. Cuestionario Habibar, visitas coordinadas y gestión para propietarios.</p>
         </header>
         ${navBlock()}
         <section>
@@ -308,7 +308,7 @@ async function main() {
       pathname: "/anunciar",
       body: marketingBody({
         h1: "Anuncia tu inmueble — Administración completa",
-        intro: "Publica gratis en Bogotá. LUMORA HOME gestiona visitas, candidatos, contratos y cobros.",
+        intro: "Publica gratis en Bogotá. HABIBAR gestiona visitas, candidatos, contratos y cobros.",
         ctaHref: "/publicar/nuevo",
         ctaLabel: "Registrar inmueble",
       }),

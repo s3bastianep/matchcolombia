@@ -19,7 +19,7 @@ const OwnerCTA = lazy(() => import("../components/home/OwnerCTA"));
 
 
 
-const startQuiz = () => window.dispatchEvent(new CustomEvent("open-match-quiz"));
+const startQuiz = () => window.dispatchEvent(new CustomEvent("open-habibar-quiz"));
 
 
 

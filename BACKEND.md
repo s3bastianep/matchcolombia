@@ -1,4 +1,4 @@
-# LUMORA HOME — Backend con Supabase
+# HABIBAR — Backend con Supabase
 
 ## 1. Crear proyecto en Supabase
 

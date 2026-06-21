@@ -15,9 +15,9 @@ export default class ErrorBoundary extends React.Component {
     if (
       (message.includes("Failed to fetch dynamically imported module") ||
         message.includes("Importing a module script failed")) &&
-      !sessionStorage.getItem("lumora-chunk-reload")
+      !sessionStorage.getItem("habibar-chunk-reload")
     ) {
-      sessionStorage.setItem("lumora-chunk-reload", "1");
+      sessionStorage.setItem("habibar-chunk-reload", "1");
       window.location.reload();
     }
   }
@@ -49,7 +49,7 @@ export default class ErrorBoundary extends React.Component {
                 type="button"
                 onClick={() => {
                   Object.keys(localStorage)
-                    .filter((key) => key.startsWith("matchcolombia_"))
+                    .filter((key) => key.startsWith("habibar_"))
                     .forEach((key) => localStorage.removeItem(key));
                   window.location.reload();
                 }}

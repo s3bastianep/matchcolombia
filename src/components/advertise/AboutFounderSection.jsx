@@ -4,7 +4,7 @@ import { BRAND } from "@/lib/brand";
 export default function AboutFounderSection() {
   return (
     <section className="py-10 sm:py-14 bg-[hsl(0,0%,98%)] border-y border-border/40">
-      <div className="max-w-6xl mx-auto px-4 sm:px-8">
+      <div className="site-container">
         <div className="grid lg:grid-cols-[0.85fr_1.15fr] gap-8 lg:gap-12 items-center">
           <div className="relative max-w-sm mx-auto lg:mx-0 w-full">
             <div className="aspect-[4/5] rounded-2xl overflow-hidden border border-border/40 shadow-lg bg-muted">

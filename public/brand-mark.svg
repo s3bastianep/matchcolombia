@@ -1,15 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
   <defs>
-    <linearGradient id="lumora-mark" x1="6" y1="6" x2="34" y2="34" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#E91E7A"/>
-      <stop offset="1" stop-color="#8B5CF6"/>
+    <linearGradient id="habibar-mark" x1="10" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7C3AED"/>
+      <stop offset="0.45" stop-color="#A855F7"/>
+      <stop offset="1" stop-color="#EC4899"/>
     </linearGradient>
   </defs>
   <path
-    d="M8 28H26V20M24 17L20 7.5L8 14.5V28"
-    stroke="url(#lumora-mark)"
-    stroke-width="2.75"
-    stroke-linecap="round"
-    stroke-linejoin="round"
+    fill="url(#habibar-mark)"
+    fill-rule="evenodd"
+    d="M12 8h10v18.2L34.8 8H46v48H36V37.8L21.2 56H12V8Zm14 34.5V27.3L36 42.5V42.5h0V8h10v48H26V42.5Z"
+  />
+  <path
+    fill="url(#habibar-mark)"
+    d="M22 38h8v8h-8v-8Z"
   />
 </svg>
