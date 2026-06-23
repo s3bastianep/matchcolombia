@@ -20,6 +20,17 @@ mkdirSync(dataDir, { recursive: true });
 mkdirSync(uploadDir, { recursive: true });
 
 const app = express();
+
+// Redirige HTTP → HTTPS en producción (Railway / Cloudflare)
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV !== "production") return next();
+  const proto = req.headers["x-forwarded-proto"];
+  if (proto && proto !== "https") {
+    return res.redirect(301, `https://${req.headers.host}${req.originalUrl}`);
+  }
+  next();
+});
+
 app.use(express.json({ limit: "2mb" }));
 app.use(authMiddleware);
 

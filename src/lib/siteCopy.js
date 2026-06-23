@@ -1,7 +1,7 @@
 /** Copy unificado para todo el sitio */
 
 export const HERO_SUBTITLE =
-  "Inmuebles verificados para habitar Bogotá. Encuentra el lugar ideal con nuestro cuestionario.";
+  "Inmuebles verificados para habitar Bogotá. Encuentra el lugar ideal con el Match inteligente de HABIBAR.";
 
 export const HERO_QUIZ_TITLE = "Match inteligente";
 export const HERO_QUIZ_DESC = "2 minutos · opciones a tu medida";
@@ -57,7 +57,7 @@ export const FAVORITES_BADGE = "Guardados";
 export const FAVORITES_EMPTY_TITLE = "Aún no tienes inmuebles guardados";
 
 export const FAVORITES_EMPTY_HINT =
-  "Usa el cuestionario Habibar para encontrar opciones que encajen, o guarda cualquier inmueble con el corazón.";
+  "Usa el Match inteligente de HABIBAR para encontrar opciones que encajen, o guarda cualquier inmueble con el corazón.";
 
 export const OWNER_PROMO_TAGLINE =
   "Publica gratis. Nos encargamos de interesados y visitas.";
@@ -105,7 +105,7 @@ export function viewListingsLabel(count) {
 
 export const EXPLORE_EMPTY_NO_LISTINGS_TITLE = "No hay inmuebles en este momento";
 export const EXPLORE_EMPTY_NO_LISTINGS_DESC =
-  "Estamos incorporando nuevos inmuebles verificados. Completa el cuestionario Habibar y vuelve a buscar pronto: publicamos opciones nuevas con frecuencia.";
+  "Estamos incorporando nuevos inmuebles verificados. Prueba el Match inteligente de HABIBAR y vuelve a buscar pronto: publicamos opciones nuevas con frecuencia.";
 export const EXPLORE_EMPTY_FILTERED_TITLE = "Sin resultados por ahora";
 export const EXPLORE_EMPTY_FILTERED_DESC =
   "Prueba ampliando ciudad, zona o ajustando habitaciones, baños, parqueaderos o estrato.";

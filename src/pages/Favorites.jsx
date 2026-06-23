@@ -60,7 +60,7 @@ export default function Favorites() {
                 className="app-btn-primary w-full flex items-center justify-center gap-2 py-3.5 text-sm"
               >
                 <Sparkles className="w-4 h-4" />
-                Cuestionario Habibar
+                Match inteligente
               </button>
             }
             secondaryAction={
@@ -108,7 +108,7 @@ export default function Favorites() {
                   className="rounded-xl gap-2 font-bold gradient-cta text-white px-6 py-3 flex items-center justify-center"
                 >
                   <Sparkles className="w-4 h-4" />
-                  Cuestionario Habibar
+                  Match inteligente
                 </button>
                 <Link to="/explorar" className="rounded-xl gap-2 font-semibold border-2 px-6 py-3 flex items-center justify-center">
                   Explorar <ArrowRight className="w-4 h-4" />

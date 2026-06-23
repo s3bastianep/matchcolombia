@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 const STEPS = [
   {
     num: "01",
-    title: "Haz el cuestionario",
+    title: "Match inteligente",
     problem: "Sin perder horas en portales sin filtro.",
     desc: "Ciudad, presupuesto, habitaciones, baños, mascotas y más. Habibar filtra por ti.",
   },
@@ -111,7 +111,7 @@ export default function MatchSteps({ onStartQuiz }) {
             onClick={onStartQuiz}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 gradient-cta text-white font-bold px-8 py-3.5 rounded-full hover:opacity-95 transition-opacity"
           >
-            Empezar cuestionario
+            Empezar Match inteligente
             <ArrowRight className="w-4 h-4" />
           </button>
           <Link

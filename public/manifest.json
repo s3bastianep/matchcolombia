@@ -1,7 +1,7 @@
 {
   "name": "HABIBAR",
   "short_name": "Habibar",
-  "description": "Arriendos verificados en Bogotá. Apartamentos y casas con cuestionario Habibar.",
+  "description": "HABIBAR — arriendos verificados en Bogotá, Colombia. Match inteligente, apartamentos y casas con atención humana.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

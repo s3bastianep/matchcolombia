@@ -13,7 +13,7 @@ const TABS = [
     icon: Search,
     match: (path) => path === "/explorar" || path.startsWith("/propiedad"),
   },
-  { id: "quiz", type: "action", label: "Cuestionario", icon: Sparkles },
+  { id: "quiz", type: "action", label: "Match", icon: Sparkles },
   { id: "favorites", to: "/favoritos", label: "Guardados", icon: Heart, match: (path) => path === "/favoritos" },
   { id: "account", type: "account", label: "Cuenta", icon: User },
 ];

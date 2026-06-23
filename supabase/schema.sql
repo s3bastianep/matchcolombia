@@ -1,4 +1,4 @@
--- LUMORA HOME — Backend Supabase
+-- HABIBAR — Backend Supabase (opcional)
 -- Ejecuta este archivo en: Supabase Dashboard → SQL Editor → New query → Run
 
 -- ─── Perfiles de usuario ───────────────────────────────────────────────────

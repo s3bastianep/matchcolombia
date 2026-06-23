@@ -4,11 +4,11 @@
 
 ## Descripción
 
-HABIBAR conecta arrendatarios y propietarios en Bogotá. Ofrece listados verificados, cuestionario Habibar según preferencias del usuario, exploración con mapa y filtros, y coordinación de visitas.
+HABIBAR conecta arrendatarios y propietarios en Bogotá. Ofrece listados verificados, Match inteligente según preferencias del usuario, exploración con mapa y filtros, atención humana por WhatsApp y coordinación de visitas.
 
 ## Páginas públicas principales
 
-- `/` — Inicio: búsqueda rápida, cuestionario Habibar, inmuebles recientes
+- `/` — Inicio: búsqueda rápida, Match inteligente, inmuebles recientes
 - `/explorar` — Catálogo de inmuebles con filtros, mapa y ordenamiento (Bogotá)
 - `/anunciar` — Publicar inmueble en arriendo (propietarios)
 - `/publicar` — Vender inmueble en Bogotá
@@ -18,28 +18,31 @@ HABIBAR conecta arrendatarios y propietarios en Bogotá. Ofrece listados verific
 ## Funcionalidades clave
 
 - Inmuebles verificados (apartamentos, casas, estudios) en Bogotá
-- Cuestionario Habibar: quiz de preferencias (presupuesto, zona, habitaciones)
+- Match inteligente HABIBAR: preferencias de presupuesto, zona, habitaciones
 - `/propiedad/{id}` — Ficha pública de un inmueble (URL canónica para SEO e IAs)
 - Favoritos / guardados (requiere cuenta)
-- App móvil nativa (Capacitor) con navegación inferior
+- App móvil nativa HABIBAR (Capacitor) con navegación inferior
 
-## SEO local (Bogotá)
+## SEO local (Bogotá, Colombia)
 
-- Ciudad principal: Bogotá, Cundinamarca, Colombia
+- Marca: HABIBAR
+- Ciudad principal: Bogotá, Cundinamarca, Colombia (CO-DC)
 - Coordenadas: 4.7110, -74.0721
-- Zonas: Chapinero, Usaquén, Suba, Zona Rosa, Parque 93, entre otras
+- Zonas: Chapinero, Usaquén, Suba, Zona Rosa, Parque 93, Kennedy, Engativá, entre otras
 
 ## Tecnología
 
 - Frontend: React 18 + Vite + Tailwind CSS
-- Backend: Supabase (cuando está configurado) o API local en desarrollo
-- App móvil: Capacitor (Android/iOS)
+- Backend: Railway + SQLite (API propia HABIBAR)
+- App móvil: Capacitor (Android/iOS), appId `com.habibar.app`
 
 ## Contacto y sitio
 
+- Marca: HABIBAR
 - URL: https://habibar.com
+- Email: hola@habibar.com
 - Idioma: español (Colombia, es-CO)
 
 ## Nota para crawlers
 
-El HTML inicial incluye contenido estático en `#root` antes de que React cargue. Las meta etiquetas Open Graph y JSON-LD en `<head>` describen el sitio. Para rutas dinámicas (p. ej. detalle de inmueble), el contenido se renderiza en el cliente; en producción hay prerender para las rutas principales.
+El HTML inicial incluye contenido estático en `#root` antes de que React cargue. Las meta etiquetas Open Graph, geo (Bogotá, CO-DC) y JSON-LD en `<head>` describen el sitio. Para rutas dinámicas (p. ej. detalle de inmueble), el contenido se renderiza en el cliente; en producción hay prerender para las rutas principales.

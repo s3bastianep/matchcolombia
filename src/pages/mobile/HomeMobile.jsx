@@ -130,7 +130,7 @@ export default function HomeMobile() {
           />
           <ActionCard
             icon={Sparkles}
-            title="Cuestionario Habibar"
+            title="Match inteligente"
             subtitle="Te recomendamos inmuebles a tu medida"
             iconClassName="gradient-cta text-white shadow-sm"
             className="border border-brand-violet/15 bg-gradient-to-r from-brand-violet/[0.07] to-brand-magenta/[0.05]"
@@ -174,7 +174,7 @@ export default function HomeMobile() {
               <AppEmptyState
                 icon={Building2}
                 title="Sin inmuebles por ahora"
-                description="Estamos agregando nuevos apartamentos verificados. Mientras tanto, puedes iniciar el cuestionario Habibar."
+                description="Estamos agregando nuevos apartamentos verificados. Mientras tanto, prueba el Match inteligente de HABIBAR."
                 action={
                   <button
                     type="button"
@@ -182,7 +182,7 @@ export default function HomeMobile() {
                     className="app-btn-primary w-full py-3.5 text-sm flex items-center justify-center gap-2"
                   >
                     <Sparkles className="size-4" />
-                    Iniciar cuestionario
+                    Iniciar Match
                   </button>
                 }
                 secondaryAction={

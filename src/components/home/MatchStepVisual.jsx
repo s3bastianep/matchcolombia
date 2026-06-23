@@ -41,7 +41,7 @@ function QuizVisual() {
       <div className="w-full max-w-[248px] space-y-3">
         <div className="flex items-center gap-2 px-1">
           <Sparkles className="w-4 h-4 text-brand-violet shrink-0" />
-          <p className="text-[11px] font-extrabold text-foreground">Cuestionario Habibar</p>
+          <p className="text-[11px] font-extrabold text-foreground">Match inteligente</p>
         </div>
         <div className="grid grid-cols-2 gap-2">
           <FilterChip icon={MapPin} label="Ciudad" value="Tu zona" />

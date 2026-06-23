@@ -24,15 +24,16 @@ export const SEO_DEFAULTS = {
   locale: "es_CO",
   language: "es",
   region: "CO",
-  geoPlacename: "Bogotá, Colombia",
+  regionDetail: "CO-DC",
+  geoPlacename: "Bogotá, Distrito Capital, Colombia",
   geoPosition: "4.7110;-74.0721",
   title: `${BRAND.name} | Arriendos verificados en Bogotá`,
   description:
-    `${BRAND.name} conecta arrendatarios y propietarios en Bogotá. Apartamentos y casas verificados, cuestionario personalizado, visitas coordinadas y gestión completa del arriendo.`,
+    `${BRAND.name} conecta arrendatarios y propietarios en Bogotá, Colombia. Apartamentos y casas verificados, Match inteligente, visitas coordinadas y gestión completa del arriendo.`,
   keywords:
-    "arriendo apartamentos Bogotá, inmuebles verificados Bogotá, arriendo casas Bogotá, administración de arriendos, Habibar, arriendo Bogotá",
+    "HABIBAR, arriendo apartamentos Bogotá, inmuebles verificados Bogotá, arriendo casas Bogotá, venta inmuebles Bogotá, match inteligente arriendo, administración de arriendos Bogotá",
   ogImage: DEFAULT_OG_IMAGE,
-  ogImageAlt: `${BRAND.name} — inmuebles verificados en Bogotá`,
+  ogImageAlt: `${BRAND.name} — inmuebles verificados en Bogotá, Colombia`,
   twitterHandle: "@habibar",
 };
 
@@ -163,8 +164,8 @@ export function getExploreSeo(searchParams) {
       : `Apartamentos en arriendo en ${city}`;
 
   const description = isSale
-    ? `Encuentra inmuebles en venta en ${city} con ${BRAND.name}. Listados verificados, fotos reales y acompañamiento en todo el proceso de compra.`
-    : `Arrienda ${typeLabel ? `${typeLabel.toLowerCase()}s` : "apartamentos y casas"} en ${city} con listados verificados. Cuestionario Habibar, visitas presenciales o virtuales y sin scroll infinito.`;
+    ? `Encuentra inmuebles en venta en ${city} con ${BRAND.name}. Listados verificados, fotos reales y acompañamiento humano en todo el proceso de compra.`
+    : `Arrienda ${typeLabel ? `${typeLabel.toLowerCase()}s` : "apartamentos y casas"} en ${city} con ${BRAND.name}. Match inteligente, listados verificados y visitas presenciales o virtuales.`;
 
   const geo = cityGeoMeta(city);
 
@@ -344,7 +345,7 @@ export function organizationSchema() {
       "Arriendo de apartamentos en Bogotá",
       "Venta de inmuebles en Bogotá",
       "Administración de propiedades en Bogotá",
-      "Cuestionario personalizado de inmuebles",
+      "Match inteligente de inmuebles",
       "Visitas presenciales y virtuales",
     ],
     address: {

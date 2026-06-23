@@ -772,7 +772,7 @@ export default function Explore() {
                   onClick={() => window.dispatchEvent(new CustomEvent("open-habibar-quiz"))}
                   className="app-btn-primary w-full py-3.5 text-sm"
                 >
-                  {properties.length === 0 ? "Configurar cuestionario" : "Refinar cuestionario"}
+                  {properties.length === 0 ? "Configurar Match" : "Refinar Match"}
                 </button>
               }
               secondaryAction={
@@ -808,7 +808,7 @@ export default function Explore() {
                 onClick={() => window.dispatchEvent(new CustomEvent("open-habibar-quiz"))}
                 className="gradient-cta text-white font-bold px-6 py-3 rounded-xl shadow-md hover:opacity-95 transition-opacity"
               >
-                {properties.length === 0 ? "Configurar cuestionario" : "Refinar cuestionario"}
+                {properties.length === 0 ? "Configurar Match" : "Refinar Match"}
               </button>
               {properties.length === 0 ? (
                 <Link

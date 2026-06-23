@@ -1,12 +1,12 @@
 # HABIBAR — Railway (un solo servicio, SQLite)
 
-Todo en **matchcolombia**: web + API + base de datos en un archivo local. **Sin PostgreSQL.**
+Web + API + base de datos HABIBAR en un archivo local. **Sin PostgreSQL.**
 
 ## En Railway: qué borrar
 
-1. **Elimina el servicio Postgres** (`postgres_bd`):
+1. **Elimina el servicio Postgres** (si existe):
    - Canvas del proyecto → clic en Postgres → **Settings** → **Delete Service**
-2. **Borra estas variables** de matchcolombia (si existen):
+2. **Borra estas variables** del servicio HABIBAR (si existen):
    - `DATABASE_URL`
    - `JWT_SECRET`
    - `PGSSL`
@@ -14,11 +14,11 @@ Todo en **matchcolombia**: web + API + base de datos en un archivo local. **Sin 
 
 ## Variables (solo 2 obligatorias)
 
-En **matchcolombia** → **Variables** → **Raw Editor**, pega:
+En el servicio **HABIBAR** → **Variables** → **Raw Editor**, pega:
 
 ```env
 VITE_USE_RAILWAY_API=true
-VITE_SITE_URL=https://matchcolombia.co
+VITE_SITE_URL=https://habibar.com
 ```
 
 Opcional (fotos y datos persistentes al redeploy):
@@ -34,7 +34,7 @@ Y monta un **Volume** en `/data` (Settings → Volumes).
 - **Build:** `npm run build`
 - **Start:** `npm start`
 
-Al arrancar crea solo `data/habibar.db` y carga usuarios demo.
+Al arrancar crea `data/habibar.db` y carga usuarios demo.
 
 ## Usuarios demo
 
@@ -47,9 +47,15 @@ Al arrancar crea solo `data/habibar.db` y carga usuarios demo.
 
 ## Verificar
 
-- `https://matchcolombia-production.up.railway.app/api/health` → `{ "ok": true, "backend": "sqlite" }`
+- `https://tu-dominio.railway.app/api/health` → `{ "ok": true, "backend": "sqlite" }`
 - Login en `/admin`
+
+## Dominio propio
+
+1. Railway → **Settings** → **Networking** → **Custom Domain** → `habibar.com` y `www.habibar.com`
+2. Configura DNS en tu registrador (CNAME hacia Railway)
+3. `VITE_SITE_URL=https://habibar.com` y redeploy
 
 ## Costo
 
-~**$5/mes** (solo el servicio matchcolombia, sin base de datos aparte).
+~**$5/mes** (un solo servicio Railway, sin base de datos aparte).

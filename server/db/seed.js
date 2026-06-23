@@ -6,7 +6,7 @@ import { getPortalSeedData } from "../../src/api/portalSeed.js";
 import { buildNewProperty } from "../../src/api/propertyMutations.js";
 
 const DEMO_USERS = [
-  { id: "user-admin-demo", username: "admin", password: "admin123", name: "Admin HABIBAR", role: "admin", email: "admin@habibar.co" },
+  { id: "user-admin-demo", username: "admin", password: "admin123", name: "Admin HABIBAR", role: "admin", email: "admin@habibar.com" },
   { id: "user-seeker-demo", username: "buscador", password: "demo123", name: "Laura Buscadora", role: "seeker", email: "buscador@demo.co" },
   { id: "user-tenant-demo", username: "inquilino", password: "demo123", name: "Ana Inquilina", role: "tenant", email: "inquilino@demo.co" },
   { id: "user-owner-demo", username: "propietario", password: "demo123", name: "Pedro Propietario", role: "owner", email: "propietario@demo.co" },
@@ -52,7 +52,10 @@ export async function seedIfEmpty() {
   }
 
   for (const prop of SEED_PROPERTIES) {
-    await upsertEntity("property", buildNewProperty(prop, prop.id));
+    await upsertEntity(
+      "property",
+      buildNewProperty({ ...prop, publication_status: "publicada", status: "disponible" }, prop.id)
+    );
   }
 
   const propIds = SEED_PROPERTIES.slice(0, 2).map((p) => p.id);

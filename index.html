@@ -16,19 +16,21 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
-    <meta name="description" content="HABIBAR conecta arrendatarios y propietarios en Bogotá. Apartamentos y casas verificados, cuestionario Habibar y gestión completa del arriendo." />
+    <meta name="description" content="HABIBAR conecta arrendatarios y propietarios en Bogotá, Colombia. Apartamentos y casas verificados, Match inteligente, visitas coordinadas y gestión completa del arriendo." />
 
-    <meta name="keywords" content="arriendo apartamentos Bogotá, inmuebles verificados Bogotá, arriendo casas Bogotá, venta inmuebles Bogotá, HABIBAR" />
+    <meta name="keywords" content="HABIBAR, arriendo apartamentos Bogotá, inmuebles verificados Bogotá, arriendo casas Bogotá, venta inmuebles Bogotá, match inteligente arriendo" />
 
     <meta name="author" content="HABIBAR" />
+
+    <meta name="application-name" content="HABIBAR" />
 
     <meta name="robots" content="index, follow, max-image-preview:large" />
 
     <meta name="theme-color" content="#8B5CF6" />
 
-    <meta name="geo.region" content="CO" />
+    <meta name="geo.region" content="CO-DC" />
 
-    <meta name="geo.placename" content="Bogotá, Colombia" />
+    <meta name="geo.placename" content="Bogotá, Distrito Capital, Colombia" />
 
     <meta name="geo.position" content="4.7110;-74.0721" />
 
@@ -44,7 +46,7 @@
 
     <meta property="og:title" content="HABIBAR | Arriendos verificados en Bogotá" />
 
-    <meta property="og:description" content="Encuentra tu espacio ideal con inmuebles verificados, cuestionario Habibar y visitas coordinadas en Bogotá." />
+    <meta property="og:description" content="Encuentra tu espacio ideal en Bogotá con HABIBAR: inmuebles verificados, Match inteligente y visitas coordinadas." />
 
     <meta property="og:image" content="https://habibar.com/og-habibar.jpg" />
 
@@ -62,7 +64,7 @@
 
     <meta name="twitter:title" content="HABIBAR | Arriendos verificados en Bogotá" />
 
-    <meta name="twitter:description" content="Arrienda apartamentos y casas verificados en Bogotá con cuestionario Habibar." />
+    <meta name="twitter:description" content="Arrienda apartamentos y casas verificados en Bogotá con HABIBAR y Match inteligente." />
 
     <meta name="twitter:image" content="https://habibar.com/og-habibar.jpg" />
 
@@ -87,33 +89,35 @@
     <title>HABIBAR | Arriendos verificados en Bogotá</title>
 
     <script type="application/ld+json">
-
       {
-
         "@context": "https://schema.org",
-
-        "@type": "RealEstateAgent",
-
-        "name": "HABIBAR",
-
-        "url": "https://habibar.com",
-
-        "logo": "https://habibar.com/habibar-wordmark.png?v=9",
-
-        "description": "Plataforma de arriendos verificados en Bogotá con cuestionario Habibar y gestión completa para propietarios.",
-
-        "areaServed": [
-
-          { "@type": "City", "name": "Bogotá", "containedInPlace": { "@type": "Country", "name": "Colombia" } }
-
-        ],
-
-        "geo": { "@type": "GeoCoordinates", "latitude": 4.711, "longitude": -74.0721 },
-
-        "address": { "@type": "PostalAddress", "addressCountry": "CO", "addressLocality": "Bogotá" }
-
+        "@graph": [
+          {
+            "@type": "RealEstateAgent",
+            "@id": "https://habibar.com/#organization",
+            "name": "HABIBAR",
+            "url": "https://habibar.com",
+            "logo": "https://habibar.com/habibar-wordmark.png?v=9",
+            "description": "HABIBAR — plataforma de arriendos verificados en Bogotá, Colombia. Match inteligente, listados revisados y gestión completa para propietarios.",
+            "email": "hola@habibar.com",
+            "telephone": "+573012345678",
+            "areaServed": [
+              { "@type": "City", "name": "Bogotá", "containedInPlace": { "@type": "AdministrativeArea", "name": "Cundinamarca" } }
+            ],
+            "geo": { "@type": "GeoCoordinates", "latitude": 4.711, "longitude": -74.0721 },
+            "address": { "@type": "PostalAddress", "addressCountry": "CO", "addressLocality": "Bogotá", "addressRegion": "Cundinamarca" }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://habibar.com/#website",
+            "name": "HABIBAR",
+            "url": "https://habibar.com",
+            "description": "Arriendos verificados en Bogotá, Colombia",
+            "inLanguage": "es-CO",
+            "publisher": { "@id": "https://habibar.com/#organization" }
+          }
+        ]
       }
-
     </script>
 
   </head>
@@ -125,8 +129,8 @@
         <header>
           <h1>HABIBAR — Arriendos verificados en Bogotá</h1>
           <p>
-            Plataforma para arrendar y comprar apartamentos y casas verificados en Bogotá.
-            Cuestionario Habibar, listados revisados y visitas coordinadas.
+            HABIBAR es la plataforma para arrendar y comprar apartamentos y casas verificados en Bogotá, Colombia.
+            Match inteligente, listados revisados, atención humana y visitas coordinadas.
           </p>
         </header>
         <nav aria-label="Navegación principal">
@@ -142,7 +146,7 @@
           <h2 id="static-about">Qué ofrece HABIBAR</h2>
           <ul>
             <li>Inmuebles verificados con fotos y datos revisados por el equipo</li>
-            <li>Cuestionario Habibar según presupuesto, zona y preferencias</li>
+            <li>Match inteligente según presupuesto, zona y preferencias</li>
             <li>Exploración por mapa y filtros en Bogotá</li>
             <li>Agenda de visitas y gestión para propietarios e inquilinos</li>
           </ul>

@@ -29,8 +29,8 @@ const features = [
   {
     icon: Sparkles,
     title: "Recursos útiles",
-    desc: "Cuestionario Habibar, filtros avanzados, mapa interactivo y herramientas para decidir mejor en Colombia.",
-    tag: "Cuestionario + mapa",
+    desc: "Match inteligente HABIBAR, filtros avanzados, mapa interactivo y herramientas para decidir mejor en Bogotá.",
+    tag: "Match + mapa",
     accent: "from-brand-violet to-brand-magenta",
     ring: "ring-brand-violet/20",
     image: INTERIORS.sala2,

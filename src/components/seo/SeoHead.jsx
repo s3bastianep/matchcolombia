@@ -67,8 +67,9 @@ export default function SeoHead({
     upsertMeta("name", "keywords", keywords);
     upsertMeta("name", "robots", noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large");
     upsertMeta("name", "author", SEO_DEFAULTS.siteName);
+    upsertMeta("name", "application-name", SEO_DEFAULTS.siteName);
     upsertMeta("http-equiv", "content-language", "es-CO");
-    upsertMeta("name", "geo.region", SEO_DEFAULTS.region);
+    upsertMeta("name", "geo.region", SEO_DEFAULTS.regionDetail || SEO_DEFAULTS.region);
     upsertMeta("name", "geo.placename", geoPlacename);
     upsertMeta("name", "geo.position", geoPosition);
     upsertMeta("name", "ICBM", geoPosition.replace(";", ", "));

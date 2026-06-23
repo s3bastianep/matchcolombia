@@ -1,4 +1,4 @@
-package co.matchcolombia.lumora;
+package com.habibar.app;
 
 import com.getcapacitor.BridgeActivity;
 

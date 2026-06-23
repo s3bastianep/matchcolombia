@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "co.matchcolombia.lumora"
+    namespace "com.habibar.app"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "co.matchcolombia.lumora"
+        applicationId "com.habibar.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

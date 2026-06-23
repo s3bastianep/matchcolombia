@@ -17,7 +17,7 @@ const SLIDES = [
   },
   {
     icon: Sparkles,
-    title: "Cuestionario Habibar",
+    title: "Match inteligente HABIBAR",
     description: "Cuéntanos qué buscas y te mostramos los inmuebles que mejor encajan contigo.",
     tone: "text-brand-magenta",
     bg: "bg-brand-magenta/10",
