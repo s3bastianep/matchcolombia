@@ -23,10 +23,10 @@ export default function CompareStrip({ properties }) {
 
           {[
             { label: "Total / mes", render: (p) => formatCOP(getPropertyPricing(p).totalMonthly || p.monthly_rent) },
-            { label: "Depósito", render: (p) => (p.deposit ? formatCOP(p.deposit) : "—") },
+            { label: "Depósito", render: (p) => (p.deposit ? formatCOP(p.deposit) : "N/D") },
             { label: "Habitaciones", icon: Bed, render: (p) => p.bedrooms },
             { label: "Baños", icon: Bath, render: (p) => p.bathrooms },
-            { label: "Área", icon: Maximize, render: (p) => (p.area_sqm ? `${p.area_sqm} m²` : "—") },
+            { label: "Área", icon: Maximize, render: (p) => (p.area_sqm ? `${p.area_sqm} m²` : "N/D") },
             { label: "Parqueadero", icon: Car, render: (p) => (p.parking ? p.parking_spots || 1 : "No") },
           ].map((row) => (
             <React.Fragment key={row.label}>

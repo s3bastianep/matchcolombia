@@ -84,11 +84,7 @@ export default function PropertyDetailView({
         <MobileSection title="Agenda tu visita">
           <ContactBlock property={property} id={property.id} bookingRef={bookingRef} mobile />
         </MobileSection>
-        {showSimilar && (
-          <div className="border-t border-border/30">
-            <SimilarProperties property={property} />
-          </div>
-        )}
+        {showSimilar && <SimilarProperties property={property} compact />}
       </div>
     );
   }

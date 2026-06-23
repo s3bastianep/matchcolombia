@@ -33,7 +33,7 @@ const STEPS = [
 
 export default function MatchSteps({ onStartQuiz }) {
   return (
-    <section className="section-pad section-pad-tight-bottom relative overflow-hidden surface-warm border-y border-border/40">
+    <section id="como-funciona" className="section-pad section-pad-tight-bottom relative overflow-hidden surface-warm border-y border-border/40 scroll-mt-24">
       <div className="relative site-container">
         <div className="grid lg:grid-cols-[1fr_1.1fr] gap-6 lg:gap-8 items-start mb-8 sm:mb-10">
           <SectionHeader

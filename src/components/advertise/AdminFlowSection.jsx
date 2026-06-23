@@ -84,7 +84,7 @@ export default function AdminFlowSection() {
             Lo que ganas al confiarnos tu inmueble
           </h2>
           <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
-            Publicas gratis. Nosotros nos encargamos del proceso completo — tú ganas tiempo, orden y tranquilidad en cada etapa.
+            Publica gratis. Nosotros nos encargamos del proceso completo. Tú ganas tiempo, orden y tranquilidad en cada etapa.
           </p>
         </div>
 

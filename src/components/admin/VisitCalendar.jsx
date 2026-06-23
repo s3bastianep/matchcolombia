@@ -56,7 +56,7 @@ export default function VisitCalendar({ visits = [], properties = [], weekOffset
           return (
             <div key={key} className="p-2 border-r border-border/20 last:border-r-0 space-y-1.5 min-h-[120px]">
               {dayVisits.length === 0 ? (
-                <p className="text-[10px] text-muted-foreground text-center pt-6">—</p>
+                <p className="text-[10px] text-muted-foreground text-center pt-6">Sin visitas</p>
               ) : (
                 dayVisits.map((v) => {
                   const hour = new Date(v.scheduled_at).getHours();
@@ -83,7 +83,7 @@ export default function VisitCalendar({ visits = [], properties = [], weekOffset
         })}
       </div>
       <div className="px-4 py-2 border-t border-border/20 flex flex-wrap gap-3 text-[10px] text-muted-foreground">
-        <span>Horario sugerido: {HOURS[0]}:00 – {HOURS[HOURS.length - 1]}:00</span>
+        <span>Horario sugerido: {HOURS[0]}:00 a {HOURS[HOURS.length - 1]}:00</span>
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-brand-violet/40" /> Presencial</span>
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-brand-magenta/40" /> Virtual</span>
       </div>

@@ -52,7 +52,7 @@ export default function AdminDashboard() {
     <div className="space-y-8">
       <div>
         <h2 className="text-2xl font-extrabold tracking-tight">Panel Admin</h2>
-        <p className="text-sm text-muted-foreground mt-1">Vista operativa — leads, visitas, propiedades e inquilinos.</p>
+        <p className="text-sm text-muted-foreground mt-1">Vista operativa: leads, visitas, propiedades e inquilinos.</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -65,7 +65,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <StatCard label="Conversión → visita" value={`${m.conversionLeadsToVisits}%`} icon={Users} />
         <StatCard label="Conversión → cierre" value={`${m.conversionToClose}%`} icon={FileText} />
-        <StatCard label="Días prom. arriendo" value={m.avgDaysToRent ?? "—"} icon={Building2} />
+        <StatCard label="Días prom. arriendo" value={m.avgDaysToRent ?? "N/D"} icon={Building2} />
         <StatCard label="Tickets abiertos" value={m.openTickets} hint={`${m.unreadMessages} mensajes sin leer`} icon={Bell} />
       </div>
 

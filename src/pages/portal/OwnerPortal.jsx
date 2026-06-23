@@ -112,7 +112,7 @@ export default function OwnerPortal() {
               Hola, {user?.name?.split(" ")[0] || "propietario"}
             </h2>
             <p className="text-sm text-white/80 mt-2 max-w-lg leading-relaxed">
-              Resumen de rentabilidad, inmuebles y operación — todo en un solo lugar.
+              Resumen de rentabilidad, inmuebles y operación. Todo en un solo lugar.
             </p>
           </div>
           {s && (
@@ -147,14 +147,14 @@ export default function OwnerPortal() {
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <KpiCard
           label="Ingresos totales"
-          value={s ? formatCOP(s.totalIncome) : "—"}
+          value={s ? formatCOP(s.totalIncome) : "N/D"}
           hint={s ? `${s.paidMonths} pagos recibidos` : undefined}
           icon={Banknote}
           accent="emerald"
         />
         <KpiCard
           label="Ganancia neta"
-          value={s ? formatCOP(s.netEarnings) : "—"}
+          value={s ? formatCOP(s.netEarnings) : "N/D"}
           hint="Después de mantenimiento"
           icon={PiggyBank}
           accent="violet"

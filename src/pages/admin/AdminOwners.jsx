@@ -99,7 +99,7 @@ export default function AdminOwners() {
     pushAdminNotification({
       type: "owner",
       title: status === "verificado" ? "Propietario verificado" : "Verificación actualizada",
-      message: `${selected.name} — ${status}`,
+      message: `${selected.name} · ${status}`,
       link: "/admin/propietarios",
       entityId: selected.id,
     });

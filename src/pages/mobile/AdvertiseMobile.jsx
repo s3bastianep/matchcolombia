@@ -1,14 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Building2, Check, MessageCircle, Phone } from "lucide-react";
+import { ArrowRight, Building2, Check, MessageCircle, Phone, FileText, Camera, Heart } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
+import { ADVERTISE_EXPERT_CTA_BODY, ADVERTISE_EXPERT_CTA_TITLE, ADVERTISE_FREE_SUBTITLE } from "@/lib/siteCopy";
 
 const BENEFITS = [
   "Publicación verificada",
   "Gestión de visitas",
   "Contratos digitales",
   "Cobro de cánones",
+];
+
+const PUBLISH_STEPS = [
+  { icon: FileText, text: "Registra tu inmueble en minutos. Es gratis." },
+  { icon: Camera, text: "Coordinamos fotos profesionales." },
+  { icon: Heart, text: "Listo para recibir visitas y ofertas." },
 ];
 
 export default function AdvertiseMobile() {
@@ -37,6 +44,39 @@ export default function AdvertiseMobile() {
             <span className="text-sm font-semibold">{item}</span>
           </div>
         ))}
+      </section>
+
+      <section className="px-4 pt-2 pb-2">
+        <p className="app-section-label mb-3">Cómo publicar</p>
+        <div className="space-y-2">
+          {PUBLISH_STEPS.map(({ icon: Icon, text }) => (
+            <div key={text} className="app-card-flat flex items-start gap-3 px-4 py-3.5">
+              <span className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center shrink-0">
+                <Icon className="w-4 h-4 text-foreground/70" />
+              </span>
+              <span className="text-sm font-medium leading-snug pt-1.5">{text}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="px-4 pt-4">
+        <div className="rounded-2xl bg-brand-dark text-white p-5">
+          <h2 className="text-base font-extrabold">{ADVERTISE_EXPERT_CTA_TITLE}</h2>
+          <p className="text-xs text-white/75 mt-2 leading-relaxed">{ADVERTISE_EXPERT_CTA_BODY}</p>
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex items-center gap-2 bg-white/15 text-white font-bold text-xs px-5 py-2.5 rounded-full"
+          >
+            <MessageCircle className="w-4 h-4" />
+            Anúnciate vía WhatsApp
+          </a>
+        </div>
+        <p className="text-xs text-muted-foreground text-center mt-3 px-2">
+          {ADVERTISE_FREE_SUBTITLE.replace(/HABIBAR/g, BRAND.name)}
+        </p>
       </section>
 
       <section className="px-4 pt-6 space-y-3">

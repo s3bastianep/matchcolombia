@@ -328,7 +328,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                   <div className="grid grid-cols-3 gap-y-2">
                     <GridSpecItem
                       icon={<Maximize className="w-4 h-4" strokeWidth={2.25} />}
-                      label={property.area_sqm ? `${property.area_sqm} m²` : "— m²"}
+                      label={property.area_sqm ? `${property.area_sqm} m²` : "N/D"}
                       title="Área"
                       muted={!property.area_sqm}
                     />

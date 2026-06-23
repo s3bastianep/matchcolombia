@@ -29,7 +29,7 @@ export default function OfflineBanner() {
         >
           <div className="flex items-center justify-center gap-2 px-4 py-2 text-xs font-semibold">
             <WifiOff className="w-3.5 h-3.5 shrink-0" />
-            Sin conexión — algunos datos pueden estar desactualizados
+            Sin conexión. Algunos datos pueden estar desactualizados.
           </div>
         </motion.div>
       )}

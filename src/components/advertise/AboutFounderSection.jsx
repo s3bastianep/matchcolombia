@@ -3,7 +3,7 @@ import { BRAND } from "@/lib/brand";
 
 export default function AboutFounderSection() {
   return (
-    <section className="py-10 sm:py-14 bg-[hsl(0,0%,98%)] border-y border-border/40">
+    <section id="nosotros" className="py-10 sm:py-14 bg-[hsl(0,0%,98%)] border-y border-border/40 scroll-mt-24">
       <div className="site-container">
         <div className="grid lg:grid-cols-[0.85fr_1.15fr] gap-8 lg:gap-12 items-center">
           <div className="relative max-w-sm mx-auto lg:mx-0 w-full">

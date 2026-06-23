@@ -1,136 +1,239 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
+
 import { Link } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { api } from "@/api/apiClient";
-import PropertyCard from "../property/PropertyCard";
+
+import { motion } from "framer-motion";
+
+import { ArrowRight, Building2, MapPin } from "lucide-react";
 import { BRAND } from "@/lib/brand";
-import VerifiedBadge from "../brand/VerifiedBadge";
-import SectionHeader from "../ui/SectionHeader";
+import { exploreInviteSubtitle } from "@/lib/siteCopy";
+
+import VerifiedBadge from "@/components/brand/VerifiedBadge";
+
+import SectionHeader from "@/components/ui/SectionHeader";
+
+import { EXPLORE_PATHS, POPULAR_ZONES } from "@/lib/homeExplore";
+
 import { cn } from "@/lib/utils";
-import { FEATURED_PROPERTIES_QUERY } from "@/lib/queryOptions";
-import { getLatestPublishedProperties } from "@/lib/propertyListing";
 
-const TABS = [
-  { id: "all", label: "Todos" },
-  { id: "apartamento", label: "Apartamento" },
-  { id: "casa", label: "Casa" },
-  { id: "estudio", label: "Estudio" },
-];
 
-const FEATURED_POOL_SIZE = 60;
-const FEATURED_VISIBLE = 8;
 
-export default function FeaturedProperties() {
-  const [tab, setTab] = useState("all");
-  const queryClient = useQueryClient();
+function ExplorePathCard({ path, index }) {
 
-  const { data: properties = [], isLoading } = useQuery({
-    queryKey: ["properties-featured"],
-    queryFn: () =>
-      api.entities.Property.filter({ status: "disponible" }, "-listed_date", FEATURED_POOL_SIZE),
-    ...FEATURED_PROPERTIES_QUERY,
-  });
+  const Icon = path.icon;
 
-  useEffect(() => {
-    const refresh = () => {
-      queryClient.invalidateQueries({ queryKey: ["properties-featured"] });
-    };
-    window.addEventListener("properties-updated", refresh);
-    return () => window.removeEventListener("properties-updated", refresh);
-  }, [queryClient]);
 
-  const latest = useMemo(
-    () => getLatestPublishedProperties(properties, { type: tab, limit: FEATURED_VISIBLE }),
-    [properties, tab]
-  );
-
-  const scroll = (dir) => {
-    const el = document.getElementById("featured-carousel");
-    if (el) el.scrollBy({ left: dir * 336, behavior: "smooth" });
-  };
 
   return (
-    <section id="featured" className="section-pad section-pad-tight-top bg-background overflow-hidden">
-      <div className="site-container">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-6">
-          <div className="flex flex-col gap-2">
-            <SectionHeader
-              eyebrow="Nuevas publicaciones"
-              title="Inmuebles verificados"
-              subtitle={`Las últimas publicaciones revisadas por ${BRAND.name}. Sin estafas, sin sustos.`}
-            />
-            <VerifiedBadge size="sm" className="w-fit" />
-          </div>
 
-          <div className="flex items-center gap-3">
-            <div className="flex flex-wrap gap-1.5 p-1 rounded-full bg-white border border-border/50 w-full sm:w-auto">
-              {TABS.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => setTab(t.id)}
-                  className={cn(
-                    "flex-1 sm:flex-none px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap",
-                    tab === t.id ? "chip-brand-active" : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
-            <div className="hidden sm:flex gap-1 shrink-0">
-              <button type="button" onClick={() => scroll(-1)} className="w-9 h-9 rounded-full border border-border/60 bg-white flex items-center justify-center hover:bg-secondary transition-colors" aria-label="Anterior">
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button type="button" onClick={() => scroll(1)} className="w-9 h-9 rounded-full border border-border/60 bg-white flex items-center justify-center hover:bg-secondary transition-colors" aria-label="Siguiente">
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
+    <motion.div
 
-        {isLoading ? (
-          <div className="flex gap-5 overflow-hidden">
-            {Array(4).fill(0).map((_, i) => (
-              <div key={i} className="shrink-0 w-[min(300px,88vw)] sm:w-[320px] rounded-xl overflow-hidden border border-[hsl(0,0%,92%)] bg-white">
-                <div className="p-3">
-                  <div className="aspect-[5/4] shimmer rounded-lg" />
-                </div>
-                <div className="px-3 pb-3 space-y-2">
-                  <div className="h-5 shimmer rounded w-1/2" />
-                  <div className="h-16 shimmer rounded-lg w-full" />
-                  <div className="h-4 shimmer rounded w-2/3" />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div
-            key={tab}
-            id="featured-carousel"
-            className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-thin scroll-smooth animate-in fade-in duration-300 items-stretch"
+      initial={{ opacity: 0, y: 14 }}
+
+      whileInView={{ opacity: 1, y: 0 }}
+
+      viewport={{ once: true }}
+
+      transition={{ delay: index * 0.06 }}
+
+    >
+
+      <Link
+
+        to={path.to}
+
+        className={cn(
+
+          "group relative flex flex-col overflow-hidden rounded-3xl border border-border/50 bg-white shadow-sm card-hover min-h-[280px] sm:min-h-[300px]",
+
+          "ring-1 ring-transparent hover:ring-2",
+
+          path.ring
+
+        )}
+
+      >
+
+        <div className="relative h-40 sm:h-44 overflow-hidden">
+
+          <img
+
+            src={path.image}
+
+            alt=""
+
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+
+            loading="lazy"
+
+          />
+
+          <div className={cn("absolute inset-0 bg-gradient-to-t", path.accent)} />
+
+          <div className="absolute top-0 left-0 right-0 h-1 bg-white/40" />
+
+          <span
+
+            className={cn(
+
+              "absolute top-4 left-4 inline-flex size-11 items-center justify-center rounded-2xl backdrop-blur-sm bg-white/95 shadow-sm",
+
+              path.iconBg
+
+            )}
+
           >
-            {latest.map((p, i) => (
-              <div key={p.id} className="snap-start shrink-0 w-[min(300px,88vw)] sm:w-[320px] self-stretch flex flex-col">
-                <PropertyCard property={p} index={i} variant="grid" />
-              </div>
-            ))}
-          </div>
-        )}
 
-        {!isLoading && latest.length === 0 && (
-          <p className="text-center text-muted-foreground py-12">No hay inmuebles de este tipo por ahora.</p>
-        )}
+            <Icon className="size-5" strokeWidth={2.25} />
 
-        <div className="mt-10 flex justify-center">
-          <Link to="/explorar">
-            <button className="group flex items-center gap-2.5 gradient-cta btn-glow text-white font-bold px-8 py-4 rounded-full hover:opacity-95 transition-opacity">
-              Ver todos los arriendos
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </Link>
+          </span>
+
         </div>
-      </div>
-    </section>
+
+
+
+        <div className="flex flex-1 flex-col p-5 sm:p-6">
+
+          <h3 className="text-xl font-extrabold tracking-tight text-foreground">{path.title}</h3>
+
+          <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{path.subtitle}</p>
+
+          <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-violet group-hover:gap-2.5 transition-all">
+
+            {path.cta}
+
+            <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.5} />
+
+          </span>
+
+        </div>
+
+      </Link>
+
+    </motion.div>
+
   );
+
 }
+
+
+
+export default function FeaturedProperties() {
+
+  return (
+
+    <section id="explorar-inmuebles" className="section-pad section-pad-tight-top bg-[hsl(0,0%,98%)] border-y border-border/40">
+
+      <div className="site-container">
+
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
+
+          <div className="flex flex-col gap-3 max-w-2xl">
+
+            <SectionHeader
+
+              eyebrow="Inventario verificado"
+
+              title="Explora inmuebles en Bogotá"
+
+              subtitle={exploreInviteSubtitle(BRAND.name)}
+
+            />
+
+            <VerifiedBadge size="sm" className="w-fit" />
+
+          </div>
+
+
+
+          <Link
+
+            to="/explorar"
+
+            className="hidden lg:inline-flex items-center gap-2 gradient-cta text-white font-bold text-sm px-6 py-3.5 rounded-xl shadow-md hover:opacity-95 transition-opacity shrink-0"
+
+          >
+
+            <Building2 className="size-4" strokeWidth={2.25} />
+
+            Ver todo el inventario
+
+            <ArrowRight className="size-4" strokeWidth={2.5} />
+
+          </Link>
+
+        </div>
+
+
+
+        <div className="grid sm:grid-cols-2 gap-5 lg:gap-6">
+
+          {EXPLORE_PATHS.map((path, i) => (
+
+            <ExplorePathCard key={path.to} path={path} index={i} />
+
+          ))}
+
+        </div>
+
+
+
+        <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+          <div className="flex flex-wrap items-center gap-2">
+
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground mr-1">
+
+              <MapPin className="size-3.5 text-brand-violet" strokeWidth={2.5} />
+
+              Zonas populares
+
+            </span>
+
+            {POPULAR_ZONES.map((zone) => (
+
+              <Link
+
+                key={zone.label}
+
+                to={zone.to}
+
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold border border-border/60 bg-white text-foreground/80 hover:border-brand-violet/35 hover:text-brand-violet transition-colors"
+
+              >
+
+                {zone.label}
+
+              </Link>
+
+            ))}
+
+          </div>
+
+
+
+          <Link
+
+            to="/explorar"
+
+            className="lg:hidden inline-flex items-center justify-center gap-2 gradient-cta text-white font-bold text-sm px-6 py-3.5 rounded-xl shadow-md hover:opacity-95 transition-opacity"
+
+          >
+
+            Ver todo el inventario
+
+            <ArrowRight className="size-4" strokeWidth={2.5} />
+
+          </Link>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  );
+
+}
+
+

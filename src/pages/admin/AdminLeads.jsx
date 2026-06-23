@@ -74,7 +74,7 @@ export default function AdminLeads() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h2 className="text-xl font-extrabold">CRM — Leads</h2>
+          <h2 className="text-xl font-extrabold">CRM · Leads</h2>
           <p className="text-sm text-muted-foreground">Pipeline completo con notas, tags y plantillas WhatsApp.</p>
         </div>
         <select value={propertyFilter} onChange={(e) => setPropertyFilter(e.target.value)} className="text-sm border rounded-xl px-3 py-2 bg-white">

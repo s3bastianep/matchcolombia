@@ -70,7 +70,7 @@ export default function AdminApplications() {
                   {app.documents.map((doc, i) => (
                     <span key={i} className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-secondary">
                       <FileText className="w-3.5 h-3.5" />
-                      {docLabel(doc.type)} — {doc.name}
+                      {docLabel(doc.type)} · {doc.name}
                     </span>
                   ))}
                 </div>

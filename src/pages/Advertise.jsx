@@ -21,6 +21,9 @@ import TraditionalVsMatch from "@/components/advertise/TraditionalVsMatch";
 import AboutFounderSection from "@/components/advertise/AboutFounderSection";
 import OwnerSecuritySection from "@/components/advertise/OwnerSecuritySection";
 import OwnerFaqSection from "@/components/advertise/OwnerFaqSection";
+import AdvertiseFreeStrip from "@/components/advertise/AdvertiseFreeStrip";
+import AdvertisePublishSteps from "@/components/advertise/AdvertisePublishSteps";
+import AdvertiseExpertCta from "@/components/advertise/AdvertiseExpertCta";
 import { ADVERTISE_HERO_TITLE, ADVERTISE_HERO_SUBTITLE } from "@/lib/siteCopy";
 import AdvertiseMobile from "./mobile/AdvertiseMobile";
 
@@ -178,8 +181,8 @@ export default function Advertise() {
                   Publicar mi inmueble
                   <ArrowRight className="w-4 h-4" />
                 </Link>
-                <a href="#panel-real" className="inline-flex items-center justify-center gap-2 border border-white/30 text-white font-bold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm">
-                  Ver cómo se ve
+                <a href="#como-publicar" className="inline-flex items-center justify-center gap-2 border border-white/30 text-white font-bold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm">
+                  Cómo publicar
                 </a>
               </div>
             </motion.div>
@@ -200,6 +203,10 @@ export default function Advertise() {
           </div>
         </div>
       </section>
+
+      <AdvertiseFreeStrip />
+
+      <AdvertisePublishSteps />
 
       <section className="color-bar">
         <div className="site-container py-12 sm:py-16 lg:py-20 text-center text-white">
@@ -295,6 +302,8 @@ export default function Advertise() {
       </section>
 
       <AboutFounderSection />
+
+      <AdvertiseExpertCta />
 
       <OwnerFaqSection />
 

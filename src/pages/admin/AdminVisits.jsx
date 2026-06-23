@@ -45,7 +45,7 @@ export default function AdminVisits() {
   const propTitle = (id) => properties.find((p) => p.id === id)?.title || "Propiedad";
 
   const fmt = (iso) => {
-    if (!iso) return "—";
+    if (!iso) return "N/D";
     const d = new Date(iso);
     return d.toLocaleString("es-CO", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   };

@@ -74,7 +74,7 @@ export function getPortalSeedData(propertyIds = []) {
       scheduled_at: new Date(now.getTime() + 86400000 * 2).toISOString(),
       status: "confirmada",
       visit_type: "presencial",
-      notes: "Visita presencial — acompañar al edificio",
+      notes: "Visita presencial. Acompañar al edificio",
       created_date: new Date(now - 86400000).toISOString(),
     },
     {

@@ -78,6 +78,11 @@ export default function AppLayout() {
 
       {!isExplore && (
         <Suspense fallback={null}>
+          {!isHome && (
+            <div className="lg:hidden">
+              <Footer />
+            </div>
+          )}
           <div className="hidden lg:block">
             <Footer />
           </div>

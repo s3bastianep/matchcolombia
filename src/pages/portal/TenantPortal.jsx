@@ -50,7 +50,7 @@ export default function TenantPortal() {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Contrato" value={lease ? "Activo" : "—"} hint={lease?.end_date ? `Hasta ${lease.end_date}` : ""} icon={FileText} />
+        <StatCard label="Contrato" value={lease ? "Activo" : "N/D"} hint={lease?.end_date ? `Hasta ${lease.end_date}` : ""} icon={FileText} />
         <StatCard label="Próximo pago" value={pending ? formatCOP(pending.amount) : "Al día"} icon={CreditCard} />
         <StatCard label="Tickets abiertos" value={tickets.filter((t) => t.status !== "resuelto").length} icon={Wrench} />
       </div>

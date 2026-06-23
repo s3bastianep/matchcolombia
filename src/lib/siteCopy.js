@@ -1,10 +1,20 @@
 /** Copy unificado para todo el sitio */
 
+export const HERO_EYEBROW = "Arriendos verificados · Bogotá";
+
+export const HERO_TITLE_LINE1 = "El lugar que buscas";
+
+export const HERO_TITLE_LINE2 = "existe y está aquí";
+
 export const HERO_SUBTITLE =
-  "Inmuebles verificados para habitar Bogotá. Encuentra el lugar ideal con el Match inteligente de HABIBAR.";
+  "Cada inmueble en Habibar lo verifica nuestro equipo antes de publicarse. Solo ves opciones disponibles hoy. Agenda tu visita en línea y una persona del equipo te acompaña en todo el proceso.";
 
 export const HERO_QUIZ_TITLE = "Match inteligente";
 export const HERO_QUIZ_DESC = "2 minutos · opciones a tu medida";
+
+export function exploreInviteSubtitle(brandName) {
+  return `Arriendo o compra con listados revisados por ${brandName}. Filtra por zona, precio y tipo, sin perder horas en scroll infinito.`;
+}
 
 export const VERIFIED_LISTINGS =
   "Inmuebles revisados antes de publicar. Fotos y datos verificados por nuestro equipo.";
@@ -21,7 +31,7 @@ export const TRUST_TAGLINE =
 export const HUMAN_SUPPORT_TITLE = "Cuando nos escribes, te responde una persona";
 export const HUMAN_SUPPORT_BADGE = "Atención humana";
 export const HUMAN_SUPPORT_BODY =
-  "En Habibar la atención la da el equipo, no un proceso automático. Alguien real te escucha, te entiende y te acompaña por WhatsApp cuando lo necesites.";
+  "En Habibar te atiende el equipo, no un bot. Alguien real te escucha, responde tus dudas y te acompaña por WhatsApp cuando lo necesites.";
 export const HUMAN_SUPPORT_SHORT =
   "Cuando nos escribes, responde alguien del equipo · WhatsApp directo";
 
@@ -57,10 +67,51 @@ export const FAVORITES_BADGE = "Guardados";
 export const FAVORITES_EMPTY_TITLE = "Aún no tienes inmuebles guardados";
 
 export const FAVORITES_EMPTY_HINT =
-  "Usa el Match inteligente de HABIBAR para encontrar opciones que encajen, o guarda cualquier inmueble con el corazón.";
+  "Usa el Match inteligente para encontrar opciones que encajen, o guarda cualquier inmueble con el corazón.";
 
 export const OWNER_PROMO_TAGLINE =
   "Publica gratis. Nos encargamos de interesados y visitas.";
+
+export const RENTER_PROMO_TITLE =
+  "Arrienda sin problemas, sin complicaciones y con confianza.";
+
+export const RENTER_PROMO_BODY =
+  "Con Habibar agendas visitas en línea, hablas con personas del equipo si tienes dudas y sigues todo el proceso desde un solo lugar. Sin scroll infinito.";
+
+export const OWNER_PROMO_TITLE = "Anuncia tu inmueble sin complicaciones.";
+
+export const OWNER_PROMO_BODY =
+  "Registra tu propiedad, sigue cada paso y gestiona todo desde un solo lugar, de principio a fin.";
+
+export const OWNER_PERKS = [
+  "Publicación gratuita",
+  "Gestión de visitas e interesados",
+  "Seguimiento digital del inmueble",
+  "Equipo en Bogotá",
+];
+
+export const OWNER_WHATSAPP_TITLE = "Anúnciate vía WhatsApp";
+
+export const OWNER_WHATSAPP_BODY =
+  "Nuestro equipo te ayuda a publicar tu inmueble de forma rápida y segura.";
+
+export const ADVERTISE_FREE_TITLE = "Publica tu propiedad gratis en HABIBAR.";
+
+export const ADVERTISE_FREE_SUBTITLE =
+  "Arrienda o vende con HABIBAR de forma rápida, sencilla y segura.";
+
+export const ADVERTISE_PUBLISH_STEPS_TITLE =
+  "Cómo publicar tu casa o apartamento en HABIBAR";
+
+export const ADVERTISE_EXPERT_CTA_TITLE = "Habla con nuestro equipo.";
+
+export const ADVERTISE_EXPERT_CTA_BODY =
+  "Publicar el anuncio es gratis. Solo pagas después de arrendar o vender la propiedad.";
+
+export const ADVERTISE_VISITS_EXPERT_TITLE = "Equipo que acompaña las visitas";
+
+export const ADVERTISE_VISITS_EXPERT_BODY =
+  "Cuando tu inmueble reciba interés, nuestro equipo en Bogotá coordina las visitas, responde dudas y acompaña a los interesados. Personas reales de Habibar, no bots ni mensajes sueltos.";
 
 export const ADVERTISE_HERO_TITLE =
   "Arrienda con tranquilidad. Nosotros administramos tu inmueble de punta a punta.";
@@ -105,7 +156,7 @@ export function viewListingsLabel(count) {
 
 export const EXPLORE_EMPTY_NO_LISTINGS_TITLE = "No hay inmuebles en este momento";
 export const EXPLORE_EMPTY_NO_LISTINGS_DESC =
-  "Estamos incorporando nuevos inmuebles verificados. Prueba el Match inteligente de HABIBAR y vuelve a buscar pronto: publicamos opciones nuevas con frecuencia.";
+  "Estamos incorporando inmuebles verificados. Prueba el Match inteligente y vuelve pronto: publicamos opciones nuevas con frecuencia.";
 export const EXPLORE_EMPTY_FILTERED_TITLE = "Sin resultados por ahora";
 export const EXPLORE_EMPTY_FILTERED_DESC =
   "Prueba ampliando ciudad, zona o ajustando habitaciones, baños, parqueaderos o estrato.";

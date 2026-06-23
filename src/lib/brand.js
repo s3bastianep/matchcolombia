@@ -20,8 +20,8 @@ export const BRAND = {
   logoWordmark2x: "/habibar-wordmark@2x.png?v=9",
   logoStacked: "/habibar-logo.png?v=9",
   logo: "/habibar-wordmark.png?v=9",
-  logoIcon: "/habibar-icon.png?v=11",
-  logoMark: "/habibar-mark.svg?v=11",
+  logoIcon: "/habibar-icon.png?v=12",
+  logoMark: "/habibar-mark.svg?v=12",
   splashMark: "/habibar-wordmark.png?v=9",
   social: {
     instagram: "https://instagram.com/habibar",

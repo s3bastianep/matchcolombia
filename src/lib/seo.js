@@ -33,7 +33,7 @@ export const SEO_DEFAULTS = {
   keywords:
     "HABIBAR, arriendo apartamentos Bogotá, inmuebles verificados Bogotá, arriendo casas Bogotá, venta inmuebles Bogotá, match inteligente arriendo, administración de arriendos Bogotá",
   ogImage: DEFAULT_OG_IMAGE,
-  ogImageAlt: `${BRAND.name} — inmuebles verificados en Bogotá, Colombia`,
+  ogImageAlt: `${BRAND.name} · inmuebles verificados en Bogotá, Colombia`,
   twitterHandle: "@habibar",
 };
 
@@ -197,7 +197,7 @@ export function getPropertySeo(property) {
   const rent = formatRent(property);
   const geo = cityGeoMeta(property.city);
 
-  const title = `${property.title} — ${typeLabel} en ${city}`;
+  const title = `${property.title} · ${typeLabel} en ${city}`;
   const description =
     property.description?.slice(0, 155) ||
     `${typeLabel} en arriendo en ${city}${locality}. ${property.bedrooms || 0} hab., ${property.bathrooms || 0} baños${property.area_sqm ? `, ${property.area_sqm} m²` : ""}. Canon ${rent}. Verificado por ${BRAND.name}.`;
@@ -206,7 +206,7 @@ export function getPropertySeo(property) {
     title: buildTitle(title),
     description,
     image: propertyImage(property),
-    imageAlt: `${property.title} — ${typeLabel} en ${city}`,
+    imageAlt: `${property.title} · ${typeLabel} en ${city}`,
     url: absoluteUrl(`/propiedad/${property.id}`),
     keywords: `${typeLabel} arriendo ${city}, inmueble ${property.locality || city}, ${BRAND.name}`,
     geoPlacename: geo?.placename || SEO_DEFAULTS.geoPlacename,
@@ -235,7 +235,7 @@ const ROUTE_SEO = {
   },
   "/explorar": (searchParams) => getExploreSeo(searchParams),
   "/anunciar": {
-    title: buildTitle("Anuncia tu inmueble — Administración completa de arriendos"),
+    title: buildTitle("Anuncia tu inmueble · Administración completa de arriendos"),
     description: `Publica gratis tu apartamento o casa en Bogotá. ${BRAND.name} gestiona visitas, candidatos, contratos, cobros y mantenimiento sin exponer tu teléfono.`,
     url: "/anunciar",
     keywords: "administración de arriendos, publicar apartamento, arrendar propiedad Bogotá, propietarios Habibar",

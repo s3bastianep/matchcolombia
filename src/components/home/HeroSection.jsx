@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Search, Building2, Sparkles } from "lucide-react";
 import { PEOPLE } from "@/lib/colombiaImages";
-import { HERO_QUIZ_DESC, HERO_QUIZ_TITLE, HERO_SUBTITLE } from "@/lib/siteCopy";
+import { HERO_EYEBROW, HERO_QUIZ_DESC, HERO_QUIZ_TITLE, HERO_SUBTITLE, HERO_TITLE_LINE1, HERO_TITLE_LINE2 } from "@/lib/siteCopy";
 import { cn } from "@/lib/utils";
 import HomeSearchBar from "@/components/search/HomeSearchBar";
 import HumanSupportBanner from "@/components/brand/HumanSupportBanner";
@@ -29,10 +29,10 @@ function CollagePhoto({ src, alt, className, priority = false }) {
 
 function HeroCollage() {
   return (
-    <div className="relative w-full flex items-center justify-center py-8 sm:py-10 lg:py-12 min-h-[240px] sm:min-h-[300px] lg:min-h-[360px]">
+    <div className="relative w-full flex items-center justify-center py-6 sm:py-10 lg:py-12 min-h-[200px] sm:min-h-[300px] lg:min-h-[360px]">
       <div className="absolute inset-0 bg-gradient-to-br from-brand-violet/6 via-white to-brand-magenta/4 pointer-events-none" />
 
-      <div className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[420px] aspect-square mx-auto">
+      <div className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[420px] aspect-square mx-auto scale-[0.92] sm:scale-100">
         <div className="hero-collage-main absolute inset-[6%] z-10">
           <CollagePhoto src={PEOPLE.collageMain} alt="Sala moderna de apartamento" className="w-full h-full shadow-2xl" priority />
         </div>
@@ -113,12 +113,13 @@ export default function HeroSection({ onStartQuiz }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
         <div className="flex flex-col justify-center py-8 sm:py-10 lg:py-12 order-1">
           <p className="text-xs font-bold uppercase tracking-widest text-brand-violet mb-3">
-            Arriendos verificados · Bogotá
+            {HERO_EYEBROW}
           </p>
           <h1 className="font-extrabold leading-[1.08] mb-3 tracking-tight text-[clamp(1.85rem,5vw,3rem)]">
-            Encuentra tu inmueble.
+            {HERO_TITLE_LINE1}
             <br />
-            <span className="text-gradient">O arriéndalo sin estrés.</span>
+            <span className="text-gradient">{HERO_TITLE_LINE2}</span>
+            <span className="text-foreground">.</span>
           </h1>
 
           <p className="text-muted-foreground text-sm sm:text-base mb-5 max-w-md leading-relaxed">
@@ -141,7 +142,7 @@ export default function HeroSection({ onStartQuiz }) {
           </div>
         </div>
 
-        <div className="order-2 hidden lg:block">
+        <div className="order-2">
           <HeroCollage />
         </div>
         </div>

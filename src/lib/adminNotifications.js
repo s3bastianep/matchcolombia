@@ -50,6 +50,6 @@ export function seedAdminNotificationsIfNeeded() {
   if (localStorage.getItem(SEEDED_KEY)) return;
   pushAdminNotification({ type: "lead", title: "Nuevo lead sin responder", message: "Laura Méndez espera respuesta.", link: "/admin/leads" });
   pushAdminNotification({ type: "owner", title: "Verificación pendiente", message: "Ana Dueña envió documentos.", link: "/admin/propietarios" });
-  pushAdminNotification({ type: "visit", title: "Visita pendiente", message: "Carlos Ruiz — confirmar visita virtual.", link: "/admin/visitas" });
+  pushAdminNotification({ type: "visit", title: "Visita pendiente", message: "Carlos Ruiz · confirmar visita virtual.", link: "/admin/visitas" });
   localStorage.setItem(SEEDED_KEY, "1");
 }

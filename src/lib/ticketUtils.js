@@ -26,7 +26,7 @@ export function formatTicketCost(amount) {
 }
 
 export function formatTicketDate(iso) {
-  if (!iso) return "—";
+  if (!iso) return "N/D";
   return new Date(iso).toLocaleString("es-CO", {
     day: "numeric",
     month: "short",

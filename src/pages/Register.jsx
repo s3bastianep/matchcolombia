@@ -31,7 +31,7 @@ export default function Register() {
       return;
     }
     if (!/^[a-zA-Z0-9._-]{3,20}$/.test(username)) {
-      setError("Usuario: 3–20 caracteres (letras, números, . _ -)");
+      setError("Usuario: 3 a 20 caracteres (letras, números, . _ -)");
       return;
     }
 

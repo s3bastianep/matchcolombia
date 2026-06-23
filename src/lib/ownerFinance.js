@@ -9,7 +9,7 @@ export function formatCOP(value) {
 }
 
 export function formatPercent(value, digits = 1) {
-  if (value == null || Number.isNaN(value)) return "—";
+  if (value == null || Number.isNaN(value)) return "N/D";
   return `${value.toFixed(digits)}%`;
 }
 

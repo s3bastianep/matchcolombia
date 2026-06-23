@@ -43,7 +43,7 @@ function PropertyFinanceCard({ row }) {
         <div>
           <h3 className="font-extrabold text-base">{property.title || "Inmueble"}</h3>
           <p className="text-xs text-muted-foreground mt-0.5">
-            {property.neighborhood || property.city || "—"} · Valor ref. {formatCOP(value)}
+            {property.neighborhood || property.city || "N/D"} · Valor ref. {formatCOP(value)}
           </p>
         </div>
         <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-brand-violet/10 text-brand-violet">
@@ -242,7 +242,7 @@ export default function OwnerFinancePanel({ compact = false }) {
               <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Rentabilidad anual bruta</p>
               <p className="text-4xl font-extrabold text-brand-violet mt-1 tabular-nums">{formatPercent(s.grossAnnualYield)}</p>
               <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
-                Canon anual estimado ÷ valor del inmueble. Referencia de mercado en Bogotá: 5%–8% bruto.
+                Canon anual estimado ÷ valor del inmueble. Referencia de mercado en Bogotá: 5% a 8% bruto.
               </p>
             </div>
             <div className="pt-4 border-t border-brand-violet/15">

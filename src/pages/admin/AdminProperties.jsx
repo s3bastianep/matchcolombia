@@ -30,7 +30,7 @@ export default function AdminProperties() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-properties"] }),
   });
 
-  const ownerName = (userId) => owners.find((o) => o.user_id === userId)?.name || "—";
+  const ownerName = (userId) => owners.find((o) => o.user_id === userId)?.name || "N/D";
   const workflow = (p) => p.publication_status || (p.status === "disponible" ? "publicada" : p.status);
 
   const filtered = workflowFilter === "all"
@@ -88,7 +88,7 @@ export default function AdminProperties() {
                       <p className="font-bold line-clamp-1">{p.title}</p>
                       <p className="text-xs text-muted-foreground">{p.neighborhood}, {p.city}</p>
                     </td>
-                    <td className="p-4 font-mono text-xs text-muted-foreground">{p.reference_code || "—"}</td>
+                    <td className="p-4 font-mono text-xs text-muted-foreground">{p.reference_code || "N/D"}</td>
                     <td className="p-4 font-semibold">{formatCOP(p.monthly_rent)}</td>
                     <td className="p-4 text-xs">{ownerName(p.owner_user_id)}</td>
                     <td className="p-4">

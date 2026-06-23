@@ -146,7 +146,7 @@ export default function MobileAccountSheet({ open, onOpenChange, onMatchClick })
             className="flex items-center justify-center gap-2 w-full rounded-2xl bg-[#25D366]/10 border border-[#25D366]/25 text-[#128C7E] font-bold py-3.5 text-sm"
           >
             <MessageCircle className="w-5 h-5" />
-            WhatsApp — ¿Dudas?
+            WhatsApp · ¿Dudas?
           </a>
         </div>
       </DrawerContent>
