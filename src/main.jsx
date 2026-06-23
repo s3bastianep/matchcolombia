@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { CHUNK_RELOAD_KEY, hardReloadForNewBuild, importWithRetry } from '@/lib/chunkRetry'
+import { importWithRetry } from '@/lib/chunkRetry'
+import { preloadCurrentRouteChunk } from '@/lib/preloadRoute'
 
 function isBooting() {
   return !!document.getElementById('boot-loader')
@@ -54,7 +55,6 @@ window.addEventListener('unhandledrejection', (event) => {
 })
 
 const BOOT_TIMEOUT_MS = 20000
-const BOOT_STALL_MS = 10000
 
 const bootTimer = window.setTimeout(() => {
   if (isBooting()) {
@@ -62,37 +62,34 @@ const bootTimer = window.setTimeout(() => {
   }
 }, BOOT_TIMEOUT_MS)
 
-const stallTimer = window.setTimeout(() => {
-  if (!isBooting()) return
-  if (!sessionStorage.getItem(CHUNK_RELOAD_KEY) && !new URLSearchParams(window.location.search).has('_cb')) {
-    hardReloadForNewBuild()
-    return
-  }
-  showBootstrapError(new Error('No se pudo cargar HABIBAR. Toca Recargar para intentar de nuevo.'))
-}, BOOT_STALL_MS)
-
 async function boot() {
   try {
     try {
-      for (const key of Object.keys(localStorage)) {
-        if (key.startsWith('matchcolombia_') || key.startsWith('lumora_')) {
-          const next = key.replace(/^matchcolombia_/, 'habibar_').replace(/^lumora_/, 'habibar_')
-          if (!localStorage.getItem(next)) localStorage.setItem(next, localStorage.getItem(key))
-          localStorage.removeItem(key)
+      if (!sessionStorage.getItem("habibar_storage_migrated")) {
+        for (const key of Object.keys(localStorage)) {
+          if (key.startsWith("matchcolombia_") || key.startsWith("lumora_")) {
+            const next = key.replace(/^matchcolombia_/, "habibar_").replace(/^lumora_/, "habibar_")
+            if (!localStorage.getItem(next)) localStorage.setItem(next, localStorage.getItem(key))
+            localStorage.removeItem(key)
+          }
         }
+        sessionStorage.setItem("habibar_storage_migrated", "1")
       }
     } catch {
       /* ignore storage migration errors */
     }
 
-    const [{ default: App }, { default: ErrorBoundary }] = await Promise.all([
-      importWithRetry(() => import('@/App.jsx')),
-      importWithRetry(() => import('@/components/ErrorBoundary')),
-      import('@/index.css'),
-    ])
+    const routeChunk = preloadCurrentRouteChunk()
+    const bootTasks = [
+      importWithRetry(() => import("@/App.jsx")),
+      importWithRetry(() => import("@/components/ErrorBoundary")),
+      import("@/index.css"),
+    ]
+    if (routeChunk) bootTasks.push(routeChunk)
+
+    const [{ default: App }, { default: ErrorBoundary }] = await Promise.all(bootTasks)
 
     window.clearTimeout(bootTimer)
-    window.clearTimeout(stallTimer)
     removeBootLoader()
 
     ReactDOM.createRoot(document.getElementById('root')).render(
@@ -113,7 +110,6 @@ async function boot() {
     })
   } catch (error) {
     window.clearTimeout(bootTimer)
-    window.clearTimeout(stallTimer)
     showBootstrapError(error)
   }
 }

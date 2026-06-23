@@ -26,7 +26,24 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    checkUserAuth();
+    let cancelled = false;
+    const run = () => {
+      if (!cancelled) checkUserAuth();
+    };
+
+    if (typeof requestIdleCallback === "function") {
+      const id = requestIdleCallback(run, { timeout: 1500 });
+      return () => {
+        cancelled = true;
+        cancelIdleCallback(id);
+      };
+    }
+
+    const timer = window.setTimeout(run, 50);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
   }, [checkUserAuth]);
 
   const logout = async () => {

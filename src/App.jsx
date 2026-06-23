@@ -7,7 +7,6 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider } from '@/lib/AuthContext';
 import { ROLES } from '@/lib/roles';
 import { PropertyPanelProvider } from '@/lib/PropertyPanelContext';
-import RouteSeo from '@/components/seo/RouteSeo';
 import { lazyWithRetry as lazy } from '@/lib/lazyWithRetry';
 
 import AppLayout from './components/layout/AppLayout';
@@ -61,6 +60,8 @@ const OwnerLeads = lazy(() => import('./pages/portal/OwnerLeads'));
 const OwnerTickets = lazy(() => import('./pages/portal/OwnerTickets'));
 const OwnerFinance = lazy(() => import('./pages/portal/OwnerFinance'));
 
+const RouteSeo = lazy(() => import('@/components/seo/RouteSeo'));
+
 function PageLoader() {
   return (
     <div className="min-h-[40vh] flex items-center justify-center">
@@ -69,9 +70,17 @@ function PageLoader() {
   );
 }
 
+function RouteFallback() {
+  const path = typeof window !== "undefined" ? window.location.pathname : "";
+  if (path === "/" || path === "") {
+    return <div className="min-h-[55vh] bg-white" aria-hidden="true" />;
+  }
+  return <PageLoader />;
+}
+
 function AppRoutes() {
   return (
-    <Suspense fallback={<PageLoader />}>
+    <Suspense fallback={<RouteFallback />}>
       <Routes>
         <Route path="/vista-previa-app" element={<AppMobilePreview />} />
         <Route path="/vender" element={<Navigate to="/publicar" replace />} />
@@ -158,7 +167,9 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <PropertyPanelProvider>
-            <RouteSeo />
+            <Suspense fallback={null}>
+              <RouteSeo />
+            </Suspense>
             <AppRoutes />
           </PropertyPanelProvider>
         </Router>

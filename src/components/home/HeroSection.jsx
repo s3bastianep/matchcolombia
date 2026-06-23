@@ -6,6 +6,7 @@ import { HERO_EYEBROW, HERO_QUIZ_DESC, HERO_QUIZ_TITLE, HERO_SUBTITLE, HERO_TITL
 import { cn } from "@/lib/utils";
 import HomeSearchBar from "@/components/search/HomeSearchBar";
 import HumanSupportBanner from "@/components/brand/HumanSupportBanner";
+import DeferredMount from "@/components/ui/DeferredMount";
 
 function CollagePhoto({ src, alt, className, priority = false }) {
   return (
@@ -143,7 +144,14 @@ export default function HeroSection({ onStartQuiz }) {
         </div>
 
         <div className="order-2">
-          <HeroCollage />
+          <DeferredMount
+            rootMargin="120px 0px"
+            minHeight="200px"
+            className="lg:contents"
+            fallback={<div className="min-h-[200px] sm:min-h-[300px] lg:min-h-[360px]" aria-hidden="true" />}
+          >
+            <HeroCollage />
+          </DeferredMount>
         </div>
         </div>
       </div>

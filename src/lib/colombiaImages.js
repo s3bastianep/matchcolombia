@@ -114,9 +114,9 @@ export const CITIES_IMG = {
 };
 
 export const HERO_COLLAGE = {
-  collageMain: pexels(439391, 800, 700),
-  collageBedroom: pexels(1643384, 500, 600),
-  collageKitchen: pexels(2062432, 500, 500),
+  collageMain: pexels(439391, 640, 560),
+  collageBedroom: pexels(1643384, 400, 480),
+  collageKitchen: pexels(2062432, 400, 400),
 };
 
 /** @deprecated Usar HERO_COLLAGE */
