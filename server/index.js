@@ -33,7 +33,9 @@ app.use("/uploads", express.static(uploadDir, { maxAge: "7d" }));
 
 app.use(express.static(distDir, { maxAge: "1h", index: false }));
 
-app.get("*", (req, res, next) => {
+// SPA fallback (sin wildcard * — incompatible con Express 5)
+app.use((req, res, next) => {
+  if (req.method !== "GET" && req.method !== "HEAD") return next();
   if (req.path.startsWith("/api") || req.path.startsWith("/uploads")) return next();
   res.sendFile(path.join(distDir, "index.html"), (err) => {
     if (err) next(err);
