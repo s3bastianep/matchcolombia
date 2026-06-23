@@ -1,41 +1,55 @@
-# HABIBAR — Backend con Supabase
+# HABIBAR — Backend
 
-## 1. Crear proyecto en Supabase
+## Opción recomendada: Railway (todo en uno)
+
+Web + API + PostgreSQL en **una sola cuenta Railway**.
+
+→ Guía completa: **[RAILWAY.md](./RAILWAY.md)**
+
+---
+
+## Opción alternativa: Supabase
+
+Si prefieres Supabase como backend externo:
+
+### 1. Crear proyecto en Supabase
 
 1. Entra a [supabase.com](https://supabase.com) y crea un proyecto gratis.
 2. Espera a que termine de provisionarse (~2 min).
 
-## 2. Ejecutar el schema SQL
+### 2. Ejecutar el schema SQL
 
 1. En Supabase: **SQL Editor** → **New query**.
 2. Copia y pega todo el contenido de `supabase/schema.sql`.
 3. Pulsa **Run**.
 
-## 3. Variables de entorno
-
-Crea un archivo `.env.local` en la raíz del proyecto:
+### 3. Variables de entorno
 
 ```env
 VITE_SUPABASE_URL=https://TU-PROYECTO.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+VITE_SUPABASE_ANON_KEY=eyJ...
+SUPABASE_SERVICE_ROLE_KEY=eyJ...  # solo local, nunca en Railway
 ```
 
-Las claves están en: **Project Settings → API**
-
-| Variable | Uso |
-|----------|-----|
-| `VITE_SUPABASE_URL` | Frontend (público) |
-| `VITE_SUPABASE_ANON_KEY` | Frontend (público, con RLS) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Solo scripts locales / servidor. **Nunca** en Railway ni en el navegador |
-
-## 4. Cargar datos demo
+### 4. Cargar datos demo
 
 ```bash
 npm run seed:supabase
 ```
 
-Crea propiedades, visitas, leads y usuarios:
+### 5. Deploy
+
+En Railway, **no** uses `VITE_USE_RAILWAY_API=true`. Solo agrega las variables `VITE_SUPABASE_*`.
+
+---
+
+## Modo demo (sin backend)
+
+Sin `VITE_USE_RAILWAY_API` ni `VITE_SUPABASE_*`, la app usa **localStorage** en cada navegador (solo para pruebas locales).
+
+---
+
+## Usuarios demo
 
 | Usuario | Contraseña | Rol |
 |---------|------------|-----|
@@ -43,47 +57,3 @@ Crea propiedades, visitas, leads y usuarios:
 | `buscador` | `demo123` | Buscador |
 | `propietario` | `demo123` | Propietario |
 | `inquilino` | `demo123` | Inquilino |
-
-## 5. Desarrollo local
-
-```bash
-npm run dev
-```
-
-Si las variables `VITE_SUPABASE_*` están configuradas, la app usa **Supabase**.  
-Si no, sigue usando **localStorage** (modo demo sin backend).
-
-## 6. Deploy en Railway
-
-Agrega las variables de entorno en Railway (Settings → Variables):
-
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
-
-**No** agregues `SUPABASE_SERVICE_ROLE_KEY` en Railway.
-
-Redeploy después de guardar las variables.
-
-## Arquitectura
-
-```
-React (frontend)
-    ↓
-apiClient.js  →  Supabase si hay credenciales, si no localApi
-    ↓
-Supabase
-  ├── Auth (login por usuario + contraseña)
-  ├── PostgreSQL (app_records, profiles)
-  └── Storage (bucket uploads — fotos y documentos)
-```
-
-## Subir fotos
-
-Las fotos se guardan en el bucket `uploads` de Supabase Storage y quedan con URL pública.
-
-## Solución de problemas
-
-- **"Backend no configurado"** → Faltan variables `VITE_SUPABASE_*`.
-- **Error al login** → ¿Ejecutaste `schema.sql` y `npm run seed:supabase`?
-- **No hay propiedades** → Corre el seed.
-- **RLS error** → Vuelve a ejecutar `supabase/schema.sql`.

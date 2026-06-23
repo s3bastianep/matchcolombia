@@ -331,7 +331,7 @@ export function organizationSchema() {
     name: BRAND.name,
     alternateName: BRAND.short,
     url: SITE_URL,
-    logo: absoluteUrl("/habibar-wordmark.png?v=3"),
+    logo: absoluteUrl("/habibar-wordmark.png?v=9"),
     description: SEO_DEFAULTS.description,
     email: BRAND.email,
     telephone: BRAND.phone,

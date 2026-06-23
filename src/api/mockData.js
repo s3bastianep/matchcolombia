@@ -60,6 +60,8 @@ export const SEED_PROPERTIES = [
 
     images: gallery("prop-1", "apartamento"),
 
+    videos: ["https://videos.pexels.com/video-files/7578554/7578554-hd_1920_1080_25fps.mp4"],
+
     available_from: "2026-07-01",
 
     min_contract_months: 12,
@@ -126,6 +128,8 @@ export const SEED_PROPERTIES = [
 
     images: gallery("prop-2", "apartamento"),
 
+    videos: ["https://videos.pexels.com/video-files/5990243/5990243-hd_1920_1080_25fps.mp4"],
+
     available_from: "2026-06-15",
 
     min_contract_months: 12,
@@ -191,6 +195,8 @@ export const SEED_PROPERTIES = [
     amenities: ["Zona verde", "Depósito", "Portería"],
 
     images: gallery("prop-3", "casa"),
+
+    videos: ["https://videos.pexels.com/video-files/3280131/3280131-hd_1920_1080_30fps.mp4"],
 
     available_from: "2026-08-01",
 
@@ -607,4 +613,8 @@ export const SEED_PROPERTIES = [
   },
 
 ];
+
+for (const p of SEED_PROPERTIES) {
+  p.verified = true;
+}
 

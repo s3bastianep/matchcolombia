@@ -8,53 +8,83 @@ const MAX_PULL = 96;
 
 export default function PullToRefresh({ onRefresh, children, className, disabled = false }) {
   const scrollRef = useRef(null);
+  const indicatorRef = useRef(null);
   const startY = useRef(0);
   const pulling = useRef(false);
-  const [pull, setPull] = useState(0);
+  const pullRef = useRef(0);
+  const rafRef = useRef(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  const offset = refreshing ? 52 : pull;
+  const applyPullVisual = useCallback((value, animate = false) => {
+    const el = indicatorRef.current;
+    if (!el) return;
+    el.style.height = `${value}px`;
+    el.style.marginBottom = value > 0 ? `-${value}px` : "0px";
+    el.style.transition = animate ? "height 0.2s ease, margin-bottom 0.2s ease" : "";
+    const icon = el.querySelector("[data-pull-icon]");
+    if (icon) {
+      icon.style.opacity = String(Math.min(1, value / THRESHOLD));
+    }
+  }, []);
 
-  const handleTouchStart = useCallback((e) => {
-    if (disabled || refreshing) return;
-    const el = scrollRef.current;
-    if (el && el.scrollTop <= 0) {
-      startY.current = e.touches[0].clientY;
-      pulling.current = true;
-    }
-  }, [disabled, refreshing]);
+  const handleTouchStart = useCallback(
+    (e) => {
+      if (disabled || refreshing) return;
+      const el = scrollRef.current;
+      if (el && el.scrollTop <= 0) {
+        startY.current = e.touches[0].clientY;
+        pulling.current = true;
+      }
+    },
+    [disabled, refreshing]
+  );
 
-  const handleTouchMove = useCallback((e) => {
-    if (!pulling.current || disabled || refreshing) return;
-    const el = scrollRef.current;
-    if (!el || el.scrollTop > 0) {
-      pulling.current = false;
-      setPull(0);
-      return;
-    }
-    const dy = e.touches[0].clientY - startY.current;
-    if (dy > 0) {
-      setPull(Math.min(dy * 0.5, MAX_PULL));
-    }
-  }, [disabled, refreshing]);
+  const handleTouchMove = useCallback(
+    (e) => {
+      if (!pulling.current || disabled || refreshing) return;
+      const el = scrollRef.current;
+      if (!el || el.scrollTop > 0) {
+        pulling.current = false;
+        pullRef.current = 0;
+        applyPullVisual(0);
+        return;
+      }
+      const dy = e.touches[0].clientY - startY.current;
+      if (dy > 0) {
+        const next = Math.min(dy * 0.5, MAX_PULL);
+        pullRef.current = next;
+        if (rafRef.current) return;
+        rafRef.current = requestAnimationFrame(() => {
+          applyPullVisual(pullRef.current);
+          rafRef.current = null;
+        });
+      }
+    },
+    [disabled, refreshing, applyPullVisual]
+  );
 
   const handleTouchEnd = useCallback(async () => {
     if (!pulling.current || disabled) return;
     pulling.current = false;
 
+    const pull = pullRef.current;
+
     if (pull >= THRESHOLD && !refreshing) {
       setRefreshing(true);
+      applyPullVisual(52, true);
       hapticLight();
       try {
         await onRefresh?.();
       } finally {
         setRefreshing(false);
-        setPull(0);
+        pullRef.current = 0;
+        applyPullVisual(0, true);
       }
     } else {
-      setPull(0);
+      pullRef.current = 0;
+      applyPullVisual(0, true);
     }
-  }, [pull, refreshing, disabled, onRefresh]);
+  }, [refreshing, disabled, onRefresh, applyPullVisual]);
 
   return (
     <div
@@ -65,20 +95,19 @@ export default function PullToRefresh({ onRefresh, children, className, disabled
       onTouchEnd={handleTouchEnd}
     >
       <div
+        ref={indicatorRef}
         className="sticky top-0 z-20 flex items-end justify-center pointer-events-none overflow-hidden"
-        style={{ height: offset, marginBottom: offset > 0 ? -offset : 0, transition: refreshing ? "height 0.2s ease" : undefined }}
+        style={{ height: 0, marginBottom: 0 }}
       >
-        <div className={cn("pb-2 flex items-center justify-center", (pull > 0 || refreshing) && "opacity-100")}>
+        <div className="pb-2 flex items-center justify-center">
           <Loader2
-            className={cn(
-              "w-5 h-5 text-brand-violet",
-              (refreshing || pull >= THRESHOLD) && "animate-spin"
-            )}
-            style={{ opacity: Math.min(1, pull / THRESHOLD) }}
+            data-pull-icon
+            className={cn("w-5 h-5 text-brand-violet", refreshing && "animate-spin")}
+            style={{ opacity: 0 }}
           />
         </div>
       </div>
-      <div style={{ transform: offset ? `translateY(0)` : undefined }}>{children}</div>
+      {children}
     </div>
   );
 }

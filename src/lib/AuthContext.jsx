@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { api } from "@/api/apiClient";
+import { mergeGuestShortlistIntoUser } from "@/lib/shortlist";
 
 const AuthContext = createContext(null);
 
@@ -15,6 +16,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const current = await api.auth.me();
       setUser(current);
+      if (current?.id) mergeGuestShortlistIntoUser(current.id);
     } catch {
       setUser(null);
     } finally {

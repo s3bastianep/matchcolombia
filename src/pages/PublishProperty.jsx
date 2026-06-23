@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import {
   Upload, X, Home, ArrowRight, ArrowLeft, Bed, Bath, Car,
-  Building2, DollarSign, Camera, Sparkles, Check,
+  Building2, DollarSign, Camera, Sparkles, Check, Video,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
@@ -19,6 +19,7 @@ import { BEDROOM_OPTIONS, BATHROOM_OPTIONS, PARKING_OPTIONS, ESTRATO_OPTIONS } f
 import { getCurrentUserId } from "@/lib/authUser";
 import { MobileFormProgress } from "@/components/layout/mobileAppUtils";
 import { pushAdminNotification } from "@/lib/adminNotifications";
+import { normalizeVideoInput } from "@/lib/propertyVideo";
 
 const STEPS = [
   { id: "basic", label: "Básico", icon: Home },
@@ -88,7 +89,7 @@ export default function PublishProperty() {
     locality: "", address: "",
     bedrooms: "", bathrooms: "", area_sqm: "", floor: "",
     parking: false, parking_spots: 0, furnished: "sin_amoblar", pets_allowed: false,
-    amenities: [], images: [], available_from: "",
+    amenities: [], images: [], video_url: "", available_from: "",
     monthly_rent: "", deposit: "", admin_fee: "",
     min_contract_months: "", estrato: "",
     contact_name: searchParams.get("name") || user?.name || "",
@@ -131,6 +132,8 @@ export default function PublishProperty() {
       if (cleaned.estrato === "" || cleaned.estrato == null) delete cleaned.estrato;
       else if (!isNaN(cleaned.estrato)) cleaned.estrato = Number(cleaned.estrato);
       cleaned.parking = (cleaned.parking_spots || 0) > 0;
+      cleaned.videos = normalizeVideoInput(cleaned.video_url);
+      delete cleaned.video_url;
 
       const userId = getCurrentUserId();
       if (userId) {
@@ -439,7 +442,7 @@ export default function PublishProperty() {
             )}
 
             {step === 3 && (
-              <SectionCard title="Fotos y datos del propietario" subtitle="Sube fotos y déjanos tus datos. Nosotros gestionamos todo con los interesados.">
+              <SectionCard title="Fotos, video y datos del propietario" subtitle="Sube fotos, agrega un video y déjanos tus datos. Nosotros gestionamos todo con los interesados.">
                 <div className="space-y-6">
                   <div className="rounded-2xl border border-brand-violet/20 bg-brand-violet/5 p-5">
                     <p className="font-extrabold text-sm mb-3">¿Cómo funciona con {BRAND.name}?</p>
@@ -480,6 +483,24 @@ export default function PublishProperty() {
                       </label>
                     </div>
                   </div>
+
+                  <div>
+                    <FieldLabel>Video del inmueble (opcional)</FieldLabel>
+                    <div className="relative">
+                      <Video className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                      <Input
+                        type="url"
+                        placeholder="Enlace de YouTube, Vimeo o video MP4"
+                        value={form.video_url}
+                        onChange={(e) => update("video_url", e.target.value)}
+                        className="h-12 rounded-xl pl-11"
+                      />
+                    </div>
+                    <p className="text-[11px] text-muted-foreground mt-1.5 leading-relaxed">
+                      Un recorrido en video ayuda a que más personas se interesen. Puedes subirlo a YouTube y pegar el enlace aquí.
+                    </p>
+                  </div>
+
                   <div>
                     <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">
                       Tus datos (solo para nuestro equipo)

@@ -1,19 +1,46 @@
 import React from "react";
-import { ShieldCheck, Check } from "lucide-react";
+import { ShieldCheck, Check, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
+import { isPropertyVerified } from "@/lib/propertyTrust";
 
 /**
  * Badge exclusivo mint/turquesa — solo para confianza / verificado.
- * No reutilizar este color para otros estados o decoración.
  */
-export default function VerifiedBadge({ score, className, size = "sm", showTooltip = true }) {
+export default function VerifiedBadge({
+  property,
+  verified,
+  score,
+  className,
+  size = "sm",
+  showTooltip = true,
+  matchOnly = false,
+}) {
+  const isVerified = verified ?? (property != null ? isPropertyVerified(property) : true);
+
+  if (matchOnly || (score != null && score > 0 && !isVerified)) {
+    return (
+      <span
+        className={cn(
+          "inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-black/55 backdrop-blur-sm text-[10px] font-bold text-white",
+          className
+        )}
+      >
+        <Sparkles className="w-3 h-3" />
+        {score}% encaje
+      </span>
+    );
+  }
+
+  if (!isVerified) return null;
+
   const useShield = size === "card" || size === "md";
   const Icon = useShield ? ShieldCheck : Check;
 
   return (
     <span
       title={showTooltip ? `Propietario verificado por ${BRAND.name}. Inmueble revisado por nuestro equipo` : undefined}
+      aria-label="Inmueble verificado"
       className={cn(
         "badge-verified",
         size === "xs" && "text-[9px] px-2 py-0.5 gap-0.5",

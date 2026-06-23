@@ -11,14 +11,14 @@ import {
   LayoutDashboard,
   Heart,
   Building2,
-  TrendingUp,
   LogIn,
   UserPlus,
   LogOut,
   Sparkles,
-  Search,
+  KeyRound,
   Home,
   MessageCircle,
+  Signpost,
 } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
 import { getUserRole, PANEL_HOME, ROLE_LABELS } from "@/lib/roles";
@@ -26,10 +26,10 @@ import { BRAND } from "@/lib/brand";
 
 const quickLinks = [
   { to: "/", label: "Inicio", icon: Home },
-  { to: "/explorar", label: "Buscar arriendos", icon: Search },
-  { to: "/explorar?intent=compra", label: "Buscar compra", icon: Search },
+  { to: "/explorar", label: "Buscar arriendos", icon: KeyRound },
+  { to: "/explorar?intent=compra", label: "Buscar compra", icon: Home },
   { to: "/anunciar", label: "Anunciar inmueble", icon: Building2 },
-  { to: "/publicar", label: "Vender inmueble", icon: TrendingUp },
+  { to: "/publicar", label: "Vender inmueble", icon: Signpost },
 ];
 
 export default function MobileAccountSheet({ open, onOpenChange, onMatchClick }) {

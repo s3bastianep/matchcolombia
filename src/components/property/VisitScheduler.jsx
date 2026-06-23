@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Gift, MapPin, Video } from "lucide-react";
+import { ChevronLeft, ChevronRight, CalendarCheck, MapPin, Video } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   getAvailableSlotsForDate,
@@ -198,7 +198,7 @@ export default function VisitScheduler({
             <p className="text-[11px] text-muted-foreground mt-1.5">{VISIT_RULES_HINT}</p>
           </div>
           <span className="inline-flex items-center gap-1.5 shrink-0 px-3 py-1.5 rounded-full bg-[hsl(var(--brand-magenta)/0.1)] border border-[hsl(var(--brand-magenta)/0.22)] text-xs font-bold text-[hsl(var(--brand-magenta))]">
-            <Gift className="w-3.5 h-3.5" strokeWidth={2.5} />
+            <CalendarCheck className="w-3.5 h-3.5" strokeWidth={2.5} />
             Gratis
           </span>
         </div>

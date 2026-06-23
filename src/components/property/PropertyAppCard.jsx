@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { Heart, Bed, Bath, Maximize, MapPin, Sparkles } from "lucide-react";
+import React, { useState, useEffect, memo } from "react";
+import { Heart, Bed, Bath, Maximize, Sparkles, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/lib/AuthContext";
-import { usePropertyPanel } from "@/lib/PropertyPanelContext";
+import { usePropertyPanelActions } from "@/lib/PropertyPanelContext";
 import SmartImage from "@/components/ui/SmartImage";
 import { INTERIORS, FALLBACK_IMAGE } from "@/lib/colombiaImages";
 import { isInShortlist, toggleShortlist } from "@/lib/shortlist";
 import { toast } from "sonner";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
+import { isPropertyVerified } from "@/lib/propertyTrust";
+import { getPropertyPricing } from "@/lib/propertyPricing";
 import { hapticLight } from "@/lib/haptics";
+import PropertyLocationBadge from "@/components/property/PropertyLocationBadge";
+import { hasPropertyVideo } from "@/lib/propertyVideo";
 
 const formatCOP = (value) =>
   new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(value || 0);
@@ -24,15 +25,18 @@ function SpecItem({ icon: Icon, children }) {
   );
 }
 
-export default function PropertyAppCard({ property, matchScore, showMatch, layout = "vertical", index = 0 }) {
-  const navigate = useNavigate();
-  const { openProperty } = usePropertyPanel();
-  const { isAuthenticated } = useAuth();
-  const [liked, setLiked] = useState(isInShortlist(property.id));
+function PropertyAppCard({ property, matchScore, showMatch, layout = "vertical" }) {
+  const { openProperty } = usePropertyPanelActions();
+  const [liked, setLiked] = useState(() => isInShortlist(property.id));
   const image = property.images?.[0] || INTERIORS.sala;
+  const showVideo = hasPropertyVideo(property);
 
   useEffect(() => {
-    const handler = () => setLiked(isInShortlist(property.id));
+    const handler = (e) => {
+      const changedId = e.detail?.propertyId;
+      if (changedId && changedId !== property.id) return;
+      setLiked(isInShortlist(property.id));
+    };
     window.addEventListener("shortlist-updated", handler);
     return () => window.removeEventListener("shortlist-updated", handler);
   }, [property.id]);
@@ -40,10 +44,6 @@ export default function PropertyAppCard({ property, matchScore, showMatch, layou
   const toggleLike = (e) => {
     e.stopPropagation();
     hapticLight();
-    if (!isAuthenticated) {
-      navigate("/login", { state: { from: window.location.pathname } });
-      return;
-    }
     const nowLiked = toggleShortlist(property.id);
     setLiked(nowLiked);
     toast.success(nowLiked ? "Guardado en tus favoritos" : "Eliminado de favoritos", {
@@ -56,81 +56,101 @@ export default function PropertyAppCard({ property, matchScore, showMatch, layou
     openProperty(property);
   };
 
-  const enterTransition = {
-    duration: 0.28,
-    delay: Math.min(index * 0.05, 0.25),
-    ease: [0.22, 1, 0.36, 1],
-  };
-
   if (layout === "horizontal") {
     return (
-      <motion.button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={open}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={enterTransition}
-        className="native-card w-full flex gap-3 p-3 text-left"
+        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && open()}
+        className="native-card native-card-perf w-full flex gap-3 p-3 text-left cursor-pointer"
       >
         <div className="relative w-[88px] h-[88px] shrink-0 rounded-2xl overflow-hidden bg-muted">
-          <SmartImage src={image} alt={property.title} fallback={FALLBACK_IMAGE} className="absolute inset-0" imgClassName="object-cover" />
-          <div className="absolute top-1 left-1"><VerifiedBadge size="xs" /></div>
+          <SmartImage
+            src={image}
+            alt={property.title}
+            fallback={FALLBACK_IMAGE}
+            variant="card"
+            className="absolute inset-0"
+            imgClassName="object-cover"
+          />
+          {isPropertyVerified(property) && (
+            <div className="absolute top-1 left-1">
+              <VerifiedBadge property={property} size="xs" />
+            </div>
+          )}
         </div>
         <CardBody property={property} liked={liked} toggleLike={toggleLike} showMatch={showMatch} matchScore={matchScore} compact />
-      </motion.button>
+      </div>
     );
   }
 
   return (
-    <motion.button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       onClick={open}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={enterTransition}
-      className="native-card w-full overflow-hidden text-left"
+      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && open()}
+      className="native-card native-card-perf w-full overflow-hidden text-left cursor-pointer"
     >
       <div className="relative aspect-[4/3] w-full bg-muted">
-        <SmartImage src={image} alt={property.title} fallback={FALLBACK_IMAGE} className="absolute inset-0" imgClassName="object-cover" />
+        <SmartImage
+          src={image}
+          alt={property.title}
+          fallback={FALLBACK_IMAGE}
+          variant="card"
+          className="absolute inset-0"
+          imgClassName="object-cover"
+        />
         <div className="absolute top-2.5 left-2.5">
-          <VerifiedBadge size="xs" />
+          <VerifiedBadge property={property} size="xs" />
         </div>
         <button
           type="button"
           onClick={toggleLike}
           className={cn(
             "absolute top-2.5 right-2.5 w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-transform active:scale-90",
-            liked ? "bg-white text-brand-magenta" : "bg-white/95 text-foreground/55"
+            liked ? "bg-white text-brand-magenta" : "bg-white text-foreground/55"
           )}
           aria-label="Guardar"
         >
           <Heart className={cn("w-4 h-4", liked && "fill-current")} strokeWidth={2} />
         </button>
+        {showVideo && (
+          <span className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-black/65 text-[10px] font-bold text-white">
+            <Play className="w-3 h-3 fill-current" strokeWidth={0} />
+            Video
+          </span>
+        )}
         {showMatch && matchScore > 0 && (
-          <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-black/55 backdrop-blur-sm text-[10px] font-bold text-white">
+          <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-black/65 text-[10px] font-bold text-white">
             <Sparkles className="w-3 h-3" />
             {matchScore}% encaje
           </span>
         )}
       </div>
       <CardBody property={property} liked={liked} toggleLike={toggleLike} showMatch={showMatch} matchScore={matchScore} />
-    </motion.button>
+    </div>
   );
 }
 
 function CardBody({ property, liked, toggleLike, showMatch, matchScore, compact }) {
+  const { rent, admin, totalMonthly, isSale, salePrice } = getPropertyPricing(property);
+
   return (
     <div className={cn("flex flex-col", compact ? "flex-1 min-w-0 py-0.5" : "p-3.5 pt-3")}>
       <div className={cn("flex items-start justify-between gap-2", compact && "relative")}>
         <div className="min-w-0 flex-1">
           <p className="price-trust text-[15px] leading-none">
-            {formatCOP(property.monthly_rent)}
-            {!compact && <span className="text-[11px] font-medium text-muted-foreground ml-0.5">/mes</span>}
+            {formatCOP(isSale ? salePrice : totalMonthly || rent)}
+            {!isSale && <span className="text-[11px] font-medium text-muted-foreground ml-0.5">/mes</span>}
           </p>
-          <p className="text-xs font-semibold text-foreground/75 mt-1.5 flex items-center gap-1 truncate">
-            <MapPin className="w-3.5 h-3.5 shrink-0 text-foreground/45" strokeWidth={2} />
-            {property.neighborhood || property.city}
-          </p>
+          {!isSale && admin > 0 && (
+            <p className="text-[10px] text-muted-foreground mt-1">
+              Arriendo {formatCOP(rent)} + admin {formatCOP(admin)}
+            </p>
+          )}
+          <PropertyLocationBadge property={property} className="mt-2" compact={compact} />
         </div>
         {compact && (
           <button
@@ -167,3 +187,5 @@ function CardBody({ property, liked, toggleLike, showMatch, matchScore, compact 
     </div>
   );
 }
+
+export default memo(PropertyAppCard);

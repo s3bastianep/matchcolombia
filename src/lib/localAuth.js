@@ -218,3 +218,51 @@ export async function resendOtp() {
 export function loginWithProvider() {
   throw new Error("Inicio con Google no disponible en modo demo");
 }
+
+/** Cuenta rápida al agendar visita (WhatsApp como identificador). */
+export async function registerFromBooking({ name, phone }) {
+  await delay(350);
+  await seedDemoUsers();
+
+  if (!name?.trim()) throw new Error("Ingresa tu nombre");
+  if (!phone?.trim()) throw new Error("Ingresa tu WhatsApp o celular");
+
+  const normalizedPhone = phone.replace(/\D/g, "");
+  const users = loadUsers();
+  const existing = users.find((u) => u.phone && u.phone.replace(/\D/g, "") === normalizedPhone);
+
+  if (existing) {
+    const session = {
+      token: generateToken(),
+      userId: existing.id,
+      user: sanitizeUser(existing),
+      expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
+    };
+    saveSession(session);
+    return { user: session.user, access_token: session.token, isNew: false };
+  }
+
+  const user = {
+    id: `user-${Date.now()}`,
+    name: name.trim(),
+    username: `wa_${normalizedPhone.slice(-10) || Date.now()}`,
+    email: "",
+    phone: phone.trim(),
+    role: ROLES.SEEKER,
+    passwordHash: await hashPassword(`habibar_${normalizedPhone}_${Date.now()}`),
+    created_at: new Date().toISOString(),
+  };
+
+  users.push(user);
+  saveUsers(users);
+
+  const session = {
+    token: generateToken(),
+    userId: user.id,
+    user: sanitizeUser(user),
+    expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
+  };
+  saveSession(session);
+
+  return { user: session.user, access_token: session.token, isNew: true };
+}

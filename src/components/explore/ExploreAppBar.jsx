@@ -1,14 +1,18 @@
 import React from "react";
 import { Search, SlidersHorizontal, Map, LayoutList } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { CITIES } from "@/lib/colombia";
+import { CITIES, getZonesForCity } from "@/lib/colombia";
+import { EXPLORE_DEFAULT_CITY, listingsCountLabel } from "@/lib/siteCopy";
 
 const QUICK_TYPES = [
   { key: "apartamento", label: "Apartamento" },
   { key: "casa", label: "Casa" },
+  { key: "estudio", label: "Estudio" },
   { key: "pets", label: "Mascotas" },
   { key: "parking", label: "Parqueadero" },
 ];
+
+const POPULAR_ZONES = getZonesForCity(EXPLORE_DEFAULT_CITY).slice(0, 4);
 
 export default function ExploreAppBar({
   locality,
@@ -22,11 +26,21 @@ export default function ExploreAppBar({
   onToggleView,
   activeQuick = [],
   onToggleQuick,
+  resultsCount,
+  onZoneSelect,
 }) {
   return (
     <header className="lg:hidden shrink-0 native-header px-4 pt-safe pb-3 space-y-3">
       <div className="flex items-center justify-between gap-3 pt-1">
-        <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Explorar</h1>
+        <div className="min-w-0">
+          <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Explorar</h1>
+          {typeof resultsCount === "number" && (
+            <p className="text-xs text-muted-foreground mt-0.5">
+              <span className="font-bold text-foreground tabular-nums">{resultsCount}</span>{" "}
+              {listingsCountLabel(resultsCount)}
+            </p>
+          )}
+        </div>
         <button
           type="button"
           onClick={onToggleView}
@@ -44,13 +58,22 @@ export default function ExploreAppBar({
           value={locality}
           onChange={(e) => onLocalityChange(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && onSearch()}
-          onBlur={onSearch}
           placeholder="Barrio, localidad o ciudad"
           className="native-search-input w-full h-12 pl-11 pr-4"
         />
       </div>
 
       <div className="flex items-center gap-2 overflow-x-auto native-scroll-x pb-0.5">
+        {POPULAR_ZONES.map((zone) => (
+          <button
+            key={zone}
+            type="button"
+            onClick={() => onZoneSelect?.(zone)}
+            className={cn("native-chip shrink-0", locality === zone && "native-chip-active")}
+          >
+            {zone}
+          </button>
+        ))}
         {CITIES.map((c) => (
           <button
             key={c.id}

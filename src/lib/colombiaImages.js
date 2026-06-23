@@ -153,6 +153,9 @@ export function getGalleryForProperty(propertyId, propertyType) {
 
 export function getPropertyImages(property) {
   if (!property) return GALLERY_SETS.default;
+  if (Array.isArray(property.images) && property.images.length > 0) {
+    return property.images;
+  }
   return getGalleryForProperty(property.id, property.property_type);
 }
 

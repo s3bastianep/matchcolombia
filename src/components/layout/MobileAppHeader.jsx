@@ -23,8 +23,8 @@ export default function MobileAppHeader() {
   if (isHome) {
     return (
       <header className="lg:hidden sticky top-0 z-40 native-header">
-        <div className="flex items-center justify-center h-12 px-5 pt-safe">
-          <BrandLogo size="sm" layout="lockup" />
+        <div className="flex items-center justify-center h-14 px-4 pt-safe">
+          <BrandLogo size="nav" layout="lockup" />
         </div>
       </header>
     );

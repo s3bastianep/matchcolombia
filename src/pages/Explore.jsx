@@ -8,7 +8,7 @@ import ExploreOwnerPromoCard from "../components/explore/ExploreOwnerPromoCard";
 import AdvancedFilters from "../components/explore/AdvancedFilters";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
-import { SlidersHorizontal, X, Sparkles, Search, Map, Check, ArrowUpDown, MousePointer2, ShieldCheck, LayoutGrid, Columns2, Home } from "lucide-react";
+import { SlidersHorizontal, X, Sparkles, Search, Map, Check, ArrowUpDown, MousePointer2, ShieldCheck, LayoutGrid, Columns2, Home, LayoutList, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import VerifiedBadge from "../components/brand/VerifiedBadge";
 import { loadPreferences, scoreProperty } from "@/lib/matchPreferences";
@@ -135,17 +135,30 @@ export default function Explore() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialQ = searchParams.get("q") || "";
   const initialCity = searchParams.get("city") || "";
-  const initialType = searchParams.get("type") || "";
+  const initialTypeRaw = searchParams.get("type") || "";
+  const initialTypes = useMemo(
+    () => (initialTypeRaw ? initialTypeRaw.split(",").map((s) => s.trim()).filter(Boolean) : []),
+    [initialTypeRaw]
+  );
+  const initialZones = useMemo(() => {
+    const zonesParam = searchParams.get("zones");
+    if (zonesParam) return zonesParam.split(",").map((s) => s.trim()).filter(Boolean);
+    return initialQ ? [initialQ] : [];
+  }, [searchParams, initialQ]);
   const isMatched = searchParams.get("matched") === "1";
   const intent = searchParams.get("intent");
-  const prefs = loadPreferences();
+  const prefs = useMemo(() => loadPreferences(), []);
 
   const [sortBy, setSortBy] = useState(isMatched ? "match" : "newest");
-  const [activeQuick, setActiveQuick] = useState([]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [viewMode, setViewMode] = useState("split");
   const [highlightedId, setHighlightedId] = useState(null);
   const [locality, setLocality] = useState(initialQ);
+
+  const activeQuick = useMemo(() => {
+    const raw = searchParams.get("quick");
+    return raw ? raw.split(",").filter(Boolean) : [];
+  }, [searchParams]);
   const { openProperty, property: openPanelProperty } = usePropertyPanel();
   const inmuebleId = searchParams.get("inmueble");
   const visitaFromUrl = searchParams.get("visita") === "1";
@@ -158,6 +171,14 @@ export default function Explore() {
     void import("../components/property/PropertyDetailView");
   }, []);
 
+  const applyZoneSearch = useCallback((zone) => {
+    setLocality(zone);
+    const next = new URLSearchParams(searchParams);
+    next.set("q", zone);
+    if (!next.get("city")) next.set("city", EXPLORE_DEFAULT_CITY);
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
+
   const applyLocalitySearch = useCallback(() => {
     const next = new URLSearchParams(searchParams);
     if (locality.trim()) next.set("q", locality.trim());
@@ -168,6 +189,18 @@ export default function Explore() {
   useEffect(() => {
     setLocality(initialQ);
   }, [initialQ]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const trimmed = locality.trim();
+      if (trimmed === (initialQ || "")) return;
+      const next = new URLSearchParams(searchParams);
+      if (trimmed) next.set("q", trimmed);
+      else next.delete("q");
+      setSearchParams(next, { replace: true });
+    }, 450);
+    return () => clearTimeout(timer);
+  }, [locality, initialQ, searchParams, setSearchParams]);
 
   const advancedFilters = useMemo(
     () => parseAdvancedFiltersFromUrl(searchParams),
@@ -196,9 +229,10 @@ export default function Explore() {
   }, [searchParams, setSearchParams]);
 
   const clearAllFilters = useCallback(() => {
-    setActiveQuick([]);
-    clearAdvancedFilters();
-  }, [clearAdvancedFilters]);
+    const next = syncFiltersToUrl(searchParams, DEFAULT_ADVANCED_FILTERS);
+    next.delete("quick");
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   const filtered = useMemo(() => {
     let result = properties.map((p) => ({
@@ -211,17 +245,30 @@ export default function Explore() {
       result = result.filter((p) => p.city?.toLowerCase() === c);
     }
 
-    if (initialQ) {
-      const q = initialQ.toLowerCase();
+    if (initialZones.length === 1) {
+      const q = initialZones[0].toLowerCase();
       result = result.filter(
         (p) =>
           p.title?.toLowerCase().includes(q) ||
           p.neighborhood?.toLowerCase().includes(q) ||
           p.locality?.toLowerCase().includes(q)
       );
+    } else if (initialZones.length > 1) {
+      result = result.filter((p) =>
+        initialZones.some((zone) => {
+          const q = zone.toLowerCase();
+          return (
+            p.title?.toLowerCase().includes(q) ||
+            p.neighborhood?.toLowerCase().includes(q) ||
+            p.locality?.toLowerCase().includes(q)
+          );
+        })
+      );
     }
 
-    if (initialType) result = result.filter((p) => p.property_type === initialType);
+    if (initialTypes.length) {
+      result = result.filter((p) => initialTypes.includes(p.property_type));
+    }
 
     result = applyAdvancedFilters(result, advancedFilters);
 
@@ -241,7 +288,7 @@ export default function Explore() {
     else if (sortBy === "area") result.sort((a, b) => (b.area_sqm || 0) - (a.area_sqm || 0));
 
     return result;
-  }, [properties, initialQ, initialCity, initialType, advancedFilters, activeQuick, sortBy, isMatched, prefs]);
+  }, [properties, initialZones, initialCity, initialTypes, advancedFilters, activeQuick, sortBy, isMatched, prefs]);
 
   const cityLabel = initialCity || prefs?.city || EXPLORE_DEFAULT_CITY;
   const advancedCount = countAdvancedFilters(advancedFilters);
@@ -251,11 +298,22 @@ export default function Explore() {
       ? `Inmuebles en venta en ${cityLabel}`
       : `Apartamentos en arriendo en ${cityLabel}`;
 
-  const removeQuickFilter = (key) => setActiveQuick((prev) => prev.filter((k) => k !== key));
+  const removeQuickFilter = useCallback((key) => {
+    const current = activeQuick.filter((k) => k !== key);
+    const next = new URLSearchParams(searchParams);
+    if (current.length) next.set("quick", current.join(","));
+    else next.delete("quick");
+    setSearchParams(next, { replace: true });
+  }, [activeQuick, searchParams, setSearchParams]);
 
   const toggleQuickFilter = useCallback((key) => {
-    setActiveQuick((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
-  }, []);
+    const current = activeQuick;
+    const updated = current.includes(key) ? current.filter((k) => k !== key) : [...current, key];
+    const next = new URLSearchParams(searchParams);
+    if (updated.length) next.set("quick", updated.join(","));
+    else next.delete("quick");
+    setSearchParams(next, { replace: true });
+  }, [activeQuick, searchParams, setSearchParams]);
 
   const setCityFilter = useCallback((city) => {
     const next = new URLSearchParams(searchParams);
@@ -294,6 +352,8 @@ export default function Explore() {
         onToggleView={() => setViewMode((m) => (m === "map" ? "list" : "map"))}
         activeQuick={activeQuick}
         onToggleQuick={toggleQuickFilter}
+        onZoneSelect={applyZoneSearch}
+        resultsCount={isLoading ? null : filtered.length}
       />
 
       <div className={cn("hidden lg:block bg-white border-b border-[hsl(0,0%,90%)] sticky top-[58px] z-30 shrink-0", EXPLORE_GUTTER)}>
@@ -385,9 +445,9 @@ export default function Explore() {
             </button>
           </div>
 
-          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[hsl(var(--brand-verified-bg))] border border-[hsl(var(--brand-verified-border))] shrink-0 ml-auto max-w-[240px]">
-            <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-[hsl(var(--brand-verified))]" strokeWidth={2.25} />
-            <p className="text-[10px] font-semibold text-[hsl(var(--brand-verified-fg))] truncate">
+          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[hsl(var(--brand-violet)/0.08)] border border-brand-violet/15 shrink-0 ml-auto max-w-[280px]">
+            <UserRound className="w-3.5 h-3.5 shrink-0 text-brand-violet" strokeWidth={2.25} />
+            <p className="text-[10px] font-semibold text-foreground/80 truncate">
               {EXPLORE_TRUST_BANNER}
             </p>
           </div>
@@ -417,11 +477,7 @@ export default function Explore() {
             return (
               <button
                 key={f.key}
-                onClick={() =>
-                  setActiveQuick((prev) =>
-                    prev.includes(f.key) ? prev.filter((k) => k !== f.key) : [...prev, f.key]
-                  )
-                }
+                onClick={() => toggleQuickFilter(f.key)}
                 className={cn(
                   "shrink-0 h-7 px-3 rounded-full text-[11px] font-semibold border transition-all inline-flex items-center gap-1 shadow-sm",
                   active
@@ -446,9 +502,9 @@ export default function Explore() {
         </div>
 
         <div className="pb-1.5 lg:hidden">
-          <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[hsl(var(--brand-verified-bg))] border border-[hsl(var(--brand-verified-border))]">
-            <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-[hsl(var(--brand-verified))]" strokeWidth={2.25} />
-            <p className="text-[10px] font-semibold text-[hsl(var(--brand-verified-fg))] leading-snug">
+          <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[hsl(var(--brand-violet)/0.08)] border border-brand-violet/15">
+            <UserRound className="w-3.5 h-3.5 shrink-0 text-brand-violet" strokeWidth={2.25} />
+            <p className="text-[10px] font-semibold text-foreground/80 leading-snug">
               {EXPLORE_TRUST_BANNER}
             </p>
           </div>
@@ -476,6 +532,21 @@ export default function Explore() {
           <Suspense fallback={<MapPaneFallback className="h-full" />}>
             <ExploreMap properties={filtered} activeCity={initialCity || undefined} pane className="h-full border-0" />
           </Suspense>
+          <div className="absolute bottom-[4.5rem] left-0 right-0 z-[4] px-3 pointer-events-none">
+            <div className="flex gap-3 overflow-x-auto native-scroll-x snap-x snap-mandatory pb-1 pointer-events-auto">
+              {filtered.slice(0, 10).map((p, i) => (
+                <div key={p.id} className="snap-start shrink-0 w-[min(88vw,300px)]">
+                  <PropertyAppCard
+                    property={p}
+                    layout="horizontal"
+                    index={i}
+                    showMatch={isMatched}
+                    matchScore={p.matchScore}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
           <button
             type="button"
             onClick={() => setViewMode("list")}
@@ -529,9 +600,13 @@ export default function Explore() {
                 {totalFilterCount > 0 && (
                   <div className="mt-3 flex flex-wrap items-center gap-2">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Activos</span>
-                  {initialType && (
+                  {initialTypes.length > 0 && (
                     <ActiveFilterChip
-                      label={TYPES_LABEL[initialType] || initialType}
+                      label={
+                        initialTypes.length === 1
+                          ? TYPES_LABEL[initialTypes[0]] || initialTypes[0]
+                          : initialTypes.map((t) => TYPES_LABEL[t] || t).join(" · ")
+                      }
                       onRemove={() => {
                         const next = new URLSearchParams(searchParams);
                         next.delete("type");
@@ -547,7 +622,13 @@ export default function Explore() {
                   })}
                   {advancedFilters.bedrooms && (
                     <ActiveFilterChip
-                      label={advancedFilters.bedrooms === "5" ? "5+ hab." : `${advancedFilters.bedrooms} hab.`}
+                      label={
+                        advancedFilters.bedrooms.includes(",")
+                          ? `${advancedFilters.bedrooms.split(",").join(" y ")} hab.`
+                          : advancedFilters.bedrooms === "5"
+                            ? "5+ hab."
+                            : `${advancedFilters.bedrooms} hab.`
+                      }
                       onRemove={() => updateAdvancedFilters({ ...advancedFilters, bedrooms: "" })}
                     />
                   )}

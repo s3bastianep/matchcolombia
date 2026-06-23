@@ -167,6 +167,25 @@ export function loginWithProvider() {
   throw new Error("Inicio con Google estará disponible pronto");
 }
 
+export async function registerFromBooking({ name, phone }) {
+  if (!supabase) throw new Error("Servicio no disponible");
+  const normalizedPhone = phone?.replace(/\D/g, "") || "";
+  const email = `visit_${normalizedPhone || Date.now()}@guest.habibar.local`;
+  const password = `Hb_${normalizedPhone}_${Math.random().toString(36).slice(2, 10)}`;
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { name: name?.trim(), phone: phone?.trim(), role: ROLES.SEEKER },
+    },
+  });
+
+  if (error) throw error;
+  cachedUserId = data.user?.id || null;
+  return { user: data.user, isNew: true };
+}
+
 export function initSupabaseAuth() {
   if (!supabase) return;
   supabase.auth.getSession().then(({ data: { session } }) => {

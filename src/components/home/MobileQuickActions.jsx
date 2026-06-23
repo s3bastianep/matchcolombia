@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { KeyRound, ShoppingBag, Building2, Sparkles } from "lucide-react";
+import { KeyRound, Home, Building2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const actions = [
@@ -15,7 +15,7 @@ const actions = [
     to: "/explorar?intent=compra",
     label: "Comprar",
     desc: "Inmuebles en venta",
-    icon: ShoppingBag,
+    icon: Home,
     theme: "from-brand-violet/15 to-brand-violet/5 border-brand-violet/20 text-brand-violet",
   },
   {

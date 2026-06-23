@@ -159,10 +159,10 @@ export default function Navbar({ onAccountClick = () => {} }) {
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border/50">
       <div className="color-bar w-full h-[2px]" />
       <div className="site-container">
-        <div className="flex items-center h-16">
+        <div className="flex items-center h-14">
           <BrandLogo size="nav" layout="lockup" className="flex items-center shrink-0" />
 
-          <div className="flex items-center gap-4 sm:gap-5 ml-auto translate-y-1">
+          <div className="flex items-center gap-4 sm:gap-5 ml-auto">
             <div className="hidden lg:flex items-center gap-4 sm:gap-5">
               {navLinks.map((item) => {
                 const active = isNavLinkActive(item, location.pathname, location.search);

@@ -29,9 +29,9 @@ import {
 } from "lucide-react";
 import ElevatorIcon from "@/components/icons/ElevatorIcon";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { savePreferences, buildExploreUrl } from "@/lib/matchPreferences";
+import { savePreferences, buildExploreUrl, asSelectionList } from "@/lib/matchPreferences";
 import { CITIES, getZonesForCity } from "@/lib/colombia";
-import { QUIZ_FINISH_CTA, QUIZ_STEPS } from "@/lib/siteCopy";
+import { QUIZ_FINISH_CTA, QUIZ_STEPS, EXPLORE_DEFAULT_CITY } from "@/lib/siteCopy";
 import { cn } from "@/lib/utils";
 
 const STEP_ICONS = {
@@ -152,11 +152,27 @@ function StepQuestionIcon({ icon: Icon }) {
   );
 }
 
-function NumberSelectGrid({ values, selected, onSelect, unit, icon: Icon }) {
+function toggleSelection(list, value) {
+  const current = asSelectionList(list);
+  if (current.includes(value)) return current.filter((v) => v !== value);
+  return [...current, value].sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+}
+
+function formatCountSelection(list, { singular, plural, plusLabel = "5 o más" }) {
+  const selected = asSelectionList(list);
+  if (!selected.length) return "Cualquier cantidad";
+  const parts = selected.map((v) => (v === "5" ? plusLabel : v));
+  const label = parts.length === 1 ? parts[0] : parts.join(" y ");
+  const unit = selected.length === 1 && selected[0] === "1" ? singular : plural;
+  return `${label} ${unit}`;
+}
+
+function MultiNumberSelectGrid({ values, selectedList, onToggle, unit, icon: Icon }) {
+  const selected = asSelectionList(selectedList);
   return (
     <div className="grid grid-cols-5 gap-2 sm:gap-2.5">
       {values.map((v) => {
-        const isSelected = selected === v;
+        const isSelected = selected.includes(v);
         const display = v === "5" ? "5+" : v;
         const unitLabel = v === "1" ? unit.singular : unit.plural;
 
@@ -164,7 +180,7 @@ function NumberSelectGrid({ values, selected, onSelect, unit, icon: Icon }) {
           <button
             key={v}
             type="button"
-            onClick={() => onSelect(v)}
+            onClick={() => onToggle(v)}
             className={cn(
               "relative flex flex-col items-center justify-center gap-1 py-4 px-1.5 rounded-2xl border-2 transition-all min-h-[96px]",
               isSelected
@@ -277,15 +293,19 @@ function IconBubble({ icon: Icon, selected }) {
   );
 }
 
+const OPTIONAL_QUIZ_STEPS = new Set(["zone", "kitchen", "shower", "flooring", "balcony", "elevator"]);
+
 export default function MatchQuiz({ open, onOpenChange }) {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [prefs, setPrefs] = useState({
     city: "",
     zone: "",
+    zones: [],
+    types: ["apartamento"],
     type: "apartamento",
-    beds: "2",
-    bathrooms: "all",
+    beds: ["2"],
+    bathrooms: [],
     maxPrice: 3000000,
     elevator: "",
     pets: "",
@@ -300,15 +320,26 @@ export default function MatchQuiz({ open, onOpenChange }) {
   });
 
   const current = QUIZ_STEPS[step];
+  const canSkip = OPTIONAL_QUIZ_STEPS.has(current.id);
   const StepIcon = STEP_ICONS[current.id] || Sparkles;
   const progress = ((step + 1) / QUIZ_STEPS.length) * 100;
-  const zones = prefs.city ? getZonesForCity(prefs.city) : [];
+  const activeCity = prefs.city || CITIES[0]?.name || EXPLORE_DEFAULT_CITY;
+  const zones = getZonesForCity(activeCity);
+  const selectedZones = asSelectionList(prefs.zones?.length ? prefs.zones : prefs.zone);
+  const selectedTypes = asSelectionList(prefs.types?.length ? prefs.types : prefs.type);
 
   const finish = () => {
-    savePreferences(prefs);
+    const normalized = {
+      ...prefs,
+      types: selectedTypes,
+      type: selectedTypes.length === 1 ? selectedTypes[0] : selectedTypes.length ? selectedTypes.join(",") : "all",
+      zones: selectedZones,
+      zone: selectedZones.length === 1 ? selectedZones[0] : "",
+    };
+    savePreferences(normalized);
     onOpenChange(false);
     setStep(0);
-    navigate(buildExploreUrl(prefs));
+    navigate(buildExploreUrl(normalized));
   };
 
   const next = () => (step < QUIZ_STEPS.length - 1 ? setStep(step + 1) : finish());
@@ -364,22 +395,22 @@ export default function MatchQuiz({ open, onOpenChange }) {
 
               {current.id === "city" && (
                 <div className="grid grid-cols-2 gap-2.5">
-                  {CITIES.length > 1 && (
-                    <QuizOption
-                      selected={!prefs.city}
-                      onClick={() => setPrefs({ ...prefs, city: "", zone: "" })}
-                      className="col-span-2 flex items-center gap-3"
-                    >
-                      <IconBubble icon={MapPin} selected={!prefs.city} />
-                      <span className="font-bold text-sm">Toda la ciudad</span>
-                      <OptionCheck selected={!prefs.city} />
-                    </QuizOption>
-                  )}
+                  <QuizOption
+                    selected={!prefs.city}
+                    onClick={() => setPrefs({ ...prefs, city: "", zone: "", zones: [] })}
+                    className="col-span-2 flex items-center gap-3"
+                  >
+                    <IconBubble icon={MapPin} selected={!prefs.city} />
+                    <span className="font-bold text-sm">
+                      {CITIES.length === 1 ? `Toda ${CITIES[0].name}` : "Toda la ciudad"}
+                    </span>
+                    <OptionCheck selected={!prefs.city} />
+                  </QuizOption>
                   {CITIES.map((c) => (
                     <QuizOption
                       key={c.id}
                       selected={prefs.city === c.name}
-                      onClick={() => setPrefs({ ...prefs, city: c.name, zone: "" })}
+                      onClick={() => setPrefs({ ...prefs, city: c.name, zone: "", zones: [] })}
                       className="flex items-center gap-3"
                     >
                       <IconBubble icon={MapPin} selected={prefs.city === c.name} />
@@ -393,18 +424,25 @@ export default function MatchQuiz({ open, onOpenChange }) {
               {current.id === "zone" && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   <QuizOption
-                    selected={!prefs.zone}
-                    onClick={() => setPrefs({ ...prefs, zone: "" })}
+                    selected={!selectedZones.length}
+                    onClick={() => setPrefs({ ...prefs, zone: "", zones: [] })}
                     className="col-span-2 sm:col-span-3 text-center font-bold text-sm"
                     compact
                   >
-                    {prefs.city ? `Toda ${prefs.city}` : "Cualquier zona"}
+                    {activeCity ? `Toda ${activeCity}` : "Cualquier zona"}
                   </QuizOption>
                   {zones.map((z) => (
                     <QuizOption
                       key={z}
-                      selected={prefs.zone === z}
-                      onClick={() => setPrefs({ ...prefs, zone: z })}
+                      selected={selectedZones.includes(z)}
+                      onClick={() => {
+                        const next = toggleSelection(selectedZones, z);
+                        setPrefs({
+                          ...prefs,
+                          zones: next,
+                          zone: next.length === 1 ? next[0] : "",
+                        });
+                      }}
                       className="text-center text-xs sm:text-sm font-bold"
                       compact
                     >
@@ -420,8 +458,15 @@ export default function MatchQuiz({ open, onOpenChange }) {
                     <TypeOptionCard
                       key={t.value}
                       type={t}
-                      selected={prefs.type === t.value}
-                      onClick={() => setPrefs({ ...prefs, type: t.value })}
+                      selected={selectedTypes.includes(t.value)}
+                      onClick={() => {
+                        const next = toggleSelection(selectedTypes, t.value);
+                        setPrefs({
+                          ...prefs,
+                          types: next,
+                          type: next.length === 1 ? next[0] : next.length ? next.join(",") : "all",
+                        });
+                      }}
                     />
                   ))}
                 </div>
@@ -429,17 +474,21 @@ export default function MatchQuiz({ open, onOpenChange }) {
 
               {current.id === "beds" && (
                 <div className="rounded-2xl border border-border/40 bg-white p-4 sm:p-5 shadow-sm">
-                  <NumberSelectGrid
+                  <MultiNumberSelectGrid
                     values={BEDS}
-                    selected={prefs.beds}
-                    onSelect={(b) => setPrefs({ ...prefs, beds: b })}
+                    selectedList={prefs.beds}
+                    onToggle={(b) => setPrefs({ ...prefs, beds: toggleSelection(prefs.beds, b) })}
                     unit={{ singular: "hab.", plural: "hab." }}
                     icon={Bed}
                   />
                   <p className="text-center text-[11px] text-muted-foreground mt-4 font-medium">
                     Seleccionado:{" "}
                     <span className="font-bold text-foreground">
-                      {prefs.beds === "5" ? "5 o más habitaciones" : `${prefs.beds} habitación${prefs.beds !== "1" ? "es" : ""}`}
+                      {formatCountSelection(prefs.beds, {
+                        singular: "habitación",
+                        plural: "habitaciones",
+                        plusLabel: "5+",
+                      })}
                     </span>
                   </p>
                 </div>
@@ -448,8 +497,8 @@ export default function MatchQuiz({ open, onOpenChange }) {
               {current.id === "baths" && (
                 <div className="space-y-3">
                   <QuizOption
-                    selected={prefs.bathrooms === "all"}
-                    onClick={() => setPrefs({ ...prefs, bathrooms: "all" })}
+                    selected={!asSelectionList(prefs.bathrooms).length}
+                    onClick={() => setPrefs({ ...prefs, bathrooms: [] })}
                     className="flex items-center gap-3 bg-white"
                   >
                     <StepQuestionIcon icon={Bath} />
@@ -457,16 +506,30 @@ export default function MatchQuiz({ open, onOpenChange }) {
                       <p className="font-bold text-sm">Cualquiera</p>
                       <p className="text-xs text-muted-foreground">Sin mínimo de baños</p>
                     </div>
-                    <OptionCheck selected={prefs.bathrooms === "all"} />
+                    <OptionCheck selected={!asSelectionList(prefs.bathrooms).length} />
                   </QuizOption>
                   <div className="rounded-2xl border border-border/40 bg-white p-4 sm:p-5 shadow-sm">
-                    <NumberSelectGrid
+                    <MultiNumberSelectGrid
                       values={BATHS}
-                      selected={prefs.bathrooms}
-                      onSelect={(b) => setPrefs({ ...prefs, bathrooms: b })}
+                      selectedList={prefs.bathrooms}
+                      onToggle={(b) =>
+                        setPrefs({ ...prefs, bathrooms: toggleSelection(prefs.bathrooms, b) })
+                      }
                       unit={{ singular: "baño", plural: "baños" }}
                       icon={Bath}
                     />
+                    {asSelectionList(prefs.bathrooms).length > 0 && (
+                      <p className="text-center text-[11px] text-muted-foreground mt-4 font-medium">
+                        Seleccionado:{" "}
+                        <span className="font-bold text-foreground">
+                          {formatCountSelection(prefs.bathrooms, {
+                            singular: "baño",
+                            plural: "baños",
+                            plusLabel: "5+",
+                          })}
+                        </span>
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
@@ -587,14 +650,25 @@ export default function MatchQuiz({ open, onOpenChange }) {
             <ArrowLeft className="w-4 h-4" />
             Atrás
           </button>
-          <button
-            type="button"
-            onClick={next}
-            className="flex items-center gap-2 gradient-cta btn-glow text-white font-bold px-7 py-3 rounded-full hover:opacity-95 transition-opacity shadow-md"
-          >
-            {step === QUIZ_STEPS.length - 1 ? QUIZ_FINISH_CTA : "Siguiente"}
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            {canSkip && (
+              <button
+                type="button"
+                onClick={next}
+                className="text-sm font-semibold text-muted-foreground hover:text-foreground px-3 py-2"
+              >
+                Saltar
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={next}
+              className="flex items-center gap-2 gradient-cta btn-glow text-white font-bold px-7 py-3 rounded-full hover:opacity-95 transition-opacity shadow-md"
+            >
+              {step === QUIZ_STEPS.length - 1 ? QUIZ_FINISH_CTA : "Siguiente"}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

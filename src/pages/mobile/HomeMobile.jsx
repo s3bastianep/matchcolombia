@@ -1,54 +1,77 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Building2, Sparkles, ArrowRight, Home, ShieldCheck } from "lucide-react";
+import { KeyRound, Building2, Home, Sparkles, ArrowRight } from "lucide-react";
 import { api } from "@/api/apiClient";
 import PropertyAppCard from "@/components/property/PropertyAppCard";
 import PullToRefresh from "@/components/mobile/PullToRefresh";
 import AppEmptyState from "@/components/mobile/AppEmptyState";
+import HomeSearchBar from "@/components/search/HomeSearchBar";
+import HumanSupportBanner from "@/components/brand/HumanSupportBanner";
 import { FEATURED_PROPERTIES_QUERY } from "@/lib/queryOptions";
 import { getLatestPublishedProperties } from "@/lib/propertyListing";
+import { loadPreferences, scoreProperty } from "@/lib/matchPreferences";
 import { CITIES } from "@/lib/colombia";
 import { cn } from "@/lib/utils";
 
 const openQuiz = () => window.dispatchEvent(new CustomEvent("open-habibar-quiz"));
 
-function PathCard({ to, icon: Icon, title, cta, variant = "renter" }) {
-  const isOwner = variant === "owner";
-
-  return (
-    <Link
-      to={to}
-      className={cn(
-        "native-card flex items-center gap-3 p-4 min-h-[72px] transition-colors",
-        isOwner
-          ? "border border-brand-magenta/25 bg-brand-magenta/[0.04]"
-          : "border border-border/70 bg-white"
-      )}
-    >
+function ActionCard({
+  as: Component = "button",
+  to,
+  onClick,
+  icon: Icon,
+  title,
+  subtitle,
+  iconClassName,
+  className,
+  ...props
+}) {
+  const content = (
+    <>
       <span
         className={cn(
           "inline-flex size-10 shrink-0 items-center justify-center rounded-xl",
-          isOwner ? "bg-brand-magenta/10 text-brand-magenta" : "bg-brand-violet/10 text-brand-violet"
+          iconClassName
         )}
       >
         <Icon className="size-[18px]" strokeWidth={2.25} />
       </span>
-      <span className="font-bold text-sm flex-1 min-w-0">{title}</span>
-      <span
-        className={cn(
-          "inline-flex items-center gap-1 text-xs font-bold shrink-0",
-          isOwner ? "text-brand-magenta" : "text-brand-violet"
+      <span className="flex-1 min-w-0 text-left">
+        <span className="block text-sm font-extrabold text-foreground leading-tight">{title}</span>
+        {subtitle && (
+          <span className="block text-xs font-medium text-muted-foreground mt-0.5 leading-snug">
+            {subtitle}
+          </span>
         )}
-      >
-        {cta}
-        <ArrowRight className="size-3.5" />
       </span>
-    </Link>
+      <ArrowRight className="size-4 text-brand-violet shrink-0" strokeWidth={2.5} />
+    </>
+  );
+
+  const cardClass = cn(
+    "native-card w-full flex items-center gap-3 p-4 active:scale-[0.99] transition-transform",
+    className
+  );
+
+  if (Component === Link) {
+    return (
+      <Link to={to} className={cardClass} {...props}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button type="button" onClick={onClick} className={cardClass} {...props}>
+      {content}
+    </button>
   );
 }
 
 export default function HomeMobile() {
+  const prefs = useMemo(() => loadPreferences(), []);
+
   const { data: properties = [], isLoading, refetch } = useQuery({
     queryKey: ["properties-featured"],
     queryFn: () => api.entities.Property.filter({ status: "disponible" }, "-listed_date", 40),
@@ -62,67 +85,69 @@ export default function HomeMobile() {
       <div className="native-screen relative">
         <div className="absolute inset-x-0 top-0 h-36 gradient-hero opacity-20 pointer-events-none" />
 
-        <section className="relative px-5 pt-4 pb-2">
-          <p className="text-[11px] font-bold uppercase tracking-widest text-brand-violet mb-2.5">
-            Arriendos verificados · Bogotá
+        <section className="relative px-5 pt-4 pb-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-violet mb-2">
+            Inmuebles verificados en Bogotá
           </p>
-          <h1 className="text-[1.55rem] font-extrabold leading-[1.15] tracking-tight text-foreground">
-            Encuentra tu inmueble.
-            <br />
-            <span className="text-gradient">O arriéndalo sin estrés.</span>
+          <h1 className="text-[1.5rem] font-extrabold leading-[1.2] tracking-tight text-foreground mb-4">
+            Encuentra tu inmueble{" "}
+            <span className="text-gradient">o arriéndalo sin estrés.</span>
           </h1>
+          <HomeSearchBar compact />
         </section>
 
-        <section className="px-5 pt-4 pb-2">
-          <div className="native-card overflow-hidden border border-border/60 bg-white/95">
-            <div className="color-bar h-[2px] w-full" />
-            <div className="p-5">
-              <div className="flex items-center gap-3 mb-5">
-                <span className="flex size-10 items-center justify-center rounded-xl gradient-cta shrink-0">
-                  <Sparkles className="size-[18px] text-white" strokeWidth={2.25} />
-                </span>
-                <div className="min-w-0">
-                  <p className="font-extrabold text-base leading-tight">Cuestionario Habibar</p>
-                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    Inmuebles verificados según lo que buscas
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={openQuiz}
-                className="app-btn-primary w-full py-3.5 text-sm flex items-center justify-center gap-2"
-              >
-                <Sparkles className="size-4" />
-                Iniciar cuestionario
-              </button>
-              <Link to="/explorar" className="block text-center text-xs font-medium text-muted-foreground mt-4">
-                o explorar todos los arriendos
-              </Link>
-            </div>
-          </div>
+        <section className="px-5 pb-3">
+          <HumanSupportBanner />
         </section>
 
-        <section className="px-5 pt-3 pb-2 flex flex-col gap-3">
-          <PathCard to="/explorar" icon={Search} title="Busco inmueble" cta="Explorar" />
-          <PathCard to="/anunciar" icon={Building2} title="Tengo inmueble" cta="Anunciar" variant="owner" />
-        </section>
-
-        <section className="px-5 py-5">
-          <p className="flex items-center gap-2 text-[11px] text-muted-foreground">
-            <ShieldCheck className="size-3.5 text-brand-verified shrink-0" strokeWidth={2.25} />
-            Verificados · Contrato digital · Equipo en Bogotá
-          </p>
+        <section className="px-5 pb-2 flex flex-col gap-2.5">
+          <ActionCard
+            as={Link}
+            to="/explorar"
+            icon={KeyRound}
+            title="Arrendar"
+            subtitle="Apartamentos y casas en Bogotá"
+            iconClassName="bg-brand-violet/10 text-brand-violet"
+            className="border border-border/70 bg-white"
+          />
+          <ActionCard
+            as={Link}
+            to="/explorar?intent=compra"
+            icon={Home}
+            title="Comprar"
+            subtitle="Inmuebles en venta"
+            iconClassName="bg-brand-violet/10 text-brand-violet"
+            className="border border-brand-violet/20 bg-brand-violet/[0.04]"
+          />
+          <ActionCard
+            as={Link}
+            to="/anunciar"
+            icon={Building2}
+            title="Anunciar inmueble"
+            subtitle="Publica gratis con nuestro equipo"
+            iconClassName="bg-brand-magenta/10 text-brand-magenta"
+            className="border border-brand-magenta/20 bg-brand-magenta/[0.04]"
+          />
+          <ActionCard
+            icon={Sparkles}
+            title="Cuestionario Habibar"
+            subtitle="Te recomendamos inmuebles a tu medida"
+            iconClassName="gradient-cta text-white shadow-sm"
+            className="border border-brand-violet/15 bg-gradient-to-r from-brand-violet/[0.07] to-brand-magenta/[0.05]"
+            onClick={openQuiz}
+          />
         </section>
 
         <div className="mx-5 border-t border-border/40" />
 
-        <section className="px-5 pt-6 pb-3 flex items-end justify-between">
-          <div>
+        <section className="px-5 pt-6 pb-3 flex items-end justify-between gap-3">
+          <div className="min-w-0">
             <h2 className="text-lg font-extrabold tracking-tight">Recién publicados</h2>
-            <p className="text-xs text-muted-foreground mt-1">Verificados · {CITIES[0]?.name || "Bogotá"}</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Nuevas opciones en {CITIES[0]?.name || "Bogotá"}
+            </p>
           </div>
-          <Link to="/explorar" className="text-xs font-bold text-brand-violet mb-0.5">
+          <Link to="/explorar" className="text-xs font-bold text-brand-violet shrink-0 mb-0.5">
             Ver todos
           </Link>
         </section>
@@ -132,13 +157,24 @@ export default function HomeMobile() {
             ? Array(4).fill(0).map((_, i) => (
                 <div key={i} className="aspect-[4/5] rounded-2xl shimmer" />
               ))
-            : latest.map((p, i) => <PropertyAppCard key={p.id} property={p} index={i} />)}
+            : latest.map((p, i) => {
+                const matchScore = prefs ? scoreProperty(p, prefs) : 0;
+                return (
+                  <PropertyAppCard
+                    key={p.id}
+                    property={p}
+                    index={i}
+                    showMatch={Boolean(prefs && matchScore >= 40)}
+                    matchScore={matchScore}
+                  />
+                );
+              })}
           {!isLoading && latest.length === 0 && (
             <div className="col-span-2">
               <AppEmptyState
-                icon={Home}
+                icon={Building2}
                 title="Sin inmuebles por ahora"
-                description="Estamos agregando nuevos apartamentos verificados. Mientras tanto, inicia el cuestionario Habibar."
+                description="Estamos agregando nuevos apartamentos verificados. Mientras tanto, puedes iniciar el cuestionario Habibar."
                 action={
                   <button
                     type="button"

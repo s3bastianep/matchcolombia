@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Bed, Bath, Maximize, ArrowRight } from "lucide-react";
+import { Bed, Bath, Maximize, ArrowRight, Car } from "lucide-react";
+import { getPropertyPricing } from "@/lib/propertyPricing";
 
 const formatCOP = (v) =>
   new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v || 0);
@@ -21,10 +22,12 @@ export default function CompareStrip({ properties }) {
           ))}
 
           {[
-            { label: "Precio / mes", render: (p) => formatCOP(p.monthly_rent) },
+            { label: "Total / mes", render: (p) => formatCOP(getPropertyPricing(p).totalMonthly || p.monthly_rent) },
+            { label: "Depósito", render: (p) => (p.deposit ? formatCOP(p.deposit) : "—") },
             { label: "Habitaciones", icon: Bed, render: (p) => p.bedrooms },
             { label: "Baños", icon: Bath, render: (p) => p.bathrooms },
             { label: "Área", icon: Maximize, render: (p) => (p.area_sqm ? `${p.area_sqm} m²` : "—") },
+            { label: "Parqueadero", icon: Car, render: (p) => (p.parking ? p.parking_spots || 1 : "No") },
           ].map((row) => (
             <React.Fragment key={row.label}>
               <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground py-2 border-t border-border/40">

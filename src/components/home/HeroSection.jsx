@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Search, Building2, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Search, Building2, Sparkles } from "lucide-react";
 import { PEOPLE } from "@/lib/colombiaImages";
 import { HERO_SUBTITLE } from "@/lib/siteCopy";
-import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
+import HomeSearchBar from "@/components/search/HomeSearchBar";
+import HumanSupportBanner from "@/components/brand/HumanSupportBanner";
 
 function CollagePhoto({ src, alt, className, priority = false }) {
   return (
@@ -84,46 +85,19 @@ function HeroPathLink({ to, icon: Icon, title, cta, variant = "renter" }) {
 }
 
 function HeroMatchBlock({ onStartQuiz }) {
+  if (!onStartQuiz) return null;
   return (
-    <div className="rounded-2xl overflow-hidden border border-brand-violet/15 bg-white shadow-lg shadow-brand-violet/8 mb-5">
-      <div className="color-bar h-[3px] w-full" />
-      <div className="p-5 sm:p-6">
-        <div className="flex items-start gap-3.5 mb-5">
-          <span className="inline-flex w-11 h-11 rounded-xl gradient-cta items-center justify-center shrink-0 shadow-md shadow-brand-magenta/25">
-            <Sparkles className="w-5 h-5 text-white" strokeWidth={2.25} />
-          </span>
-          <div className="min-w-0 pt-0.5">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-brand-violet mb-1">
-              HABIBAR
-            </p>
-            <h2 className="font-extrabold text-lg sm:text-xl leading-tight text-foreground">
-              {BRAND.quizLabel}
-            </h2>
-            <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-              Responde el cuestionario y te mostramos inmuebles verificados que encajan contigo.
-            </p>
-          </div>
-        </div>
-
-        {onStartQuiz && (
-          <button
-            type="button"
-            onClick={onStartQuiz}
-            className="w-full h-12 sm:h-[52px] rounded-xl gradient-cta btn-glow text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 hover:opacity-95 transition-opacity"
-          >
-            <Sparkles className="w-4 h-4 shrink-0" strokeWidth={2.25} />
-            Iniciar cuestionario
-          </button>
-        )}
-
-        <Link
-          to="/explorar"
-          className="mt-3 block text-center text-xs sm:text-sm font-semibold text-muted-foreground hover:text-brand-violet transition-colors"
-        >
-          o explorar todos los arriendos
-        </Link>
-      </div>
-    </div>
+    <p className="mb-5 text-sm text-muted-foreground">
+      ¿No sabes por dónde empezar?{" "}
+      <button
+        type="button"
+        onClick={onStartQuiz}
+        className="font-bold text-brand-violet hover:underline inline-flex items-center gap-1"
+      >
+        <Sparkles className="w-3.5 h-3.5" />
+        Prueba el cuestionario Habibar
+      </button>
+    </p>
   );
 }
 
@@ -144,9 +118,13 @@ export default function HeroSection({ onStartQuiz }) {
             <span className="text-gradient">O arriéndalo sin estrés.</span>
           </h1>
 
-          <p className="text-muted-foreground text-sm sm:text-base mb-6 max-w-md leading-relaxed">
+          <p className="text-muted-foreground text-sm sm:text-base mb-5 max-w-md leading-relaxed">
             {HERO_SUBTITLE}
           </p>
+
+          <div className="mb-6">
+            <HomeSearchBar />
+          </div>
 
           <HeroMatchBlock onStartQuiz={onStartQuiz} />
 
@@ -155,10 +133,9 @@ export default function HeroSection({ onStartQuiz }) {
             <HeroPathLink to="/anunciar" icon={Building2} variant="owner" title="Tengo inmueble" cta="Anunciar" />
           </div>
 
-          <p className="mt-5 flex items-center gap-2 text-xs text-muted-foreground">
-            <ShieldCheck className="w-3.5 h-3.5 text-brand-verified shrink-0" strokeWidth={2.25} />
-            Verificados · Contrato digital · Equipo en Bogotá
-          </p>
+          <div className="mt-5">
+            <HumanSupportBanner />
+          </div>
         </div>
 
         <div className="order-2 hidden lg:block">

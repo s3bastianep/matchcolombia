@@ -20,18 +20,24 @@ export default function Favorites() {
     return () => window.removeEventListener("shortlist-updated", refresh);
   }, []);
 
-  const { data: allProperties = [], refetch } = useQuery({
-    queryKey: ["properties-shortlist"],
-    queryFn: () => api.entities.Property.filter({ status: "disponible" }, "-created_date", 100),
+  const { data: saved = [], refetch } = useQuery({
+    queryKey: ["properties-shortlist", ids.join(",")],
+    queryFn: async () => {
+      if (!ids.length) return [];
+      const results = await Promise.all(
+        ids.map((id) => api.entities.Property.get(id).catch(() => null))
+      );
+      return results.filter((p) => p && p.status === "disponible");
+    },
+    enabled: ids.length > 0,
   });
-
-  const saved = allProperties.filter((p) => ids.includes(p.id));
 
   return (
     <>
       <PullToRefresh onRefresh={() => refetch()} className="lg:hidden native-screen min-h-[calc(100dvh-8rem)] pb-mobile-nav native-scroll-y">
         {saved.length > 0 ? (
           <div className="px-4 py-4">
+            <CompareStrip properties={saved} />
             <p className="text-sm text-muted-foreground mb-4">
               <span className="font-extrabold text-foreground">{saved.length}</span>{" "}
               guardado{saved.length !== 1 ? "s" : ""}

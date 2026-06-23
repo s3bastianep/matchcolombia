@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Home, Plus, MapPin, Check, Sparkles, ClipboardCheck, Gift } from "lucide-react";
+import { Home, Plus, MapPin, Check, Sparkles, ClipboardCheck, Tag } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 import { OWNER_PROMO_TAGLINE } from "@/lib/siteCopy";
 
@@ -60,7 +60,7 @@ export default function ExploreOwnerPromoCard() {
 
             <div className="mt-2.5 rounded-lg border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,97%)] px-2 py-2.5 min-h-[4.75rem]">
               <div className="grid grid-cols-3 gap-y-3 h-full items-center">
-                <PromoBenefit icon={Gift} label="Publicar gratis" />
+                <PromoBenefit icon={Tag} label="Publicar gratis" />
                 <PromoBenefit icon={ClipboardCheck} label="Gestión incluida" />
                 <PromoBenefit icon={Sparkles} label="Listo rápido" />
               </div>

@@ -32,9 +32,13 @@ export default function BrandLogo({
 
   /* Wordmark: ancho fijo; `nav` usa altura fija para alinear con el menú */
   const sizes = {
-    nav: { icon: "h-9 w-9", wordmark: "h-[38px] w-auto max-w-[11.5rem] sm:max-w-[13.5rem]", full: "h-[38px] w-auto" },
-    sm: { icon: "h-9 w-9", wordmark: "h-9 w-auto max-w-[10rem] sm:max-w-[11rem]", full: "h-14 w-auto" },
-    md: { icon: "h-11 w-11", wordmark: "h-10 w-auto max-w-[12.5rem] sm:max-w-[14rem]", full: "h-16 w-auto" },
+    nav: {
+      icon: "h-7 w-7",
+      wordmark: "h-8 sm:h-9 w-auto max-w-[9.5rem] sm:max-w-[10.5rem] lg:max-w-[11.5rem]",
+      full: "h-8 sm:h-9 w-auto",
+    },
+    sm: { icon: "h-10 w-10", wordmark: "h-11 w-auto max-w-[12rem] sm:max-w-[14rem]", full: "h-14 w-auto" },
+    md: { icon: "h-11 w-11", wordmark: "h-12 w-auto max-w-[14rem] sm:max-w-[16rem]", full: "h-16 w-auto" },
     lg: { icon: "h-12 w-12", wordmark: "h-11 w-auto max-w-[14rem] sm:max-w-[15.5rem]", full: "h-20 w-auto" },
     xl: { icon: "h-14 w-14", wordmark: "h-12 w-auto max-w-[16rem] sm:max-w-[18rem]", full: "h-24 w-auto" },
     hero: { icon: "h-16 w-16", wordmark: "h-14 w-auto max-w-[min(90vw,20rem)]", full: "h-28 w-auto" },
@@ -42,6 +46,10 @@ export default function BrandLogo({
   const s = sizes[size] || sizes.md;
 
   const wordmarkSrc = customLogoUrl || BRAND.logoWordmark;
+  const wordmarkSrcSet =
+    !customLogoUrl && BRAND.logoWordmark2x
+      ? `${BRAND.logoWordmark} 1x, ${BRAND.logoWordmark2x} 2x`
+      : undefined;
   const iconSrc = BRAND.logoIcon;
   const stackedSrc = customLogoUrl || BRAND.logoStacked;
 
@@ -78,9 +86,10 @@ export default function BrandLogo({
       <div className="shrink-0">
         <img
           src={wordmarkSrc}
+          srcSet={wordmarkSrcSet}
           alt={BRAND.name}
           className={cn(
-            "block object-contain object-left select-none",
+            "block max-h-full object-contain object-left select-none",
             s.wordmark,
             onDark && "brightness-0 invert"
           )}

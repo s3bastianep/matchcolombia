@@ -2,7 +2,7 @@ const SETTINGS_KEY = "habibar_admin_settings";
 const LOGO_KEY = "habibar_site_logo";
 
 export const SITE_BRANDING_EVENT = "site-branding-updated";
-export const DEFAULT_FAVICON = "/habibar-icon.png?v=4";
+export const DEFAULT_FAVICON = "/habibar-icon.png?v=10";
 export const MAX_LOGO_BYTES = 400 * 1024;
 
 function readLogoFromSettings() {

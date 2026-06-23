@@ -13,7 +13,7 @@ import {
   hasPropertyCharacteristics,
 } from "@/lib/propertyBuildingInfo";
 import { getParkingSpots, hasElevator } from "@/lib/propertyFilters";
-import { Bed, Bath, Maximize, Building, Layers, Car, PawPrint, ArrowUpDown } from "lucide-react";
+import { Bed, Bath, Maximize, Building, Car, PawPrint, ArrowUpDown } from "lucide-react";
 import ProcessStepper from "./ProcessStepper";
 
 export const formatCOP = (v) =>
@@ -23,6 +23,13 @@ export const furnishedLabels = { amoblado: "Amoblado", semi_amoblado: "Semi-amob
 export const typeLabel = { apartamento: "Apartamento", casa: "Casa", estudio: "Estudio", habitacion: "Habitación", penthouse: "Penthouse", duplex: "Dúplex" };
 
 export const ICON_STROKE = 2;
+
+const COMPACT_SPEC_TONES = [
+  { tile: "bg-brand-magenta/[0.09] border-brand-magenta/20", icon: "text-brand-magenta" },
+  { tile: "bg-brand-violet/[0.09] border-brand-violet/20", icon: "text-brand-violet" },
+  { tile: "bg-[hsl(330,85%,55%,0.08)] border-brand-magenta/15", icon: "text-brand-magenta" },
+  { tile: "bg-brand-violet/[0.07] border-brand-violet/15", icon: "text-brand-violet" },
+];
 
 export function SpecTile({ icon: Icon, label, value, tone = "pink" }) {
   const tileTone = tone === "violet"
@@ -48,7 +55,6 @@ export function PropertyEssentialsSection({ property, compact = false }) {
     property.bedrooms != null && { icon: Bed, label: "Habitaciones", value: property.bedrooms },
     property.bathrooms != null && { icon: Bath, label: "Baños", value: property.bathrooms },
     property.area_sqm && { icon: Maximize, label: "Área", value: `${property.area_sqm} m²` },
-    property.floor && { icon: Layers, label: "Piso", value: property.floor },
     property.parking != null && {
       icon: Car,
       label: "Parqueadero",
@@ -69,16 +75,22 @@ export function PropertyEssentialsSection({ property, compact = false }) {
     return (
       <section>
         <div className="grid grid-cols-3 gap-2">
-          {specs.map((s) => (
-            <div
-              key={s.label}
-              className="flex flex-col items-center justify-center rounded-xl border border-border/50 bg-secondary/30 py-3 px-1 text-center min-h-[72px]"
-            >
-              <s.icon className="w-4 h-4 text-foreground/40 mb-1.5" strokeWidth={ICON_STROKE} />
-              <p className="text-sm font-bold leading-none text-foreground tabular-nums">{s.value}</p>
-              <p className="text-[10px] font-medium text-muted-foreground mt-1 leading-tight">{s.label}</p>
-            </div>
-          ))}
+          {specs.map((s, i) => {
+            const tone = COMPACT_SPEC_TONES[i % COMPACT_SPEC_TONES.length];
+            return (
+              <div
+                key={s.label}
+                className={cn(
+                  "flex flex-col items-center justify-center rounded-xl border py-3 px-1 text-center min-h-[76px] shadow-sm",
+                  tone.tile
+                )}
+              >
+                <s.icon className={cn("w-4 h-4 mb-1.5", tone.icon)} strokeWidth={ICON_STROKE} />
+                <p className="text-sm font-extrabold leading-none text-foreground tabular-nums">{s.value}</p>
+                <p className="text-[10px] font-semibold text-muted-foreground mt-1 leading-tight">{s.label}</p>
+              </div>
+            );
+          })}
         </div>
       </section>
     );
@@ -134,21 +146,29 @@ export function PropertyDetailHeader({ property, compact = false }) {
 
     return (
       <div className="px-4 pt-3 pb-4">
-        <div className="flex items-center gap-2 mb-2">
-          <VerifiedBadge size="xs" />
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <VerifiedBadge property={property} size="xs" />
           {meta && (
             <span className="text-xs font-medium text-muted-foreground truncate">{meta}</span>
           )}
         </div>
         <h1 className="text-xl font-bold leading-snug tracking-tight text-foreground">{property.title}</h1>
         <p className="flex items-center gap-1.5 text-sm text-muted-foreground mt-2">
-          <MapPin className="w-3.5 h-3.5 shrink-0 text-foreground/40" strokeWidth={2} />
-          <span className="truncate">{property.neighborhood} · {property.city}</span>
+          <MapPin className="w-3.5 h-3.5 shrink-0 text-brand-magenta" strokeWidth={2} />
+          <span className="truncate">
+            {property.neighborhood} · {property.city}
+            {property.floor != null && property.floor !== "" ? ` · Piso ${property.floor}` : ""}
+          </span>
         </p>
         <p className="text-2xl font-extrabold leading-none tabular-nums text-foreground mt-4">
           {formatCOP(total || property.monthly_rent)}
           <span className="text-base font-medium text-muted-foreground ml-1">/mes</span>
         </p>
+        {(property.admin_fee || 0) > 0 && (
+          <p className="text-xs text-muted-foreground mt-1.5">
+            Arriendo {formatCOP(property.monthly_rent)} + admin {formatCOP(property.admin_fee)}
+          </p>
+        )}
         <PropertyReferenceBadge property={property} className="mt-3 !text-[11px] !py-1.5" />
       </div>
     );
@@ -157,7 +177,7 @@ export function PropertyDetailHeader({ property, compact = false }) {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-2 mb-4">
-        <VerifiedBadge size="sm" />
+        <VerifiedBadge property={property} size="sm" />
         {isAvailable && (
           <span className="inline-flex items-center px-3 py-1 rounded-full bg-[hsl(var(--brand-violet)/0.09)] text-[11px] font-semibold text-brand-violet">
             Disponible
@@ -191,6 +211,12 @@ export function PropertyDetailHeader({ property, compact = false }) {
           <span className="font-semibold text-foreground">{property.neighborhood}</span>
           <span className="text-foreground/35">·</span>
           <span className="text-foreground/70">{property.city || property.locality}</span>
+          {property.floor != null && property.floor !== "" && (
+            <>
+              <span className="text-foreground/35">·</span>
+              <span className="font-semibold text-brand-magenta">Piso {property.floor}</span>
+            </>
+          )}
         </span>
       </div>
 
@@ -205,7 +231,9 @@ export function DirectContactOptions({ property, className }) {
 
   return (
     <div className={cn("pt-1", className)}>
-      <p className="text-center text-[11px] font-medium text-subtle mb-2.5">o contáctanos directamente</p>
+      <p className="text-center text-[11px] font-medium text-subtle mb-2.5">
+        Escríbenos y un asesor de Habibar te orienta
+      </p>
       <div className="flex gap-2">
         <a
           href={`https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(waText)}`}
@@ -417,11 +445,11 @@ export function PriceBlock({ property, compact = false }) {
     <div>
       <p className={cn("font-bold text-foreground tracking-tight", compact ? "text-2xl" : "text-3xl")}>
         {formatCOP(total)}
-        <span className={cn("font-semibold text-subtle", compact ? "text-sm" : "text-base")}>/mes total</span>
+        <span className={cn("font-semibold text-subtle", compact ? "text-sm" : "text-base")}>/mes</span>
       </p>
       {hasAdmin && (
         <p className="text-sm text-subtle mt-1">
-          Canon {formatCOP(property.monthly_rent)} + admin {formatCOP(property.admin_fee)}
+          Arriendo {formatCOP(property.monthly_rent)} + admin {formatCOP(property.admin_fee)}
         </p>
       )}
       {!hasAdmin && (

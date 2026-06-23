@@ -12,11 +12,10 @@ import { getEstratoLabel, getEstratoChipStyle } from "@/lib/propertyLabels";
 import { getParkingSpots, hasElevator } from "@/lib/propertyFilters";
 import {
   getTotalMonthly,
-  getFurnishedLabel,
-  formatAvailableFrom,
 } from "@/lib/propertyCardUtils";
 import VerifiedBadge from "@/components/brand/VerifiedBadge";
 import ElevatorIcon from "@/components/icons/ElevatorIcon";
+import PropertyLocationBadge from "@/components/property/PropertyLocationBadge";
 
 const formatCOP = (value) =>
   new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(value || 0);
@@ -79,14 +78,6 @@ function GridSpecItem({ icon, label, title, muted = false }) {
   );
 }
 
-function GridMetaTag({ children }) {
-  return (
-    <span className="inline-flex items-center h-6 max-w-full px-2 rounded-md bg-white text-[10px] font-semibold text-foreground/75 border border-[hsl(0,0%,88%)] truncate">
-      {children}
-    </span>
-  );
-}
-
 export default function PropertyCard({ property, index = 0, matchScore, showMatch, variant = "default", highlighted = false }) {
   const navigate = useNavigate();
   const { openProperty } = usePropertyPanel();
@@ -103,11 +94,13 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
   const elevator = hasElevator(property);
   const pricePerSqm = property.area_sqm ? Math.round((property.monthly_rent || 0) / property.area_sqm) : null;
   const totalMonthly = getTotalMonthly(property);
-  const furnishedLabel = getFurnishedLabel(property.furnished);
-  const availableFrom = formatAvailableFrom(property.available_from, { compact: isGrid });
 
   useEffect(() => {
-    const handler = () => setLiked(isInShortlist(property.id));
+    const handler = (e) => {
+      const changedId = e.detail?.propertyId;
+      if (changedId && changedId !== property.id) return;
+      setLiked(isInShortlist(property.id));
+    };
     window.addEventListener("shortlist-updated", handler);
     return () => window.removeEventListener("shortlist-updated", handler);
   }, [property.id]);
@@ -184,8 +177,11 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                 >
                   <Heart className={cn("w-3.5 h-3.5", liked && "fill-current")} strokeWidth={2.25} />
                 </button>
-                <div className="absolute top-2 left-2 z-10">
-                  <VerifiedBadge size="sm" score={showMatch && matchScore > 0 ? matchScore : undefined} />
+                <div className="absolute top-2 left-2 z-10 flex flex-col gap-1 items-start">
+                  <VerifiedBadge property={property} size="sm" />
+                  {showMatch && matchScore > 0 && (
+                    <VerifiedBadge property={property} score={matchScore} size="sm" matchOnly />
+                  )}
                 </div>
                 {images.length > 1 && (
                   <>
@@ -320,9 +316,13 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                     <span className="text-[11px] font-semibold text-muted-foreground"> / mes</span>
                   </p>
                   <p className="text-[11px] text-muted-foreground leading-none h-4">
-                    {property.admin_fee > 0 ? `+ Adm. ${formatCOP(property.admin_fee)}` : "\u00A0"}
+                    {property.admin_fee > 0
+                      ? `Arriendo ${formatCOP(property.monthly_rent)} + admin ${formatCOP(property.admin_fee)}`
+                      : "\u00A0"}
                   </p>
                 </div>
+
+                <PropertyLocationBadge property={property} className="mt-2.5" />
 
                 <div className="mt-2.5 rounded-lg border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,97%)] px-1 py-2">
                   <div className="grid grid-cols-3 gap-y-2">
@@ -363,26 +363,6 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
                   </div>
                 </div>
 
-                {(property.floor != null && property.floor !== "") || furnishedLabel || availableFrom ? (
-                  <div className="mt-2 min-h-[2.75rem] flex flex-wrap content-start gap-1">
-                    {property.floor != null && property.floor !== "" && (
-                      <GridMetaTag>Piso {property.floor}</GridMetaTag>
-                    )}
-                    {furnishedLabel && <GridMetaTag>{furnishedLabel}</GridMetaTag>}
-                    {availableFrom && <GridMetaTag>Desde {availableFrom}</GridMetaTag>}
-                  </div>
-                ) : (
-                  <div className="mt-2 h-12 shrink-0" aria-hidden />
-                )}
-
-                <p className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-foreground h-[18px] leading-tight shrink-0">
-                  <MapPin className="w-3.5 h-3.5 shrink-0 text-brand-magenta" strokeWidth={2.25} />
-                  <span className="truncate">
-                    {property.neighborhood || property.locality || "Zona"}
-                    {property.city ? ` · ${property.city}` : ""}
-                  </span>
-                </p>
-
                 <button
                   type="button"
                   onClick={(e) => {
@@ -406,10 +386,7 @@ export default function PropertyCard({ property, index = 0, matchScore, showMatc
               {property.title}
             </h3>
             {!isGrid && (
-              <p className="text-xs text-muted-foreground mt-1">
-                {property.city}
-                {property.locality ? ` · ${property.locality}` : ""}
-              </p>
+              <PropertyLocationBadge property={property} className="mt-2" compact={!isExplore} />
             )}
 
             {isExplore && !isGrid && (

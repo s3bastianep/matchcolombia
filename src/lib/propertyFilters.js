@@ -1,3 +1,8 @@
+import {
+  propertyMatchesBedSelection,
+  propertyMatchesBathSelection,
+} from "@/lib/matchPreferences";
+
 export const DEFAULT_ADVANCED_FILTERS = {
   bedrooms: "",
   bathrooms: "",
@@ -103,8 +108,8 @@ export function matchEstratoFilter(filterValue, property) {
 
 export function applyAdvancedFilters(properties, filters) {
   return properties.filter((p) => {
-    if (filters.bedrooms && !matchNumericFilter(filters.bedrooms, p.bedrooms)) return false;
-    if (filters.bathrooms && !matchNumericFilter(filters.bathrooms, p.bathrooms)) return false;
+    if (filters.bedrooms && !propertyMatchesBedSelection(p.bedrooms, filters.bedrooms)) return false;
+    if (filters.bathrooms && !propertyMatchesBathSelection(p.bathrooms, filters.bathrooms)) return false;
     if (filters.parkingSpots && !matchNumericFilter(filters.parkingSpots, getParkingSpots(p))) return false;
     if (filters.floor && !matchNumericFilter(filters.floor, p.floor, { minPlus: 10 })) return false;
     if (filters.estrato && !matchEstratoFilter(filters.estrato, p)) return false;

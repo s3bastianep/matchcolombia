@@ -15,11 +15,17 @@ export const MATCH_STEPS_VERIFIED = HABIBAR_STEPS_VERIFIED;
 export const TRUST_TAGLINE =
   "Menos tiempo buscando. Más confianza al arrendar.";
 
+export const HUMAN_SUPPORT_TITLE = "Acompañamiento personalizado";
+export const HUMAN_SUPPORT_BODY =
+  "Un asesor de Habibar te guía en cada paso, con comunicación directa por WhatsApp y respuestas oportunas.";
+export const HUMAN_SUPPORT_SHORT =
+  "Asesor dedicado · Comunicación directa · Respuesta ágil";
+
 export const FEATURED_SUBTITLE =
   "Filtra por tipo y descubre más opciones en Bogotá.";
 
 export const EXPLORE_TRUST_BANNER =
-  "Listados revisados por nuestro equipo antes de publicar.";
+  "Acompañamiento personalizado · Respuesta ágil por WhatsApp";
 
 export const EXPLORE_MORE_FILTERS = "Más filtros";
 
@@ -62,10 +68,10 @@ export const QUIZ_FINISH_CTA = "Ver resultados";
 
 export const QUIZ_STEPS = [
   { id: "city", title: "¿En qué zona de Bogotá?", subtitle: "Elige toda la ciudad o un barrio" },
-  { id: "zone", title: "¿Qué barrio prefieres?", subtitle: "Opcional. Afina por localidad o zona" },
-  { id: "type", title: "¿Qué tipo de inmueble?", subtitle: "Apartamento, casa o estudio" },
-  { id: "beds", title: "¿Cuántas habitaciones?", subtitle: "Para afinar tu búsqueda" },
-  { id: "baths", title: "¿Cuántos baños?", subtitle: "Elige el mínimo que necesitas" },
+  { id: "zone", title: "¿Qué barrio prefieres?", subtitle: "Opcional. Puedes elegir varios barrios" },
+  { id: "type", title: "¿Qué tipo de inmueble?", subtitle: "Puedes seleccionar uno o varios" },
+  { id: "beds", title: "¿Cuántas habitaciones?", subtitle: "Elige una o varias. Ej: 1 y 2 habitaciones" },
+  { id: "baths", title: "¿Cuántos baños?", subtitle: "Elige uno o varios mínimos, o cualquiera" },
   { id: "budget", title: "¿Cuál es tu presupuesto?", subtitle: "Precio mensual, sin sorpresas" },
   { id: "elevator", title: "¿Necesitas ascensor?", subtitle: "Útil en pisos altos o si buscas comodidad" },
   { id: "pets", title: "¿Tienes mascotas?", subtitle: "Filtramos inmuebles que las acepten si las tienes" },
@@ -105,6 +111,9 @@ export function exploreResultsQuerySuffix(query) {
 }
 
 export function bathroomFilterChipLabel(count) {
+  if (count.includes(",")) {
+    return `${count.split(",").join(" y ")} baños`;
+  }
   if (count === "5") return "5+ baños";
   return `${count} baño${count !== "1" ? "s" : ""}`;
 }

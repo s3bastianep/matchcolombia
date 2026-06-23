@@ -17,6 +17,7 @@ import {
 } from "@/lib/visitSlots";
 import VisitScheduler from "./VisitScheduler";
 import ProcessStepper from "./ProcessStepper";
+import HumanSupportBanner from "@/components/brand/HumanSupportBanner";
 import { getTotalMonthly } from "@/lib/propertyCardUtils";
 import { getPropertyReferenceCode } from "@/lib/propertyReference";
 import { useAuth } from "@/lib/AuthContext";
@@ -203,6 +204,7 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
         variant === "mobile" ? "native-card-flat p-4" : "bg-white/90 rounded-2xl detail-card-soft p-5 sm:p-6"
       )}
     >
+      <HumanSupportBanner variant="compact" className="mb-4" />
       <VisitScheduler
         visitType={visitType}
         onVisitTypeChange={setVisitType}
@@ -244,6 +246,12 @@ export default function VisitBookingForm({ property, propertyId, propertyTitle, 
                   <span className="text-foreground/55">Administración</span>
                   <span className="font-semibold text-foreground/85 tabular-nums">{formatCOP(property.admin_fee)}</span>
                 </div>
+                {property.deposit > 0 && (
+                  <div className="flex justify-between gap-3 text-sm">
+                    <span className="text-foreground/55">Depósito (una vez)</span>
+                    <span className="font-semibold text-foreground/85 tabular-nums">{formatCOP(property.deposit)}</span>
+                  </div>
+                )}
               </div>
             ) : (
               <p className="text-xs text-foreground/55 mt-2">Canon de arriendo mensual</p>

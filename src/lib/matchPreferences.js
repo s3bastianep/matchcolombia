@@ -12,9 +12,11 @@ const PREFS_KEY = "habibar_preferences";
 export const defaultPreferences = {
   city: "",
   zone: "",
+  zones: [],
   type: "all",
-  beds: "all",
-  bathrooms: "all",
+  types: [],
+  beds: [],
+  bathrooms: [],
   maxPrice: 10000000,
   elevator: "",
   pets: "",
@@ -37,9 +39,7 @@ export function loadPreferences() {
     const raw = localStorage.getItem(PREFS_KEY) || localStorage.getItem("matchbogota_preferences");
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    const pets =
-      parsed.pets === true ? "si" : parsed.pets === false ? "" : parsed.pets ?? "";
-    return { ...defaultPreferences, ...parsed, pets };
+    return normalizeStoredPreferences(parsed);
   } catch {
     return null;
   }
@@ -54,6 +54,64 @@ function normalizePetsPref(pets) {
   if (pets === true) return "si";
   if (pets === false) return "";
   return pets || "";
+}
+
+/** Convierte valor legacy (string) o array a lista de opciones seleccionadas */
+export function asSelectionList(value) {
+  if (Array.isArray(value)) return value.filter(Boolean).map(String);
+  if (!value || value === "all") return [];
+  if (typeof value === "string" && value.includes(",")) {
+    return value.split(",").map((s) => s.trim()).filter(Boolean);
+  }
+  return [String(value)];
+}
+
+export function propertyMatchesBedSelection(bedrooms, selected) {
+  const list = asSelectionList(selected);
+  if (!list.length) return true;
+  const n = Number(bedrooms) || 0;
+  return list.some((b) => {
+    const target = parseInt(b, 10);
+    return target === 5 ? n >= 5 : n === target;
+  });
+}
+
+export function propertyMatchesBathSelection(bathrooms, selected) {
+  const list = asSelectionList(selected);
+  if (!list.length) return true;
+  const n = Number(bathrooms) || 0;
+  return list.some((b) => {
+    const target = parseInt(b, 10);
+    return target === 5 ? n >= 5 : n === target;
+  });
+}
+
+export function propertyMatchesTypeSelection(propertyType, selected) {
+  const list = asSelectionList(selected);
+  if (!list.length) return true;
+  return list.includes(propertyType);
+}
+
+function normalizeStoredPreferences(parsed) {
+  const pets =
+    parsed.pets === true ? "si" : parsed.pets === false ? "" : parsed.pets ?? "";
+
+  const types = asSelectionList(parsed.types?.length ? parsed.types : parsed.type);
+  const beds = asSelectionList(parsed.beds);
+  const bathrooms = asSelectionList(parsed.bathrooms);
+  const zones = asSelectionList(parsed.zones?.length ? parsed.zones : parsed.zone);
+
+  return {
+    ...defaultPreferences,
+    ...parsed,
+    pets,
+    types,
+    type: types.length === 1 ? types[0] : types.length ? types.join(",") : "all",
+    beds,
+    bathrooms,
+    zones,
+    zone: zones.length === 1 ? zones[0] : "",
+  };
 }
 
 export function scoreProperty(property, prefs) {
@@ -74,26 +132,34 @@ export function scoreProperty(property, prefs) {
       property.locality?.toLowerCase().includes(z) ||
       property.neighborhood?.toLowerCase().includes(z);
     score += match ? 25 : 0;
+  } else if (prefs.zones?.length) {
+    const match = prefs.zones.some((zone) => {
+      const z = zone.toLowerCase();
+      return (
+        property.locality?.toLowerCase().includes(z) ||
+        property.neighborhood?.toLowerCase().includes(z)
+      );
+    });
+    score += match ? 25 : 0;
   } else {
     score += 10;
   }
 
-  if (!prefs.type || prefs.type === "all" || property.property_type === prefs.type) {
+  const types = asSelectionList(prefs.types?.length ? prefs.types : prefs.type);
+  if (!types.length || propertyMatchesTypeSelection(property.property_type, types)) {
     score += 25;
   }
 
-  if (prefs.beds && prefs.beds !== "all") {
-    const beds = parseInt(prefs.beds, 10);
-    const match = beds === 5 ? property.bedrooms >= 5 : property.bedrooms === beds;
-    score += match ? 15 : 0;
+  const bedsList = asSelectionList(prefs.beds);
+  if (bedsList.length) {
+    if (propertyMatchesBedSelection(property.bedrooms, bedsList)) score += 15;
   } else {
     score += 8;
   }
 
-  if (prefs.bathrooms && prefs.bathrooms !== "all") {
-    const baths = parseInt(prefs.bathrooms, 10);
-    const match = baths === 5 ? property.bathrooms >= 5 : property.bathrooms === baths;
-    score += match ? 10 : 0;
+  const bathsList = asSelectionList(prefs.bathrooms);
+  if (bathsList.length) {
+    if (propertyMatchesBathSelection(property.bathrooms, bathsList)) score += 10;
   } else {
     score += 5;
   }
@@ -124,10 +190,21 @@ export function scoreProperty(property, prefs) {
 export function buildExploreUrl(prefs) {
   const params = new URLSearchParams();
   if (prefs.city) params.set("city", prefs.city);
-  if (prefs.zone) params.set("q", prefs.zone);
-  if (prefs.type && prefs.type !== "all") params.set("type", prefs.type);
-  if (prefs.beds && prefs.beds !== "all") params.set("beds", prefs.beds);
-  if (prefs.bathrooms && prefs.bathrooms !== "all") params.set("baths", prefs.bathrooms);
+
+  const zones = asSelectionList(prefs.zones?.length ? prefs.zones : prefs.zone);
+  if (zones.length === 1) params.set("q", zones[0]);
+  else if (zones.length > 1) params.set("zones", zones.join(","));
+
+  const types = asSelectionList(prefs.types?.length ? prefs.types : prefs.type);
+  if (types.length === 1) params.set("type", types[0]);
+  else if (types.length > 1) params.set("type", types.join(","));
+
+  const beds = asSelectionList(prefs.beds);
+  if (beds.length) params.set("beds", beds.join(","));
+
+  const baths = asSelectionList(prefs.bathrooms);
+  if (baths.length) params.set("baths", baths.join(","));
+
   if (prefs.maxPrice < 10000000) params.set("max", String(prefs.maxPrice));
   if (prefs.elevator) params.set("elevator", prefs.elevator);
   const petsPref = normalizePetsPref(prefs.pets);

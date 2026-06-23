@@ -2,8 +2,11 @@ import React, { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import PropertyGallery from "./PropertyGallery";
+import PropertyMatchFit from "./PropertyMatchFit";
+import PropertyPriceBreakdown from "./PropertyPriceBreakdown";
 import VisitBookingForm from "./VisitBookingForm";
 import PropertyLocationMap from "./PropertyLocationMap";
+import PropertyVideoSection from "./PropertyVideoSection";
 import SimilarProperties from "./SimilarProperties";
 import { getPropertyImages } from "@/lib/colombiaImages";
 import {
@@ -60,9 +63,13 @@ export default function PropertyDetailView({
       <div className="pb-28 bg-white">
         <PropertyGallery images={images} title={property.title} variant="modal" />
         <PropertyDetailHeader property={property} compact />
+        <div className="px-4 pb-3">
+          <PropertyMatchFit property={property} />
+        </div>
         <div className="px-4 pb-5">
           <PropertyEssentialsSection property={property} compact />
         </div>
+        <PropertyVideoSection property={property} compact />
         <MobileSection>
           <PropertyCharacteristicsSection property={property} />
         </MobileSection>
@@ -91,11 +98,13 @@ export default function PropertyDetailView({
       <PropertyGallery images={images} title={property.title} variant="immersive" />
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
         <PropertyDetailHeader property={property} />
+        <PropertyMatchFit property={property} className="mt-5" />
       </motion.div>
       <div className="py-6">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_340px] gap-8 items-start">
           <div className="flex flex-col gap-6 sm:gap-12">
             <PropertyEssentialsSection property={property} />
+            <PropertyVideoSection property={property} />
             <PropertyCharacteristicsSection property={property} />
             {property.description && (
               <section className="detail-section">
@@ -110,7 +119,8 @@ export default function PropertyDetailView({
             </div>
           </div>
           <div className="hidden lg:block self-start">
-            <div className="sticky top-4 z-10">
+            <div className="sticky top-4 z-10 space-y-4">
+              <PropertyPriceBreakdown property={property} />
               <ContactBlock property={property} id={property.id} bookingRef={bookingRef} />
             </div>
           </div>
