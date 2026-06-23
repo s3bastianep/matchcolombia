@@ -24,6 +24,10 @@ const app = express();
 app.disable("x-powered-by");
 app.use(securityHeadersMiddleware);
 
+app.get("/api/health", (_req, res) => {
+  res.json({ ok: true, backend: "sqlite" });
+});
+
 const CANONICAL_HOST = (process.env.CANONICAL_HOST || "habibar.com").toLowerCase();
 
 function prerenderHtmlPath(urlPath) {
@@ -70,10 +74,6 @@ app.use((req, res, next) => {
 app.use(express.json({ limit: "2mb" }));
 app.use(authMiddleware);
 
-app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, backend: "sqlite" });
-});
-
 app.use("/api/auth", authRoutes);
 app.use("/api/entities", entityRoutes);
 app.use("/api/settings", settingsRouter);
@@ -107,11 +107,23 @@ app.use((err, _req, res, _next) => {
 
 async function start() {
   await migrate();
-  await seedIfEmpty();
+
   app.listen(port, "0.0.0.0", () => {
     console.log(`HABIBAR API escuchando en :${port}`);
   });
+
+  seedIfEmpty().catch((err) => {
+    console.error("HABIBAR API: seed falló (el servidor sigue activo):", err);
+  });
 }
+
+process.on("unhandledRejection", (reason) => {
+  console.error("HABIBAR API: unhandledRejection:", reason);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("HABIBAR API: uncaughtException:", err);
+});
 
 start().catch((err) => {
   console.error("No se pudo iniciar el servidor:", err);
