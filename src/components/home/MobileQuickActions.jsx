@@ -12,7 +12,7 @@ const actions = [
     theme: "from-brand-magenta/15 to-brand-magenta/5 border-brand-magenta/20 text-brand-magenta",
   },
   {
-    to: "/explorar?intent=compra",
+    to: "/explorar/compra",
     label: "Comprar",
     desc: "Inmuebles en venta",
     icon: Home,

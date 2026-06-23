@@ -33,7 +33,7 @@ export default function ExploreAppBar({
     <header className="lg:hidden shrink-0 native-header px-4 pt-safe pb-3 space-y-3">
       <div className="flex items-center justify-between gap-3 pt-1">
         <div className="min-w-0">
-          <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Explorar</h1>
+          <p className="text-2xl font-extrabold tracking-tight text-foreground">Explorar</p>
           {typeof resultsCount === "number" && (
             <p className="text-xs text-muted-foreground mt-0.5">
               <span className="font-bold text-foreground tabular-nums">{resultsCount}</span>{" "}

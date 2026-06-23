@@ -157,6 +157,14 @@ export default function Register() {
           </div>
         </div>
 
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          Al registrarte aceptas nuestra{" "}
+          <Link to="/privacidad" className="font-semibold text-brand-violet hover:underline">
+            política de privacidad
+          </Link>
+          .
+        </p>
+
         <button
           type="submit"
           disabled={loading}

@@ -9,6 +9,7 @@ const RentEasySection = lazy(() => import("../components/home/RentEasySection"))
 const HomeRenterPromo = lazy(() => import("../components/home/HomeRenterPromo"));
 const MatchSteps = lazy(() => import("../components/home/MatchSteps"));
 const FeaturedProperties = lazy(() => import("../components/home/FeaturedProperties"));
+const HomeSeoContent = lazy(() => import("../components/home/HomeSeoContent"));
 const OwnerCTA = lazy(() => import("../components/home/OwnerCTA"));
 
 const startQuiz = () => window.dispatchEvent(new CustomEvent("open-habibar-quiz"));
@@ -48,6 +49,16 @@ export default function Home() {
       >
         <Suspense fallback={<HomeSectionSkeleton minHeight="360px" />}>
           <FeaturedProperties />
+        </Suspense>
+      </DeferredMount>
+
+      <DeferredMount
+        rootMargin="120px 0px"
+        minHeight="280px"
+        fallback={<HomeSectionSkeleton minHeight="280px" />}
+      >
+        <Suspense fallback={<HomeSectionSkeleton minHeight="280px" />}>
+          <HomeSeoContent />
         </Suspense>
       </DeferredMount>
 

@@ -23,7 +23,7 @@ import {
 
 const navLinks = [
   { to: "/explorar", label: "Arrendar", intent: "arriendo" },
-  { to: "/explorar?intent=compra", label: "Comprar", intent: "compra" },
+  { to: "/explorar/compra", label: "Comprar", intent: "compra" },
 ];
 
 const advertiseItems = [

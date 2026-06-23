@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 const STEPS = [
   {
     num: "01",
-    title: "Match inteligente",
+    title: "Cuéntanos qué buscas",
     problem: "Sin perder horas en portales sin filtro.",
     desc: "Ciudad, presupuesto, habitaciones, baños, mascotas y más. Habibar filtra por ti.",
   },

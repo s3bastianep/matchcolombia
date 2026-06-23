@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback, useEffect, Suspense } from "react";
 import { lazyWithRetry as lazy } from "@/lib/lazyWithRetry";
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link, useLocation } from "react-router-dom";
 import { api } from "@/api/apiClient";
 import PropertyCard from "../components/property/PropertyCard";
 import ExploreOwnerPromoCard from "../components/explore/ExploreOwnerPromoCard";
@@ -39,6 +39,7 @@ import {
   advancedFiltersToUrlParams,
 } from "@/lib/propertyFilters";
 import { shouldInsertOwnerPromo, EXPLORE_GUTTER, EXPLORE_CONTENT_PAD, EXPLORE_SPLIT_LAYOUT } from "@/lib/exploreUtils";
+import { parseExplorePath } from "@/lib/explorePaths";
 
 import ExploreMap from "../components/explore/ExploreMap";
 import ExploreAppBar from "../components/explore/ExploreAppBar";
@@ -133,8 +134,10 @@ function ResultsCount({ count, query }) {
 
 export default function Explore() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialQ = searchParams.get("q") || "";
-  const initialCity = searchParams.get("city") || "";
+  const { pathname } = useLocation();
+  const pathDefaults = parseExplorePath(pathname);
+  const initialQ = searchParams.get("q") || pathDefaults.q || "";
+  const initialCity = searchParams.get("city") || pathDefaults.city || "";
   const initialTypeRaw = searchParams.get("type") || "";
   const initialTypes = useMemo(
     () => (initialTypeRaw ? initialTypeRaw.split(",").map((s) => s.trim()).filter(Boolean) : []),
@@ -146,7 +149,7 @@ export default function Explore() {
     return initialQ ? [initialQ] : [];
   }, [searchParams, initialQ]);
   const isMatched = searchParams.get("matched") === "1";
-  const intent = searchParams.get("intent");
+  const intent = searchParams.get("intent") || pathDefaults.intent || null;
   const prefs = useMemo(() => loadPreferences(), []);
 
   const [sortBy, setSortBy] = useState(isMatched ? "match" : "newest");
@@ -340,6 +343,7 @@ export default function Explore() {
 
   return (
     <div className="h-full min-h-0 max-h-full bg-white flex flex-col overflow-hidden">
+      <h1 className="sr-only">{resultsTitle}</h1>
       <ExploreAppBar
         locality={locality}
         onLocalityChange={setLocality}
@@ -591,9 +595,9 @@ export default function Explore() {
               <div className="sticky top-0 z-10 bg-[hsl(0,0%,99%)] pt-2 pb-3 mb-1">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="min-w-0">
-                    <h1 className="text-base lg:text-lg font-extrabold tracking-tight text-foreground leading-snug">
+                    <h2 className="text-base lg:text-lg font-extrabold tracking-tight text-foreground leading-snug">
                       {resultsTitle}
-                    </h1>
+                    </h2>
                     <ResultsCount count={filtered.length} query={initialQ} />
                   </div>
                   {viewMode === "split" && (

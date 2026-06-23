@@ -6,6 +6,7 @@ import PropertyAppCard from "./PropertyAppCard";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { exploreZonePath } from "@/lib/explorePaths";
 
 export default function SimilarProperties({ property, compact = false }) {
   const { data: all = [] } = useQuery({
@@ -20,9 +21,9 @@ export default function SimilarProperties({ property, compact = false }) {
 
   if (similar.length === 0) return null;
 
-  const exploreHref = `/explorar?city=${encodeURIComponent(property.city)}${
-    property.property_type ? `&type=${encodeURIComponent(property.property_type)}` : ""
-  }`;
+  const exploreHref = property.neighborhood
+    ? exploreZonePath(property.neighborhood)
+    : "/explorar";
 
   return (
     <section

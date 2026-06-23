@@ -8,6 +8,7 @@ import { authMiddleware } from "./middleware/auth.js";
 import authRoutes from "./routes/auth.js";
 import entityRoutes, { settingsRouter } from "./routes/entities.js";
 import uploadRoutes from "./routes/upload.js";
+import { securityHeadersMiddleware } from "./securityHeaders.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -21,6 +22,7 @@ mkdirSync(uploadDir, { recursive: true });
 
 const app = express();
 app.disable("x-powered-by");
+app.use(securityHeadersMiddleware);
 
 const CANONICAL_HOST = (process.env.CANONICAL_HOST || "habibar.com").toLowerCase();
 
@@ -28,15 +30,19 @@ function prerenderHtmlPath(urlPath) {
   if (urlPath === "/" || urlPath === "") {
     return path.join(distDir, "index.html");
   }
-  const match = urlPath.match(/^\/propiedad\/([^/]+)$/);
-  if (match) {
-    const file = path.join(distDir, "propiedad", match[1], "index.html");
+  const propertyMatch = urlPath.match(/^\/propiedad\/([^/]+)$/);
+  if (propertyMatch) {
+    const file = path.join(distDir, "propiedad", propertyMatch[1], "index.html");
     return existsSync(file) ? file : null;
   }
-  const staticRoutes = ["explorar", "anunciar", "publicar"];
-  const segment = urlPath.replace(/^\//, "").split("/")[0];
-  if (staticRoutes.includes(segment) && urlPath.split("/").length === 2) {
-    const file = path.join(distDir, segment, "index.html");
+  const segments = urlPath.replace(/^\//, "").split("/").filter(Boolean);
+  if (segments[0] === "explorar") {
+    const file = path.join(distDir, ...segments, "index.html");
+    return existsSync(file) ? file : null;
+  }
+  const staticRoutes = ["anunciar", "publicar", "privacidad"];
+  if (staticRoutes.includes(segments[0]) && segments.length === 1) {
+    const file = path.join(distDir, segments[0], "index.html");
     return existsSync(file) ? file : null;
   }
   return null;

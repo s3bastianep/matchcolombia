@@ -1,12 +1,13 @@
 import { ArrowRight, Home, KeyRound } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 import { INTERIORS } from "@/lib/colombiaImages";
+import { EXPLORE_COMPRA_PATH, exploreZonePath } from "@/lib/explorePaths";
 
 export const POPULAR_ZONES = [
-  { label: "Chapinero", to: "/explorar?city=Bogotá&q=Chapinero" },
-  { label: "Usaquén", to: "/explorar?city=Bogotá&q=Usaquén" },
-  { label: "Suba", to: "/explorar?city=Bogotá&q=Suba" },
-  { label: "La Candelaria", to: "/explorar?city=Bogotá&q=La Candelaria" },
+  { label: "Chapinero", to: exploreZonePath("Chapinero") },
+  { label: "Usaquén", to: exploreZonePath("Usaquén") },
+  { label: "Suba", to: exploreZonePath("Suba") },
+  { label: "La Candelaria", to: exploreZonePath("La Candelaria") },
 ];
 
 export const EXPLORE_PATHS = [
@@ -22,7 +23,7 @@ export const EXPLORE_PATHS = [
     iconBg: "bg-brand-violet/15 text-brand-violet",
   },
   {
-    to: "/explorar?intent=compra",
+    to: EXPLORE_COMPRA_PATH,
     title: "Compra",
     subtitle: "Inmuebles en venta revisados por el equipo. Compara zonas y agenda visitas.",
     cta: "Explorar en venta",

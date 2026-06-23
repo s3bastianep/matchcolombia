@@ -24,7 +24,7 @@ const SocialTikTok = ({ size = 15 }) => (
 
 const primaryLinks = [
   { to: "/explorar", label: "Arriendos" },
-  { to: "/explorar?intent=compra", label: "Compra" },
+  { to: "/explorar/compra", label: "Compra" },
   { to: "/favoritos", label: "Guardados" },
   { to: "/anunciar", label: "Anunciar" },
   { to: "/publicar", label: "Vender" },
@@ -101,6 +101,10 @@ function FooterMeta({ className, centered = false }) {
       <a href={`mailto:${BRAND.email}`} className={linkBase}>
         {BRAND.email}
       </a>
+      <span className={dot}> · </span>
+      <Link to="/privacidad" className={linkBase}>
+        Privacidad
+      </Link>
       <span className={dot}> · </span>
       <a href={`mailto:${BRAND.email}?subject=Consulta%20legal`} className={linkBase}>
         Legal

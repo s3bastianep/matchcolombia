@@ -1,5 +1,6 @@
 import { BRAND } from "./brand.js";
 import { CITIES, ZONES_BY_CITY } from "./colombia.js";
+import { EXPLORE_COMPRA_PATH, listExploreZonePaths, exploreZonePath, parseExplorePath } from "./explorePaths.js";
 
 /** URL canónica del sitio — configurar VITE_SITE_URL en producción */
 export const SITE_URL = (
@@ -117,7 +118,10 @@ function cityGeoMeta(cityName) {
 }
 
 function isKnownRoute(pathname) {
-  if (pathname === "/explorar" || ROUTE_SEO[pathname]) return true;
+  if (pathname === "/explorar" || pathname === EXPLORE_COMPRA_PATH || pathname.startsWith("/explorar/zona/")) {
+    return true;
+  }
+  if (ROUTE_SEO[pathname]) return true;
   if (isNoIndexPath(pathname)) return true;
   if (/^\/propiedad\/[^/]+$/.test(pathname)) return true;
   return false;
@@ -139,7 +143,11 @@ function propertyImage(property) {
   return absoluteUrl(img);
 }
 
-function exploreCanonical(searchParams) {
+function exploreCanonical(pathname, searchParams) {
+  const path = pathname.replace(/\/$/, "") || "/explorar";
+  if (path === EXPLORE_COMPRA_PATH || path.startsWith("/explorar/zona/")) {
+    return absoluteUrl(path);
+  }
   const allowed = ["city", "intent", "type", "q", "inmueble"];
   const next = new URLSearchParams();
   allowed.forEach((key) => {
@@ -150,29 +158,37 @@ function exploreCanonical(searchParams) {
   return absoluteUrl(qs ? `/explorar?${qs}` : "/explorar");
 }
 
-export function getExploreSeo(searchParams) {
-  const city = searchParams.get("city") || "Bogotá";
-  const intent = searchParams.get("intent");
+export function getExploreSeo(searchParams, pathname = "/explorar") {
+  const fromPath = parseExplorePath(pathname);
+  const city = searchParams.get("city") || fromPath.city || "Bogotá";
+  const zoneQuery = searchParams.get("q") || fromPath.q || null;
+  const intent = fromPath.intent || searchParams.get("intent");
   const type = searchParams.get("type");
   const typeLabel = TYPE_LABELS[type] || null;
 
   const isSale = intent === "compra";
   const title = isSale
     ? `Inmuebles en venta en ${city}`
-    : typeLabel
-      ? `${typeLabel}s en arriendo en ${city}`
-      : `Apartamentos en arriendo en ${city}`;
+    : zoneQuery
+      ? `Arriendo en ${zoneQuery}, ${city}`
+      : typeLabel
+        ? `${typeLabel}s en arriendo en ${city}`
+        : `Apartamentos en arriendo en ${city}`;
 
   const description = isSale
     ? `Encuentra inmuebles en venta en ${city} con ${BRAND.name}. Listados verificados, fotos reales y acompañamiento humano en todo el proceso de compra.`
-    : `Arrienda ${typeLabel ? `${typeLabel.toLowerCase()}s` : "apartamentos y casas"} en ${city} con ${BRAND.name}. Match inteligente, listados verificados y visitas presenciales o virtuales.`;
+    : zoneQuery
+      ? `Apartamentos y casas en arriendo en ${zoneQuery}, ${city}. Listados verificados, Match inteligente y visitas coordinadas con ${BRAND.name}.`
+      : `Arrienda ${typeLabel ? `${typeLabel.toLowerCase()}s` : "apartamentos y casas"} en ${city} con ${BRAND.name}. Match inteligente, listados verificados y visitas presenciales o virtuales.`;
 
   const geo = cityGeoMeta(city);
+  const exploreListUrl = isSale ? EXPLORE_COMPRA_PATH : "/explorar";
+  const zoneUrl = zoneQuery ? exploreZonePath(zoneQuery) : exploreListUrl;
 
   return {
     title: buildTitle(title),
     description,
-    url: exploreCanonical(searchParams),
+    url: exploreCanonical(pathname, searchParams),
     keywords: `${isSale ? "venta" : "arriendo"} inmuebles ${city}, apartamentos ${city}, casas ${city}, ${BRAND.name}`,
     geoPlacename: geo?.placename || SEO_DEFAULTS.geoPlacename,
     geoPosition: geo?.position || SEO_DEFAULTS.geoPosition,
@@ -181,8 +197,8 @@ export function getExploreSeo(searchParams) {
       websiteSchema(),
       breadcrumbSchema([
         { name: "Inicio", url: "/" },
-        { name: isSale ? "Compra" : "Arriendos", url: "/explorar" },
-        { name: city, url: `/explorar?city=${encodeURIComponent(city)}` },
+        { name: isSale ? "Compra" : "Arriendos", url: exploreListUrl },
+        ...(zoneQuery ? [{ name: zoneQuery, url: zoneUrl }] : [{ name: city, url: exploreListUrl }]),
       ]),
     ],
   };
@@ -218,7 +234,7 @@ export function getPropertySeo(property) {
       breadcrumbSchema([
         { name: "Inicio", url: "/" },
         { name: "Arriendos", url: "/explorar" },
-        { name: city, url: `/explorar?city=${encodeURIComponent(city)}` },
+        { name: city, url: property.neighborhood ? exploreZonePath(property.neighborhood) : "/explorar" },
         { name: property.title, url: `/propiedad/${property.id}` },
       ]),
     ],
@@ -262,6 +278,19 @@ const ROUTE_SEO = {
       faqSchema(SELL_FAQ_SCHEMA),
     ],
   },
+  "/privacidad": {
+    title: buildTitle("Política de privacidad"),
+    description: `Conoce cómo ${BRAND.name} trata tus datos personales al usar la plataforma de arriendos verificados en Bogotá.`,
+    url: "/privacidad",
+    keywords: `política de privacidad ${BRAND.name}, protección de datos, RGPD, arriendos Bogotá`,
+    jsonLd: () => [
+      organizationSchema(),
+      breadcrumbSchema([
+        { name: "Inicio", url: "/" },
+        { name: "Política de privacidad", url: "/privacidad" },
+      ]),
+    ],
+  },
   "/favoritos": {
     title: buildTitle("Mis inmuebles guardados"),
     description: `Tu lista personal de inmuebles guardados en ${BRAND.name}.`,
@@ -286,8 +315,8 @@ export function resolveRouteSeo(pathname, searchParams = new URLSearchParams()) 
     };
   }
 
-  if (pathname === "/explorar") {
-    return getExploreSeo(searchParams);
+  if (pathname === "/explorar" || pathname === EXPLORE_COMPRA_PATH || pathname.startsWith("/explorar/zona/")) {
+    return getExploreSeo(searchParams, pathname);
   }
 
   if (/^\/propiedad\/[^/]+$/.test(pathname)) {
@@ -485,28 +514,14 @@ export function getSitemapUrls() {
   const urls = [
     { loc: "/", priority: "1.0", changefreq: "daily" },
     { loc: "/explorar", priority: "0.9", changefreq: "daily" },
+    { loc: EXPLORE_COMPRA_PATH, priority: "0.85", changefreq: "weekly" },
     { loc: "/anunciar", priority: "0.8", changefreq: "weekly" },
     { loc: "/publicar", priority: "0.8", changefreq: "weekly" },
+    { loc: "/privacidad", priority: "0.4", changefreq: "yearly" },
   ];
 
-  CITIES.forEach((city) => {
-    urls.push({
-      loc: `/explorar?city=${encodeURIComponent(city.name)}`,
-      priority: "0.85",
-      changefreq: "daily",
-    });
-    urls.push({
-      loc: `/explorar?city=${encodeURIComponent(city.name)}&intent=compra`,
-      priority: "0.75",
-      changefreq: "weekly",
-    });
-    (ZONES_BY_CITY[city.name] || []).forEach((zone) => {
-      urls.push({
-        loc: `/explorar?city=${encodeURIComponent(city.name)}&q=${encodeURIComponent(zone)}`,
-        priority: "0.7",
-        changefreq: "weekly",
-      });
-    });
+  listExploreZonePaths().forEach((loc) => {
+    urls.push({ loc, priority: "0.75", changefreq: "weekly" });
   });
 
   return urls.map((entry) => ({ ...entry, lastmod: now }));

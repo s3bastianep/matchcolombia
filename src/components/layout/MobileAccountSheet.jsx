@@ -27,7 +27,7 @@ import { BRAND } from "@/lib/brand";
 const quickLinks = [
   { to: "/", label: "Inicio", icon: Home },
   { to: "/explorar", label: "Buscar arriendos", icon: KeyRound },
-  { to: "/explorar?intent=compra", label: "Buscar compra", icon: Home },
+  { to: "/explorar/compra", label: "Buscar compra", icon: Home },
   { to: "/anunciar", label: "Anunciar inmueble", icon: Building2 },
   { to: "/publicar", label: "Vender inmueble", icon: Signpost },
 ];

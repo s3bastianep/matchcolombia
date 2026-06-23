@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { MapPin } from "lucide-react";
+import { exploreZonePath } from "@/lib/explorePaths";
 import InteractiveMap from "@/components/map/InteractiveMap";
 import { getPropertyLatLng, getPropertyPin } from "@/lib/zoneMap";
 
@@ -33,7 +34,7 @@ export default function PropertyLocationMap({ property }) {
         <InteractiveMap markers={markers} center={coords} zoom={14} className="absolute inset-0 w-full h-full" />
       </div>
       <Link
-        to={`/explorar?city=${encodeURIComponent(property.city)}&q=${encodeURIComponent(property.neighborhood)}`}
+        to={exploreZonePath(property.neighborhood)}
         className="inline-block mt-4 text-sm font-bold text-brand-violet hover:underline"
       >
         Ver más en {property.neighborhood} →

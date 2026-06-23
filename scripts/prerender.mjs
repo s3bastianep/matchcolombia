@@ -38,6 +38,7 @@ const {
 } = await import("../src/lib/seo.js");
 
 const { buildHomeStaticHtml, seoNavBlock, seoFooterBlock } = await import("../src/lib/seoStaticContent.js");
+const { EXPLORE_COMPRA_PATH, listExploreZonePaths } = await import("../src/lib/explorePaths.js");
 
 const TYPE_LABELS = {
   apartamento: "Apartamento",
@@ -196,7 +197,7 @@ function exploreBody(properties) {
           <h2>Inmuebles destacados en arriendo</h2>
           <p>
             Cada listado incluye fotos revisadas, datos del inmueble y opción de visita presencial o virtual.
-            Si buscas comprar, visita la sección de <a href="/explorar?intent=compra">inmuebles en venta</a>.
+            Si buscas comprar, visita la sección de <a href="${EXPLORE_COMPRA_PATH}">inmuebles en venta</a>.
           </p>
           <ul>
           ${items}
@@ -296,6 +297,11 @@ async function main() {
     { dir: "", pathname: "/", body: homeBody(properties) },
     { dir: "explorar", pathname: "/explorar", body: exploreBody(properties) },
     {
+      dir: path.join("explorar", "compra"),
+      pathname: EXPLORE_COMPRA_PATH,
+      body: exploreBody(properties),
+    },
+    {
       dir: "anunciar",
       pathname: "/anunciar",
       body: marketingBody({
@@ -315,7 +321,26 @@ async function main() {
         ctaLabel: "Vender mi inmueble",
       }),
     },
+    {
+      dir: "privacidad",
+      pathname: "/privacidad",
+      body: marketingBody({
+        h1: "Política de privacidad",
+        intro: `${escapeHtml(SEO_DEFAULTS.siteName)} trata tus datos para prestarte el servicio de arriendos verificados, coordinar visitas y gestionar publicaciones. Consulta el documento completo en la aplicación.`,
+        ctaHref: "/",
+        ctaLabel: "Volver al inicio",
+      }),
+    },
   ];
+
+  listExploreZonePaths().forEach((zonePath) => {
+    const slug = zonePath.replace("/explorar/zona/", "");
+    routes.push({
+      dir: path.join("explorar", "zona", slug),
+      pathname: zonePath,
+      body: exploreBody(properties),
+    });
+  });
 
   for (const route of routes) {
     const seo = resolveRouteSeo(route.pathname);

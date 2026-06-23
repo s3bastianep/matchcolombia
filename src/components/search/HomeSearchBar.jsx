@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { EXPLORE_DEFAULT_CITY } from "@/lib/siteCopy";
 import { getZonesForCity } from "@/lib/colombia";
+import { EXPLORE_COMPRA_PATH, exploreZonePath } from "@/lib/explorePaths";
 import { cn } from "@/lib/utils";
 
 const POPULAR_ZONES = getZonesForCity(EXPLORE_DEFAULT_CITY).slice(0, 3);
@@ -15,13 +16,7 @@ export default function HomeSearchBar({ className, intent, compact = false }) {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
 
-  const zoneUrl = (zone) => {
-    const params = new URLSearchParams();
-    params.set("city", EXPLORE_DEFAULT_CITY);
-    if (intent === "compra") params.set("intent", "compra");
-    params.set("q", zone);
-    return `/explorar?${params}`;
-  };
+  const zoneUrl = (zone) => (intent === "compra" ? EXPLORE_COMPRA_PATH : exploreZonePath(zone));
 
   const goExplore = (q = query) => {
     const params = new URLSearchParams();
@@ -77,7 +72,7 @@ export default function HomeSearchBar({ className, intent, compact = false }) {
         ))}
         {MORE_ZONES.length > 0 && (
           <Link
-            to={`/explorar?city=${encodeURIComponent(EXPLORE_DEFAULT_CITY)}${intent === "compra" ? "&intent=compra" : ""}`}
+            to={intent === "compra" ? EXPLORE_COMPRA_PATH : "/explorar"}
             className="native-chip shrink-0 text-xs text-brand-violet font-bold"
           >
             Más barrios
