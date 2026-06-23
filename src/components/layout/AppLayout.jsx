@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 import MobileAppHeader from "./MobileAppHeader";
 import MobileBottomNav from "./MobileBottomNav";
 import MobileAccountSheet from "./MobileAccountSheet";
-import AppOnboarding, { hasCompletedOnboarding } from "../mobile/AppOnboarding";
+import AppOnboarding, { hasCompletedOnboarding, shouldShowAppOnboarding } from "../mobile/AppOnboarding";
 import OfflineBanner from "../mobile/OfflineBanner";
 import { usePropertyPanel } from "@/lib/PropertyPanelContext";
 import { useIsApp } from "@/hooks/use-mobile";
@@ -18,7 +18,7 @@ const MatchQuiz = lazyWithRetry(() => import("../match/MatchQuiz"));
 export default function AppLayout() {
   const [quizOpen, setQuizOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
-  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(() => shouldShowAppOnboarding());
   const location = useLocation();
   const isApp = useIsApp();
   const { isOpen: propertyOpen } = usePropertyPanel();
@@ -32,6 +32,8 @@ export default function AppLayout() {
   useEffect(() => {
     if (isApp && !hasCompletedOnboarding()) {
       setShowOnboarding(true);
+    } else if (!isApp) {
+      setShowOnboarding(false);
     }
   }, [isApp]);
 

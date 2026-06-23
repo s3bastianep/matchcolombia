@@ -1,33 +1,42 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Sparkles, CalendarCheck, ChevronRight } from "lucide-react";
+import { Search, Sparkles, CalendarCheck, Building2, ChevronRight } from "lucide-react";
 import BrandLogo from "@/components/brand/BrandLogo";
 import { cn } from "@/lib/utils";
 import { hapticLight } from "@/lib/haptics";
+import { BRAND } from "@/lib/brand";
 
-const STORAGE_KEY = "habibar_onboarding_done";
+const STORAGE_KEY = "habibar_onboarding_v2_done";
 
 const SLIDES = [
   {
     icon: Search,
-    title: "Explora inmuebles verificados",
-    description: "Apartamentos y casas revisados en Bogotá, con fotos reales y precios claros.",
+    title: "Arriendos verificados en Bogotá",
+    description:
+      "Explora apartamentos y casas con fotos reales, precios claros y filtros por zona. Más fácil, rápido y seguro.",
     tone: "text-brand-violet",
     bg: "bg-brand-violet/10",
   },
   {
     icon: Sparkles,
-    title: "Match inteligente HABIBAR",
-    description: "Cuéntanos qué buscas y te mostramos los inmuebles que mejor encajan contigo.",
+    title: "Match inteligente",
+    description: "Cuéntanos qué buscas en 2 minutos y te mostramos los inmuebles que mejor encajan contigo.",
     tone: "text-brand-magenta",
     bg: "bg-brand-magenta/10",
   },
   {
     icon: CalendarCheck,
     title: "Agenda tu visita",
-    description: "Elige fecha y hora. Nosotros coordinamos todo el proceso por ti.",
+    description: "Elige fecha y horario. El equipo de HABIBAR coordina la visita y te acompaña en el proceso.",
     tone: "text-brand-violet",
     bg: "bg-brand-violet/10",
+  },
+  {
+    icon: Building2,
+    title: "¿Tienes un inmueble?",
+    description: `Publica gratis en ${BRAND.name}, delega visitas y cobros, y haz seguimiento desde tu panel de propietario.`,
+    tone: "text-brand-magenta",
+    bg: "bg-brand-magenta/10",
   },
 ];
 
@@ -37,6 +46,12 @@ export function hasCompletedOnboarding() {
   } catch {
     return true;
   }
+}
+
+export function shouldShowAppOnboarding() {
+  if (typeof window === "undefined") return false;
+  if (hasCompletedOnboarding()) return false;
+  return window.matchMedia("(max-width: 1023px)").matches;
 }
 
 export function markOnboardingComplete() {
@@ -67,8 +82,12 @@ export default function AppOnboarding({ onComplete }) {
   return (
     <div className="fixed inset-0 z-[300] bg-white flex flex-col pt-safe pb-safe">
       <div className="flex items-center justify-between px-5 h-12">
-        <BrandLogo size="lg" layout="lockup" />
-        <button type="button" onClick={finish} className="text-sm font-semibold text-muted-foreground px-2 py-1">
+        <BrandLogo size="lg" layout="lockup" link={false} />
+        <button
+          type="button"
+          onClick={finish}
+          className="text-sm font-semibold text-muted-foreground px-3 py-1.5 rounded-lg hover:bg-secondary transition-colors"
+        >
           Omitir
         </button>
       </div>
@@ -86,6 +105,9 @@ export default function AppOnboarding({ onComplete }) {
             <div className={cn("w-20 h-20 rounded-3xl flex items-center justify-center mb-8", slide.bg)}>
               <Icon className={cn("w-9 h-9", slide.tone)} strokeWidth={1.75} />
             </div>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-brand-violet mb-2">
+              {step + 1} de {SLIDES.length}
+            </p>
             <h2 className="text-2xl font-extrabold tracking-tight text-foreground leading-tight">{slide.title}</h2>
             <p className="text-sm text-muted-foreground mt-4 leading-relaxed">{slide.description}</p>
           </motion.div>
@@ -104,7 +126,11 @@ export default function AppOnboarding({ onComplete }) {
             />
           ))}
         </div>
-        <button type="button" onClick={next} className="app-btn-primary w-full flex items-center justify-center gap-2 py-4 text-sm font-bold">
+        <button
+          type="button"
+          onClick={next}
+          className="app-btn-primary w-full flex items-center justify-center gap-2 py-4 text-sm font-bold"
+        >
           {isLast ? "Empezar" : "Siguiente"}
           <ChevronRight className="w-4 h-4" />
         </button>
