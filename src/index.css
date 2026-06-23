@@ -533,6 +533,21 @@
     touch-action: pan-y;
   }
 
+  @media (min-width: 1024px) {
+    html.explore-desktop-lock,
+    html.explore-desktop-lock body {
+      height: 100%;
+      overflow: hidden;
+      overscroll-behavior: none;
+    }
+
+    .explore-list-pane {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+    }
+  }
+
   .premium-spec-pill {
     @apply flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-secondary/70 border border-border/30;
   }

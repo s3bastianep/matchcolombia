@@ -44,8 +44,22 @@ export default function AppLayout() {
     setAccountOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (!isExplore) return undefined;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const sync = () => {
+      document.documentElement.classList.toggle("explore-desktop-lock", mq.matches);
+    };
+    sync();
+    mq.addEventListener("change", sync);
+    return () => {
+      mq.removeEventListener("change", sync);
+      document.documentElement.classList.remove("explore-desktop-lock");
+    };
+  }, [isExplore]);
+
   return (
-    <div className={cn("flex flex-col overflow-x-hidden", scrollLocked ? "h-[100dvh]" : "min-h-[100dvh]")}>
+    <div className={cn("flex flex-col overflow-x-hidden", scrollLocked ? "h-[100dvh] overflow-hidden" : "min-h-[100dvh]")}>
       <div className="hidden lg:block">
         <Navbar onAccountClick={() => setAccountOpen(true)} />
       </div>

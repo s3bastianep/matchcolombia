@@ -38,7 +38,7 @@ import {
   countAdvancedFilters,
   advancedFiltersToUrlParams,
 } from "@/lib/propertyFilters";
-import { shouldInsertOwnerPromo, EXPLORE_SPLIT_LAYOUT, EXPLORE_GUTTER, EXPLORE_CONTENT_PAD } from "@/lib/exploreUtils";
+import { shouldInsertOwnerPromo, EXPLORE_GUTTER, EXPLORE_CONTENT_PAD } from "@/lib/exploreUtils";
 
 import ExploreMap from "../components/explore/ExploreMap";
 import ExploreAppBar from "../components/explore/ExploreAppBar";
@@ -339,7 +339,7 @@ export default function Explore() {
   );
 
   return (
-    <div className="h-full min-h-0 bg-white flex flex-col">
+    <div className="h-full min-h-0 max-h-full bg-white flex flex-col overflow-hidden">
       <ExploreAppBar
         locality={locality}
         onLocalityChange={setLocality}
@@ -514,9 +514,9 @@ export default function Explore() {
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
       {isLoading ? (
         <>
-          <div className={cn("hidden lg:grid lg:flex-1 lg:min-h-0 lg:h-full lg:overflow-hidden min-w-0 gap-4 lg:gap-5", EXPLORE_CONTENT_PAD, EXPLORE_SPLIT_LAYOUT)}>
-            <div className="border-r-0 shimmer min-h-0 h-full rounded-xl" />
-            <div className="min-h-0 h-full overflow-y-auto">
+          <div className={cn("hidden lg:flex lg:flex-1 lg:min-h-0 lg:h-full lg:max-h-full lg:overflow-hidden min-w-0 gap-4 lg:gap-5", EXPLORE_CONTENT_PAD)}>
+            <div className="w-[min(42%,520px)] shrink-0 h-full min-h-0 border-r-0 shimmer rounded-xl" />
+            <div className="flex-1 min-w-0 h-full min-h-0 overflow-y-auto overscroll-y-contain explore-list-pane">
             <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4 items-stretch">
               {Array(9).fill(0).map((_, i) => (
                 <ExploreSkeleton key={i} />
@@ -562,14 +562,12 @@ export default function Explore() {
       ) : filtered.length > 0 ? (
         <>
           <div className={cn(
-            "hidden lg:grid lg:flex-1 lg:min-h-0 lg:h-full lg:overflow-hidden min-w-0 gap-4 lg:gap-5",
-            EXPLORE_CONTENT_PAD,
-            viewMode === "list" ? "grid-cols-1" : EXPLORE_SPLIT_LAYOUT
+            "hidden lg:flex lg:flex-1 lg:min-h-0 lg:h-full lg:max-h-full lg:overflow-hidden min-w-0 gap-4 lg:gap-5",
+            EXPLORE_CONTENT_PAD
           )}>
             {viewMode === "split" && (
-            <div className="flex flex-col bg-[hsl(0,0%,98%)] min-h-0 h-full max-h-full overflow-hidden rounded-xl border border-[hsl(0,0%,90%)] shadow-sm">
-              <div className="flex-1 min-h-0 h-full">
-                <Suspense fallback={<MapPaneFallback className="h-full rounded-xl" />}>
+            <aside className="w-[min(42%,520px)] shrink-0 h-full min-h-0 overflow-hidden rounded-xl border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] shadow-sm">
+              <Suspense fallback={<MapPaneFallback className="h-full rounded-xl" />}>
                   <ExploreMap
                     properties={filtered}
                     activeCity={initialCity || undefined}
@@ -579,11 +577,10 @@ export default function Explore() {
                     className="h-full rounded-xl"
                   />
                 </Suspense>
-              </div>
-            </div>
+            </aside>
             )}
 
-            <div className="min-h-0 h-full max-h-full overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] min-w-0 pt-1 pb-8 overscroll-contain">
+            <section className="flex-1 min-w-0 h-full min-h-0 overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] pt-1 pb-8 overscroll-y-contain explore-list-pane">
               <div className="sticky top-0 z-10 bg-[hsl(0,0%,99%)] pt-2 pb-3 mb-1">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="min-w-0">
@@ -699,7 +696,7 @@ export default function Explore() {
                   return items;
                 })}
               </div>
-            </div>
+            </section>
           </div>
 
           <PullToRefresh
