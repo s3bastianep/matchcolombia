@@ -1,18 +1,18 @@
-import { isSupabaseConfigured } from "@/lib/supabaseClient";
+import { isSupabaseConfigured } from "@/lib/backendConfig";
 import { isRailwayBackendConfigured } from "@/lib/railwayClient";
-import { initLocalApi } from "./localApi";
-import { initSupabaseApi } from "./supabaseApi";
-import { initRailwayApi } from "./railwayApi";
 
 export async function initApi() {
   if (isRailwayBackendConfigured()) {
+    const { initRailwayApi } = await import("./railwayApi");
     await initRailwayApi();
     return "railway";
   }
   if (isSupabaseConfigured()) {
+    const { initSupabaseApi } = await import("./supabaseApi");
     await initSupabaseApi();
     return "supabase";
   }
+  const { initLocalApi } = await import("./localApi");
   initLocalApi();
   return "local";
 }

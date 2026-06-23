@@ -29,7 +29,7 @@ export const SEO_DEFAULTS = {
   geoPosition: "4.7110;-74.0721",
   title: `${BRAND.name} | Arriendos verificados en Bogotá`,
   description:
-    `${BRAND.name} conecta arrendatarios y propietarios en Bogotá, Colombia. Apartamentos y casas verificados, Match inteligente, visitas coordinadas y gestión completa del arriendo.`,
+    "Apartamentos y casas verificados en Bogotá. Match inteligente, visitas coordinadas y atención humana con HABIBAR.",
   keywords:
     "HABIBAR, arriendo apartamentos Bogotá, inmuebles verificados Bogotá, arriendo casas Bogotá, venta inmuebles Bogotá, match inteligente arriendo, administración de arriendos Bogotá",
   ogImage: DEFAULT_OG_IMAGE,

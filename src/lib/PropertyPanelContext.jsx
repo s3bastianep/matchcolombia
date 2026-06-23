@@ -1,7 +1,9 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useState, Suspense } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
-import PropertyDetailModal from "@/components/property/PropertyDetailModal";
+import { lazyWithRetry } from "@/lib/lazyWithRetry";
 import { hapticLight } from "@/lib/haptics";
+
+const PropertyDetailModal = lazyWithRetry(() => import("@/components/property/PropertyDetailModal"));
 
 const PropertyPanelActionsContext = createContext(null);
 const PropertyPanelStateContext = createContext(null);
@@ -63,12 +65,14 @@ export function PropertyPanelProvider({ children }) {
       <PropertyPanelStateContext.Provider value={state}>
         {children}
         {property && (
-          <PropertyDetailModal
-            open
-            property={property}
-            focusBooking={focusBooking}
-            onClose={closeProperty}
-          />
+          <Suspense fallback={null}>
+            <PropertyDetailModal
+              open
+              property={property}
+              focusBooking={focusBooking}
+              onClose={closeProperty}
+            />
+          </Suspense>
         )}
       </PropertyPanelStateContext.Provider>
     </PropertyPanelActionsContext.Provider>

@@ -73,14 +73,12 @@ async function boot() {
       /* ignore storage migration errors */
     }
 
-    const [{ default: App }, { default: ErrorBoundary }, , { initApi } ] = await Promise.all([
+    const [{ default: App }, { default: ErrorBoundary }] = await Promise.all([
       import('@/App.jsx'),
       import('@/components/ErrorBoundary'),
       import('@/index.css'),
-      import('@/api/initApi'),
+      import('@/api/apiClient').then(({ ensureApiReady }) => ensureApiReady()),
     ])
-
-    await initApi()
 
     window.clearTimeout(bootTimer)
     removeBootLoader()

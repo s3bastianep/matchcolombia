@@ -37,6 +37,8 @@ const {
   SEO_DEFAULTS,
 } = await import("../src/lib/seo.js");
 
+const { buildHomeStaticHtml, seoNavBlock, seoFooterBlock } = await import("../src/lib/seoStaticContent.js");
+
 const TYPE_LABELS = {
   apartamento: "Apartamento",
   casa: "Casa",
@@ -164,31 +166,11 @@ function applySeo(html, seo) {
 }
 
 function navBlock() {
-  return `
-      <nav aria-label="Navegación principal">
-        <ul>
-          <li><a href="/">Inicio</a></li>
-          <li><a href="/explorar">Explorar inmuebles</a></li>
-          <li><a href="/anunciar">Publicar inmueble</a></li>
-          <li><a href="/publicar">Vender inmueble</a></li>
-        </ul>
-      </nav>`;
+  return seoNavBlock();
 }
 
-function homeBody() {
-  return `
-      <main id="static-site-fallback" lang="es-CO">
-        <header>
-          <h1>HABIBAR — Arriendos verificados en Colombia</h1>
-          <p>Inmuebles verificados en Bogotá. Cuestionario Habibar, visitas coordinadas y gestión para propietarios.</p>
-        </header>
-        ${navBlock()}
-        <section>
-          <h2>Encuentra tu inmueble ideal</h2>
-          <p>Apartamentos y casas en arriendo y venta con listados revisados por nuestro equipo.</p>
-          <p><a href="/explorar">Explorar inmuebles disponibles</a></p>
-        </section>
-      </main>`;
+function homeBody(properties) {
+  return buildHomeStaticHtml(properties);
 }
 
 function exploreBody(properties) {
@@ -203,17 +185,25 @@ function exploreBody(properties) {
   return `
       <main id="static-site-fallback" lang="es-CO">
         <header>
-          <h1>Explorar inmuebles verificados</h1>
-          <p>Apartamentos y casas en arriendo y venta en Bogotá.</p>
+          <h1>Explorar inmuebles verificados en Bogotá</h1>
+          <p>
+            Encuentra apartamentos y casas en arriendo y venta en Bogotá con ${escapeHtml(SEO_DEFAULTS.siteName)}.
+            Filtra por barrio, presupuesto y tipo de inmueble, y agenda visitas con nuestro equipo.
+          </p>
         </header>
         ${navBlock()}
         <section>
-          <h2>Inmuebles destacados</h2>
+          <h2>Inmuebles destacados en arriendo</h2>
+          <p>
+            Cada listado incluye fotos revisadas, datos del inmueble y opción de visita presencial o virtual.
+            Si buscas comprar, visita la sección de <a href="/explorar?intent=compra">inmuebles en venta</a>.
+          </p>
           <ul>
           ${items}
           </ul>
-          <p><a href="/explorar">Ver catálogo completo</a></p>
+          <p><a href="/explorar">Ver catálogo completo de arriendos verificados</a></p>
         </section>
+        ${seoFooterBlock()}
       </main>`;
 }
 
@@ -226,6 +216,7 @@ function marketingBody({ h1, intro, ctaHref, ctaLabel }) {
         </header>
         ${navBlock()}
         <p><a href="${escapeHtml(ctaHref)}">${escapeHtml(ctaLabel)}</a></p>
+        ${seoFooterBlock()}
       </main>`;
 }
 
@@ -255,6 +246,7 @@ function propertyBody(property) {
           <p itemprop="description">${escapeHtml(property.description || `${property.title} en ${property.city}.`)}</p>
         </section>
         <p><a href="/explorar?inmueble=${escapeHtml(property.id)}">Ver ficha interactiva y agendar visita</a></p>
+        ${seoFooterBlock()}
       </main>`;
 }
 
@@ -301,7 +293,7 @@ async function main() {
   let count = 0;
 
   const routes = [
-    { dir: "", pathname: "/", body: homeBody() },
+    { dir: "", pathname: "/", body: homeBody(properties) },
     { dir: "explorar", pathname: "/explorar", body: exploreBody(properties) },
     {
       dir: "anunciar",
