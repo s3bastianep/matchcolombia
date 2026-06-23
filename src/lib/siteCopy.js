@@ -1,16 +1,18 @@
 /** Copy unificado para todo el sitio */
 
-export const HERO_EYEBROW = "Arriendos verificados · Bogotá";
+export const HERO_EYEBROW = "Fácil · Rápido · Seguro · Bogotá";
 
-export const HERO_TITLE_LINE1 = "El lugar que buscas";
+export const HERO_TITLE_LINE1 = "Arrendar en Bogotá";
 
-export const HERO_TITLE_LINE2 = "existe y está aquí";
+export const HERO_TITLE_LINE2 = "más fácil, rápido y seguro";
 
 export const HERO_SUBTITLE =
-  "Arriendos en Bogotá y alquiler de apartamento verificado: cada inmueble lo revisa nuestro equipo antes de publicarse. Agenda tu visita en línea y una persona del equipo te acompaña en todo el proceso.";
+  "Inmuebles verificados, visitas en línea y acompañamiento real. Encuentra tu apartamento sin vueltas ni anuncios dudosos.";
+
+export const HERO_BENEFITS = ["Más fácil", "Más rápido", "Más seguro"];
 
 export const HERO_QUIZ_TITLE = "Match inteligente";
-export const HERO_QUIZ_DESC = "2 minutos · opciones a tu medida";
+export const HERO_QUIZ_DESC = "2 minutos · opciones que encajan contigo";
 
 export function exploreInviteSubtitle(brandName) {
   return `Arriendo o compra con listados revisados por ${brandName}. Filtra por zona, precio y tipo, sin perder horas en scroll infinito.`;
@@ -26,7 +28,7 @@ export const HABIBAR_STEPS_VERIFIED =
 export const MATCH_STEPS_VERIFIED = HABIBAR_STEPS_VERIFIED;
 
 export const TRUST_TAGLINE =
-  "Menos tiempo buscando. Más confianza al arrendar.";
+  "Fácil de buscar. Rápido de visitar. Seguro de arrendar.";
 
 export const HUMAN_SUPPORT_TITLE = "Cuando nos escribes, te responde una persona";
 export const HUMAN_SUPPORT_BADGE = "Atención humana";

@@ -2,8 +2,22 @@ const SETTINGS_KEY = "habibar_admin_settings";
 const LOGO_KEY = "habibar_site_logo";
 
 export const SITE_BRANDING_EVENT = "site-branding-updated";
-export const DEFAULT_FAVICON = "/habibar-icon.png?v=13";
+
+export const FAVICON_VERSION = "17";
+export const FAVICON_SVG = `/habibar-favicon.svg?v=${FAVICON_VERSION}`;
+export const DEFAULT_FAVICON = `/habibar-icon.png?v=${FAVICON_VERSION}`;
 export const MAX_LOGO_BYTES = 400 * 1024;
+
+const FAVICON_LINKS = [
+  { rel: "icon", type: "image/svg+xml", href: FAVICON_SVG },
+  { rel: "icon", type: "image/png", sizes: "32x32", href: `/habibar-icon-32.png?v=${FAVICON_VERSION}` },
+  { rel: "icon", type: "image/png", sizes: "16x16", href: `/habibar-icon-16.png?v=${FAVICON_VERSION}` },
+  { rel: "icon", type: "image/png", sizes: "48x48", href: `/habibar-icon-48.png?v=${FAVICON_VERSION}` },
+  { rel: "icon", type: "image/png", sizes: "192x192", href: `/habibar-icon-192.png?v=${FAVICON_VERSION}` },
+  { rel: "icon", type: "image/png", sizes: "512x512", href: DEFAULT_FAVICON },
+  { rel: "apple-touch-icon", sizes: "180x180", href: `/habibar-icon-192.png?v=${FAVICON_VERSION}` },
+  { rel: "shortcut icon", type: "image/png", href: `/habibar-icon-32.png?v=${FAVICON_VERSION}` },
+];
 
 function readLogoFromSettings() {
   try {
@@ -63,10 +77,22 @@ export function subscribeSiteBranding(handler) {
   return () => window.removeEventListener(SITE_BRANDING_EVENT, handler);
 }
 
-export function applySiteFavicon(url) {
-  const href = url || DEFAULT_FAVICON;
-  document.querySelectorAll("link[rel='icon'], link[rel='apple-touch-icon']").forEach((link) => {
-    link.setAttribute("href", href);
+/** Instala favicon HABIBAR con tipos MIME correctos (evita romper el link SVG). */
+export function applySiteFavicon() {
+  if (typeof document === "undefined") return;
+
+  document
+    .querySelectorAll("link[rel='icon'], link[rel='apple-touch-icon'], link[rel='shortcut icon']")
+    .forEach((link) => link.remove());
+
+  const head = document.head;
+  FAVICON_LINKS.forEach(({ rel, type, sizes, href }) => {
+    const link = document.createElement("link");
+    link.rel = rel;
+    if (type) link.type = type;
+    if (sizes) link.sizes = sizes;
+    link.href = href;
+    head.appendChild(link);
   });
 }
 

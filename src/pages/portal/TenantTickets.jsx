@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
 import MaintenanceTicketCard from "@/components/tickets/MaintenanceTicketCard";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import MaintenanceRequestForm from "@/components/tickets/MaintenanceRequestForm";
+import { formatVisitDate, visitSlotLabel } from "@/lib/maintenanceForm";
 
 export default function TenantTickets() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const formKey = useRef(0);
 
   const { data: tickets = [] } = useQuery({
     queryKey: ["tenant-tickets", user?.id],
@@ -24,60 +24,68 @@ export default function TenantTickets() {
   });
 
   const create = useMutation({
-    mutationFn: () =>
+    mutationFn: (payload) =>
       api.entities.Ticket.create({
         property_id: leases[0]?.property_id,
         lease_id: leases[0]?.id,
         user_id: user.id,
-        title: title.trim(),
-        description: description.trim(),
+        title: payload.title,
+        description: payload.description,
+        problem_type: payload.problem_type,
+        visit_date: payload.visit_date,
+        visit_time_slot: payload.visit_time_slot,
+        visit_note: payload.visit_note || "",
+        category: "mantenimiento",
         priority: "media",
         status: "abierto",
         owner_approval: null,
         estimated_cost: 0,
-        images: [],
+        images: payload.images || [],
         timeline: [
           {
             at: new Date().toISOString(),
-            text: "Solicitud enviada por el inquilino.",
+            text: `Solicitud de mantenimiento enviada. Visita preferida: ${formatVisitDate(payload.visit_date)} (${visitSlotLabel(payload.visit_time_slot)}).`,
             by: "inquilino",
           },
         ],
       }),
     onSuccess: () => {
-      setTitle("");
-      setDescription("");
+      formKey.current += 1;
       qc.invalidateQueries({ queryKey: ["tenant-tickets"] });
     },
   });
 
+  const maintenanceTickets = tickets.filter(
+    (t) => t.category === "mantenimiento" || !/renovaci[oó]n/i.test(`${t.title} ${t.description}`)
+  );
+
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-extrabold">Soporte y mantenimiento</h2>
+        <h2 className="text-xl font-extrabold">Mantenimiento</h2>
         <p className="text-sm text-muted-foreground">
-          Reporta problemas y sigue el estado, fotos y costos de cada reparación.
+          Reporta daños del inmueble con fotos y el día en que puedes recibir a nuestro técnico. Para otras consultas usa{" "}
+          <Link to="/inquilino/mensajes" className="font-semibold text-brand-violet hover:underline">
+            Chat con HABIBAR
+          </Link>
+          .
         </p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-border/40 p-5 space-y-3">
-        <h3 className="font-bold text-sm">Nuevo ticket</h3>
-        <Input placeholder="Ej: Nevera no enfría" value={title} onChange={(e) => setTitle(e.target.value)} />
-        <Textarea placeholder="Describe el problema…" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
-        <button
-          type="button"
-          onClick={() => title.trim() && create.mutate()}
-          className="gradient-cta text-white font-bold text-sm px-4 py-2.5 rounded-xl"
-        >
-          Enviar solicitud
-        </button>
-      </div>
+      <MaintenanceRequestForm
+        key={formKey.current}
+        onSubmit={(payload) => create.mutate(payload)}
+        isSubmitting={create.isPending}
+      />
 
-      <div className="space-y-4">
-        {tickets.map((t) => (
-          <MaintenanceTicketCard key={t.id} ticket={t} showOwnerActions={false} />
-        ))}
-      </div>
+      {maintenanceTickets.length > 0 && (
+        <div className="space-y-4">
+          <h3 className="font-bold text-sm text-muted-foreground">Tus solicitudes</h3>
+          {maintenanceTickets.map((t) => (
+            <MaintenanceTicketCard key={t.id} ticket={t} showOwnerActions={false} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

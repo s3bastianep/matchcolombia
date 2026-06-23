@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api/apiClient";
 import { getUnreadAdminCount } from "./adminNotifications";
+import { hasPendingOwnerChanges } from "@/api/propertyMutations";
 
 export function useAdminBadges() {
   const { data: inquiries = [] } = useQuery({
@@ -23,6 +24,10 @@ export function useAdminBadges() {
     queryKey: ["admin-tickets"],
     queryFn: () => api.entities.Ticket.filter({}, "-created_date", 100),
   });
+  const { data: messages = [] } = useQuery({
+    queryKey: ["admin-messages"],
+    queryFn: () => api.entities.Message.filter({}, "-created_date", 500),
+  });
 
   const { data: properties = [] } = useQuery({
     queryKey: ["admin-properties"],
@@ -34,17 +39,20 @@ export function useAdminBadges() {
   const pendingVisits = visits.filter((v) => v.status === "pendiente").length;
   const pendingOwners = owners.filter((o) => ["pendiente", "en_revision"].includes(o.verification_status)).length;
   const pendingReviewProps = properties.filter((p) => p.publication_status === "en_revision").length;
+  const pendingOwnerEdits = properties.filter(hasPendingOwnerChanges).length;
   const pendingApps = applications.filter((a) => ["documentos_enviados", "en_revision"].includes(a.status)).length;
   const openTickets = tickets.filter((t) => t.status !== "resuelto").length;
+  const pendingMessages = messages.filter((m) => m.property_id === "support" && m.sender_role === "user" && !m.read).length;
   const notifications = getUnreadAdminCount();
 
   return {
     leads: unanswered || newLeads,
     visits: pendingVisits,
     owners: pendingOwners,
-    properties: pendingReviewProps,
+    properties: pendingReviewProps + pendingOwnerEdits,
     applications: pendingApps,
     tickets: openTickets,
+    messages: pendingMessages,
     notifications,
   };
 }

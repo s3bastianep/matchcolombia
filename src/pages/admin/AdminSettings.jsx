@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, Trash2, MapPin, Image, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import BrandLogo from "@/components/brand/BrandLogo";
-import { applySiteFavicon, readImageFile } from "@/lib/siteBranding";
+import { readImageFile } from "@/lib/siteBranding";
 
 export default function AdminSettings() {
   const qc = useQueryClient();
@@ -39,7 +39,6 @@ export default function AdminSettings() {
     onSuccess: (data, variables) => {
       qc.invalidateQueries({ queryKey: ["admin-settings"] });
       if ("site_logo" in variables) {
-        applySiteFavicon(data?.site_logo);
         setLogoDirty(false);
         toast.success("Logo actualizado en toda la página.");
       }
@@ -112,7 +111,7 @@ export default function AdminSettings() {
           Logo de la página
         </h3>
         <p className="text-sm text-muted-foreground">
-          Sube PNG, JPG o SVG (máx. 400 KB). Se verá en el navbar y como favicon.
+          Sube PNG, JPG o SVG (máx. 400 KB). Se verá en el navbar. El favicon siempre usa la H de HABIBAR.
         </p>
 
         <div className="rounded-xl border border-border/40 bg-secondary/40 p-4 flex flex-wrap items-center gap-6">

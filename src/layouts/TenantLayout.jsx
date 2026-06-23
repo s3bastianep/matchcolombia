@@ -5,7 +5,7 @@ const nav = [
   { to: "/inquilino", label: "Inicio", icon: Home },
   { to: "/inquilino/contrato", label: "Contrato", icon: FileText },
   { to: "/inquilino/pagos", label: "Pagos", icon: CreditCard },
-  { to: "/inquilino/tickets", label: "Soporte", icon: Wrench },
+  { to: "/inquilino/tickets", label: "Mantenimiento", icon: Wrench },
   { to: "/inquilino/mensajes", label: "Chat", icon: MessageSquare },
 ];
 

@@ -43,6 +43,7 @@ const AdminApplications = lazy(() => import('./pages/admin/AdminApplications'));
 const AdminOwners = lazy(() => import('./pages/admin/AdminOwners'));
 const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'));
 const AdminNotifications = lazy(() => import('./pages/admin/AdminNotifications'));
+const AdminMessages = lazy(() => import('./pages/admin/AdminMessages'));
 
 const SeekerPortal = lazy(() => import('./pages/portal/SeekerPortal'));
 const SeekerApplications = lazy(() => import('./pages/portal/SeekerApplications'));
@@ -56,6 +57,7 @@ const TenantTickets = lazy(() => import('./pages/portal/TenantTickets'));
 
 const OwnerPortal = lazy(() => import('./pages/portal/OwnerPortal'));
 const OwnerProperties = lazy(() => import('./pages/portal/OwnerProperties'));
+const OwnerPropertyEdit = lazy(() => import('./pages/portal/OwnerPropertyEdit'));
 const OwnerLeads = lazy(() => import('./pages/portal/OwnerLeads'));
 const OwnerTickets = lazy(() => import('./pages/portal/OwnerTickets'));
 const OwnerFinance = lazy(() => import('./pages/portal/OwnerFinance'));
@@ -115,6 +117,7 @@ function AppRoutes() {
             <Route path="/admin/propiedades" element={<AdminProperties />} />
             <Route path="/admin/propiedades/:id" element={<AdminPropertyEdit />} />
             <Route path="/admin/leads" element={<AdminLeads />} />
+            <Route path="/admin/mensajes" element={<AdminMessages />} />
             <Route path="/admin/visitas" element={<AdminVisits />} />
             <Route path="/admin/inquilinos" element={<AdminTenants />} />
             <Route path="/admin/aplicaciones" element={<AdminApplications />} />
@@ -148,8 +151,10 @@ function AppRoutes() {
           <Route element={<Suspense fallback={<PageLoader />}><OwnerLayout /></Suspense>}>
             <Route path="/propietario" element={<OwnerPortal />} />
             <Route path="/propietario/propiedades" element={<OwnerProperties />} />
+            <Route path="/propietario/propiedades/:id/editar" element={<OwnerPropertyEdit />} />
             <Route path="/propietario/leads" element={<OwnerLeads />} />
             <Route path="/propietario/tickets" element={<OwnerTickets />} />
+            <Route path="/propietario/mensajes" element={<SeekerMessages />} />
             <Route path="/propietario/rentabilidad" element={<OwnerFinance />} />
           </Route>
         </Route>

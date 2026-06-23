@@ -9,7 +9,7 @@ export const HOME_SEO_SECTIONS = [
     title: `Qué es ${BRAND.name} y cómo ayuda a arrendar en Bogotá`,
     paragraphs: [
       `${BRAND.name} es una plataforma de arriendos verificados en Bogotá enfocada en apartamentos, casas y estudios listos para visitar. Cada publicación pasa por una revisión humana de fotos, precios y disponibilidad antes de aparecer en el catálogo.`,
-      `Si buscas el lugar que existe y está aquí, puedes filtrar por barrio, presupuesto, habitaciones y mascotas. El Match inteligente ordena opciones según lo que marcaste como importante, para que no pierdas tiempo con anuncios que no encajan.`,
+      `En ${BRAND.name} puedes filtrar por barrio, presupuesto, habitaciones y mascotas. El Match inteligente ordena opciones según lo que marcaste como importante, para que no pierdas tiempo con anuncios que no encajan.`,
       `Nuestro equipo coordina visitas presenciales o virtuales, confirma horarios y da seguimiento hasta que firmes contrato. La atención es humana: respondemos por chat, correo y WhatsApp sin bots ni respuestas automáticas.`,
     ],
   },

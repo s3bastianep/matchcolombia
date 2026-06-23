@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { api } from "@/api/apiClient";
 import StatusBadge from "@/components/panels/StatusBadge";
 import { PROPERTY_WORKFLOW } from "@/lib/adminConstants";
+import { hasPendingOwnerChanges } from "@/api/propertyMutations";
 import { Pencil, Trash2, Plus, ExternalLink } from "lucide-react";
 
 const formatCOP = (v) => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v || 0);
@@ -87,6 +88,11 @@ export default function AdminProperties() {
                     <td className="p-4">
                       <p className="font-bold line-clamp-1">{p.title}</p>
                       <p className="text-xs text-muted-foreground">{p.neighborhood}, {p.city}</p>
+                      {hasPendingOwnerChanges(p) && (
+                        <span className="inline-flex mt-1.5 text-[10px] font-bold text-amber-800 bg-amber-500/15 px-2 py-0.5 rounded-md border border-amber-500/25">
+                          Cambios del propietario
+                        </span>
+                      )}
                     </td>
                     <td className="p-4 font-mono text-xs text-muted-foreground">{p.reference_code || "N/D"}</td>
                     <td className="p-4 font-semibold">{formatCOP(p.monthly_rent)}</td>

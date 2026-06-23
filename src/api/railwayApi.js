@@ -53,10 +53,10 @@ const Property = {
     notifyPropertiesUpdated();
     return row;
   },
-  async update(id, patch, editor = "admin") {
+  async update(id, patch, editor = "admin", options = {}) {
     const row = await apiRequest(`/entities/property/${id}`, {
       method: "PATCH",
-      body: { patch, editor },
+      body: { patch, editor, action: options.action, note: options.note },
     });
     notifyPropertiesUpdated();
     return row;

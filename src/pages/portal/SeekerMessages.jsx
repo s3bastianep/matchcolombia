@@ -1,97 +1,87 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
-import { EmptyState } from "@/components/panels/PipelineBoard";
-import { Link } from "react-router-dom";
-import { Send } from "lucide-react";
+import SupportChatPanel from "@/components/chat/SupportChatPanel";
+import { BRAND } from "@/lib/brand";
+import {
+  SUPPORT_THREAD_ID,
+  SUPPORT_THREAD_LABEL,
+  filterSupportMessages,
+  isStaffSender,
+  isSupportThread,
+  sortMessagesChronologically,
+} from "@/lib/supportChat";
 
 export default function SeekerMessages() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const [selectedProperty, setSelectedProperty] = useState(null);
   const [text, setText] = useState("");
 
-  const { data: messages = [] } = useQuery({
-    queryKey: ["my-messages", user?.id],
+  const { data: messages = [], isLoading } = useQuery({
+    queryKey: ["support-messages", user?.id],
     queryFn: () => api.entities.Message.filter({ user_id: user?.id }),
     enabled: !!user?.id,
+    refetchInterval: 15000,
   });
 
-  const { data: properties = [] } = useQuery({
-    queryKey: ["msg-properties"],
-    queryFn: () => api.entities.Property.filter({}, "-created_date", 200),
-  });
+  const threadMessages = sortMessagesChronologically(filterSupportMessages(messages, user?.id));
 
-  const threads = [...new Set(messages.map((m) => m.property_id))];
-  const activeProperty = selectedProperty || threads[0];
-  const threadMessages = messages.filter((m) => m.property_id === activeProperty).sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
+  useEffect(() => {
+    if (!user?.id) return;
+    const unreadStaff = messages.filter(
+      (m) => isSupportThread(m) && m.user_id === user.id && isStaffSender(m.sender_role) && !m.read
+    );
+    if (!unreadStaff.length) return;
+    Promise.all(unreadStaff.map((m) => api.entities.Message.update(m.id, { read: true }))).then(() => {
+      qc.invalidateQueries({ queryKey: ["support-messages"] });
+    });
+  }, [messages, user?.id, qc]);
 
   const send = useMutation({
-    mutationFn: () =>
+    mutationFn: ({ body, attachments }) =>
       api.entities.Message.create({
-        property_id: activeProperty,
+        property_id: SUPPORT_THREAD_ID,
         user_id: user.id,
+        user_name: user.name || user.username,
+        user_role: user.role || "seeker",
         sender_role: "user",
-        body: text.trim(),
+        body: body || (attachments?.length ? "Archivo adjunto" : ""),
+        attachments: attachments || [],
         read: false,
       }),
     onSuccess: () => {
       setText("");
-      qc.invalidateQueries({ queryKey: ["my-messages"] });
+      qc.invalidateQueries({ queryKey: ["support-messages"] });
+      qc.invalidateQueries({ queryKey: ["admin-messages"] });
     },
   });
 
-  if (!threads.length) {
-    return (
-      <EmptyState
-        title="Sin conversaciones"
-        description="Escribe desde el detalle de una propiedad o solicita visita para abrir un hilo."
-        action={<Link to="/explorar" className="inline-block gradient-cta text-white font-bold px-5 py-2.5 rounded-xl text-sm">Explorar</Link>}
-      />
-    );
-  }
-
-  const propTitle = (id) => properties.find((p) => p.id === id)?.title || id;
-
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-extrabold">Mensajes por propiedad</h2>
-      <div className="flex flex-wrap gap-2">
-        {threads.map((pid) => (
-          <button
-            key={pid}
-            type="button"
-            onClick={() => setSelectedProperty(pid)}
-            className={`text-xs font-bold px-3 py-1.5 rounded-full border ${activeProperty === pid ? "bg-foreground text-white border-foreground" : "bg-white"}`}
-          >
-            {propTitle(pid).slice(0, 30)}
-          </button>
-        ))}
+      <div>
+        <h2 className="text-xl font-extrabold">Chat con {BRAND.name}</h2>
+        <p className="text-sm text-muted-foreground">
+          Habla con el equipo administrativo. Tus mensajes muestran si fueron vistos y puedes adjuntar fotos o archivos.
+        </p>
       </div>
-      <div className="bg-white rounded-2xl border border-border/40 min-h-[360px] flex flex-col">
-        <div className="flex-1 p-4 space-y-3 overflow-y-auto max-h-[400px]">
-          {threadMessages.map((m) => (
-            <div key={m.id} className={`flex ${m.sender_role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm ${m.sender_role === "user" ? "bg-brand-violet text-white" : "bg-secondary"}`}>
-                {m.body}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="p-4 border-t flex gap-2">
-          <input
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && text.trim() && send.mutate()}
-            placeholder="Escribe un mensaje…"
-            className="flex-1 h-10 px-4 rounded-xl border text-sm"
-          />
-          <button type="button" onClick={() => text.trim() && send.mutate()} className="h-10 w-10 rounded-xl gradient-cta text-white flex items-center justify-center">
-            <Send className="w-4 h-4" />
-          </button>
-        </div>
+
+      <div className="rounded-2xl border border-brand-violet/15 bg-brand-violet/[0.04] px-4 py-3">
+        <p className="text-xs font-bold uppercase tracking-wide text-brand-violet">{SUPPORT_THREAD_LABEL}</p>
+        <p className="text-xs text-muted-foreground mt-1">
+          1. Escribe tu consulta · 2. Adjunta fotos si aplica · 3. El equipo responde por aquí
+        </p>
       </div>
+
+      <SupportChatPanel
+        messages={threadMessages}
+        value={text}
+        onChange={setText}
+        onSend={(payload) => send.mutate(payload)}
+        disabled={isLoading || send.isPending}
+        viewerIsUser
+        emptyHint={`Cuéntanos en qué podemos ayudarte. El equipo de ${BRAND.name} te responderá por aquí.`}
+      />
     </div>
   );
 }

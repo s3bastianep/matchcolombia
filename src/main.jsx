@@ -2,6 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { importWithRetry } from '@/lib/chunkRetry'
 import { preloadCurrentRouteChunk } from '@/lib/preloadRoute'
+import { applySiteFavicon } from '@/lib/siteBranding'
+
+applySiteFavicon()
 
 function isBooting() {
   return !!document.getElementById('boot-loader')

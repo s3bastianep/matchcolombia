@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/brand";
-import { applySiteFavicon, getSiteBranding, subscribeSiteBranding } from "@/lib/siteBranding";
+import { getSiteBranding, subscribeSiteBranding } from "@/lib/siteBranding";
 
 /**
  * layout:
@@ -24,10 +24,6 @@ export default function BrandLogo({
     return subscribeSiteBranding(() => {
       setCustomLogoUrl(getSiteBranding().logoUrl);
     });
-  }, []);
-
-  useEffect(() => {
-    applySiteFavicon(BRAND.logoIcon);
   }, []);
 
   /* Wordmark: ancho fijo; `nav` usa altura fija para alinear con el menú */

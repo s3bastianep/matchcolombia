@@ -10,6 +10,9 @@ import {
   generatePropertyId,
   matchesFilter,
   sortList,
+  submitOwnerPendingChanges,
+  approveOwnerPendingChanges,
+  rejectOwnerPendingChanges,
 } from "./propertyMutations";
 import * as supabaseAuth from "@/lib/supabaseAuth";
 
@@ -43,12 +46,25 @@ const Property = {
     return row;
   },
 
-  async update(id, patch, editor = "admin") {
+  async update(id, patch, editor = "admin", options = {}) {
     const store = createSupabaseStore(supabase, "property");
     const current = await store.get(id);
     if (!current) throw new Error("Propiedad no encontrada");
     const owners = await loadOwnersList();
-    const next = applyPropertyUpdate(current, patch, editor, owners);
+    const role = options.role || (options.asOwner ? "owner" : "admin");
+
+    let next;
+    if (options.action === "approve_pending_changes") {
+      next = approveOwnerPendingChanges(current, editor, owners);
+    } else if (options.action === "reject_pending_changes") {
+      next = rejectOwnerPendingChanges(current, editor, options.note || "");
+    } else if (role === "owner") {
+      if (current.owner_user_id !== editor) throw new Error("No autorizado para editar este inmueble");
+      next = submitOwnerPendingChanges(current, patch, editor);
+    } else {
+      next = applyPropertyUpdate(current, patch, editor, owners);
+    }
+
     const row = await store.update(id, next);
     notifyPropertiesUpdated();
     return row;

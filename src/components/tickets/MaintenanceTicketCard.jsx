@@ -9,6 +9,7 @@ import {
   appendTimeline,
   OWNER_APPROVAL_LABELS,
 } from "@/lib/ticketUtils";
+import { formatVisitDate, visitSlotLabel } from "@/lib/maintenanceForm";
 import { cn } from "@/lib/utils";
 import { Check, X, Clock, Wrench, ImageIcon, Banknote, User } from "lucide-react";
 
@@ -120,6 +121,20 @@ export default function MaintenanceTicketCard({ ticket, propertyTitle, showOwner
       </div>
 
       <p className="text-sm text-muted-foreground leading-relaxed mb-4">{ticket.description}</p>
+
+      {ticket.visit_date && (
+        <div className="mb-4 p-3 rounded-xl bg-brand-violet/[0.04] border border-brand-violet/15">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-brand-violet mb-1 flex items-center gap-1">
+            <Clock className="w-3 h-3" /> Visita del técnico
+          </p>
+          <p className="text-sm text-foreground">
+            {formatVisitDate(ticket.visit_date)} · {visitSlotLabel(ticket.visit_time_slot)}
+          </p>
+          {ticket.visit_note && (
+            <p className="text-xs text-muted-foreground mt-1">{ticket.visit_note}</p>
+          )}
+        </div>
+      )}
 
       {ticket.repair_summary && (
         <div className="mb-4 p-3 rounded-xl bg-[hsl(0,0%,98%)] border border-border/40">

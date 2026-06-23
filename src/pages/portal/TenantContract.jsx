@@ -26,7 +26,7 @@ export default function TenantContract() {
         <div className="flex justify-between"><span className="text-muted-foreground text-sm">Fin</span><span className="font-bold">{lease.end_date}</span></div>
         <div className="flex justify-between"><span className="text-muted-foreground text-sm">Canon mensual</span><span className="font-extrabold">{formatCOP(lease.monthly_rent)}</span></div>
         <div className="flex justify-between"><span className="text-muted-foreground text-sm">Administración</span><span className="font-bold">{formatCOP(lease.admin_fee)}</span></div>
-        <p className="text-xs text-muted-foreground pt-2 border-t">Renovación: recibirás aviso 30 días antes del vencimiento.</p>
+        <p className="text-xs text-muted-foreground pt-2 border-t">Renovación: recibirás aviso 75 días antes del vencimiento.</p>
       </div>
     </div>
   );

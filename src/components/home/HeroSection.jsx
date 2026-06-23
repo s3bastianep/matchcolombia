@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Search, Building2, Sparkles } from "lucide-react";
 import { PEOPLE } from "@/lib/colombiaImages";
-import { HERO_EYEBROW, HERO_QUIZ_DESC, HERO_QUIZ_TITLE, HERO_SUBTITLE, HERO_TITLE_LINE1, HERO_TITLE_LINE2 } from "@/lib/siteCopy";
+import { HERO_BENEFITS, HERO_EYEBROW, HERO_QUIZ_DESC, HERO_QUIZ_TITLE, HERO_SUBTITLE, HERO_TITLE_LINE1, HERO_TITLE_LINE2 } from "@/lib/siteCopy";
 import { cn } from "@/lib/utils";
 import HomeSearchBar from "@/components/search/HomeSearchBar";
 import HumanSupportBanner from "@/components/brand/HumanSupportBanner";
@@ -123,9 +123,20 @@ export default function HeroSection({ onStartQuiz }) {
             <span className="text-foreground">.</span>
           </h1>
 
-          <p className="text-muted-foreground text-sm sm:text-base mb-5 max-w-md leading-relaxed">
+          <p className="text-muted-foreground text-sm sm:text-base mb-4 max-w-md leading-relaxed">
             {HERO_SUBTITLE}
           </p>
+
+          <div className="flex flex-wrap gap-2 mb-5">
+            {HERO_BENEFITS.map((benefit) => (
+              <span
+                key={benefit}
+                className="inline-flex items-center rounded-full border border-brand-violet/20 bg-brand-violet/[0.06] px-3 py-1 text-[11px] font-bold tracking-wide text-brand-violet"
+              >
+                {benefit}
+              </span>
+            ))}
+          </div>
 
           <div className="mb-6">
             <HomeSearchBar />

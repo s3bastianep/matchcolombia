@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import StatusBadge from "@/components/panels/StatusBadge";
 import { PROPERTY_WORKFLOW, PHOTO_CATEGORIES } from "@/lib/adminConstants";
+import { hasPendingOwnerChanges } from "@/api/propertyMutations";
+import { Check, X } from "lucide-react";
 
 export default function AdminPropertyEdit() {
   const { id } = useParams();
@@ -39,10 +41,42 @@ export default function AdminPropertyEdit() {
     },
   });
 
+  const approvePending = useMutation({
+    mutationFn: () => api.entities.Property.update(id, {}, "admin", { action: "approve_pending_changes" }),
+    onSuccess: (updated) => {
+      qc.invalidateQueries({ queryKey: ["admin-properties"] });
+      qc.invalidateQueries({ queryKey: ["admin-property", id] });
+      qc.invalidateQueries({ queryKey: ["owner-properties"] });
+      if (updated) setForm({ ...updated });
+    },
+  });
+
+  const rejectPending = useMutation({
+    mutationFn: () => api.entities.Property.update(id, {}, "admin", { action: "reject_pending_changes" }),
+    onSuccess: (updated) => {
+      qc.invalidateQueries({ queryKey: ["admin-properties"] });
+      qc.invalidateQueries({ queryKey: ["admin-property", id] });
+      qc.invalidateQueries({ queryKey: ["owner-properties"] });
+      if (updated) setForm({ ...updated });
+    },
+  });
+
   if (isLoading || !form) return <p className="text-sm text-muted-foreground">Cargando…</p>;
 
   const set = (key, val) => setForm((f) => ({ ...f, [key]: val }));
   const workflow = form.publication_status || (form.status === "disponible" ? "publicada" : form.status);
+  const pending = property?.pending_changes;
+  const pendingPatch = pending?.patch || {};
+  const formatCOP = (v) => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v || 0);
+
+  const pendingFields = [
+    { key: "title", label: "Título" },
+    { key: "description", label: "Descripción" },
+    { key: "monthly_rent", label: "Arriendo/mes", format: formatCOP },
+    { key: "admin_fee", label: "Administración", format: formatCOP },
+    { key: "neighborhood", label: "Barrio" },
+    { key: "address", label: "Dirección" },
+  ].filter((f) => pendingPatch[f.key] !== undefined);
 
   const updateImageCategory = (idx, category) => {
     const meta = [...(form.image_meta || form.images?.map(() => ({})) || [])];
@@ -61,6 +95,56 @@ export default function AdminPropertyEdit() {
           </span>
         )}
       </div>
+
+      {hasPendingOwnerChanges(property) && (
+        <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-6 space-y-4">
+          <div>
+            <p className="font-extrabold text-amber-900">Cambios solicitados por el propietario</p>
+            <p className="text-xs text-amber-800/90 mt-1">
+              Enviados el{" "}
+              {new Date(pending.submitted_at).toLocaleString("es-CO")}
+              {pending.submitted_by ? ` · ${pending.submitted_by}` : ""}
+            </p>
+          </div>
+          <div className="space-y-2">
+            {pendingFields.map((f) => (
+              <div key={f.key} className="grid sm:grid-cols-2 gap-2 text-sm bg-white/70 rounded-xl p-3 border border-amber-500/15">
+                <div>
+                  <p className="text-[10px] font-bold uppercase text-muted-foreground">{f.label} actual</p>
+                  <p className="font-medium mt-0.5">
+                    {f.format ? f.format(property[f.key]) : (property[f.key] || "—")}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase text-amber-800">Propuesto</p>
+                  <p className="font-bold text-amber-900 mt-0.5">
+                    {f.format ? f.format(pendingPatch[f.key]) : (pendingPatch[f.key] || "—")}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={() => approvePending.mutate()}
+              disabled={approvePending.isPending || rejectPending.isPending}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
+            >
+              <Check className="w-4 h-4 mr-1" />
+              {approvePending.isPending ? "Aprobando…" : "Aprobar cambios"}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => window.confirm("¿Rechazar los cambios del propietario?") && rejectPending.mutate()}
+              disabled={approvePending.isPending || rejectPending.isPending}
+              className="border-red-300 text-red-600 hover:bg-red-50"
+            >
+              <X className="w-4 h-4 mr-1" />
+              {rejectPending.isPending ? "Rechazando…" : "Rechazar"}
+            </Button>
+          </div>
+        </div>
+      )}
 
       <div className="bg-white rounded-2xl border border-border/40 p-6 space-y-4">
         <div className="grid grid-cols-2 gap-4">

@@ -30,7 +30,7 @@ export default function SeekerPortal() {
         {[
           { to: "/explorar", label: "Explorar", icon: Heart, desc: "Lista y mapa" },
           { to: "/portal/aplicaciones", label: "Mis procesos", icon: FileText, desc: `${applications.length} activos` },
-          { to: "/portal/mensajes", label: "Mensajes", icon: MessageSquare, desc: "Chat por propiedad" },
+          { to: "/portal/mensajes", label: "Chat HABIBAR", icon: MessageSquare, desc: "Habla con el equipo administrativo" },
           { to: "/portal/visitas", label: "Visitas", icon: Calendar, desc: `${visits.length} agendadas` },
         ].map((item) => (
           <Link key={item.to} to={item.to} className="bg-white rounded-2xl border border-border/40 p-5 hover:shadow-md transition-all group">

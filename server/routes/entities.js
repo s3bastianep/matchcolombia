@@ -9,7 +9,15 @@ import {
   upsertSingleton,
 } from "../db/entityStore.js";
 import { requireAuth } from "../middleware/auth.js";
-import { matchesFilter, sortList, buildNewProperty, applyPropertyUpdate } from "../../src/api/propertyMutations.js";
+import {
+  matchesFilter,
+  sortList,
+  buildNewProperty,
+  applyPropertyUpdate,
+  submitOwnerPendingChanges,
+  approveOwnerPendingChanges,
+  rejectOwnerPendingChanges,
+} from "../../src/api/propertyMutations.js";
 import { validateVisitBooking } from "../../src/lib/visitSlots.js";
 import { getPortalSeedData } from "../../src/api/portalSeed.js";
 
@@ -136,13 +144,31 @@ router.patch("/:entityType/:id", requireAuth, async (req, res) => {
   try {
     const { entityType, id } = req.params;
     const patch = req.body?.patch ?? req.body ?? {};
-    const editor = req.body?.editor || req.user.username || "user";
+    const editor = req.body?.editor || req.user.id || req.user.username || "user";
+    const action = req.body?.action;
 
     if (entityType === "property") {
       const current = await getRecord("property", id);
       if (!current) return res.status(404).json({ error: "Propiedad no encontrada" });
       const owners = await fetchAll("owner");
-      const next = applyPropertyUpdate(current, patch, editor, owners);
+      const role = req.user.role;
+
+      let next;
+      if (action === "approve_pending_changes") {
+        if (role !== "admin") return res.status(403).json({ error: "No autorizado" });
+        next = approveOwnerPendingChanges(current, editor, owners);
+      } else if (action === "reject_pending_changes") {
+        if (role !== "admin") return res.status(403).json({ error: "No autorizado" });
+        next = rejectOwnerPendingChanges(current, editor, req.body?.note || "");
+      } else if (role === "owner") {
+        if (current.owner_user_id !== req.user.id) {
+          return res.status(403).json({ error: "No autorizado para editar este inmueble" });
+        }
+        next = submitOwnerPendingChanges(current, patch, editor);
+      } else {
+        next = applyPropertyUpdate(current, patch, editor, owners);
+      }
+
       const row = await updateRecord("property", id, next);
       return res.json(row);
     }

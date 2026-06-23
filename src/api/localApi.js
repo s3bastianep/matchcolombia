@@ -1,7 +1,13 @@
 import { SEED_PROPERTIES } from "./mockData";
 import { createStore } from "./store";
-import { getPortalSeedData } from "./portalSeed";
+import { getPortalSeedData, OBSOLETE_DEMO_TICKET_IDS } from "./portalSeed";
 import { workflowToPublicStatus } from "../lib/adminConstants";
+import {
+  applyPropertyUpdate,
+  submitOwnerPendingChanges,
+  approveOwnerPendingChanges,
+  rejectOwnerPendingChanges,
+} from "./propertyMutations";
 import { validateVisitBooking } from "../lib/visitSlots";
 import { seedAdminNotificationsIfNeeded } from "../lib/adminNotifications";
 import * as localAuth from "../lib/localAuth";
@@ -175,6 +181,18 @@ function seedPortalIfNeeded() {
       return;
     }
 
+    if (!localStorage.getItem("habibar_portal_tickets_v3")) {
+      const current = JSON.parse(localStorage.getItem(TICKETS_KEY) || "[]");
+      const filtered = current.filter((t) => !OBSOLETE_DEMO_TICKET_IDS.includes(t.id));
+      const seedIds = new Set(seed.tickets.map((t) => t.id));
+      const merged = [
+        ...filtered.filter((t) => !seedIds.has(t.id)),
+        ...seed.tickets,
+      ];
+      localStorage.setItem(TICKETS_KEY, JSON.stringify(merged));
+      localStorage.setItem("habibar_portal_tickets_v3", "1");
+    }
+
     if (localStorage.getItem("habibar_portal_seeded_v2") && !localStorage.getItem("habibar_portal_finance_migrated")) {
       localStorage.setItem(LEASES_KEY, JSON.stringify(seed.leases));
       localStorage.setItem(PAYMENTS_KEY, JSON.stringify(seed.payments));
@@ -251,52 +269,28 @@ const Property = {
     return property;
   },
 
-  async update(id, patch, editor = "admin") {
+  async update(id, patch, editor = "admin", options = {}) {
     await delay(120);
     const properties = loadProperties();
     const idx = properties.findIndex((p) => p.id === id);
     if (idx === -1) throw new Error("Propiedad no encontrada");
     const current = properties[idx];
-    const nextPublication = patch.publication_status ?? current.publication_status;
-    if (nextPublication === "publicada") {
-      const ownerUserId = patch.owner_user_id ?? current.owner_user_id;
-      if (ownerUserId) {
-        const owner = loadOwners().find((o) => o.user_id === ownerUserId);
-        if (owner && owner.verification_status !== "verificado") {
-          throw new Error("El propietario debe estar verificado para publicar el inmueble.");
-        }
-      }
+    const owners = loadOwners();
+    const role = options.role || (options.asOwner ? "owner" : "admin");
+
+    let updated;
+    if (options.action === "approve_pending_changes") {
+      updated = approveOwnerPendingChanges(current, editor, owners);
+    } else if (options.action === "reject_pending_changes") {
+      updated = rejectOwnerPendingChanges(current, editor, options.note || "");
+    } else if (role === "owner") {
+      if (current.owner_user_id !== editor) throw new Error("No autorizado para editar este inmueble");
+      updated = submitOwnerPendingChanges(current, patch, editor);
+    } else {
+      updated = applyPropertyUpdate(current, patch, editor, owners);
     }
-    const history = [...(current.history || [])];
-    const audit_log = [...(current.audit_log || [])];
-    if (patch.publication_status && patch.publication_status !== current.publication_status) {
-      history.push({ type: "workflow", from: current.publication_status, to: patch.publication_status, at: new Date().toISOString(), by: editor });
-    }
-    if (patch.status && patch.status !== current.status) {
-      history.push({ type: "status", from: current.status, to: patch.status, at: new Date().toISOString(), by: editor });
-    }
-    Object.entries(patch).forEach(([key, val]) => {
-      if (current[key] !== val && !["history", "audit_log", "updated_date"].includes(key)) {
-        audit_log.push({ field: key, at: new Date().toISOString(), by: editor });
-      }
-    });
-    const publication_status = patch.publication_status ?? current.publication_status;
-    const syncedStatus = patch.publication_status ? workflowToPublicStatus(publication_status) : patch.status;
-    const now = new Date().toISOString();
-    const becamePublished = publication_status === "publicada" && current.publication_status !== "publicada";
-    properties[idx] = {
-      ...current,
-      ...patch,
-      publication_status,
-      status: syncedStatus ?? patch.status ?? current.status,
-      history,
-      audit_log: audit_log.slice(-80),
-      updated_date: now,
-      published_at: becamePublished ? now : (patch.published_at ?? current.published_at ?? null),
-      reviewed_at: becamePublished && !current.reviewed_at
-        ? now
-        : (patch.reviewed_at ?? current.reviewed_at ?? null),
-    };
+
+    properties[idx] = updated;
     saveProperties(properties);
     notifyPropertiesUpdated();
     return properties[idx];

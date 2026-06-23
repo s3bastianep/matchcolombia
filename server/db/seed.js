@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
 import { query } from "./pool.js";
-import { upsertSingleton, createRecord, getRecord } from "./entityStore.js";
+import { upsertSingleton, createRecord, getRecord, updateRecord, deleteRecord } from "./entityStore.js";
 import { SEED_PROPERTIES } from "../../src/api/mockData.js";
-import { getPortalSeedData } from "../../src/api/portalSeed.js";
+import { getPortalSeedData, OBSOLETE_DEMO_TICKET_IDS } from "../../src/api/portalSeed.js";
 import { buildNewProperty } from "../../src/api/propertyMutations.js";
 
 const DEMO_USERS = [
@@ -73,4 +73,27 @@ export async function seedIfEmpty() {
   await upsertSingleton("admin_settings", "site", { ...seed.settings, id: "site" });
 
   console.log("HABIBAR API: seed completado. Login: admin / admin123");
+}
+
+/** Mantiene tickets demo alineados con el código (solo mantenimiento). */
+export async function syncDemoPortalTickets() {
+  const propIds = SEED_PROPERTIES.slice(0, 2).map((p) => p.id);
+  const seed = getPortalSeedData(propIds);
+
+  for (const id of OBSOLETE_DEMO_TICKET_IDS) {
+    try {
+      await deleteRecord("ticket", id);
+    } catch {
+      /* ya eliminado */
+    }
+  }
+
+  for (const ticket of seed.tickets) {
+    const existing = await getRecord("ticket", ticket.id);
+    if (existing) {
+      await updateRecord("ticket", ticket.id, { ...existing, ...ticket });
+    } else {
+      await createRecord("ticket", ticket, "ticket");
+    }
+  }
 }

@@ -30,6 +30,7 @@ export default function AdminDashboard() {
 
   const alerts = [
     m.unansweredLeads > 0 && { label: `${m.unansweredLeads} leads sin responder`, to: "/admin/leads", icon: MessageSquare },
+    m.unreadMessages > 0 && { label: `${m.unreadMessages} chats pendientes`, to: "/admin/mensajes", icon: MessageSquare },
     pendingVisits > 0 && { label: `${pendingVisits} visitas por aprobar`, to: "/admin/visitas", icon: Calendar },
     m.pendingVerifications > 0 && { label: `${m.pendingVerifications} propietarios por verificar`, to: "/admin/propietarios", icon: Shield },
     m.overduePayments > 0 && { label: `${m.overduePayments} pagos atrasados`, to: "/admin/inquilinos", icon: DollarSign },
@@ -66,7 +67,7 @@ export default function AdminDashboard() {
         <StatCard label="Conversión → visita" value={`${m.conversionLeadsToVisits}%`} icon={Users} />
         <StatCard label="Conversión → cierre" value={`${m.conversionToClose}%`} icon={FileText} />
         <StatCard label="Días prom. arriendo" value={m.avgDaysToRent ?? "N/D"} icon={Building2} />
-        <StatCard label="Tickets abiertos" value={m.openTickets} hint={`${m.unreadMessages} mensajes sin leer`} icon={Bell} />
+        <StatCard label="Tickets abiertos" value={m.openTickets} hint={`${m.unreadMessages} chats sin responder`} icon={Bell} />
       </div>
 
       {alerts.length > 0 && (

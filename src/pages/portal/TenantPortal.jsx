@@ -35,7 +35,7 @@ export default function TenantPortal() {
     <div className="space-y-8">
       <div>
         <h2 className="text-2xl font-extrabold">Mi arriendo</h2>
-        <p className="text-sm text-muted-foreground mt-1">Contrato, pagos, soporte y renovación.</p>
+        <p className="text-sm text-muted-foreground mt-1">Contrato, pagos, mantenimiento y chat.</p>
       </div>
 
       {pending && (
@@ -52,15 +52,19 @@ export default function TenantPortal() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard label="Contrato" value={lease ? "Activo" : "N/D"} hint={lease?.end_date ? `Hasta ${lease.end_date}` : ""} icon={FileText} />
         <StatCard label="Próximo pago" value={pending ? formatCOP(pending.amount) : "Al día"} icon={CreditCard} />
-        <StatCard label="Tickets abiertos" value={tickets.filter((t) => t.status !== "resuelto").length} icon={Wrench} />
+        <StatCard
+          label="Mantenimiento abierto"
+          value={tickets.filter((t) => t.status !== "resuelto" && t.status !== "rechazado" && !/renovaci[oó]n/i.test(t.title || "")).length}
+          icon={Wrench}
+        />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {[
           { to: "/inquilino/contrato", label: "Ver contrato", icon: FileText },
           { to: "/inquilino/pagos", label: "Estado de cuenta", icon: CreditCard },
-          { to: "/inquilino/tickets", label: "Soporte", icon: Wrench },
-          { to: "/portal/mensajes", label: `Chat con ${BRAND.name}`, icon: MessageSquare },
+          { to: "/inquilino/tickets", label: "Mantenimiento", icon: Wrench },
+          { to: "/inquilino/mensajes", label: `Chat con ${BRAND.name}`, icon: MessageSquare },
         ].map((item) => (
           <Link key={item.to} to={item.to} className="bg-white rounded-2xl border border-border/40 p-5 hover:shadow-md transition-all flex items-center gap-3">
             <item.icon className="w-5 h-5 text-brand-violet" />

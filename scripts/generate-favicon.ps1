@@ -1,9 +1,12 @@
-# Favicon HABIBAR — casa sólida blanca (nítida en 16px, sin trazos borrosos)
+# Favicon HABIBAR — solo H con degradado marca, fondo transparente
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Drawing
 
 $root = Split-Path $PSScriptRoot -Parent
 $public = Join-Path $root 'public'
+
+$MAGENTA = [System.Drawing.Color]::FromArgb(255, 233, 30, 122)
+$VIOLET = [System.Drawing.Color]::FromArgb(255, 139, 92, 246)
 
 function Add-RoundedRectPath($path, $x, $y, $width, $height, $radius) {
   $d = $radius * 2
@@ -20,33 +23,29 @@ function Scale-Coord([double]$value, [int]$size, [switch]$SnapPixel) {
   return [single]$scaled
 }
 
-function Draw-HabibarHouseFilled($g, [int]$size) {
+function Draw-HabibarHFilled($g, [int]$size, $brush) {
   $snap = $size -le 48
-  $path = New-Object System.Drawing.Drawing2D.GraphicsPath
-  $path.FillMode = [System.Drawing.Drawing2D.FillMode]::Alternate
-
-  $outer = @(
-    (New-Object System.Drawing.PointF (Scale-Coord 124 $size -SnapPixel:$snap), (Scale-Coord 216 $size -SnapPixel:$snap)),
-    (New-Object System.Drawing.PointF (Scale-Coord 256 $size -SnapPixel:$snap), (Scale-Coord 108 $size -SnapPixel:$snap)),
-    (New-Object System.Drawing.PointF (Scale-Coord 388 $size -SnapPixel:$snap), (Scale-Coord 216 $size -SnapPixel:$snap)),
-    (New-Object System.Drawing.PointF (Scale-Coord 388 $size -SnapPixel:$snap), (Scale-Coord 396 $size -SnapPixel:$snap)),
-    (New-Object System.Drawing.PointF (Scale-Coord 124 $size -SnapPixel:$snap), (Scale-Coord 396 $size -SnapPixel:$snap))
+  $bars = @(
+    @{ X = 108; Y = 104; W = 84; H = 304; R = 42 },
+    @{ X = 320; Y = 104; W = 84; H = 304; R = 42 },
+    @{ X = 108; Y = 208; W = 296; H = 88; R = 44 }
   )
 
-  try {
-    $path.AddPolygon($outer)
-    if ($size -ge 192) {
-      $door = @(
-        (New-Object System.Drawing.PointF (Scale-Coord 164 $size -SnapPixel:$snap), (Scale-Coord 396 $size -SnapPixel:$snap)),
-        (New-Object System.Drawing.PointF (Scale-Coord 164 $size -SnapPixel:$snap), (Scale-Coord 276 $size -SnapPixel:$snap)),
-        (New-Object System.Drawing.PointF (Scale-Coord 236 $size -SnapPixel:$snap), (Scale-Coord 276 $size -SnapPixel:$snap)),
-        (New-Object System.Drawing.PointF (Scale-Coord 236 $size -SnapPixel:$snap), (Scale-Coord 396 $size -SnapPixel:$snap))
-      )
-      $path.AddPolygon($door)
+  foreach ($bar in $bars) {
+    $path = New-Object System.Drawing.Drawing2D.GraphicsPath
+    try {
+      $x = Scale-Coord $bar.X $size -SnapPixel:$snap
+      $y = Scale-Coord $bar.Y $size -SnapPixel:$snap
+      $w = Scale-Coord $bar.W $size -SnapPixel:$snap
+      $h = Scale-Coord $bar.H $size -SnapPixel:$snap
+      $r = Scale-Coord $bar.R $size -SnapPixel:$snap
+      if ($r * 2 -gt $w) { $r = $w / 2 }
+      if ($r * 2 -gt $h) { $r = $h / 2 }
+      Add-RoundedRectPath $path $x $y $w $h $r
+      $g.FillPath($brush, $path)
+    } finally {
+      $path.Dispose()
     }
-    $g.FillPath([System.Drawing.Brushes]::White, $path)
-  } finally {
-    $path.Dispose()
   }
 }
 
@@ -66,24 +65,17 @@ function New-HabibarFavicon([int]$size, [string]$path) {
     $g.CompositingQuality = [System.Drawing.Drawing2D.CompositingQuality]::HighQuality
     $g.Clear([System.Drawing.Color]::Transparent)
 
-    $radius = if ($size -le 48) { [math]::Round($size * 0.21875) } else { [int]($size * 0.21875) }
-    $bgPath = New-Object System.Drawing.Drawing2D.GraphicsPath
-    Add-RoundedRectPath $bgPath 0 0 $size $size $radius
-
     $brush = New-Object System.Drawing.Drawing2D.LinearGradientBrush (
-      (New-Object System.Drawing.Point ([int](72 * $size / 512), [int](440 * $size / 512))),
-      (New-Object System.Drawing.Point ([int](440 * $size / 512), [int](72 * $size / 512))),
-      [System.Drawing.Color]::FromArgb(255, 124, 58, 237),
-      [System.Drawing.Color]::FromArgb(255, 236, 72, 153)
+      (New-Object System.Drawing.Point ([int](108 * $size / 512), [int](408 * $size / 512))),
+      (New-Object System.Drawing.Point ([int](404 * $size / 512), [int](104 * $size / 512))),
+      $MAGENTA,
+      $VIOLET
     )
     try {
-      $g.FillPath($brush, $bgPath)
+      Draw-HabibarHFilled $g $size $brush
     } finally {
       $brush.Dispose()
-      $bgPath.Dispose()
     }
-
-    Draw-HabibarHouseFilled $g $size
 
     $bmp.Save($path, [System.Drawing.Imaging.ImageFormat]::Png)
     Write-Host "Favicon OK: ${size}x${size} -> $path"

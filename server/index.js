@@ -3,7 +3,7 @@ import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { migrate } from "./db/migrate.js";
-import { seedIfEmpty } from "./db/seed.js";
+import { seedIfEmpty, syncDemoPortalTickets } from "./db/seed.js";
 import { authMiddleware } from "./middleware/auth.js";
 import authRoutes from "./routes/auth.js";
 import entityRoutes, { settingsRouter } from "./routes/entities.js";
@@ -135,9 +135,11 @@ async function start() {
     console.log(`HABIBAR API escuchando en :${port}`);
   });
 
-  seedIfEmpty().catch((err) => {
-    console.error("HABIBAR API: seed falló (el servidor sigue activo):", err);
-  });
+  seedIfEmpty()
+    .then(() => syncDemoPortalTickets())
+    .catch((err) => {
+      console.error("HABIBAR API: seed falló (el servidor sigue activo):", err);
+    });
 }
 
 process.on("unhandledRejection", (reason) => {

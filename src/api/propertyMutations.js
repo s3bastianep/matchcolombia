@@ -1,5 +1,106 @@
 import { workflowToPublicStatus } from "../lib/adminConstants.js";
 
+export const OWNER_EDITABLE_FIELDS = [
+  "title",
+  "description",
+  "property_type",
+  "city",
+  "neighborhood",
+  "locality",
+  "address",
+  "bedrooms",
+  "bathrooms",
+  "area_sqm",
+  "floor",
+  "parking",
+  "parking_spots",
+  "furnished",
+  "pets_allowed",
+  "amenities",
+  "images",
+  "image_meta",
+  "video_url",
+  "available_from",
+  "monthly_rent",
+  "deposit",
+  "admin_fee",
+  "min_contract_months",
+  "estrato",
+];
+
+export function pickOwnerPatch(patch = {}) {
+  const out = {};
+  OWNER_EDITABLE_FIELDS.forEach((key) => {
+    if (patch[key] !== undefined) out[key] = patch[key];
+  });
+  return out;
+}
+
+export function hasPendingOwnerChanges(property) {
+  const patch = property?.pending_changes?.patch;
+  return Boolean(patch && Object.keys(patch).length > 0);
+}
+
+export function submitOwnerPendingChanges(current, patch, editor = "owner") {
+  const changes = pickOwnerPatch(patch);
+  if (Object.keys(changes).length === 0) {
+    throw new Error("No hay cambios para enviar.");
+  }
+
+  const now = new Date().toISOString();
+  const audit_log = [...(current.audit_log || [])];
+  audit_log.push({ action: "pending_changes_submitted", at: now, by: editor });
+
+  return {
+    ...current,
+    pending_changes: {
+      submitted_at: now,
+      submitted_by: editor,
+      patch: changes,
+    },
+    updated_date: now,
+    audit_log: audit_log.slice(-80),
+  };
+}
+
+export function approveOwnerPendingChanges(current, editor = "admin", owners = []) {
+  if (!hasPendingOwnerChanges(current)) {
+    throw new Error("No hay cambios pendientes para aprobar.");
+  }
+
+  const patch = current.pending_changes.patch;
+  const withoutPending = { ...current, pending_changes: null };
+  const next = applyPropertyUpdate(withoutPending, patch, editor, owners);
+  next.audit_log.push({
+    action: "pending_changes_approved",
+    at: new Date().toISOString(),
+    by: editor,
+  });
+  return next;
+}
+
+export function rejectOwnerPendingChanges(current, editor = "admin", note = "") {
+  if (!current?.pending_changes) {
+    throw new Error("No hay cambios pendientes.");
+  }
+
+  const now = new Date().toISOString();
+  const audit_log = [...(current.audit_log || [])];
+  audit_log.push({
+    action: "pending_changes_rejected",
+    at: now,
+    by: editor,
+    note: note || undefined,
+  });
+
+  return {
+    ...current,
+    pending_changes: null,
+    updated_date: now,
+    audit_log: audit_log.slice(-80),
+  };
+}
+
 export function generatePropertyId() {
   return `prop-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 }

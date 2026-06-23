@@ -1,3 +1,5 @@
+import { FAVICON_VERSION } from "./siteBranding";
+
 export const BRAND = {
   name: "HABIBAR",
   short: "Habibar",
@@ -20,8 +22,8 @@ export const BRAND = {
   logoWordmark2x: "/habibar-wordmark@2x.png?v=9",
   logoStacked: "/habibar-logo.png?v=9",
   logo: "/habibar-wordmark.png?v=9",
-  logoIcon: "/habibar-icon.png?v=13",
-  logoMark: "/habibar-mark.svg?v=13",
+  logoIcon: `/habibar-icon.png?v=${FAVICON_VERSION}`,
+  logoMark: `/habibar-mark.svg?v=${FAVICON_VERSION}`,
   splashMark: "/habibar-wordmark.png?v=9",
   social: {
     instagram: "https://instagram.com/habibar",
