@@ -17,6 +17,7 @@ import {
   Banknote,
   AlertCircle,
   Sparkles,
+  MessageSquare,
 } from "lucide-react";
 
 const QUICK_LINKS = [
@@ -24,6 +25,7 @@ const QUICK_LINKS = [
   { to: "/propietario/propiedades", title: "Propiedades", desc: "Estado y canon mensual", icon: Building2, tone: "magenta" },
   { to: "/propietario/leads", title: "Leads", desc: "Interesados activos", icon: Users, tone: "emerald" },
   { to: "/propietario/tickets", title: "Mantenimiento", desc: "Aprueba reparaciones", icon: Wrench, tone: "amber" },
+  { to: "/propietario/mensajes", title: "Chat", desc: "Habla con el equipo", icon: MessageSquare, tone: "violet" },
 ];
 
 const TONE_STYLES = {

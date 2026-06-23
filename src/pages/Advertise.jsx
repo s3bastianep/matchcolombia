@@ -25,7 +25,6 @@ import AdvertiseFreeStrip from "@/components/advertise/AdvertiseFreeStrip";
 import AdvertisePublishSteps from "@/components/advertise/AdvertisePublishSteps";
 import AdvertiseExpertCta from "@/components/advertise/AdvertiseExpertCta";
 import { ADVERTISE_HERO_TITLE, ADVERTISE_HERO_SUBTITLE } from "@/lib/siteCopy";
-import AdvertiseMobile from "./mobile/AdvertiseMobile";
 
 const VERIFIABLE = [
   { label: "Seguimiento digital", desc: "Pagos, contratos y tickets en un solo lugar." },
@@ -149,11 +148,7 @@ function LeadForm({ dark = false }) {
 
 export default function Advertise() {
   return (
-    <>
-      <div className="lg:hidden">
-        <AdvertiseMobile />
-      </div>
-      <div className="hidden lg:block w-full overflow-x-hidden bg-background">
+    <div className="w-full overflow-x-hidden bg-background pb-mobile-nav lg:pb-0">
       <OwnerBreadcrumb />
 
       <section className="bg-brand-dark text-white">
@@ -191,7 +186,7 @@ export default function Advertise() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="hidden sm:block rounded-2xl overflow-hidden border border-white/10 shadow-2xl max-h-[220px] lg:max-h-[260px]"
+              className="mt-6 rounded-2xl overflow-hidden border border-white/10 shadow-2xl max-h-[200px] sm:max-h-[220px] lg:max-h-[260px]"
             >
               <img
                 src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=500&fit=crop&q=80"
@@ -336,6 +331,5 @@ export default function Advertise() {
         </div>
       </section>
     </div>
-    </>
   );
 }

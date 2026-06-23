@@ -19,9 +19,12 @@ import {
   Home,
   MessageCircle,
   Signpost,
+  Wrench,
+  CreditCard,
+  Users,
 } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
-import { getUserRole, PANEL_HOME, ROLE_LABELS } from "@/lib/roles";
+import { getUserRole, PANEL_HOME, ROLE_LABELS, ROLES } from "@/lib/roles";
 import { BRAND } from "@/lib/brand";
 
 const quickLinks = [
@@ -36,6 +39,24 @@ export default function MobileAccountSheet({ open, onOpenChange, onMatchClick })
   const { user, isAuthenticated, logout, isLoadingAuth } = useAuth();
 
   const close = () => onOpenChange(false);
+  const role = user ? getUserRole(user) : null;
+
+  const panelLinks =
+    role === ROLES.OWNER
+      ? [
+          { to: "/propietario/propiedades", label: "Mis propiedades", icon: Building2 },
+          { to: "/propietario/mensajes", label: "Chat con el equipo", icon: MessageCircle },
+          { to: "/propietario/leads", label: "Leads", icon: Users },
+        ]
+      : role === ROLES.TENANT
+        ? [
+            { to: "/inquilino/mensajes", label: "Chat con el equipo", icon: MessageCircle },
+            { to: "/inquilino/tickets", label: "Mantenimiento", icon: Wrench },
+            { to: "/inquilino/pagos", label: "Pagos", icon: CreditCard },
+          ]
+        : role === ROLES.SEEKER
+          ? [{ to: "/portal/mensajes", label: "Chat con el equipo", icon: MessageCircle }]
+          : [];
 
   const handleLogout = async () => {
     close();
@@ -72,6 +93,27 @@ export default function MobileAccountSheet({ open, onOpenChange, onMatchClick })
                 <LayoutDashboard className="w-5 h-5 text-brand-violet" />
                 Mi panel
               </Link>
+              {panelLinks.length > 0 && (
+                <div className="rounded-2xl border border-border/50 bg-secondary/30 p-1.5 space-y-0.5">
+                  <p className="px-3 pt-1.5 pb-0.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                    Tu cuenta
+                  </p>
+                  {panelLinks.map((link) => {
+                    const Icon = link.icon;
+                    return (
+                      <Link
+                        key={link.to}
+                        to={link.to}
+                        onClick={close}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 font-semibold text-sm hover:bg-white transition-colors"
+                      >
+                        <Icon className="w-4 h-4 text-brand-violet" />
+                        {link.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
               <Link
                 to="/favoritos"
                 onClick={close}
