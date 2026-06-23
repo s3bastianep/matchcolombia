@@ -80,14 +80,39 @@ app.use("/api/settings", settingsRouter);
 app.use("/api/upload", uploadRoutes);
 app.use("/uploads", express.static(uploadDir, { maxAge: "7d" }));
 
-app.use(express.static(distDir, { maxAge: "1h", index: false }));
+const HTML_CACHE = "no-cache, no-store, must-revalidate";
+
+function sendHtml(res, file, next) {
+  res.setHeader("Cache-Control", HTML_CACHE);
+  res.sendFile(file, (err) => (err ? next(err) : undefined));
+}
+
+app.use(
+  "/assets",
+  express.static(path.join(distDir, "assets"), {
+    maxAge: "1y",
+    immutable: true,
+  })
+);
+
+app.use(
+  express.static(distDir, {
+    maxAge: "1h",
+    index: false,
+    setHeaders(res, filePath) {
+      if (filePath.endsWith(".html")) {
+        res.setHeader("Cache-Control", HTML_CACHE);
+      }
+    },
+  })
+);
 
 // HTML prerenderizado por ruta (SSG) antes del fallback SPA
 app.use((req, res, next) => {
   if (req.method !== "GET" && req.method !== "HEAD") return next();
   if (req.path.startsWith("/api") || req.path.startsWith("/uploads")) return next();
   const file = prerenderHtmlPath(req.path);
-  if (file) return res.sendFile(file, (err) => (err ? next(err) : undefined));
+  if (file) return sendHtml(res, file, next);
   next();
 });
 
@@ -95,9 +120,7 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   if (req.method !== "GET" && req.method !== "HEAD") return next();
   if (req.path.startsWith("/api") || req.path.startsWith("/uploads")) return next();
-  res.sendFile(path.join(distDir, "index.html"), (err) => {
-    if (err) next(err);
-  });
+  sendHtml(res, path.join(distDir, "index.html"), next);
 });
 
 app.use((err, _req, res, _next) => {

@@ -1,4 +1,5 @@
 import React from "react";
+import { CHUNK_RELOAD_KEY, hardReloadForNewBuild, isChunkLoadError } from "@/lib/chunkRetry";
 
 export default class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -11,14 +12,8 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error) {
-    const message = error?.message || "";
-    if (
-      (message.includes("Failed to fetch dynamically imported module") ||
-        message.includes("Importing a module script failed")) &&
-      !sessionStorage.getItem("habibar-chunk-reload")
-    ) {
-      sessionStorage.setItem("habibar-chunk-reload", "1");
-      window.location.reload();
+    if (isChunkLoadError(error) && !sessionStorage.getItem(CHUNK_RELOAD_KEY)) {
+      hardReloadForNewBuild();
     }
   }
 
@@ -40,7 +35,7 @@ export default class ErrorBoundary extends React.Component {
             <div className="flex flex-col sm:flex-row gap-2 justify-center">
               <button
                 type="button"
-                onClick={() => window.location.reload()}
+                onClick={() => hardReloadForNewBuild()}
                 className="gradient-cta text-white font-bold px-6 py-3 rounded-xl"
               >
                 Recargar

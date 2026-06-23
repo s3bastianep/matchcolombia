@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { importWithRetry } from '@/lib/chunkRetry'
 
 function isBooting() {
   return !!document.getElementById('boot-loader')
@@ -36,7 +37,7 @@ function showBootstrapError(error) {
         <p style="color:#6b7280;font-size:.875rem;margin:0 0 16px">Prueba recargar o limpiar los datos locales del navegador.</p>
         <p style="font-size:.75rem;text-align:left;background:#f3f4f6;border-radius:12px;padding:12px;margin:0 0 16px;word-break:break-all;color:#dc2626">${message}</p>
         <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">
-          <button type="button" onclick="location.reload()" style="background:linear-gradient(135deg,#E91E7A,#8B5CF6);color:#fff;border:0;font-weight:700;padding:12px 24px;border-radius:12px;cursor:pointer">Recargar</button>
+          <button type="button" onclick="(function(){sessionStorage.removeItem('habibar-chunk-reload');var u=new URL(location.href);u.searchParams.set('_cb',Date.now());location.replace(u);})()" style="background:linear-gradient(135deg,#E91E7A,#8B5CF6);color:#fff;border:0;font-weight:700;padding:12px 24px;border-radius:12px;cursor:pointer">Recargar</button>
           <button type="button" onclick="Object.keys(localStorage).filter(k=>k.startsWith('habibar_')).forEach(k=>localStorage.removeItem(k));location.reload()" style="border:1px solid #e5e7eb;background:#fff;font-weight:600;padding:12px 24px;border-radius:12px;cursor:pointer">Limpiar datos</button>
         </div>
       </div>
@@ -74,8 +75,8 @@ async function boot() {
     }
 
     const [{ default: App }, { default: ErrorBoundary }] = await Promise.all([
-      import('@/App.jsx'),
-      import('@/components/ErrorBoundary'),
+      importWithRetry(() => import('@/App.jsx')),
+      importWithRetry(() => import('@/components/ErrorBoundary')),
       import('@/index.css'),
       import('@/api/apiClient').then(({ ensureApiReady }) => ensureApiReady()),
     ])
@@ -90,7 +91,7 @@ async function boot() {
     )
 
     import('@/lib/capacitorNative').then(({ initCapacitorNative }) => initCapacitorNative())
-    import('@/lib/lazyWithRetry').then(({ clearChunkReloadFlag }) => clearChunkReloadFlag())
+    import('@/lib/chunkRetry').then(({ clearChunkReloadFlag }) => clearChunkReloadFlag())
   } catch (error) {
     window.clearTimeout(bootTimer)
     showBootstrapError(error)
