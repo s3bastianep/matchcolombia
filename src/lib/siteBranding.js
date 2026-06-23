@@ -1,9 +1,10 @@
 const SETTINGS_KEY = "habibar_admin_settings";
 const LOGO_KEY = "habibar_site_logo";
 
-export const SITE_BRANDING_EVENT = "site-branding-updated";
+import { FAVICON_VERSION } from "./brand.js";
 
-export const FAVICON_VERSION = "17";
+export { FAVICON_VERSION };
+export const SITE_BRANDING_EVENT = "site-branding-updated";
 export const FAVICON_SVG = `/habibar-favicon.svg?v=${FAVICON_VERSION}`;
 export const DEFAULT_FAVICON = `/habibar-icon.png?v=${FAVICON_VERSION}`;
 export const MAX_LOGO_BYTES = 400 * 1024;

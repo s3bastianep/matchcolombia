@@ -1,4 +1,4 @@
-import { FAVICON_VERSION } from "./siteBranding";
+export const FAVICON_VERSION = "17";
 
 export const BRAND = {
   name: "HABIBAR",
