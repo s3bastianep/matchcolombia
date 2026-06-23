@@ -232,7 +232,7 @@ export function DirectContactOptions({ property, className }) {
   return (
     <div className={cn("pt-1", className)}>
       <p className="text-center text-[11px] font-medium text-subtle mb-2.5">
-        Escríbenos: te responde alguien del equipo, no un bot
+        Cuando nos escribes, responde una persona del equipo
       </p>
       <div className="flex gap-2">
         <a

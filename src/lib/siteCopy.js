@@ -3,9 +3,8 @@
 export const HERO_SUBTITLE =
   "Inmuebles verificados para habitar Bogotá. Encuentra el lugar ideal con nuestro cuestionario.";
 
-export const HERO_QUIZ_TITLE = "¿No sabes por dónde empezar?";
-export const HERO_QUIZ_DESC =
-  "Cuéntanos qué buscas en 2 minutos — te mostramos lo que encaja con tu presupuesto y zona.";
+export const HERO_QUIZ_TITLE = "Match inteligente";
+export const HERO_QUIZ_DESC = "2 minutos · opciones a tu medida";
 
 export const VERIFIED_LISTINGS =
   "Inmuebles revisados antes de publicar. Fotos y datos verificados por nuestro equipo.";
@@ -19,18 +18,18 @@ export const MATCH_STEPS_VERIFIED = HABIBAR_STEPS_VERIFIED;
 export const TRUST_TAGLINE =
   "Menos tiempo buscando. Más confianza al arrendar.";
 
-export const HUMAN_SUPPORT_TITLE = "Siempre hay alguien del equipo para ayudarte";
-export const HUMAN_SUPPORT_BADGE = "Sin bots ni IA";
+export const HUMAN_SUPPORT_TITLE = "Cuando nos escribes, te responde una persona";
+export const HUMAN_SUPPORT_BADGE = "Atención humana";
 export const HUMAN_SUPPORT_BODY =
-  "Si tienes dudas, un problema o algo no te queda claro, escríbenos: te responde una persona de Habibar, no un chatbot ni inteligencia artificial. Atención humana por WhatsApp, cuando la necesites.";
+  "En Habibar la atención la da el equipo, no un proceso automático. Alguien real te escucha, te entiende y te acompaña por WhatsApp cuando lo necesites.";
 export const HUMAN_SUPPORT_SHORT =
-  "Personas reales del equipo · Sin bots ni IA · WhatsApp directo";
+  "Cuando nos escribes, responde alguien del equipo · WhatsApp directo";
 
 export const FEATURED_SUBTITLE =
   "Filtra por tipo y descubre más opciones en Bogotá.";
 
 export const EXPLORE_TRUST_BANNER =
-  "Gente real del equipo · Sin bots ni IA";
+  "Cuando nos escribes, responde una persona";
 
 export const EXPLORE_MORE_FILTERS = "Más filtros";
 

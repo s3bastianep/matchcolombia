@@ -1,4 +1,4 @@
-# Favicon HABIBAR — H blanca sobre gradiente violeta/magenta
+# Favicon HABIBAR — H blanca gruesa sobre gradiente violeta/magenta (legible en 16px)
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Drawing
 
@@ -25,7 +25,7 @@ function New-HabibarFavicon([int]$size, [string]$path) {
     $g.CompositingQuality = [System.Drawing.Drawing2D.CompositingQuality]::HighQuality
     $g.Clear([System.Drawing.Color]::Transparent)
 
-    $radius = [int]($size * 0.21875)
+    $radius = [int]($size * 0.2109)
     $bgPath = New-Object System.Drawing.Drawing2D.GraphicsPath
     Add-RoundedRectPath $bgPath 0 0 $size $size $radius
 
@@ -42,44 +42,18 @@ function New-HabibarFavicon([int]$size, [string]$path) {
       $bgPath.Dispose()
     }
 
-    $pad = [int]($size * 0.21875)
-    $barW = [int]($size * 0.15625)
-    $innerH = $size - ($pad * 2)
-    $crossH = [int]($size * 0.15625)
-    $crossY = [int](($size - $crossH) / 2)
+    $pad = [int]($size * 0.1953)
+    $barW = [int]($size * 0.1875)
+    $crossY = [int]($size * 0.4023)
+    $crossH = [int]($size * 0.1953)
     $white = [System.Drawing.Brushes]::White
 
     # Brazo izquierdo
-    $g.FillRectangle($white, $pad, $pad, $barW, $innerH)
+    $g.FillRectangle($white, $pad, $pad, $barW, $size - ($pad * 2))
     # Brazo derecho
-    $g.FillRectangle($white, $size - $pad - $barW, $pad, $barW, $innerH)
+    $g.FillRectangle($white, $size - $pad - $barW, $pad, $barW, $size - ($pad * 2))
     # Barra horizontal
     $g.FillRectangle($white, $pad, $crossY, $size - ($pad * 2), $crossH)
-    # Recorte central (detalle marca H)
-    $notchW = [int]($size * 0.1875)
-    $notchH = [int]($size * 0.15625)
-    $notchX = [int](($size - $notchW) / 2)
-    $notchY = $crossY
-    $g.FillRectangle(
-      [System.Drawing.Brushes]::Transparent,
-      $notchX,
-      $notchY,
-      $notchW,
-      $notchH
-    )
-
-    # El recorte transparente no funciona sobre fill blanco; repintar gradiente en el notch
-    $notchBrush = New-Object System.Drawing.Drawing2D.LinearGradientBrush (
-      (New-Object System.Drawing.Point 0, $size),
-      (New-Object System.Drawing.Point $size, 0),
-      [System.Drawing.Color]::FromArgb(255, 124, 58, 237),
-      [System.Drawing.Color]::FromArgb(255, 236, 72, 153)
-    )
-    try {
-      $g.FillRectangle($notchBrush, $notchX, $notchY, $notchW, $notchH)
-    } finally {
-      $notchBrush.Dispose()
-    }
 
     $bmp.Save($path, [System.Drawing.Imaging.ImageFormat]::Png)
     Write-Host "Favicon OK: ${size}x${size} -> $path"

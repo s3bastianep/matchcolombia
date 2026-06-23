@@ -1,15 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" aria-hidden="true">
   <defs>
-    <linearGradient id="habibar-favicon-bg" x1="72" y1="440" x2="440" y2="72" gradientUnits="userSpaceOnUse">
+    <linearGradient id="habibar-favicon-bg" x1="64" y1="448" x2="448" y2="64" gradientUnits="userSpaceOnUse">
       <stop stop-color="#7C3AED"/>
-      <stop offset="0.45" stop-color="#A855F7"/>
+      <stop offset="0.5" stop-color="#A855F7"/>
       <stop offset="1" stop-color="#EC4899"/>
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="112" fill="url(#habibar-favicon-bg)"/>
+  <rect width="512" height="512" rx="108" fill="url(#habibar-favicon-bg)"/>
   <path
     fill="#FFFFFF"
-    fill-rule="evenodd"
-    d="M112 112h80v104h128V112h80v288h-80V296H192v104h-80V112Zm96 104h96v80h-96v-80Z"
+    d="M100 100h96v312H100V100zm216 0h96v312h-96V100zM100 206h312v100H100V206z"
   />
 </svg>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Search, Building2, ListChecks } from "lucide-react";
+import { ArrowRight, Search, Building2, Sparkles } from "lucide-react";
 import { PEOPLE } from "@/lib/colombiaImages";
 import { HERO_QUIZ_DESC, HERO_QUIZ_TITLE, HERO_SUBTITLE } from "@/lib/siteCopy";
 import { cn } from "@/lib/utils";
@@ -90,16 +90,14 @@ function HeroMatchBlock({ onStartQuiz }) {
     <button
       type="button"
       onClick={onStartQuiz}
-      className="mb-5 w-full text-left group flex items-center gap-3 rounded-xl border border-brand-violet/15 bg-gradient-to-r from-brand-violet/[0.06] to-brand-magenta/[0.03] px-4 py-3 transition-all hover:border-brand-violet/30 hover:shadow-sm active:scale-[0.99]"
+      className="mb-5 w-full text-left group flex items-center gap-3 rounded-xl border border-brand-violet/15 bg-gradient-to-r from-brand-violet/[0.06] to-brand-magenta/[0.03] px-4 py-2.5 transition-all hover:border-brand-violet/30 hover:shadow-sm active:scale-[0.99]"
     >
       <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm ring-1 ring-brand-violet/10">
-        <ListChecks className="size-4 text-brand-violet" strokeWidth={2.25} />
+        <Sparkles className="size-4 text-brand-violet" strokeWidth={2.25} />
       </span>
-      <span className="min-w-0 flex-1">
-        <span className="block text-sm font-extrabold text-foreground leading-tight">{HERO_QUIZ_TITLE}</span>
-        <span className="block text-xs text-muted-foreground mt-0.5 leading-relaxed">
-          {HERO_QUIZ_DESC}
-        </span>
+      <span className="min-w-0 flex-1 flex items-baseline flex-wrap gap-x-1.5">
+        <span className="text-sm font-extrabold text-foreground">{HERO_QUIZ_TITLE}</span>
+        <span className="text-xs text-muted-foreground">{HERO_QUIZ_DESC}</span>
       </span>
       <ArrowRight className="size-4 text-brand-violet shrink-0 group-hover:translate-x-0.5 transition-transform" />
     </button>
