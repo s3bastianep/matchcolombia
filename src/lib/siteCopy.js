@@ -7,7 +7,7 @@ export const HERO_TITLE_LINE1 = "El lugar que buscas";
 export const HERO_TITLE_LINE2 = "existe y está aquí";
 
 export const HERO_SUBTITLE =
-  "Arriendos verificados en Bogotá: cada inmueble lo revisa nuestro equipo antes de publicarse. El lugar que buscas existe y está aquí. Agenda tu visita en línea y una persona del equipo te acompaña en todo el proceso.";
+  "Arriendos en Bogotá y alquiler de apartamento verificado: cada inmueble lo revisa nuestro equipo antes de publicarse. Agenda tu visita en línea y una persona del equipo te acompaña en todo el proceso.";
 
 export const HERO_QUIZ_TITLE = "Match inteligente";
 export const HERO_QUIZ_DESC = "2 minutos · opciones a tu medida";

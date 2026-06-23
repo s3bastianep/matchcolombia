@@ -4,45 +4,36 @@
 
 ## Descripción
 
-HABIBAR conecta arrendatarios y propietarios en Bogotá. Ofrece listados verificados, Match inteligente según preferencias del usuario, exploración con mapa y filtros, atención humana por WhatsApp y coordinación de visitas.
+HABIBAR conecta arrendatarios y propietarios en Bogotá. Ofrece arriendos en Bogotá, alquiler de apartamentos verificados, casas en arriendo, Match inteligente, exploración con mapa y filtros, atención humana y coordinación de visitas.
 
-## Páginas públicas principales
+## Páginas públicas principales (SEO)
 
-- `/` — Inicio: búsqueda rápida, Match inteligente, inmuebles recientes
-- `/explorar` — Catálogo de inmuebles con filtros, mapa y ordenamiento (Bogotá)
+- `/` — Inicio: búsqueda de arriendos en Bogotá
+- `/arriendos-bogota` — Guía de arriendos, alquiler de apartamento e inmobiliarias en Bogotá
+- `/explorar` — Catálogo de inmuebles en arriendo
+- `/explorar/apartamentos` — Apartamentos en arriendo / alquiler en Bogotá
+- `/explorar/casas` — Casas en arriendo en Bogotá
+- `/explorar/estudios` — Estudios en arriendo en Bogotá
+- `/explorar/compra` — Inmuebles en venta
+- `/explorar/zona/{barrio}` — Arriendo por barrio (Chapinero, Usaquén, Suba, etc.)
 - `/anunciar` — Publicar inmueble en arriendo (propietarios)
 - `/publicar` — Vender inmueble en Bogotá
-- `/login` — Inicio de sesión
-- `/register` — Registro de usuario
+- `/privacidad` — Política de privacidad
+- `/propiedad/{id}` — Ficha pública de un inmueble
 
-## Funcionalidades clave
+## Palabras clave objetivo
 
-- Inmuebles verificados (apartamentos, casas, estudios) en Bogotá
-- Match inteligente HABIBAR: preferencias de presupuesto, zona, habitaciones
-- `/propiedad/{id}` — Ficha pública de un inmueble (URL canónica para SEO e IAs)
-- Favoritos / guardados (requiere cuenta)
-- App móvil nativa HABIBAR (Capacitor) con navegación inferior
+arriendos en bogotá, apartamento en bogotá, alquiler apartamento bogotá, arriendo apartamentos bogotá, casas en arriendo bogotá, inmobiliarias bogotá, inmuebles bogotá
 
 ## SEO local (Bogotá, Colombia)
 
 - Marca: HABIBAR
-- Ciudad principal: Bogotá, Cundinamarca, Colombia (CO-DC)
+- Ciudad: Bogotá, Cundinamarca, Colombia (CO-DC)
 - Coordenadas: 4.7110, -74.0721
-- Zonas: Chapinero, Usaquén, Suba, Zona Rosa, Parque 93, Kennedy, Engativá, entre otras
+- Barrios: Chapinero, Usaquén, Teusaquillo, Suba, Kennedy, Engativá, La Candelaria, Santa Fe, Fontibón
 
-## Tecnología
+## Contacto
 
-- Frontend: React 18 + Vite + Tailwind CSS
-- Backend: Railway + SQLite (API propia HABIBAR)
-- App móvil: Capacitor (Android/iOS), appId `com.habibar.app`
-
-## Contacto y sitio
-
-- Marca: HABIBAR
 - URL: https://habibar.com
 - Email: hola@habibar.com
 - Idioma: español (Colombia, es-CO)
-
-## Nota para crawlers
-
-El HTML inicial incluye contenido estático en `#root` antes de que React cargue. Las meta etiquetas Open Graph, geo (Bogotá, CO-DC) y JSON-LD en `<head>` describen el sitio. Para rutas dinámicas (p. ej. detalle de inmueble), el contenido se renderiza en el cliente; en producción hay prerender para las rutas principales.

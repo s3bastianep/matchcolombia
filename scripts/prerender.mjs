@@ -38,7 +38,8 @@ const {
 } = await import("../src/lib/seo.js");
 
 const { buildHomeStaticHtml, seoNavBlock, seoFooterBlock } = await import("../src/lib/seoStaticContent.js");
-const { EXPLORE_COMPRA_PATH, listExploreZonePaths } = await import("../src/lib/explorePaths.js");
+const { EXPLORE_COMPRA_PATH, ARRIENDOS_BOGOTA_PATH, listExploreZonePaths, listExploreTypePaths } = await import("../src/lib/explorePaths.js");
+const { ARRIENDOS_BOGOTA_SECTIONS } = await import("../src/lib/arriendosBogotaCopy.js");
 
 const TYPE_LABELS = {
   apartamento: "Apartamento",
@@ -174,7 +175,10 @@ function homeBody(properties) {
   return buildHomeStaticHtml(properties);
 }
 
-function exploreBody(properties) {
+function exploreBody(properties, pathname = "/explorar") {
+  const seo = resolveRouteSeo(pathname);
+  const h1 = seo.title.includes("|") ? seo.title.split("|")[0].trim() : seo.title;
+  const intro = seo.description;
   const items = properties
     .slice(0, 12)
     .map((p) => {
@@ -186,11 +190,8 @@ function exploreBody(properties) {
   return `
       <main id="static-site-fallback" lang="es-CO">
         <header>
-          <h1>Explorar inmuebles verificados en Bogotá</h1>
-          <p>
-            Encuentra apartamentos y casas en arriendo y venta en Bogotá con ${escapeHtml(SEO_DEFAULTS.siteName)}.
-            Filtra por barrio, presupuesto y tipo de inmueble, y agenda visitas con nuestro equipo.
-          </p>
+          <h1>${escapeHtml(h1)}</h1>
+          <p>${escapeHtml(intro)}</p>
         </header>
         ${navBlock()}
         <section>
@@ -283,6 +284,28 @@ ${urls
   console.log(`Sitemap: ${urls.length} URLs (incl. ${propertyUrls.length} inmuebles)`);
 }
 
+function arriendosBogotaBody() {
+  const sections = ARRIENDOS_BOGOTA_SECTIONS.map(
+    (section) => `
+        <section aria-labelledby="${section.id}">
+          <h2 id="${section.id}">${escapeHtml(section.title)}</h2>
+          ${section.paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join("\n          ")}
+        </section>`
+  ).join("");
+
+  return `
+      <main id="static-site-fallback" lang="es-CO">
+        <header>
+          <h1>Arriendos en Bogotá: apartamentos, casas y alquiler verificado</h1>
+          <p>Encuentra apartamento en Bogotá, alquiler de apartamento verificado y casas en arriendo con ${escapeHtml(SEO_DEFAULTS.siteName)}.</p>
+        </header>
+        ${seoNavBlock()}
+        ${sections}
+        <p><a href="/explorar">Explorar arriendos en Bogotá</a></p>
+        ${seoFooterBlock()}
+      </main>`;
+}
+
 async function main() {
   if (!existsSync(path.join(distDir, "index.html"))) {
     console.error("Prerender: ejecuta vite build antes (falta dist/index.html)");
@@ -295,11 +318,16 @@ async function main() {
 
   const routes = [
     { dir: "", pathname: "/", body: homeBody(properties) },
-    { dir: "explorar", pathname: "/explorar", body: exploreBody(properties) },
+    { dir: "explorar", pathname: "/explorar", body: exploreBody(properties, "/explorar") },
     {
       dir: path.join("explorar", "compra"),
       pathname: EXPLORE_COMPRA_PATH,
-      body: exploreBody(properties),
+      body: exploreBody(properties, EXPLORE_COMPRA_PATH),
+    },
+    {
+      dir: "arriendos-bogota",
+      pathname: ARRIENDOS_BOGOTA_PATH,
+      body: arriendosBogotaBody(),
     },
     {
       dir: "anunciar",
@@ -338,7 +366,16 @@ async function main() {
     routes.push({
       dir: path.join("explorar", "zona", slug),
       pathname: zonePath,
-      body: exploreBody(properties),
+      body: exploreBody(properties, zonePath),
+    });
+  });
+
+  listExploreTypePaths().forEach((typePath) => {
+    const slug = typePath.replace("/explorar/", "");
+    routes.push({
+      dir: path.join("explorar", slug),
+      pathname: typePath,
+      body: exploreBody(properties, typePath),
     });
   });
 

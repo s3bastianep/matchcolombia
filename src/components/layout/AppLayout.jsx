@@ -8,6 +8,7 @@ import AppOnboarding, { hasCompletedOnboarding } from "../mobile/AppOnboarding";
 import OfflineBanner from "../mobile/OfflineBanner";
 import { usePropertyPanel } from "@/lib/PropertyPanelContext";
 import { useIsApp } from "@/hooks/use-mobile";
+import { isExplorePath } from "@/lib/explorePaths";
 import { cn } from "@/lib/utils";
 import { lazyWithRetry } from "@/lib/lazyWithRetry";
 
@@ -21,7 +22,7 @@ export default function AppLayout() {
   const location = useLocation();
   const isApp = useIsApp();
   const { isOpen: propertyOpen } = usePropertyPanel();
-  const isExplore = location.pathname === "/explorar";
+  const isExplore = isExplorePath(location.pathname);
   const isHome = location.pathname === "/";
   const scrollLocked = isExplore || (isApp && isHome);
   const hideChrome = propertyOpen || location.pathname === "/publicar/nuevo";

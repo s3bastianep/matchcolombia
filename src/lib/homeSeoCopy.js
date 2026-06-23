@@ -50,6 +50,24 @@ export const HOME_SEO_SECTIONS = [
     ],
   },
   {
+    id: "alquiler-apartamentos",
+    title: "Alquiler de apartamento en Bogotá",
+    paragraphs: [
+      `El alquiler de apartamento en Bogotá es una de las búsquedas más frecuentes en la ciudad. Los precios varían según barrio, estrato, parqueadero y antigüedad del edificio.`,
+      `En ${BRAND.name} puedes comparar apartamentos en arriendo en Chapinero, Usaquén, Suba, Kennedy y más zonas sin perder tiempo en anuncios duplicados o precios que cambian al llegar a la visita.`,
+      `Usa filtros de habitaciones, mascotas y presupuesto para ver solo apartamentos en Bogotá que encajan contigo. El equipo coordina la visita y te acompaña si tienes dudas.`,
+    ],
+  },
+  {
+    id: "inmobiliarias-bogota",
+    title: "Inmobiliarias en Bogotá y arriendos verificados",
+    paragraphs: [
+      `Si buscas inmobiliarias en Bogotá, también puedes usar ${BRAND.name}: una plataforma enfocada en arriendos y ventas con listados revisados antes de publicarse.`,
+      `A diferencia de muchas inmobiliarias tradicionales, filtramos interesados, respondemos consultas frecuentes y agendamos visitas sin exponer tu teléfono en portales abiertos.`,
+      `Tanto si arriendas como si publicas, el proceso es digital y con acompañamiento humano en Bogotá. Explora el catálogo o registra tu inmueble gratis.`,
+    ],
+  },
+  {
     id: "barrios-bogota",
     title: "Barrios donde más buscan arriendo en Bogotá",
     paragraphs: [

@@ -106,6 +106,10 @@ function FooterMeta({ className, centered = false }) {
         Privacidad
       </Link>
       <span className={dot}> · </span>
+      <Link to="/arriendos-bogota" className={linkBase}>
+        Arriendos Bogotá
+      </Link>
+      <span className={dot}> · </span>
       <a href={`mailto:${BRAND.email}?subject=Consulta%20legal`} className={linkBase}>
         Legal
       </a>

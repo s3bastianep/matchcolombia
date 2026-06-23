@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import BrandLogo from "../brand/BrandLogo";
 
+import { isExplorePath } from "@/lib/explorePaths";
+
 const TITLES = {
   "/favoritos": "Guardados",
   "/anunciar": "Publicar",
@@ -14,7 +16,7 @@ export default function MobileAppHeader() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  if (pathname === "/explorar") return null;
+  if (isExplorePath(pathname)) return null;
 
   const isHome = pathname === "/";
   const title = TITLES[pathname];

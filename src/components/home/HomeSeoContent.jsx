@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { HOME_SEO_SECTIONS } from "@/lib/homeSeoCopy";
-import { EXPLORE_COMPRA_PATH } from "@/lib/explorePaths";
+import { ARRIENDOS_BOGOTA_PATH, EXPLORE_COMPRA_PATH, exploreTypePath } from "@/lib/explorePaths";
 
 export default function HomeSeoContent() {
   return (
@@ -14,10 +14,18 @@ export default function HomeSeoContent() {
           Arriendos verificados en Bogotá
         </p>
         <p className="text-sm text-muted-foreground leading-relaxed mb-8">
-          El lugar que buscas existe y está aquí. En Habibar encontrarás apartamentos y casas verificados,
-          con visitas coordinadas y Match inteligente según lo que buscas.{" "}
+          Arriendos en Bogotá y alquiler de apartamento verificado. En Habibar encuentras apartamentos y casas
+          revisados, con visitas coordinadas y Match inteligente.{" "}
+          <Link to={ARRIENDOS_BOGOTA_PATH} className="text-brand-violet font-medium hover:underline">
+            Guía de arriendos en Bogotá
+          </Link>
+          ,{" "}
+          <Link to={exploreTypePath("apartamento")} className="text-brand-violet font-medium hover:underline">
+            apartamentos en alquiler
+          </Link>
+          ,{" "}
           <Link to="/explorar" className="text-brand-violet font-medium hover:underline">
-            Explorar inmuebles
+            explorar inmuebles
           </Link>{" "}
           o{" "}
           <Link to={EXPLORE_COMPRA_PATH} className="text-brand-violet font-medium hover:underline">

@@ -138,7 +138,7 @@ export default function Explore() {
   const pathDefaults = parseExplorePath(pathname);
   const initialQ = searchParams.get("q") || pathDefaults.q || "";
   const initialCity = searchParams.get("city") || pathDefaults.city || "";
-  const initialTypeRaw = searchParams.get("type") || "";
+  const initialTypeRaw = searchParams.get("type") || pathDefaults.type || "";
   const initialTypes = useMemo(
     () => (initialTypeRaw ? initialTypeRaw.split(",").map((s) => s.trim()).filter(Boolean) : []),
     [initialTypeRaw]
@@ -299,7 +299,15 @@ export default function Explore() {
   const resultsTitle =
     intent === "compra"
       ? `Inmuebles en venta en ${cityLabel}`
-      : `Apartamentos en arriendo en ${cityLabel}`;
+      : pathDefaults.type === "apartamento"
+        ? `Apartamentos en arriendo en ${cityLabel}`
+        : pathDefaults.type === "casa"
+          ? `Casas en arriendo en ${cityLabel}`
+          : pathDefaults.type === "estudio"
+            ? `Estudios en arriendo en ${cityLabel}`
+            : initialQ
+              ? `Arriendo en ${initialQ}, ${cityLabel}`
+              : `Arriendos en ${cityLabel}`;
 
   const removeQuickFilter = useCallback((key) => {
     const current = activeQuick.filter((k) => k !== key);

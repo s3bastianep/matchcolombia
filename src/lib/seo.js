@@ -1,6 +1,17 @@
 import { BRAND } from "./brand.js";
 import { CITIES, ZONES_BY_CITY } from "./colombia.js";
-import { EXPLORE_COMPRA_PATH, listExploreZonePaths, exploreZonePath, parseExplorePath } from "./explorePaths.js";
+import { RENTER_FAQ } from "./arriendosBogotaCopy.js";
+import {
+  ARRIENDOS_BOGOTA_PATH,
+  EXPLORE_COMPRA_PATH,
+  listExploreZonePaths,
+  listExploreTypePaths,
+  exploreZonePath,
+  exploreTypePath,
+  parseExplorePath,
+  isExplorePath,
+} from "./explorePaths.js";
+import { getZoneSeoCopy } from "./zoneSeoCopy.js";
 
 /** URL canónica del sitio — configurar VITE_SITE_URL en producción */
 export const SITE_URL = (
@@ -28,11 +39,11 @@ export const SEO_DEFAULTS = {
   regionDetail: "CO-DC",
   geoPlacename: "Bogotá, Distrito Capital, Colombia",
   geoPosition: "4.7110;-74.0721",
-  title: `${BRAND.name} | Arriendos verificados en Bogotá`,
+  title: `${BRAND.name} | Arriendos en Bogotá · Apartamentos en alquiler`,
   description:
-    "Apartamentos y casas verificados en Bogotá. Match inteligente, visitas coordinadas y atención humana con HABIBAR.",
+    "Arriendos en Bogotá: apartamentos, casas y estudios verificados. Alquiler con visitas coordinadas, Match inteligente y atención humana. Alternativa confiable a inmobiliarias en Bogotá.",
   keywords:
-    "HABIBAR, arriendo apartamentos Bogotá, inmuebles verificados Bogotá, arriendo casas Bogotá, venta inmuebles Bogotá, match inteligente arriendo, administración de arriendos Bogotá",
+    "arriendos en bogotá, apartamento en bogotá, alquiler apartamento bogotá, arriendo apartamentos bogotá, casas en arriendo bogotá, inmobiliarias bogotá, inmuebles bogotá, arriendo bogotá, HABIBAR, inmuebles verificados bogotá",
   ogImage: DEFAULT_OG_IMAGE,
   ogImageAlt: `${BRAND.name} · inmuebles verificados en Bogotá, Colombia`,
   twitterHandle: "@habibar",
@@ -118,9 +129,7 @@ function cityGeoMeta(cityName) {
 }
 
 function isKnownRoute(pathname) {
-  if (pathname === "/explorar" || pathname === EXPLORE_COMPRA_PATH || pathname.startsWith("/explorar/zona/")) {
-    return true;
-  }
+  if (isExplorePath(pathname) || pathname === ARRIENDOS_BOGOTA_PATH) return true;
   if (ROUTE_SEO[pathname]) return true;
   if (isNoIndexPath(pathname)) return true;
   if (/^\/propiedad\/[^/]+$/.test(pathname)) return true;
@@ -145,7 +154,11 @@ function propertyImage(property) {
 
 function exploreCanonical(pathname, searchParams) {
   const path = pathname.replace(/\/$/, "") || "/explorar";
-  if (path === EXPLORE_COMPRA_PATH || path.startsWith("/explorar/zona/")) {
+  if (
+    path === EXPLORE_COMPRA_PATH ||
+    path.startsWith("/explorar/zona/") ||
+    listExploreTypePaths().includes(path)
+  ) {
     return absoluteUrl(path);
   }
   const allowed = ["city", "intent", "type", "q", "inmueble"];
@@ -163,33 +176,58 @@ export function getExploreSeo(searchParams, pathname = "/explorar") {
   const city = searchParams.get("city") || fromPath.city || "Bogotá";
   const zoneQuery = searchParams.get("q") || fromPath.q || null;
   const intent = fromPath.intent || searchParams.get("intent");
-  const type = searchParams.get("type");
+  const type = searchParams.get("type") || fromPath.type || null;
   const typeLabel = TYPE_LABELS[type] || null;
+  const zoneCopy = zoneQuery ? getZoneSeoCopy(zoneQuery) : null;
 
   const isSale = intent === "compra";
-  const title = isSale
-    ? `Inmuebles en venta en ${city}`
-    : zoneQuery
-      ? `Arriendo en ${zoneQuery}, ${city}`
-      : typeLabel
-        ? `${typeLabel}s en arriendo en ${city}`
-        : `Apartamentos en arriendo en ${city}`;
 
-  const description = isSale
-    ? `Encuentra inmuebles en venta en ${city} con ${BRAND.name}. Listados verificados, fotos reales y acompañamiento humano en todo el proceso de compra.`
-    : zoneQuery
-      ? `Apartamentos y casas en arriendo en ${zoneQuery}, ${city}. Listados verificados, Match inteligente y visitas coordinadas con ${BRAND.name}.`
-      : `Arrienda ${typeLabel ? `${typeLabel.toLowerCase()}s` : "apartamentos y casas"} en ${city} con ${BRAND.name}. Match inteligente, listados verificados y visitas presenciales o virtuales.`;
+  let title;
+  let description;
+
+  if (isSale) {
+    title = `Inmuebles en venta en ${city}`;
+    description = `Encuentra inmuebles en venta en ${city} con ${BRAND.name}. Listados verificados, fotos reales y acompañamiento humano en todo el proceso de compra.`;
+  } else if (zoneCopy) {
+    title = zoneCopy.h1;
+    description = `${zoneCopy.intro} Listados verificados y visitas coordinadas con ${BRAND.name}.`;
+  } else if (type === "apartamento") {
+    title = "Alquiler de apartamentos en Bogotá";
+    description = `Apartamentos en arriendo y alquiler de apartamento en Bogotá verificados. Filtra por barrio, precio y habitaciones. Visitas coordinadas con ${BRAND.name}.`;
+  } else if (type === "casa") {
+    title = "Casas en arriendo en Bogotá";
+    description = `Casas en arriendo en Bogotá: conjuntos cerrados y vivienda familiar verificada. Agenda visitas y compara zonas con ${BRAND.name}.`;
+  } else if (type === "estudio") {
+    title = "Estudios en arriendo en Bogotá";
+    description = `Estudios y apartamentos pequeños en arriendo en Bogotá. Opciones cerca del trabajo o la universidad, revisadas por ${BRAND.name}.`;
+  } else if (typeLabel) {
+    title = `${typeLabel}s en arriendo en ${city}`;
+    description = `Arrienda ${typeLabel.toLowerCase()}s en ${city} con ${BRAND.name}. Match inteligente, listados verificados y visitas presenciales o virtuales.`;
+  } else {
+    title = "Arriendos en Bogotá · Apartamentos y casas";
+    description = `Arriendos en Bogotá: apartamentos, casas y estudios verificados. Alquiler con Match inteligente, filtros por barrio y visitas coordinadas con ${BRAND.name}.`;
+  }
 
   const geo = cityGeoMeta(city);
   const exploreListUrl = isSale ? EXPLORE_COMPRA_PATH : "/explorar";
   const zoneUrl = zoneQuery ? exploreZonePath(zoneQuery) : exploreListUrl;
+  const typeUrl = type ? exploreTypePath(type) : exploreListUrl;
+
+  const keywordParts = [
+    isSale ? "venta inmuebles" : "arriendos en bogotá",
+    type === "apartamento" ? "alquiler apartamento bogotá, apartamento en bogotá" : null,
+    type === "casa" ? "casas en arriendo bogotá" : null,
+    zoneQuery ? `arriendo ${zoneQuery}` : null,
+    BRAND.name,
+  ]
+    .filter(Boolean)
+    .join(", ");
 
   return {
     title: buildTitle(title),
     description,
     url: exploreCanonical(pathname, searchParams),
-    keywords: `${isSale ? "venta" : "arriendo"} inmuebles ${city}, apartamentos ${city}, casas ${city}, ${BRAND.name}`,
+    keywords: keywordParts,
     geoPlacename: geo?.placename || SEO_DEFAULTS.geoPlacename,
     geoPosition: geo?.position || SEO_DEFAULTS.geoPosition,
     jsonLd: [
@@ -197,8 +235,13 @@ export function getExploreSeo(searchParams, pathname = "/explorar") {
       websiteSchema(),
       breadcrumbSchema([
         { name: "Inicio", url: "/" },
-        { name: isSale ? "Compra" : "Arriendos", url: exploreListUrl },
-        ...(zoneQuery ? [{ name: zoneQuery, url: zoneUrl }] : [{ name: city, url: exploreListUrl }]),
+        { name: isSale ? "Compra" : "Arriendos en Bogotá", url: ARRIENDOS_BOGOTA_PATH },
+        { name: isSale ? "Compra" : "Explorar", url: exploreListUrl },
+        ...(zoneQuery
+          ? [{ name: zoneQuery, url: zoneUrl }]
+          : type
+            ? [{ name: typeLabel || type, url: typeUrl }]
+            : []),
       ]),
     ],
   };
@@ -213,7 +256,7 @@ export function getPropertySeo(property) {
   const rent = formatRent(property);
   const geo = cityGeoMeta(property.city);
 
-  const title = `${property.title} · ${typeLabel} en ${city}`;
+  const title = `${property.title} · Arriendo ${typeLabel} en ${city}`;
   const description =
     property.description?.slice(0, 155) ||
     `${typeLabel} en arriendo en ${city}${locality}. ${property.bedrooms || 0} hab., ${property.bathrooms || 0} baños${property.area_sqm ? `, ${property.area_sqm} m²` : ""}. Canon ${rent}. Verificado por ${BRAND.name}.`;
@@ -243,13 +286,28 @@ export function getPropertySeo(property) {
 
 const ROUTE_SEO = {
   "/": {
-    title: buildTitle("Arriendos verificados en Bogotá"),
+    title: buildTitle("Arriendos en Bogotá · Apartamentos en alquiler"),
     description: SEO_DEFAULTS.description,
     url: "/",
     keywords: SEO_DEFAULTS.keywords,
-    jsonLd: () => [organizationSchema(), websiteSchema(), homeWebPageSchema()],
+    jsonLd: () => [organizationSchema(), websiteSchema(), homeWebPageSchema(), faqSchema(RENTER_FAQ)],
   },
   "/explorar": (searchParams) => getExploreSeo(searchParams),
+  [ARRIENDOS_BOGOTA_PATH]: {
+    title: buildTitle("Arriendos en Bogotá · Alquiler de apartamentos y casas"),
+    description: `Guía de arriendos en Bogotá: apartamentos en alquiler, casas en arriendo e inmuebles verificados. ${BRAND.name} coordina visitas y filtra opciones reales.`,
+    url: ARRIENDOS_BOGOTA_PATH,
+    keywords:
+      "arriendos en bogotá, alquiler apartamento bogotá, apartamento en bogotá, casas en arriendo bogotá, inmobiliarias bogotá",
+    jsonLd: () => [
+      organizationSchema(),
+      breadcrumbSchema([
+        { name: "Inicio", url: "/" },
+        { name: "Arriendos en Bogotá", url: ARRIENDOS_BOGOTA_PATH },
+      ]),
+      faqSchema(RENTER_FAQ),
+    ],
+  },
   "/anunciar": {
     title: buildTitle("Anuncia tu inmueble · Administración completa de arriendos"),
     description: `Publica gratis tu apartamento o casa en Bogotá. ${BRAND.name} gestiona visitas, candidatos, contratos, cobros y mantenimiento sin exponer tu teléfono.`,
@@ -315,7 +373,7 @@ export function resolveRouteSeo(pathname, searchParams = new URLSearchParams()) 
     };
   }
 
-  if (pathname === "/explorar" || pathname === EXPLORE_COMPRA_PATH || pathname.startsWith("/explorar/zona/")) {
+  if (isExplorePath(pathname)) {
     return getExploreSeo(searchParams, pathname);
   }
 
@@ -371,6 +429,10 @@ export function organizationSchema() {
       containedInPlace: { "@type": "Country", name: "Colombia" },
     })),
     knowsAbout: [
+      "Arriendos en Bogotá",
+      "Alquiler de apartamentos en Bogotá",
+      "Casas en arriendo en Bogotá",
+      "Inmobiliarias en Bogotá",
       "Arriendo de apartamentos en Bogotá",
       "Venta de inmuebles en Bogotá",
       "Administración de propiedades en Bogotá",
@@ -416,9 +478,9 @@ export function websiteSchema() {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${SITE_URL}/explorar?city={city}&q={search_term_string}`,
+        urlTemplate: `${SITE_URL}/explorar?q={search_term_string}`,
       },
-      "query-input": ["required name=city", "required name=search_term_string"],
+      "query-input": "required name=search_term_string",
     },
   };
 }
@@ -513,6 +575,7 @@ export function getSitemapUrls() {
   const now = new Date().toISOString().slice(0, 10);
   const urls = [
     { loc: "/", priority: "1.0", changefreq: "daily" },
+    { loc: ARRIENDOS_BOGOTA_PATH, priority: "0.95", changefreq: "weekly" },
     { loc: "/explorar", priority: "0.9", changefreq: "daily" },
     { loc: EXPLORE_COMPRA_PATH, priority: "0.85", changefreq: "weekly" },
     { loc: "/anunciar", priority: "0.8", changefreq: "weekly" },
@@ -520,8 +583,12 @@ export function getSitemapUrls() {
     { loc: "/privacidad", priority: "0.4", changefreq: "yearly" },
   ];
 
+  listExploreTypePaths().forEach((loc) => {
+    urls.push({ loc, priority: "0.88", changefreq: "daily" });
+  });
+
   listExploreZonePaths().forEach((loc) => {
-    urls.push({ loc, priority: "0.75", changefreq: "weekly" });
+    urls.push({ loc, priority: "0.8", changefreq: "weekly" });
   });
 
   return urls.map((entry) => ({ ...entry, lastmod: now }));

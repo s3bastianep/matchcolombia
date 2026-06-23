@@ -40,7 +40,7 @@ function prerenderHtmlPath(urlPath) {
     const file = path.join(distDir, ...segments, "index.html");
     return existsSync(file) ? file : null;
   }
-  const staticRoutes = ["anunciar", "publicar", "privacidad"];
+  const staticRoutes = ["anunciar", "publicar", "privacidad", "arriendos-bogota"];
   if (staticRoutes.includes(segments[0]) && segments.length === 1) {
     const file = path.join(distDir, segments[0], "index.html");
     return existsSync(file) ? file : null;

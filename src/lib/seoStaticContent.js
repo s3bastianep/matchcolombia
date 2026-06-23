@@ -1,5 +1,11 @@
 import { BRAND } from "./brand.js";
-import { EXPLORE_COMPRA_PATH, exploreZonePath } from "./explorePaths.js";
+import {
+  ARRIENDOS_BOGOTA_PATH,
+  EXPLORE_COMPRA_PATH,
+  exploreZonePath,
+  exploreTypePath,
+  listExploreTypePaths,
+} from "./explorePaths.js";
 import { HOME_SEO_SECTIONS } from "./homeSeoCopy.js";
 
 function escapeHtml(value) {
@@ -11,7 +17,7 @@ function escapeHtml(value) {
 }
 
 export function seoNavBlock() {
-  const zones = ["Chapinero", "Usaquén", "Teusaquillo", "Suba"];
+  const zones = ["Chapinero", "Usaquén", "Teusaquillo", "Suba", "Kennedy", "Engativá"];
   const zoneLinks = zones
     .map(
       (zone) =>
@@ -19,15 +25,34 @@ export function seoNavBlock() {
     )
     .join("\n          ");
 
+  const typeLinks = listExploreTypePaths()
+    .map((path) => {
+      const label = path.includes("apartamentos")
+        ? "Apartamentos en Bogotá"
+        : path.includes("casas")
+          ? "Casas en arriendo"
+          : "Estudios en Bogotá";
+      return `<li><a href="${path}">${escapeHtml(label)}</a></li>`;
+    })
+    .join("\n          ");
+
   return `
       <nav aria-label="Navegación principal">
         <ul>
           <li><a href="/">Inicio</a></li>
+          <li><a href="${ARRIENDOS_BOGOTA_PATH}">Arriendos en Bogotá</a></li>
           <li><a href="/explorar">Explorar inmuebles en arriendo</a></li>
+          <li><a href="${exploreTypePath("apartamento")}">Alquiler de apartamentos</a></li>
           <li><a href="${EXPLORE_COMPRA_PATH}">Comprar inmueble en Bogotá</a></li>
           <li><a href="/anunciar">Publicar inmueble en arriendo</a></li>
           <li><a href="/publicar">Vender apartamento o casa</a></li>
           <li><a href="/privacidad">Política de privacidad</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Tipos de inmueble">
+        <p class="seo-nav-label">Arriendos por tipo en Bogotá</p>
+        <ul>
+          ${typeLinks}
         </ul>
       </nav>
       <nav aria-label="Barrios populares">
@@ -86,10 +111,10 @@ export function buildHomeStaticHtml(properties = []) {
   return `
       <main id="static-site-fallback" lang="es-CO">
         <header>
-          <h1>Arriendos verificados en Bogotá</h1>
+          <h1>Arriendos en Bogotá · Apartamentos y casas verificados</h1>
           <p>
-            <strong>${escapeHtml(BRAND.name)}</strong> conecta arrendatarios y propietarios con apartamentos y casas verificados en Bogotá, Colombia.
-            El lugar que buscas existe y está aquí: listados revisados, Match inteligente según tu presupuesto y zona, y visitas coordinadas por nuestro equipo humano.
+            <strong>${escapeHtml(BRAND.name)}</strong> conecta arrendatarios y propietarios con apartamentos, casas y estudios en arriendo en Bogotá, Colombia.
+            Alquiler de apartamento verificado, Match inteligente según tu presupuesto y zona, y visitas coordinadas por nuestro equipo humano.
           </p>
         </header>
         ${seoNavBlock()}

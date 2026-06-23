@@ -1,7 +1,7 @@
 import { ArrowRight, Home, KeyRound } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 import { INTERIORS } from "@/lib/colombiaImages";
-import { EXPLORE_COMPRA_PATH, exploreZonePath } from "@/lib/explorePaths";
+import { EXPLORE_COMPRA_PATH, exploreZonePath, exploreTypePath } from "@/lib/explorePaths";
 
 export const POPULAR_ZONES = [
   { label: "Chapinero", to: exploreZonePath("Chapinero") },
@@ -12,10 +12,10 @@ export const POPULAR_ZONES = [
 
 export const EXPLORE_PATHS = [
   {
-    to: "/explorar",
-    title: "Arriendo",
-    subtitle: "Apartamentos y casas verificados, con filtros claros y visitas coordinadas.",
-    cta: "Explorar arriendos",
+    to: exploreTypePath("apartamento"),
+    title: "Apartamentos",
+    subtitle: "Alquiler de apartamento en Bogotá verificado, con filtros por barrio y visitas coordinadas.",
+    cta: "Ver apartamentos",
     icon: KeyRound,
     image: INTERIORS.sala2,
     accent: "from-brand-violet/90 via-brand-violet/55 to-brand-magenta/75",
