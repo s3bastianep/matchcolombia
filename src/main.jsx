@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { importWithRetry } from '@/lib/chunkRetry'
+import { CHUNK_RELOAD_KEY, hardReloadForNewBuild, importWithRetry } from '@/lib/chunkRetry'
 
 function isBooting() {
   return !!document.getElementById('boot-loader')
@@ -53,12 +53,23 @@ window.addEventListener('unhandledrejection', (event) => {
   if (isBooting()) showBootstrapError(event.reason)
 })
 
-const BOOT_TIMEOUT_MS = 25000
+const BOOT_TIMEOUT_MS = 20000
+const BOOT_STALL_MS = 10000
+
 const bootTimer = window.setTimeout(() => {
   if (isBooting()) {
     showBootstrapError(new Error('La app tardó demasiado en cargar. Recarga la página o limpia datos locales.'))
   }
 }, BOOT_TIMEOUT_MS)
+
+const stallTimer = window.setTimeout(() => {
+  if (!isBooting()) return
+  if (!sessionStorage.getItem(CHUNK_RELOAD_KEY) && !new URLSearchParams(window.location.search).has('_cb')) {
+    hardReloadForNewBuild()
+    return
+  }
+  showBootstrapError(new Error('No se pudo cargar HABIBAR. Toca Recargar para intentar de nuevo.'))
+}, BOOT_STALL_MS)
 
 async function boot() {
   try {
@@ -78,10 +89,10 @@ async function boot() {
       importWithRetry(() => import('@/App.jsx')),
       importWithRetry(() => import('@/components/ErrorBoundary')),
       import('@/index.css'),
-      import('@/api/apiClient').then(({ ensureApiReady }) => ensureApiReady()),
     ])
 
     window.clearTimeout(bootTimer)
+    window.clearTimeout(stallTimer)
     removeBootLoader()
 
     ReactDOM.createRoot(document.getElementById('root')).render(
@@ -90,10 +101,19 @@ async function boot() {
       </ErrorBoundary>
     )
 
+    import('@/api/apiClient').then(({ ensureApiReady }) => ensureApiReady().catch(() => {}))
     import('@/lib/capacitorNative').then(({ initCapacitorNative }) => initCapacitorNative())
-    import('@/lib/chunkRetry').then(({ clearChunkReloadFlag }) => clearChunkReloadFlag())
+    import('@/lib/chunkRetry').then(({ clearChunkReloadFlag }) => {
+      clearChunkReloadFlag()
+      const url = new URL(window.location.href)
+      if (url.searchParams.has('_cb')) {
+        url.searchParams.delete('_cb')
+        window.history.replaceState({}, '', url.pathname + url.search + url.hash)
+      }
+    })
   } catch (error) {
     window.clearTimeout(bootTimer)
+    window.clearTimeout(stallTimer)
     showBootstrapError(error)
   }
 }

@@ -11,17 +11,36 @@ export function getApiBase() {
 }
 
 export async function apiRequest(path, options = {}) {
-  const headers = { ...(options.headers || {}) };
+  const { timeoutMs = 12_000, headers: optionHeaders, body: optionBody, ...fetchOptions } = options;
+  const headers = { ...(optionHeaders || {}) };
   const token = getToken();
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  let body = options.body;
+  let body = optionBody;
   if (body && !(body instanceof FormData) && typeof body === "object") {
     headers["Content-Type"] = "application/json";
     body = JSON.stringify(body);
   }
 
-  const res = await fetch(`${getApiBase()}${path}`, { ...options, headers, body });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  let res;
+  try {
+    res = await fetch(`${getApiBase()}${path}`, {
+      ...fetchOptions,
+      headers,
+      body,
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      throw new Error("El servidor tardó demasiado en responder. Intenta de nuevo.");
+    }
+    throw error;
+  } finally {
+    clearTimeout(timer);
+  }
   const text = await res.text();
   let data = null;
   try {
