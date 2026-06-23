@@ -23,7 +23,7 @@ export default function AppLayout() {
   const { isOpen: propertyOpen } = usePropertyPanel();
   const isExplore = location.pathname === "/explorar";
   const isHome = location.pathname === "/";
-  const scrollLocked = isApp && (isExplore || isHome);
+  const scrollLocked = isExplore || (isApp && isHome);
   const hideChrome = propertyOpen || location.pathname === "/publicar/nuevo";
 
   const openQuiz = useCallback(() => setQuizOpen(true), []);

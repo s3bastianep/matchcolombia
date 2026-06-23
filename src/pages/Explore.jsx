@@ -356,7 +356,7 @@ export default function Explore() {
         resultsCount={isLoading ? null : filtered.length}
       />
 
-      <div className={cn("hidden lg:block bg-white border-b border-[hsl(0,0%,90%)] sticky top-[58px] z-30 shrink-0", EXPLORE_GUTTER)}>
+      <div className={cn("hidden lg:block bg-white border-b border-[hsl(0,0%,90%)] shrink-0 z-30", EXPLORE_GUTTER)}>
         {isMatched && prefs && (
           <motion.div
             initial={{ opacity: 0, y: -6 }}
@@ -511,14 +511,17 @@ export default function Explore() {
         </div>
       </div>
 
+      <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
       {isLoading ? (
         <>
-          <div className={cn("hidden lg:grid lg:flex-1 lg:min-h-0 min-w-0 gap-4 lg:gap-5", EXPLORE_CONTENT_PAD, EXPLORE_SPLIT_LAYOUT)}>
-            <div className="border-r-0 shimmer min-h-[400px] rounded-xl" />
+          <div className={cn("hidden lg:grid lg:flex-1 lg:min-h-0 lg:h-full lg:overflow-hidden min-w-0 gap-4 lg:gap-5", EXPLORE_CONTENT_PAD, EXPLORE_SPLIT_LAYOUT)}>
+            <div className="border-r-0 shimmer min-h-0 h-full rounded-xl" />
+            <div className="min-h-0 h-full overflow-y-auto">
             <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4 items-stretch">
               {Array(9).fill(0).map((_, i) => (
                 <ExploreSkeleton key={i} />
               ))}
+            </div>
             </div>
           </div>
           <div className="lg:hidden px-5 lg:px-8 py-5 grid grid-cols-1 gap-4">
@@ -559,13 +562,13 @@ export default function Explore() {
       ) : filtered.length > 0 ? (
         <>
           <div className={cn(
-            "hidden lg:grid lg:flex-1 lg:min-h-0 min-w-0 gap-4 lg:gap-5",
+            "hidden lg:grid lg:flex-1 lg:min-h-0 lg:h-full lg:overflow-hidden min-w-0 gap-4 lg:gap-5",
             EXPLORE_CONTENT_PAD,
             viewMode === "list" ? "grid-cols-1" : EXPLORE_SPLIT_LAYOUT
           )}>
             {viewMode === "split" && (
-            <div className="flex flex-col bg-[hsl(0,0%,98%)] min-h-0 min-w-0 overflow-hidden rounded-xl border border-[hsl(0,0%,90%)] shadow-sm">
-              <div className="flex-1 min-h-0">
+            <div className="flex flex-col bg-[hsl(0,0%,98%)] min-h-0 h-full max-h-full overflow-hidden rounded-xl border border-[hsl(0,0%,90%)] shadow-sm">
+              <div className="flex-1 min-h-0 h-full">
                 <Suspense fallback={<MapPaneFallback className="h-full rounded-xl" />}>
                   <ExploreMap
                     properties={filtered}
@@ -580,7 +583,7 @@ export default function Explore() {
             </div>
             )}
 
-            <div className="overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] min-w-0 min-h-0 pt-1 pb-20">
+            <div className="min-h-0 h-full max-h-full overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] min-w-0 pt-1 pb-8 overscroll-contain">
               <div className="sticky top-0 z-10 bg-[hsl(0,0%,99%)] pt-2 pb-3 mb-1">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="min-w-0">
@@ -823,6 +826,8 @@ export default function Explore() {
           </div>
         </>
       )}
+
+      </div>
 
       <ExploreFiltersDrawer
         open={mobileFiltersOpen}
