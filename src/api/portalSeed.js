@@ -1,5 +1,5 @@
 /** Datos demo para paneles admin, inquilino y propietario */
-import { DEFAULT_WHATSAPP_TEMPLATES } from "../lib/adminConstants";
+import { DEFAULT_WHATSAPP_TEMPLATES } from "../lib/adminConstants.js";
 
 /** Genera historial de pagos pagados para un contrato */
 function buildPaidPayments(lease, startYear, startMonth, count) {

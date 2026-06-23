@@ -1,4 +1,4 @@
-import { workflowToPublicStatus } from "../lib/adminConstants";
+import { workflowToPublicStatus } from "../lib/adminConstants.js";
 
 export function generatePropertyId() {
   return `prop-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
