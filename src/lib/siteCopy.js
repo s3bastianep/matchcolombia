@@ -3,6 +3,10 @@
 export const HERO_SUBTITLE =
   "Inmuebles verificados para habitar Bogotá. Encuentra el lugar ideal con nuestro cuestionario.";
 
+export const HERO_QUIZ_TITLE = "¿No sabes por dónde empezar?";
+export const HERO_QUIZ_DESC =
+  "Cuéntanos qué buscas en 2 minutos — te mostramos lo que encaja con tu presupuesto y zona.";
+
 export const VERIFIED_LISTINGS =
   "Inmuebles revisados antes de publicar. Fotos y datos verificados por nuestro equipo.";
 
@@ -15,17 +19,18 @@ export const MATCH_STEPS_VERIFIED = HABIBAR_STEPS_VERIFIED;
 export const TRUST_TAGLINE =
   "Menos tiempo buscando. Más confianza al arrendar.";
 
-export const HUMAN_SUPPORT_TITLE = "Acompañamiento personalizado";
+export const HUMAN_SUPPORT_TITLE = "Siempre hay alguien del equipo para ayudarte";
+export const HUMAN_SUPPORT_BADGE = "Sin bots ni IA";
 export const HUMAN_SUPPORT_BODY =
-  "Un asesor de Habibar te guía en cada paso, con comunicación directa por WhatsApp y respuestas oportunas.";
+  "Si tienes dudas, un problema o algo no te queda claro, escríbenos: te responde una persona de Habibar, no un chatbot ni inteligencia artificial. Atención humana por WhatsApp, cuando la necesites.";
 export const HUMAN_SUPPORT_SHORT =
-  "Asesor dedicado · Comunicación directa · Respuesta ágil";
+  "Personas reales del equipo · Sin bots ni IA · WhatsApp directo";
 
 export const FEATURED_SUBTITLE =
   "Filtra por tipo y descubre más opciones en Bogotá.";
 
 export const EXPLORE_TRUST_BANNER =
-  "Acompañamiento personalizado · Respuesta ágil por WhatsApp";
+  "Gente real del equipo · Sin bots ni IA";
 
 export const EXPLORE_MORE_FILTERS = "Más filtros";
 

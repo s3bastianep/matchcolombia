@@ -2,6 +2,7 @@ import React from "react";
 import { UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
+  HUMAN_SUPPORT_BADGE,
   HUMAN_SUPPORT_BODY,
   HUMAN_SUPPORT_SHORT,
   HUMAN_SUPPORT_TITLE,
@@ -33,7 +34,12 @@ export default function HumanSupportBanner({ variant = "default", className }) {
         <UserRound className="size-5 text-brand-violet" strokeWidth={2.25} />
       </span>
       <div className="min-w-0">
-        <p className="text-sm font-extrabold text-foreground leading-tight">{HUMAN_SUPPORT_TITLE}</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-sm font-extrabold text-foreground leading-tight">{HUMAN_SUPPORT_TITLE}</p>
+          <span className="inline-flex items-center rounded-full bg-brand-violet/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-violet">
+            {HUMAN_SUPPORT_BADGE}
+          </span>
+        </div>
         <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{HUMAN_SUPPORT_BODY}</p>
       </div>
     </div>
