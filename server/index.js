@@ -44,7 +44,7 @@ function prerenderHtmlPath(urlPath) {
     const file = path.join(distDir, ...segments, "index.html");
     return existsSync(file) ? file : null;
   }
-  const staticRoutes = ["anunciar", "publicar", "privacidad", "arriendos-bogota"];
+  const staticRoutes = ["anunciar", "publicar", "privacidad", "arriendos-bogota", "preguntas-frecuentes"];
   if (staticRoutes.includes(segments[0]) && segments.length === 1) {
     const file = path.join(distDir, segments[0], "index.html");
     return existsSync(file) ? file : null;

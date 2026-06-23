@@ -1,6 +1,7 @@
 import { BRAND } from "./brand.js";
 import { CITIES, ZONES_BY_CITY } from "./colombia.js";
 import { RENTER_FAQ } from "./arriendosBogotaCopy.js";
+import { FAQ_PATH, homeFaqSchemaItems } from "./homeSeoCopy.js";
 import {
   ARRIENDOS_BOGOTA_PATH,
   EXPLORE_COMPRA_PATH,
@@ -349,6 +350,21 @@ const ROUTE_SEO = {
       ]),
     ],
   },
+  [FAQ_PATH]: {
+    title: buildTitle("Preguntas frecuentes · Arriendos en Bogotá"),
+    description: `Respuestas sobre arriendos verificados, alquiler de apartamentos en Bogotá, Match inteligente, visitas y publicación de inmuebles con ${BRAND.name}.`,
+    url: FAQ_PATH,
+    keywords:
+      "preguntas frecuentes arriendo bogotá, cómo arrendar apartamento bogotá, arriendos verificados, HABIBAR FAQ",
+    jsonLd: () => [
+      organizationSchema(),
+      breadcrumbSchema([
+        { name: "Inicio", url: "/" },
+        { name: "Preguntas frecuentes", url: FAQ_PATH },
+      ]),
+      faqSchema(homeFaqSchemaItems()),
+    ],
+  },
   "/favoritos": {
     title: buildTitle("Mis inmuebles guardados"),
     description: `Tu lista personal de inmuebles guardados en ${BRAND.name}.`,
@@ -581,6 +597,7 @@ export function getSitemapUrls() {
     { loc: "/anunciar", priority: "0.8", changefreq: "weekly" },
     { loc: "/publicar", priority: "0.8", changefreq: "weekly" },
     { loc: "/privacidad", priority: "0.4", changefreq: "yearly" },
+    { loc: FAQ_PATH, priority: "0.55", changefreq: "monthly" },
   ];
 
   listExploreTypePaths().forEach((loc) => {

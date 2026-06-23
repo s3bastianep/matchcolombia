@@ -37,7 +37,8 @@ const {
   SEO_DEFAULTS,
 } = await import("../src/lib/seo.js");
 
-const { buildHomeStaticHtml, seoNavBlock, seoFooterBlock } = await import("../src/lib/seoStaticContent.js");
+const { buildHomeStaticHtml, buildFaqStaticHtml, seoNavBlock, seoFooterBlock } = await import("../src/lib/seoStaticContent.js");
+const { FAQ_PATH } = await import("../src/lib/homeSeoCopy.js");
 const { EXPLORE_COMPRA_PATH, ARRIENDOS_BOGOTA_PATH, listExploreZonePaths, listExploreTypePaths } = await import("../src/lib/explorePaths.js");
 const { ARRIENDOS_BOGOTA_SECTIONS } = await import("../src/lib/arriendosBogotaCopy.js");
 
@@ -358,6 +359,11 @@ async function main() {
         ctaHref: "/",
         ctaLabel: "Volver al inicio",
       }),
+    },
+    {
+      dir: "preguntas-frecuentes",
+      pathname: FAQ_PATH,
+      body: buildFaqStaticHtml(),
     },
   ];
 

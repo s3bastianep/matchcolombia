@@ -1,7 +1,8 @@
 import { BRAND } from "./brand.js";
 import { EXPLORE_COMPRA_PATH } from "./explorePaths.js";
 
-/** Bloques de copy para SEO en home (prerender + sección visible). */
+/** Ruta pública de preguntas frecuentes / contenido informativo SEO. */
+export const FAQ_PATH = "/preguntas-frecuentes";
 export const HOME_SEO_SECTIONS = [
   {
     id: "que-es-habibar",
@@ -78,6 +79,19 @@ export const HOME_SEO_SECTIONS = [
     ],
   },
 ];
+
+export function homeFaqSchemaItems() {
+  const section = HOME_SEO_SECTIONS.find((s) => s.id === "preguntas-frecuentes");
+  if (!section) return [];
+  return section.paragraphs
+    .filter((p) => p.startsWith("¿"))
+    .map((p) => {
+      const split = p.indexOf("? ");
+      return split === -1
+        ? { q: p, a: "" }
+        : { q: p.slice(0, split + 1), a: p.slice(split + 2) };
+    });
+}
 
 export function countHomeSeoWords() {
   const text = HOME_SEO_SECTIONS.flatMap((s) => [s.title, ...s.paragraphs]).join(" ");

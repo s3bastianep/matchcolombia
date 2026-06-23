@@ -6,7 +6,7 @@ import {
   exploreTypePath,
   listExploreTypePaths,
 } from "./explorePaths.js";
-import { HOME_SEO_SECTIONS } from "./homeSeoCopy.js";
+import { HOME_SEO_SECTIONS, FAQ_PATH } from "./homeSeoCopy.js";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -47,6 +47,7 @@ export function seoNavBlock() {
           <li><a href="/anunciar">Publicar inmueble en arriendo</a></li>
           <li><a href="/publicar">Vender apartamento o casa</a></li>
           <li><a href="/privacidad">Política de privacidad</a></li>
+          <li><a href="${FAQ_PATH}">Preguntas frecuentes</a></li>
         </ul>
       </nav>
       <nav aria-label="Tipos de inmueble">
@@ -86,6 +87,22 @@ function seoSectionsHtml() {
   ).join("");
 }
 
+export function buildFaqStaticHtml() {
+  return `
+      <main id="static-site-fallback" lang="es-CO">
+        <header>
+          <h1>Preguntas frecuentes sobre arriendos en Bogotá</h1>
+          <p>
+            Guía informativa de <strong>${escapeHtml(BRAND.name)}</strong>: arriendos verificados, alquiler de apartamentos,
+            Match inteligente, visitas coordinadas y publicación de inmuebles en Bogotá.
+          </p>
+        </header>
+        ${seoNavBlock()}
+        ${seoSectionsHtml()}
+        ${seoFooterBlock()}
+      </main>`;
+}
+
 /**
  * HTML estático para crawlers y SEO (home).
  */
@@ -118,7 +135,15 @@ export function buildHomeStaticHtml(properties = []) {
           </p>
         </header>
         ${seoNavBlock()}
-        ${seoSectionsHtml()}
+        <section aria-labelledby="home-intro">
+          <h2 id="home-intro">Arriendos verificados en Bogotá</h2>
+          <p>
+            Apartamentos, casas y estudios con visitas coordinadas y Match inteligente.
+            <a href="${FAQ_PATH}">Preguntas frecuentes</a> ·
+            <a href="${ARRIENDOS_BOGOTA_PATH}">Guía de arriendos</a> ·
+            <a href="/explorar">Explorar inmuebles</a>
+          </p>
+        </section>
         ${listingsBlock}
         ${seoFooterBlock()}
       </main>`;

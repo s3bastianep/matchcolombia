@@ -25,6 +25,7 @@ const PublishProperty = lazy(() => import('./pages/PublishProperty'));
 const Sell = lazy(() => import('./pages/Sell'));
 const Advertise = lazy(() => import('./pages/Advertise'));
 const Privacy = lazy(() => import('./pages/Privacy'));
+const Faq = lazy(() => import('./pages/Faq'));
 const ArriendosBogota = lazy(() => import('./pages/ArriendosBogota'));
 const Favorites = lazy(() => import('./pages/Favorites'));
 const Login = lazy(() => import('./pages/Login'));
@@ -91,6 +92,7 @@ function AppRoutes() {
           <Route path="/anunciar" element={<Advertise />} />
           <Route path="/publicar" element={<Sell />} />
           <Route path="/privacidad" element={<Privacy />} />
+          <Route path="/preguntas-frecuentes" element={<Faq />} />
           <Route path="/propiedad/:id" element={<PropertyLanding />} />
           <Route element={<RequireAuth />}>
             <Route path="/publicar/nuevo" element={<PublishProperty />} />
