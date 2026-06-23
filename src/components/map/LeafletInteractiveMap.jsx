@@ -88,7 +88,7 @@ export default function LeafletInteractiveMap({
   const mapCenter = useMemo(() => [center.lat, center.lng], [center.lat, center.lng]);
 
   return (
-    <div className={cn("relative z-0", className)}>
+    <div className={cn("relative z-0 h-full min-h-0", className)}>
       {markerVariant !== "houm" && (
         <div className="absolute top-3 right-3 z-[500] bg-white/95 backdrop-blur-sm text-[10px] font-bold text-muted-foreground px-2.5 py-1 rounded-full border border-border/50 shadow-sm pointer-events-none">
           OpenStreetMap

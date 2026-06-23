@@ -534,9 +534,11 @@
   }
 
   @media (min-width: 1024px) {
-    html.explore-desktop-lock,
+    html.explore-desktop-lock {
+      overflow: hidden;
+    }
+
     html.explore-desktop-lock body {
-      height: 100%;
       overflow: hidden;
       overscroll-behavior: none;
     }
@@ -545,6 +547,10 @@
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
       touch-action: pan-y;
+    }
+
+    .explore-map-pane {
+      min-height: 0;
     }
   }
 

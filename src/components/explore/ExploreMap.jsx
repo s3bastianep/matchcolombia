@@ -131,7 +131,7 @@ export default function ExploreMap({
         markerVariant={pane ? "houm" : "default"}
         className={cn(
           "w-full",
-          pane ? "h-full min-h-0" : "min-h-[360px] sm:min-h-[440px] xl:min-h-[calc(100vh-240px)]"
+          pane ? "absolute inset-0 h-full min-h-0" : "min-h-[360px] sm:min-h-[440px] xl:min-h-[calc(100vh-240px)]"
         )}
         onMarkerClick={handleMarkerClick}
         onMarkerEnter={pane ? undefined : handleMarkerEnter}

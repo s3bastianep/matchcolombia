@@ -38,7 +38,7 @@ import {
   countAdvancedFilters,
   advancedFiltersToUrlParams,
 } from "@/lib/propertyFilters";
-import { shouldInsertOwnerPromo, EXPLORE_GUTTER, EXPLORE_CONTENT_PAD } from "@/lib/exploreUtils";
+import { shouldInsertOwnerPromo, EXPLORE_GUTTER, EXPLORE_CONTENT_PAD, EXPLORE_SPLIT_LAYOUT } from "@/lib/exploreUtils";
 
 import ExploreMap from "../components/explore/ExploreMap";
 import ExploreAppBar from "../components/explore/ExploreAppBar";
@@ -514,9 +514,15 @@ export default function Explore() {
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
       {isLoading ? (
         <>
-          <div className={cn("hidden lg:flex lg:flex-1 lg:min-h-0 lg:h-full lg:max-h-full lg:overflow-hidden min-w-0 gap-4 lg:gap-5", EXPLORE_CONTENT_PAD)}>
-            <div className="w-[min(42%,520px)] shrink-0 h-full min-h-0 border-r-0 shimmer rounded-xl" />
-            <div className="flex-1 min-w-0 h-full min-h-0 overflow-y-auto overscroll-y-contain explore-list-pane">
+          <div className={cn(
+            "hidden lg:grid lg:flex-1 lg:min-h-0 lg:h-0 lg:max-h-full lg:overflow-hidden min-w-0 gap-4 lg:gap-5",
+            EXPLORE_CONTENT_PAD,
+            viewMode === "list" ? "lg:grid-cols-1 lg:grid-rows-[minmax(0,1fr)]" : cn(EXPLORE_SPLIT_LAYOUT, "lg:grid-rows-[minmax(0,1fr)]")
+          )}>
+            {viewMode === "split" && (
+            <div className="explore-map-pane min-h-0 h-full border-r-0 shimmer rounded-xl" />
+            )}
+            <div className="min-h-0 h-full overflow-y-auto overscroll-y-contain explore-list-pane">
             <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4 items-stretch">
               {Array(9).fill(0).map((_, i) => (
                 <ExploreSkeleton key={i} />
@@ -562,25 +568,26 @@ export default function Explore() {
       ) : filtered.length > 0 ? (
         <>
           <div className={cn(
-            "hidden lg:flex lg:flex-1 lg:min-h-0 lg:h-full lg:max-h-full lg:overflow-hidden min-w-0 gap-4 lg:gap-5",
-            EXPLORE_CONTENT_PAD
+            "hidden lg:grid lg:flex-1 lg:min-h-0 lg:h-0 lg:max-h-full lg:overflow-hidden min-w-0 gap-4 lg:gap-5",
+            EXPLORE_CONTENT_PAD,
+            viewMode === "list" ? "lg:grid-cols-1 lg:grid-rows-[minmax(0,1fr)]" : cn(EXPLORE_SPLIT_LAYOUT, "lg:grid-rows-[minmax(0,1fr)]")
           )}>
             {viewMode === "split" && (
-            <aside className="w-[min(42%,520px)] shrink-0 h-full min-h-0 overflow-hidden rounded-xl border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] shadow-sm">
-              <Suspense fallback={<MapPaneFallback className="h-full rounded-xl" />}>
-                  <ExploreMap
-                    properties={filtered}
-                    activeCity={initialCity || undefined}
-                    pane
-                    highlightedId={highlightedId}
-                    onHighlight={setHighlightedId}
-                    className="h-full rounded-xl"
-                  />
-                </Suspense>
+            <aside className="explore-map-pane relative min-h-0 h-full overflow-hidden rounded-xl border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] shadow-sm">
+              <Suspense fallback={<MapPaneFallback className="absolute inset-0 h-full w-full rounded-xl" />}>
+                <ExploreMap
+                  properties={filtered}
+                  activeCity={initialCity || undefined}
+                  pane
+                  highlightedId={highlightedId}
+                  onHighlight={setHighlightedId}
+                  className="absolute inset-0 h-full w-full rounded-xl"
+                />
+              </Suspense>
             </aside>
             )}
 
-            <section className="flex-1 min-w-0 h-full min-h-0 overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] pt-1 pb-8 overscroll-y-contain explore-list-pane">
+            <section className="min-h-0 h-full overflow-y-auto overflow-x-hidden bg-[hsl(0,0%,99%)] pt-1 pb-8 overscroll-y-contain explore-list-pane">
               <div className="sticky top-0 z-10 bg-[hsl(0,0%,99%)] pt-2 pb-3 mb-1">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="min-w-0">
