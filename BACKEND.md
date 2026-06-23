@@ -1,51 +1,22 @@
 # HABIBAR — Backend
 
-## Opción recomendada: Railway (todo en uno)
+## Opción recomendada: Railway + SQLite (un solo servicio)
 
-Web + API + PostgreSQL en **una sola cuenta Railway**.
+Web + API + base de datos en un archivo. **Sin PostgreSQL.**
 
-→ Guía completa: **[RAILWAY.md](./RAILWAY.md)**
+→ Guía: **[RAILWAY.md](./RAILWAY.md)**
 
 ---
 
 ## Opción alternativa: Supabase
 
-Si prefieres Supabase como backend externo:
-
-### 1. Crear proyecto en Supabase
-
-1. Entra a [supabase.com](https://supabase.com) y crea un proyecto gratis.
-2. Espera a que termine de provisionarse (~2 min).
-
-### 2. Ejecutar el schema SQL
-
-1. En Supabase: **SQL Editor** → **New query**.
-2. Copia y pega todo el contenido de `supabase/schema.sql`.
-3. Pulsa **Run**.
-
-### 3. Variables de entorno
-
-```env
-VITE_SUPABASE_URL=https://TU-PROYECTO.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...  # solo local, nunca en Railway
-```
-
-### 4. Cargar datos demo
-
-```bash
-npm run seed:supabase
-```
-
-### 5. Deploy
-
-En Railway, **no** uses `VITE_USE_RAILWAY_API=true`. Solo agrega las variables `VITE_SUPABASE_*`.
+Ver sección Supabase en versiones anteriores de este archivo o `supabase/schema.sql`.
 
 ---
 
 ## Modo demo (sin backend)
 
-Sin `VITE_USE_RAILWAY_API` ni `VITE_SUPABASE_*`, la app usa **localStorage** en cada navegador (solo para pruebas locales).
+Sin `VITE_USE_RAILWAY_API`, la app usa **localStorage** en cada navegador.
 
 ---
 

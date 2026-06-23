@@ -1,40 +1,48 @@
-import pg from "pg";
+import Database from "better-sqlite3";
+import path from "node:path";
+import { mkdirSync } from "node:fs";
 
-const { Pool } = pg;
+let db = null;
 
-let pool = null;
-
-function resolveDatabaseUrl() {
-  if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
-  if (process.env.DATABASE_PRIVATE_URL) return process.env.DATABASE_PRIVATE_URL;
-  if (process.env.POSTGRES_URL) return process.env.POSTGRES_URL;
-
-  const { PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE } = process.env;
-  if (PGHOST && PGUSER && PGDATABASE) {
-    const auth = PGPASSWORD ? `${encodeURIComponent(PGUSER)}:${encodeURIComponent(PGPASSWORD)}@` : `${encodeURIComponent(PGUSER)}@`;
-    const port = PGPORT || "5432";
-    return `postgresql://${auth}${PGHOST}:${port}/${PGDATABASE}`;
-  }
-
-  return null;
+export function getDataDir() {
+  return process.env.DATA_DIR || path.join(process.cwd(), "data");
 }
 
-export function getPool() {
-  if (pool) return pool;
-  const connectionString = resolveDatabaseUrl();
-  if (!connectionString) {
-    throw new Error(
-      "DATABASE_URL no configurada. En Railway: + New → Database → PostgreSQL → " +
-        "servicio matchcolombia → Variables → Add Reference → Postgres → DATABASE_URL → Redeploy."
-    );
+export function getDb() {
+  if (!db) {
+    const dir = getDataDir();
+    mkdirSync(dir, { recursive: true });
+    const file = process.env.DATABASE_PATH || path.join(dir, "habibar.db");
+    db = new Database(file);
+    db.pragma("journal_mode = WAL");
+    db.pragma("foreign_keys = ON");
+    console.log(`HABIBAR API: SQLite en ${file}`);
   }
-  pool = new Pool({
-    connectionString,
-    ssl: process.env.PGSSL === "false" ? false : { rejectUnauthorized: false },
-  });
-  return pool;
+  return db;
 }
 
-export async function query(text, params) {
-  return getPool().query(text, params);
+function convertSql(sql) {
+  return sql
+    .replace(/\$(\d+)::jsonb/g, "?")
+    .replace(/\$(\d+)/g, "?")
+    .replace(/::int/g, "");
+}
+
+export async function query(text, params = []) {
+  const database = getDb();
+  const sql = convertSql(text);
+  const upper = text.trim().toUpperCase();
+
+  if (upper.startsWith("SELECT") || upper.includes("RETURNING")) {
+    const stmt = database.prepare(sql);
+    if (!upper.startsWith("SELECT") && upper.includes("RETURNING")) {
+      const row = stmt.get(...params);
+      return { rows: row ? [row] : [], rowCount: row ? 1 : 0 };
+    }
+    const rows = stmt.all(...params);
+    return { rows, rowCount: rows.length };
+  }
+
+  const result = database.prepare(sql).run(...params);
+  return { rows: [], rowCount: result.changes };
 }

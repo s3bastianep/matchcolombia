@@ -45,11 +45,8 @@ export async function findUserById(id) {
 
 export async function findUserByPhone(phone) {
   const digits = phone.replace(/\D/g, "");
-  const { rows } = await query(
-    "SELECT * FROM users WHERE regexp_replace(phone, '[^0-9]', '', 'g') = $1 LIMIT 1",
-    [digits]
-  );
-  return rows[0] || null;
+  const { rows } = await query("SELECT * FROM users");
+  return rows.find((row) => (row.phone || "").replace(/\D/g, "") === digits) || null;
 }
 
 export async function createUser({ id, name, username, email, phone, role, passwordHash }) {

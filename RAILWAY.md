@@ -1,73 +1,55 @@
-# HABIBAR — Backend en Railway (todo en uno)
+# HABIBAR — Railway (un solo servicio, SQLite)
 
-Un solo proyecto Railway: **web + API + PostgreSQL**.
+Todo en **matchcolombia**: web + API + base de datos en un archivo local. **Sin PostgreSQL.**
 
-## Arquitectura
+## En Railway: qué borrar
 
-```
-Railway
-├── Servicio Node (npm run build && npm start)
-│   ├── /api/*     → backend (auth, propiedades, visitas…)
-│   ├── /uploads/* → fotos subidas
-│   └── /*         → app React (dist/)
-└── PostgreSQL     → base de datos compartida
-```
+1. **Elimina el servicio Postgres** (`postgres_bd`):
+   - Canvas del proyecto → clic en Postgres → **Settings** → **Delete Service**
+2. **Borra estas variables** de matchcolombia (si existen):
+   - `DATABASE_URL`
+   - `JWT_SECRET`
+   - `PGSSL`
+   - Cualquier `POSTGRES_*` o referencia `${{Postgres...}}`
 
-## 1. Agregar PostgreSQL
+## Variables (solo 2 obligatorias)
 
-1. Proyecto **pacific-harmony** en [railway.app](https://railway.app)
-2. **+ New** → **Database** → **PostgreSQL**
-3. Espera ~30 s a que quede en verde
+En **matchcolombia** → **Variables** → **Raw Editor**, pega:
 
-## 2. Vincular la base a matchcolombia
-
-1. Abre el servicio **matchcolombia** (no el Postgres)
-2. **Variables** → **Add Reference**
-3. Servicio: **PostgreSQL** → variable **`DATABASE_URL`**
-4. Guarda
-
-Debe quedar: `DATABASE_URL` = `${{Postgres.DATABASE_URL}}`
-
-## 3. Otras variables obligatorias
-
-En **matchcolombia** → **Variables**:
-
-| Variable | Valor |
-|----------|-------|
-| `DATABASE_URL` | Referencia al Postgres |
-| `JWT_SECRET` | Texto aleatorio largo (32+ caracteres) |
-| `VITE_USE_RAILWAY_API` | `true` |
-
-Genera `JWT_SECRET`:
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```env
+VITE_USE_RAILWAY_API=true
+VITE_SITE_URL=https://matchcolombia.co
 ```
 
-**Importante:** `VITE_USE_RAILWAY_API` debe existir **antes** del build.
+Opcional (fotos y datos persistentes al redeploy):
 
-## 4. Redeploy
+```env
+DATA_DIR=/data
+```
 
-**Deployments** → último deploy → **Redeploy**.
+Y monta un **Volume** en `/data` (Settings → Volumes).
 
-## 5. Fotos persistentes (opcional)
+## Deploy
 
-1. **Volumes** → montar en `/data`
-2. Variable: `UPLOAD_DIR=/data/uploads`
+- **Build:** `npm run build`
+- **Start:** `npm start`
 
-## 6. Usuarios demo
+Al arrancar crea solo `data/habibar.db` y carga usuarios demo.
 
-| Usuario | Contraseña | Rol |
-|---------|------------|-----|
-| `admin` | `admin123` | Admin |
-| `buscador` | `demo123` | Buscador |
-| `propietario` | `demo123` | Propietario |
-| `inquilino` | `demo123` | Inquilino |
+## Usuarios demo
 
-## 7. Verificar
+| Usuario | Contraseña |
+|---------|------------|
+| `admin` | `admin123` |
+| `buscador` | `demo123` |
+| `propietario` | `demo123` |
+| `inquilino` | `demo123` |
 
-- `https://tu-dominio/api/health` → `{ "ok": true, "backend": "railway" }`
-- Login admin en `/admin`
+## Verificar
 
-## Costo estimado
+- `https://matchcolombia-production.up.railway.app/api/health` → `{ "ok": true, "backend": "sqlite" }`
+- Login en `/admin`
 
-~**$10/mes** ($5 web + ~$5 Postgres) — una sola cuenta Railway.
+## Costo
+
+~**$5/mes** (solo el servicio matchcolombia, sin base de datos aparte).

@@ -12,9 +12,11 @@ import uploadRoutes from "./routes/upload.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const distDir = path.join(root, "dist");
-const uploadDir = process.env.UPLOAD_DIR || path.join(root, "uploads");
+const dataDir = process.env.DATA_DIR || path.join(root, "data");
+const uploadDir = process.env.UPLOAD_DIR || path.join(dataDir, "uploads");
 const port = Number(process.env.PORT) || 3000;
 
+mkdirSync(dataDir, { recursive: true });
 mkdirSync(uploadDir, { recursive: true });
 
 const app = express();
@@ -22,7 +24,7 @@ app.use(express.json({ limit: "2mb" }));
 app.use(authMiddleware);
 
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, backend: "railway" });
+  res.json({ ok: true, backend: "sqlite" });
 });
 
 app.use("/api/auth", authRoutes);

@@ -13,8 +13,8 @@ const DEMO_USERS = [
 ];
 
 async function countUsers() {
-  const { rows } = await query("SELECT COUNT(*)::int AS n FROM users");
-  return rows[0]?.n || 0;
+  const { rows } = await query("SELECT COUNT(*) AS n FROM users");
+  return Number(rows[0]?.n) || 0;
 }
 
 async function ensureDemoUser(user) {
@@ -23,11 +23,11 @@ async function ensureDemoUser(user) {
     `INSERT INTO users (id, username, name, email, role, password_hash)
      VALUES ($1, $2, $3, $4, $5, $6)
      ON CONFLICT (id) DO UPDATE SET
-       username = EXCLUDED.username,
-       name = EXCLUDED.name,
-       email = EXCLUDED.email,
-       role = EXCLUDED.role,
-       password_hash = EXCLUDED.password_hash`,
+       username = excluded.username,
+       name = excluded.name,
+       email = excluded.email,
+       role = excluded.role,
+       password_hash = excluded.password_hash`,
     [user.id, user.username.toLowerCase(), user.name, user.email, user.role, hash]
   );
 }

@@ -32,3 +32,4 @@ dist-ssr
 .vite
 *.zip
 uploads/
+data/

@@ -2,11 +2,13 @@ import { query } from "./pool.js";
 
 function rowToRecord(row) {
   if (!row) return null;
+  const record =
+    typeof row.record === "string" ? JSON.parse(row.record) : row.record || {};
   return {
-    ...row.record,
+    ...record,
     id: row.id,
-    created_date: row.record?.created_date || row.created_at,
-    updated_date: row.record?.updated_date || row.updated_at,
+    created_date: record?.created_date || row.created_at,
+    updated_date: record?.updated_date || row.updated_at,
   };
 }
 
@@ -37,7 +39,7 @@ export async function createRecord(entityType, data, idPrefix = "item") {
   };
   const { rows } = await query(
     `INSERT INTO app_records (entity_type, id, record, created_at, updated_at)
-     VALUES ($1, $2, $3::jsonb, $4, $5)
+     VALUES ($1, $2, $3, $4, $5)
      RETURNING *`,
     [entityType, id, JSON.stringify(record), now, now]
   );
@@ -48,7 +50,7 @@ export async function updateRecord(entityType, id, record) {
   const now = new Date().toISOString();
   const payload = { ...record, id, updated_date: now };
   const { rows } = await query(
-    `UPDATE app_records SET record = $3::jsonb, updated_at = $4
+    `UPDATE app_records SET record = $3, updated_at = $4
      WHERE entity_type = $1 AND id = $2
      RETURNING *`,
     [entityType, id, JSON.stringify(payload), now]
@@ -71,9 +73,9 @@ export async function upsertSingleton(entityType, id, record) {
   const payload = { ...record, id, updated_date: now };
   const { rows } = await query(
     `INSERT INTO app_records (entity_type, id, record, created_at, updated_at)
-     VALUES ($1, $2, $3::jsonb, $4, $5)
+     VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT (entity_type, id) DO UPDATE
-     SET record = EXCLUDED.record, updated_at = EXCLUDED.updated_at
+     SET record = excluded.record, updated_at = excluded.updated_at
      RETURNING *`,
     [entityType, id, JSON.stringify(payload), record.created_at || now, now]
   );
