@@ -49,14 +49,13 @@ export async function createRecord(entityType, data, idPrefix = "item") {
 export async function updateRecord(entityType, id, record) {
   const now = new Date().toISOString();
   const payload = { ...record, id, updated_date: now };
-  const { rows } = await query(
+  const { rowCount } = await query(
     `UPDATE app_records SET record = $3, updated_at = $4
-     WHERE entity_type = $1 AND id = $2
-     RETURNING *`,
+     WHERE entity_type = $1 AND id = $2`,
     [entityType, id, JSON.stringify(payload), now]
   );
-  if (!rows[0]) throw new Error("Registro no encontrado");
-  return rowToRecord(rows[0]);
+  if (!rowCount) throw new Error("Registro no encontrado");
+  return getRecord(entityType, id);
 }
 
 export async function deleteRecord(entityType, id) {

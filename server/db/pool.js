@@ -21,28 +21,37 @@ export function getDb() {
   return db;
 }
 
-function convertSql(sql) {
-  return sql
-    .replace(/\$(\d+)::jsonb/g, "?")
-    .replace(/\$(\d+)/g, "?")
+/** Convierte $1, $2… a ? respetando el orden en que aparecen en el SQL (no el índice). */
+function convertSql(text, params = []) {
+  const orderedParams = [];
+  const sql = text
+    .replace(/\$(\d+)::jsonb/g, (_, index) => {
+      orderedParams.push(params[Number(index) - 1]);
+      return "?";
+    })
+    .replace(/\$(\d+)/g, (_, index) => {
+      orderedParams.push(params[Number(index) - 1]);
+      return "?";
+    })
     .replace(/::int/g, "");
+  return { sql, params: orderedParams };
 }
 
 export async function query(text, params = []) {
   const database = getDb();
-  const sql = convertSql(text);
+  const { sql, params: boundParams } = convertSql(text, params);
   const upper = text.trim().toUpperCase();
 
   if (upper.startsWith("SELECT") || upper.includes("RETURNING")) {
     const stmt = database.prepare(sql);
     if (!upper.startsWith("SELECT") && upper.includes("RETURNING")) {
-      const row = stmt.get(...params);
+      const row = stmt.get(...boundParams);
       return { rows: row ? [row] : [], rowCount: row ? 1 : 0 };
     }
-    const rows = stmt.all(...params);
+    const rows = stmt.all(...boundParams);
     return { rows, rowCount: rows.length };
   }
 
-  const result = database.prepare(sql).run(...params);
+  const result = database.prepare(sql).run(...boundParams);
   return { rows: [], rowCount: result.changes };
 }

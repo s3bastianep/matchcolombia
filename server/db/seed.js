@@ -96,4 +96,6 @@ export async function syncDemoPortalTickets() {
       await createRecord("ticket", ticket, "ticket");
     }
   }
+
+  console.log("HABIBAR API: tickets demo sincronizados.");
 }
