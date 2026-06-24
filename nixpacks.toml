@@ -1,11 +1,3 @@
-# Railway/Nixpacks: Vite y Tailwind están en devDependencies.
-# Sin esto, npm install omite devDeps y `npm run build` falla en silencio
-# (Railway mantiene el deploy anterior → la web queda con diseño viejo).
+# Asegura devDependencies en el build (eslint, types). Vite ya está en dependencies.
 [variables]
 NPM_CONFIG_PRODUCTION = "false"
-
-[phases.install]
-cmds = ["npm ci --include=dev"]
-
-[phases.build]
-cmds = ["npm run build"]
