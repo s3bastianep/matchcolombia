@@ -530,13 +530,16 @@ export function breadcrumbSchema(items) {
 }
 
 export function faqSchema(items) {
+  const ctx = "https://schema.org";
   return {
-    "@context": "https://schema.org",
+    "@context": ctx,
     "@type": "FAQPage",
-    mainEntity: items.map((item) => ({
+    mainEntity: (items || []).filter(Boolean).map((item) => ({
+      "@context": ctx,
       "@type": "Question",
       name: item.q,
       acceptedAnswer: {
+        "@context": ctx,
         "@type": "Answer",
         text: item.a,
       },

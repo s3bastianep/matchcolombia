@@ -119,14 +119,18 @@ function replaceCanonical(html, href) {
 
 function injectJsonLd(html, jsonLd) {
   const blocks = (jsonLd || []).filter(Boolean);
-  const script =
+  const scripts =
     blocks.length > 0
-      ? `\n    <script type="application/ld+json" id="prerender-json-ld">\n${JSON.stringify(blocks.length === 1 ? blocks[0] : blocks, null, 2)}\n    </script>`
+      ? blocks
+          .map(
+            (block, index) =>
+              `\n    <script type="application/ld+json" id="prerender-json-ld-${index}">\n${JSON.stringify(block, null, 2)}\n    </script>`
+          )
+          .join("")
       : "";
 
   let next = html.replace(/\s*<script type="application\/ld\+json"[\s\S]*?<\/script>/gi, "");
-  next = next.replace(/\s*<script type="application\/ld\+json" id="prerender-json-ld"[\s\S]*?<\/script>/gi, "");
-  if (script) next = next.replace("</head>", `${script}\n  </head>`);
+  if (scripts) next = next.replace("</head>", `${scripts}\n  </head>`);
   return next;
 }
 

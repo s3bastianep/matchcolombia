@@ -41,6 +41,13 @@ function upsertJsonLd(id, data) {
   if (!existing) document.head.appendChild(el);
 }
 
+function clearStaticJsonLd() {
+  document.querySelectorAll('script[id^="prerender-json-ld"]').forEach((node) => node.remove());
+  document
+    .querySelectorAll('script[type="application/ld+json"]:not([data-seo-managed])')
+    .forEach((node) => node.remove());
+}
+
 /**
  * Actualiza title, meta, canonical, Open Graph, Twitter y JSON-LD por ruta.
  */
@@ -57,7 +64,10 @@ export default function SeoHead({
   geoPosition = SEO_DEFAULTS.geoPosition,
   jsonLd = [],
 }) {
-  const jsonLdKey = useMemo(() => JSON.stringify(jsonLd), [jsonLd]);
+  const jsonLdKey = useMemo(
+    () => JSON.stringify((jsonLd || []).filter(Boolean)),
+    [jsonLd]
+  );
 
   useEffect(() => {
     const prevTitle = document.title;
@@ -94,12 +104,15 @@ export default function SeoHead({
 
     if (url) upsertLink("canonical", url);
 
-    jsonLd.forEach((block, index) => {
+    clearStaticJsonLd();
+
+    const blocks = (jsonLd || []).filter(Boolean);
+    blocks.forEach((block, index) => {
       upsertJsonLd(`seo-jsonld-${index}`, block);
     });
 
-    const maxLd = Math.max(jsonLd.length, 8);
-    for (let i = jsonLd.length; i < maxLd; i += 1) {
+    const maxLd = Math.max(blocks.length, 8);
+    for (let i = blocks.length; i < maxLd; i += 1) {
       document.getElementById(`seo-jsonld-${i}`)?.remove();
     }
 

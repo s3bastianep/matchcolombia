@@ -49,12 +49,24 @@ function showBootstrapError(error) {
   `
 }
 
+function isIgnorableBootError(error, event) {
+  const msg = error?.message || String(error || "");
+  if (msg.includes("@context")) return true;
+  const source = event?.filename || "";
+  if (source && !source.includes(location.origin) && !source.includes("/assets/")) return true;
+  return false;
+}
+
 window.addEventListener('error', (event) => {
-  if (isBooting()) showBootstrapError(event.error || event.message)
+  if (isBooting() && !isIgnorableBootError(event.error || event.message, event)) {
+    showBootstrapError(event.error || event.message);
+  }
 })
 
 window.addEventListener('unhandledrejection', (event) => {
-  if (isBooting()) showBootstrapError(event.reason)
+  if (isBooting() && !isIgnorableBootError(event.reason, event)) {
+    showBootstrapError(event.reason);
+  }
 })
 
 const BOOT_TIMEOUT_MS = 20000

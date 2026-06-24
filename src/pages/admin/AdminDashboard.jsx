@@ -45,7 +45,6 @@ export default function AdminDashboard() {
     { to: "/admin/aplicaciones", title: "Aplicaciones", desc: "Revisión de candidatos" },
     { to: "/admin/inquilinos", title: "Inquilinos", desc: "Contratos y tickets" },
     { to: "/admin/reportes", title: "Reportes", desc: "Métricas de operación" },
-    { to: "/admin/uso", label: "Uso del sitio", icon: LineChart },
     { to: "/admin/uso", title: "Uso del sitio", desc: "Páginas y clics de visitantes" },
     { to: "/admin/configuracion", title: "Configuración", desc: "WhatsApp y POIs" },
     { to: "/admin/notificaciones", title: "Notificaciones", desc: "Alertas internas" },

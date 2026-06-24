@@ -7,7 +7,7 @@ import {
   FilePenLine,
   Banknote,
   Wrench,
-  LineChart,
+  BarChart3,
   ShieldCheck,
   Clock,
   Smartphone,
@@ -65,7 +65,7 @@ const STEPS = [
     benefit: "Problemas resueltos sin que tú seas el intermediario.",
   },
   {
-    icon: LineChart,
+    icon: BarChart3,
     title: "Seguimiento en tiempo real",
     desc: "Estado del arriendo, pagos e interesados en un solo lugar.",
     benefit: "Control total desde tu panel, cuando quieras.",
