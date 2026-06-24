@@ -30,14 +30,14 @@ export default function BrandLogo({
   const sizes = {
     nav: {
       icon: "h-9 w-9",
-      wordmark: "h-11 sm:h-12 w-auto max-w-[13rem] sm:max-w-[15rem] lg:max-w-[17rem]",
-      full: "h-11 sm:h-12 w-auto",
+      wordmark: "h-10 sm:h-11 w-auto max-w-[12.5rem] sm:max-w-[14rem] lg:max-w-[15.5rem]",
+      full: "h-10 sm:h-11 w-auto",
     },
-    sm: { icon: "h-11 w-11", wordmark: "h-12 sm:h-14 w-auto max-w-[15rem] sm:max-w-[17rem]", full: "h-16 w-auto" },
-    md: { icon: "h-12 w-12", wordmark: "h-14 sm:h-16 w-auto max-w-[17rem] sm:max-w-[19rem]", full: "h-20 w-auto" },
-    lg: { icon: "h-14 w-14", wordmark: "h-14 sm:h-16 w-auto max-w-[17rem] sm:max-w-[19rem]", full: "h-24 w-auto" },
-    xl: { icon: "h-16 w-16", wordmark: "h-16 sm:h-[4.5rem] w-auto max-w-[19rem] sm:max-w-[22rem]", full: "h-28 w-auto" },
-    hero: { icon: "h-16 w-16", wordmark: "h-16 sm:h-20 w-auto max-w-[min(92vw,24rem)]", full: "h-32 w-auto" },
+    sm: { icon: "h-10 w-10", wordmark: "h-11 sm:h-12 w-auto max-w-[14rem] sm:max-w-[16rem]", full: "h-16 w-auto" },
+    md: { icon: "h-11 w-11", wordmark: "h-12 sm:h-14 w-auto max-w-[15rem] sm:max-w-[17rem]", full: "h-20 w-auto" },
+    lg: { icon: "h-12 w-12", wordmark: "h-12 sm:h-14 w-auto max-w-[16rem] sm:max-w-[18rem]", full: "h-24 w-auto" },
+    xl: { icon: "h-14 w-14", wordmark: "h-14 sm:h-16 w-auto max-w-[17rem] sm:max-w-[20rem]", full: "h-28 w-auto" },
+    hero: { icon: "h-14 w-14", wordmark: "h-14 sm:h-[4.25rem] w-auto max-w-[min(90vw,22rem)]", full: "h-32 w-auto" },
   };
   const s = sizes[size] || sizes.md;
 
