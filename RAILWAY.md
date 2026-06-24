@@ -31,8 +31,19 @@ Y monta un **Volume** en `/data` (Settings → Volumes).
 
 ## Deploy
 
-- **Build:** `npm run build`
+- **Build:** `npm ci --include=dev && npm run build` (Vite está en devDependencies; sin `--include=dev` el build falla en Railway)
 - **Start:** `npm start`
+
+El repo incluye `nixpacks.toml` para que Railway instale devDependencies al construir.
+
+### Si habibar.com no cambia tras un push
+
+1. **No uses solo "Redeploy"** en un deploy viejo — eso repite la misma imagen antigua.
+2. En Railway → servicio HABIBAR → **Deployments** → **Deploy** desde la rama `main` (o espera el auto-deploy del push).
+3. Abre los **logs de Build** y confirma que termina con `Prerender SSG:` y sin errores de `vite`.
+4. Verifica en el navegador (incógnito):
+   - `https://habibar.com/api/build-info` → debe mostrar `"faviconVersion":"17"` y un `gitSha` reciente.
+   - El favicon en el HTML debe ser `?v=17`, no `?v=10`.
 
 Al arrancar crea `data/habibar.db` y carga usuarios demo.
 

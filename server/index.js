@@ -1,4 +1,4 @@
-import { mkdirSync, existsSync } from "node:fs";
+import { mkdirSync, existsSync, readFileSync } from "node:fs";
 import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -26,6 +26,25 @@ app.use(securityHeadersMiddleware);
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true, backend: "sqlite" });
+});
+
+app.get("/api/build-info", (_req, res) => {
+  let faviconVersion = null;
+  let jsBundle = null;
+  try {
+    const indexHtml = readFileSync(path.join(distDir, "index.html"), "utf8");
+    faviconVersion = indexHtml.match(/favicon\.svg\?v=(\d+)/)?.[1] ?? null;
+    jsBundle = indexHtml.match(/assets\/(index-[^"]+\.js)/)?.[1] ?? null;
+  } catch {
+    /* dist aún no generado */
+  }
+  res.json({
+    ok: true,
+    gitSha: process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || null,
+    faviconVersion,
+    jsBundle,
+    distExists: existsSync(path.join(distDir, "index.html")),
+  });
 });
 
 const CANONICAL_HOST = (process.env.CANONICAL_HOST || "habibar.com").toLowerCase();
