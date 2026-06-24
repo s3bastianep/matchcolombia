@@ -8,6 +8,7 @@ import { authMiddleware } from "./middleware/auth.js";
 import authRoutes from "./routes/auth.js";
 import entityRoutes, { settingsRouter } from "./routes/entities.js";
 import uploadRoutes from "./routes/upload.js";
+import analyticsRoutes from "./routes/analytics.js";
 import { securityHeadersMiddleware } from "./securityHeaders.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -94,6 +95,7 @@ app.use(express.json({ limit: "2mb" }));
 app.use(authMiddleware);
 
 app.use("/api/auth", authRoutes);
+app.use("/api/analytics", analyticsRoutes);
 app.use("/api/entities", entityRoutes);
 app.use("/api/settings", settingsRouter);
 app.use("/api/upload", uploadRoutes);

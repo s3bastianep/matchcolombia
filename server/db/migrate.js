@@ -25,5 +25,22 @@ export async function migrate() {
 
     CREATE INDEX IF NOT EXISTS users_username_idx ON users (username);
     CREATE INDEX IF NOT EXISTS app_records_entity_idx ON app_records (entity_type);
+
+    CREATE TABLE IF NOT EXISTS analytics_events (
+      id TEXT PRIMARY KEY,
+      session_id TEXT NOT NULL,
+      user_id TEXT,
+      event_type TEXT NOT NULL,
+      path TEXT NOT NULL DEFAULT '/',
+      label TEXT NOT NULL DEFAULT '',
+      target TEXT NOT NULL DEFAULT '',
+      device TEXT NOT NULL DEFAULT 'unknown',
+      meta TEXT NOT NULL DEFAULT '{}',
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE INDEX IF NOT EXISTS analytics_events_created_idx ON analytics_events (created_at);
+    CREATE INDEX IF NOT EXISTS analytics_events_type_idx ON analytics_events (event_type);
+    CREATE INDEX IF NOT EXISTS analytics_events_path_idx ON analytics_events (path);
   `);
 }

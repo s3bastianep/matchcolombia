@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -32,6 +32,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { savePreferences, buildExploreUrl, asSelectionList } from "@/lib/matchPreferences";
 import { CITIES, getZonesForCity } from "@/lib/colombia";
 import { QUIZ_FINISH_CTA, QUIZ_STEPS, EXPLORE_DEFAULT_CITY } from "@/lib/siteCopy";
+import { trackEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 const STEP_ICONS = {
@@ -328,6 +329,10 @@ export default function MatchQuiz({ open, onOpenChange }) {
   const selectedZones = asSelectionList(prefs.zones?.length ? prefs.zones : prefs.zone);
   const selectedTypes = asSelectionList(prefs.types?.length ? prefs.types : prefs.type);
 
+  useEffect(() => {
+    if (open) trackEvent("quiz_open", { label: "Match inteligente" });
+  }, [open]);
+
   const finish = () => {
     const normalized = {
       ...prefs,
@@ -337,6 +342,7 @@ export default function MatchQuiz({ open, onOpenChange }) {
       zone: selectedZones.length === 1 ? selectedZones[0] : "",
     };
     savePreferences(normalized);
+    trackEvent("quiz_complete", { label: "Match completado" });
     onOpenChange(false);
     setStep(0);
     navigate(buildExploreUrl(normalized));

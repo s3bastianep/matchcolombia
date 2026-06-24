@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Building2, Users, Calendar, UserCheck, BarChart3,
-  Shield, FileText, Settings, Bell, MessageSquare,
+  Shield, FileText, Settings, Bell, MessageSquare, LineChart,
 } from "lucide-react";
 import PanelLayout from "@/components/panels/PanelLayout";
 import { useAdminBadges } from "@/lib/useAdminBadges";
@@ -19,6 +19,7 @@ export default function AdminLayout() {
     { to: "/admin/aplicaciones", label: "Aplicaciones", icon: FileText, badge: badges.applications },
     { to: "/admin/inquilinos", label: "Inquilinos", icon: UserCheck, badge: badges.tickets },
     { to: "/admin/reportes", label: "Reportes", icon: BarChart3 },
+    { to: "/admin/uso", label: "Uso del sitio", icon: LineChart },
     { to: "/admin/configuracion", label: "Configuración", icon: Settings },
     { to: "/admin/notificaciones", label: "Notificaciones", icon: Bell, badge: badges.notifications },
   ];

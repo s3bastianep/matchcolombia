@@ -10,6 +10,7 @@ import { PropertyPanelProvider } from '@/lib/PropertyPanelContext';
 import { lazyWithRetry as lazy } from '@/lib/lazyWithRetry';
 
 import AppLayout from './components/layout/AppLayout';
+import AnalyticsTracker from './components/analytics/AnalyticsTracker';
 import RequireAuth from './components/RequireAuth';
 import RequireRole from './components/RequireRole';
 
@@ -39,6 +40,7 @@ const AdminLeads = lazy(() => import('./pages/admin/AdminLeads'));
 const AdminVisits = lazy(() => import('./pages/admin/AdminVisits'));
 const AdminTenants = lazy(() => import('./pages/admin/AdminTenants'));
 const AdminReports = lazy(() => import('./pages/admin/AdminReports'));
+const AdminUsage = lazy(() => import('./pages/admin/AdminUsage'));
 const AdminApplications = lazy(() => import('./pages/admin/AdminApplications'));
 const AdminOwners = lazy(() => import('./pages/admin/AdminOwners'));
 const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'));
@@ -125,6 +127,7 @@ function AppRoutes() {
             <Route path="/admin/configuracion" element={<AdminSettings />} />
             <Route path="/admin/notificaciones" element={<AdminNotifications />} />
             <Route path="/admin/reportes" element={<AdminReports />} />
+            <Route path="/admin/uso" element={<AdminUsage />} />
           </Route>
         </Route>
 
@@ -171,6 +174,7 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
+          <AnalyticsTracker />
           <PropertyPanelProvider>
             <Suspense fallback={null}>
               <RouteSeo />
