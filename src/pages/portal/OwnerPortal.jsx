@@ -17,12 +17,14 @@ import {
   Banknote,
   AlertCircle,
   Sparkles,
+  ClipboardList,
   MessageSquare,
 } from "lucide-react";
 
 const QUICK_LINKS = [
   { to: "/propietario/rentabilidad", title: "Rentabilidad", desc: "ROI, ingresos y gastos", icon: TrendingUp, tone: "violet" },
   { to: "/propietario/propiedades", title: "Propiedades", desc: "Estado y canon mensual", icon: Building2, tone: "magenta" },
+  { to: "/propietario/inventario", title: "Inventario", desc: "Fotos y notas de entrega", icon: ClipboardList, tone: "violet" },
   { to: "/propietario/leads", title: "Leads", desc: "Interesados activos", icon: Users, tone: "emerald" },
   { to: "/propietario/tickets", title: "Mantenimiento", desc: "Aprueba reparaciones", icon: Wrench, tone: "amber" },
   { to: "/propietario/mensajes", title: "Chat", desc: "Habla con el equipo", icon: MessageSquare, tone: "violet" },

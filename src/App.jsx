@@ -63,6 +63,8 @@ const OwnerPropertyEdit = lazy(() => import('./pages/portal/OwnerPropertyEdit'))
 const OwnerLeads = lazy(() => import('./pages/portal/OwnerLeads'));
 const OwnerTickets = lazy(() => import('./pages/portal/OwnerTickets'));
 const OwnerFinance = lazy(() => import('./pages/portal/OwnerFinance'));
+const OwnerInventory = lazy(() => import('./pages/portal/OwnerInventory'));
+const OwnerInventoryEdit = lazy(() => import('./pages/portal/OwnerInventoryEdit'));
 
 const RouteSeo = lazy(() => import('@/components/seo/RouteSeo'));
 
@@ -159,6 +161,9 @@ function AppRoutes() {
             <Route path="/propietario/tickets" element={<OwnerTickets />} />
             <Route path="/propietario/mensajes" element={<SeekerMessages />} />
             <Route path="/propietario/rentabilidad" element={<OwnerFinance />} />
+            <Route path="/propietario/inventario" element={<OwnerInventory />} />
+            <Route path="/propietario/inventario/nuevo" element={<OwnerInventoryEdit />} />
+            <Route path="/propietario/inventario/:id" element={<OwnerInventoryEdit />} />
           </Route>
         </Route>
 

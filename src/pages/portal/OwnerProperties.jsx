@@ -5,7 +5,7 @@ import { useAuth } from "@/lib/AuthContext";
 import StatusBadge from "@/components/panels/StatusBadge";
 import { Link } from "react-router-dom";
 import { hasPendingOwnerChanges } from "@/api/propertyMutations";
-import { Pencil } from "lucide-react";
+import { Pencil, ClipboardList } from "lucide-react";
 
 const formatCOP = (v) => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v || 0);
 
@@ -66,6 +66,12 @@ export default function OwnerProperties() {
                     className="inline-flex items-center gap-1 text-xs font-bold text-brand-violet hover:underline"
                   >
                     <Pencil className="w-3 h-3" /> Editar
+                  </Link>
+                  <Link
+                    to={`/propietario/inventario/nuevo?propiedad=${p.id}&tipo=entrega`}
+                    className="inline-flex items-center gap-1 text-xs font-bold text-brand-magenta hover:underline"
+                  >
+                    <ClipboardList className="w-3 h-3" /> Inventario
                   </Link>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import { Home, Building2, Users, Wrench, TrendingUp, MessageSquare } from "lucide-react";
+import { Home, Building2, Users, Wrench, TrendingUp, MessageSquare, ClipboardList } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api/apiClient";
 import { useAuth } from "@/lib/AuthContext";
@@ -33,6 +33,7 @@ export default function OwnerLayout() {
     { to: "/propietario", label: "Dashboard", icon: Home },
     { to: "/propietario/rentabilidad", label: "Rentabilidad", icon: TrendingUp },
     { to: "/propietario/propiedades", label: "Propiedades", icon: Building2 },
+    { to: "/propietario/inventario", label: "Inventario", icon: ClipboardList },
     { to: "/propietario/leads", label: "Leads", icon: Users },
     {
       to: "/propietario/tickets",

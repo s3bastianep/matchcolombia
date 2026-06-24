@@ -47,7 +47,15 @@ router.get("/:entityType", async (req, res) => {
     const sort = req.query.sort || "-created_date";
     const limit = Math.min(Number(req.query.limit) || 200, 500);
 
+    if (entityType === "property_inventory" && !req.user) {
+      return res.status(401).json({ error: "No autenticado" });
+    }
+
     let list = await fetchAll(entityType);
+
+    if (entityType === "property_inventory" && req.user?.role === "owner") {
+      list = list.filter((item) => item.owner_user_id === req.user.id);
+    }
 
     if (entityType === "property" && !req.user) {
       list = list.filter(isPublishedProperty);
@@ -66,6 +74,13 @@ router.get("/:entityType/:id", async (req, res) => {
     const { entityType, id } = req.params;
     const record = await getRecord(entityType, id);
     if (!record) return res.status(404).json({ error: "No encontrado" });
+
+    if (entityType === "property_inventory") {
+      if (!req.user) return res.status(401).json({ error: "No autenticado" });
+      if (req.user.role === "owner" && record.owner_user_id !== req.user.id) {
+        return res.status(403).json({ error: "No autorizado" });
+      }
+    }
 
     if (entityType === "property" && !req.user && !isPublishedProperty(record)) {
       return res.status(404).json({ error: "No encontrado" });
@@ -127,6 +142,26 @@ router.post("/:entityType", async (req, res) => {
 
     if (!req.user) return res.status(401).json({ error: "No autenticado" });
 
+    if (entityType === "property_inventory") {
+      if (req.user.role === "owner") {
+        data.owner_user_id = req.user.id;
+        const property = await getRecord("property", data.property_id);
+        if (!property || property.owner_user_id !== req.user.id) {
+          return res.status(403).json({ error: "No autorizado para este inmueble" });
+        }
+      }
+      const row = await createRecord(
+        "property_inventory",
+        {
+          ...data,
+          status: data.status || "borrador",
+          rooms: Array.isArray(data.rooms) ? data.rooms : [],
+        },
+        "inv"
+      );
+      return res.status(201).json(row);
+    }
+
     if (entityType === "property") {
       const property = buildNewProperty(data, data.id);
       const row = await createRecord("property", property, "prop");
@@ -175,6 +210,13 @@ router.patch("/:entityType/:id", requireAuth, async (req, res) => {
 
     const current = await getRecord(entityType, id);
     if (!current) return res.status(404).json({ error: "Registro no encontrado" });
+
+    if (entityType === "property_inventory") {
+      if (req.user.role === "owner" && current.owner_user_id !== req.user.id) {
+        return res.status(403).json({ error: "No autorizado" });
+      }
+    }
+
     const row = await updateRecord(entityType, id, { ...current, ...patch });
     res.json(row);
   } catch (err) {

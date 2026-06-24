@@ -108,6 +108,7 @@ const Lease = createEntityStore("lease");
 const Payment = createEntityStore("payment");
 const Ticket = createEntityStore("ticket");
 const POI = createEntityStore("poi");
+const PropertyInventory = createEntityStore("property_inventory", "inv");
 
 const OwnerStore = createEntityStore("owner");
 const Owner = {
@@ -159,7 +160,7 @@ export async function initRailwayApi() {
 }
 
 export const api = {
-  entities: { Property, Inquiry, Visit, Message, Application, Lease, Payment, Ticket, Owner, POI, AdminSettings },
+  entities: { Property, Inquiry, Visit, Message, Application, Lease, Payment, Ticket, Owner, POI, AdminSettings, PropertyInventory },
   integrations: { Core },
   auth: railwayAuth,
 };

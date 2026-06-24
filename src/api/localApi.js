@@ -22,6 +22,7 @@ const PAYMENTS_KEY = "habibar_payments";
 const TICKETS_KEY = "habibar_tickets";
 const OWNERS_KEY = "habibar_owners";
 const POIS_KEY = "habibar_pois";
+const INVENTORIES_KEY = "habibar_property_inventories";
 const SETTINGS_KEY = "habibar_admin_settings";
 const PORTAL_SEEDED_KEY = "habibar_portal_seeded_v3";
 
@@ -348,6 +349,7 @@ const Owner = {
   },
 };
 const POI = createStore(POIS_KEY, []);
+const PropertyInventory = createStore(INVENTORIES_KEY, []);
 const AdminSettings = {
   async get() {
     await delay(50);
@@ -392,7 +394,7 @@ const Core = {
 };
 
 export const api = {
-  entities: { Property, Inquiry, Visit, Message, Application, Lease, Payment, Ticket, Owner, POI, AdminSettings },
+  entities: { Property, Inquiry, Visit, Message, Application, Lease, Payment, Ticket, Owner, POI, AdminSettings, PropertyInventory },
   integrations: { Core },
   auth: localAuth,
 };
