@@ -130,7 +130,7 @@ function FooterMobile() {
           layout="lockup"
           variant="color"
           link
-          className="[&_img]:h-10 [&_img]:max-w-[10rem]"
+          className="[&_img]:h-8 [&_img]:max-w-[8.75rem]"
         />
         <p className="mt-1.5 text-[10px] text-muted-foreground/80">{BRAND.tagline}</p>
         <SocialRow iconSize={15} className="mt-3 justify-center" />

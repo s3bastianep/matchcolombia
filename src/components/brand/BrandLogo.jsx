@@ -29,15 +29,15 @@ export default function BrandLogo({
   /* Wordmark: ancho fijo; `nav` usa altura fija para alinear con el menú */
   const sizes = {
     nav: {
-      icon: "h-9 w-9",
-      wordmark: "h-10 sm:h-11 w-auto max-w-[12.5rem] sm:max-w-[14rem] lg:max-w-[15.5rem]",
-      full: "h-10 sm:h-11 w-auto",
+      icon: "h-7 w-7",
+      wordmark: "h-8 sm:h-9 w-auto max-w-[10.5rem] sm:max-w-[12rem] lg:max-w-[13.5rem]",
+      full: "h-8 sm:h-9 w-auto",
     },
-    sm: { icon: "h-10 w-10", wordmark: "h-11 sm:h-12 w-auto max-w-[14rem] sm:max-w-[16rem]", full: "h-16 w-auto" },
-    md: { icon: "h-11 w-11", wordmark: "h-12 sm:h-14 w-auto max-w-[15rem] sm:max-w-[17rem]", full: "h-20 w-auto" },
-    lg: { icon: "h-12 w-12", wordmark: "h-12 sm:h-14 w-auto max-w-[16rem] sm:max-w-[18rem]", full: "h-24 w-auto" },
-    xl: { icon: "h-14 w-14", wordmark: "h-14 sm:h-16 w-auto max-w-[17rem] sm:max-w-[20rem]", full: "h-28 w-auto" },
-    hero: { icon: "h-14 w-14", wordmark: "h-14 sm:h-[4.25rem] w-auto max-w-[min(90vw,22rem)]", full: "h-32 w-auto" },
+    sm: { icon: "h-8 w-8", wordmark: "h-9 sm:h-10 w-auto max-w-[12rem] sm:max-w-[14rem]", full: "h-12 w-auto" },
+    md: { icon: "h-9 w-9", wordmark: "h-10 sm:h-11 w-auto max-w-[13rem] sm:max-w-[15rem]", full: "h-14 w-auto" },
+    lg: { icon: "h-10 w-10", wordmark: "h-10 sm:h-11 w-auto max-w-[14rem] sm:max-w-[16rem]", full: "h-16 w-auto" },
+    xl: { icon: "h-11 w-11", wordmark: "h-11 sm:h-12 w-auto max-w-[15rem] sm:max-w-[17rem]", full: "h-20 w-auto" },
+    hero: { icon: "h-11 w-11", wordmark: "h-11 sm:h-14 w-auto max-w-[min(85vw,18rem)]", full: "h-24 w-auto" },
   };
   const s = sizes[size] || sizes.md;
 
